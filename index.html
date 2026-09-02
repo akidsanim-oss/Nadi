@@ -1,0 +1,785 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Má Sài Gòn — An empathetic space for letters & stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --c1:#7a3418;
+    --c2:#c2652b;
+    --c3:#e8a94e;
+    --ink:#120c08;
+    --cream:#f8f1e6;
+    --muted:rgba(248,241,230,.66);
+    --line:rgba(248,241,230,.16);
+    --panel:rgba(24,16,11,.42);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:'Be Vietnam Pro',system-ui,sans-serif;
+    color:var(--cream);
+    background:#170f0a;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ── emotion-driven living background ───────────────────────── */
+  #bg{
+    position:fixed; inset:0; z-index:-3;
+    background:
+      radial-gradient(120% 90% at 12% 8%, color-mix(in srgb, var(--c3) 78%, transparent) 0%, transparent 55%),
+      radial-gradient(100% 80% at 88% 18%, color-mix(in srgb, var(--c2) 82%, transparent) 0%, transparent 60%),
+      radial-gradient(140% 110% at 50% 110%, color-mix(in srgb, var(--c1) 92%, #0b0705 8%) 0%, transparent 70%),
+      linear-gradient(160deg, var(--c1) 0%, color-mix(in srgb, var(--c1) 60%, #0b0705) 100%);
+    transition:none;
+  }
+  #bg::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(12,8,5,.42) 0%, rgba(12,8,5,.18) 35%, rgba(12,8,5,.55) 100%);
+  }
+  #grain{
+    position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.32;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+  #motes{position:fixed;inset:0;z-index:-1;pointer-events:none}
+
+  .display{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;letter-spacing:-.02em;line-height:.95}
+  .serif-it{font-style:italic}
+
+  /* ── kinetic hero type ─────────────────────────────────────── */
+  .kin span{display:inline-block;transform:translateY(110%) rotate(6deg);opacity:0;
+    animation:kinIn .95s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes kinIn{to{transform:translateY(0) rotate(0);opacity:1}}
+  .kin-wrap{overflow:hidden;display:block;padding-bottom:.06em}
+
+  .sweep{position:relative;overflow:hidden}
+  .sweep::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.55) 48%,transparent 66%);
+    transform:translateX(-120%);
+    animation:sweep 5.5s 1.6s cubic-bezier(.5,0,.2,1) infinite;
+    mix-blend-mode:screen;
+  }
+  @keyframes sweep{0%{transform:translateX(-120%)}45%,100%{transform:translateX(130%)}}
+
+  /* ── reveals ───────────────────────────────────────────────── */
+  .rv{opacity:0;transform:translateY(30px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  .mask-rv{clip-path:inset(0 0 100% 0);transition:clip-path 1.15s cubic-bezier(.16,1,.3,1)}
+  .mask-rv.in{clip-path:inset(0 0 0% 0)}
+  .mask-rv img{transform:scale(1.14);transition:transform 1.5s cubic-bezier(.16,1,.3,1)}
+  .mask-rv.in img{transform:scale(1)}
+
+  /* ── signature path ────────────────────────────────────────── */
+  .sig path{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.8s cubic-bezier(.6,0,.2,1)}
+  .sig.in path{stroke-dashoffset:0}
+
+  /* ── nav ───────────────────────────────────────────────────── */
+  nav.bar{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+  nav.bar.stuck{background:rgba(14,9,6,.72);backdrop-filter:blur(14px);border-color:var(--line)}
+  .navlink{position:relative;padding:.25rem 0;color:var(--muted);transition:color .35s}
+  .navlink:hover,.navlink.active{color:var(--cream)}
+  .navlink::after{content:"";position:absolute;left:0;bottom:-2px;height:1px;width:100%;background:var(--c3);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  .navlink:hover::after,.navlink.active::after{transform:scaleX(1);transform-origin:left}
+
+  .btn{position:relative;overflow:hidden;isolation:isolate;transition:transform .35s cubic-bezier(.2,.9,.3,1.2),box-shadow .35s,color .35s}
+  .btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--cream);transform:translateY(101%);transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  .btn:hover{color:var(--ink);transform:translateY(-2px)}
+  .btn:hover::before{transform:translateY(0)}
+
+  /* ── marquee ───────────────────────────────────────────────── */
+  .marq{display:flex;gap:0;width:max-content;animation:marq 42s linear infinite}
+  .marq:hover{animation-play-state:paused}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* ── letter cards ──────────────────────────────────────────── */
+  .lcard{transition:transform .7s cubic-bezier(.16,1,.3,1),border-color .5s}
+  .lcard:hover{transform:translateY(-8px);border-color:color-mix(in srgb,var(--c3) 60%, transparent)}
+  .lcard .excerpt{max-height:0;opacity:0;overflow:hidden;transition:max-height .7s cubic-bezier(.16,1,.3,1),opacity .5s}
+  .lcard:hover .excerpt{max-height:200px;opacity:1}
+
+  /* ── form ──────────────────────────────────────────────────── */
+  .step{display:none}
+  .step.on{display:block;animation:stepIn .7s cubic-bezier(.16,1,.3,1) both}
+  @keyframes stepIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  .chip{
+    border:1px solid var(--line);background:rgba(255,255,255,.045);
+    transition:transform .4s cubic-bezier(.2,.9,.3,1.4),background .4s,border-color .4s,color .3s;
+    will-change:transform;
+  }
+  .chip:hover{transform:translateY(-3px) scale(1.02);background:rgba(255,255,255,.1)}
+  .chip.sel{background:var(--cream);color:var(--ink);border-color:var(--cream);font-weight:600}
+  .chip.shake{animation:shake .5s}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  .opt{border:1px solid var(--line);background:rgba(255,255,255,.045);transition:all .4s cubic-bezier(.16,1,.3,1)}
+  .opt:hover{background:rgba(255,255,255,.1);transform:translateY(-3px)}
+  .opt.sel{border-color:var(--cream);background:rgba(248,241,230,.14)}
+  .opt.sel .dot{background:var(--c3);box-shadow:0 0 0 4px color-mix(in srgb,var(--c3) 30%,transparent)}
+  .dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--line);transition:all .4s}
+  textarea.paper{
+    background:linear-gradient(rgba(255,255,255,.05),rgba(255,255,255,.05));
+    background-image:repeating-linear-gradient(180deg,transparent 0 31px,rgba(248,241,230,.10) 31px 32px);
+    line-height:32px;
+  }
+  textarea.paper:focus,input.f:focus{outline:none;border-color:var(--cream);background-color:rgba(255,255,255,.08)}
+  .f{border:1px solid var(--line);background:rgba(255,255,255,.045);transition:border-color .4s,background .4s}
+  .prog{height:2px;background:var(--line);position:relative;overflow:hidden}
+  .prog i{position:absolute;inset:0;background:var(--c3);transform-origin:left;transform:scaleX(0);transition:transform .7s cubic-bezier(.16,1,.3,1)}
+
+  /* ── cookie ────────────────────────────────────────────────── */
+  #cookie{position:fixed;left:50%;bottom:1.25rem;z-index:80;transform:translate(-50%,0);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .5s}
+  #cookie.gone{transform:translate(-50%,140%);opacity:0;pointer-events:none}
+  .keycap{box-shadow:0 3px 0 rgba(0,0,0,.45);animation:tap 2.4s ease-in-out infinite}
+  @keyframes tap{0%,88%,100%{transform:translateY(0)}92%{transform:translateY(3px);box-shadow:0 0 0 rgba(0,0,0,.45)}}
+
+  .num{font-variant-numeric:tabular-nums}
+  ::selection{background:var(--c3);color:var(--ink)}
+  .edge{border:1px solid var(--line)}
+  .glow{background:radial-gradient(closest-side, color-mix(in srgb,var(--c3) 60%,transparent), transparent)}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    .rv{opacity:1;transform:none}.mask-rv{clip-path:none}
+  }
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+<div id="grain"></div>
+<canvas id="motes"></canvas>
+
+<!-- ══ NAV ══ -->
+<nav class="bar">
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8 h-[72px] flex items-center justify-between">
+    <a href="#home" class="flex items-center gap-3 group">
+      <span class="w-2.5 h-2.5 rounded-full" style="background:var(--c3);box-shadow:0 0 14px var(--c3)"></span>
+      <span class="display text-[19px] font-semibold tracking-tight">Má Sài Gòn</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-[13px] tracking-wide">
+      <a href="#home" class="navlink" data-nav="home"><span class="num opacity-50 mr-1.5">01</span>Home</a>
+      <a href="#stories" class="navlink" data-nav="stories"><span class="num opacity-50 mr-1.5">02</span>Letters</a>
+      <a href="#story" class="navlink" data-nav="story"><span class="num opacity-50 mr-1.5">03</span>Share</a>
+      <a href="#about" class="navlink" data-nav="about"><span class="num opacity-50 mr-1.5">04</span>About</a>
+    </div>
+    <a href="#story" class="btn hidden md:inline-flex items-center gap-2 text-[12.5px] uppercase tracking-[.18em] px-5 py-2.5 edge rounded-full">
+      Write a letter
+    </a>
+    <button id="burger" class="md:hidden w-10 h-10 grid place-items-center edge rounded-full" aria-label="Menu">
+      <span class="block w-4 h-[1.5px] bg-current relative before:content-[''] before:absolute before:-top-1.5 before:left-0 before:w-4 before:h-[1.5px] before:bg-current after:content-[''] after:absolute after:top-1.5 after:left-0 after:w-4 after:h-[1.5px] after:bg-current"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- mobile menu -->
+<div id="mmenu" class="fixed inset-0 z-[70] hidden">
+  <div class="absolute inset-0" style="background:rgba(10,7,4,.92);backdrop-filter:blur(10px)" id="mclose"></div>
+  <div class="relative h-full flex flex-col justify-center px-8 gap-2">
+    <a href="#home" class="mlink display text-5xl py-2"><span class="num text-sm align-super opacity-50 mr-3">01</span>Home</a>
+    <a href="#stories" class="mlink display text-5xl py-2"><span class="num text-sm align-super opacity-50 mr-3">02</span>Letters</a>
+    <a href="#story" class="mlink display text-5xl py-2"><span class="num text-sm align-super opacity-50 mr-3">03</span>Share</a>
+    <a href="#about" class="mlink display text-5xl py-2"><span class="num text-sm align-super opacity-50 mr-3">04</span>About</a>
+  </div>
+</div>
+
+<main>
+<!-- ══ HERO ══ -->
+<section id="home" class="relative min-h-[100svh] flex items-end pt-28 pb-14 overflow-hidden">
+  <div id="spot" class="pointer-events-none absolute w-[520px] h-[520px] -translate-x-1/2 -translate-y-1/2 glow opacity-40 hidden md:block" style="left:60%;top:35%"></div>
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full grid lg:grid-cols-12 gap-10 items-end relative">
+    <div class="lg:col-span-7">
+      <div class="flex items-center gap-3 mb-7 rv">
+        <span class="h-px w-10" style="background:var(--c3)"></span>
+        <span class="text-[11px] uppercase tracking-[.3em] opacity-75">A documentary space · Sài Gòn</span>
+      </div>
+
+      <h1 class="display font-semibold text-[clamp(3.2rem,11vw,8.4rem)]">
+        <span class="kin-wrap"><span style="animation-delay:.05s">Má&nbsp;</span><span class="serif-it" style="animation-delay:.15s">Sài&nbsp;</span><span class="serif-it" style="animation-delay:.25s">Gòn</span></span>
+      </h1>
+
+      <p class="mt-6 text-[clamp(1rem,2.1vw,1.35rem)] max-w-[36ch] leading-relaxed rv" style="transition-delay:.15s">
+        Welcome to <strong class="font-semibold">Mà Sài Gòn SPACE</strong>, an empathetic space where
+        LGBTQ+ members come together to shine. Whether you want to share your story or immerse in our
+        vibrant community, <em class="serif-it">you're welcome here.</em>
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-4 rv" style="transition-delay:.28s">
+        <a href="#stories" data-magnet class="btn inline-flex items-center gap-3 px-7 py-4 rounded-full edge text-[13px] uppercase tracking-[.2em]">
+          Start exploring
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#story" class="text-[13px] uppercase tracking-[.2em] border-b pb-1 hover:opacity-70 transition" style="border-color:var(--line)">Share your story</a>
+      </div>
+
+      <div class="mt-12 flex items-start gap-4 max-w-[46ch] rv" style="transition-delay:.4s">
+        <svg class="sig shrink-0 mt-1" width="54" height="26" viewBox="0 0 120 40" fill="none" stroke="var(--c3)" stroke-width="2" stroke-linecap="round">
+          <path d="M4 30c14-26 22 6 30-4s6-18 14-14 4 22 14 20 12-16 20-14 12 12 20 8"/>
+        </svg>
+        <p class="text-[13.5px] leading-relaxed opacity-80">
+          <strong class="font-semibold">Khoa Lê</strong>, author of the film <em class="serif-it">Má Sài Gòn</em> —
+          a story about dreams, love and the families we choose.
+        </p>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 relative">
+      <div class="mask-rv rounded-[2px] overflow-hidden edge" data-parallax="0.06">
+        <img src="https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=900&q=80"
+             alt="Street scene in Ho Chi Minh City at dusk" class="w-full h-[46vh] lg:h-[62vh] object-cover" loading="eager"
+             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504457047772-27faf1c00561?auto=format&fit=crop&w=900&q=80'">
+      </div>
+      <div class="absolute -left-3 sm:-left-6 bottom-6 edge px-4 py-3 backdrop-blur-md rv" style="background:rgba(16,10,7,.62);transition-delay:.6s">
+        <div class="text-[10px] uppercase tracking-[.28em] opacity-70 mb-1">Now showing</div>
+        <div class="display text-[15px]">Dreams, love &amp; relationships</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DID YOU KNOW MARQUEE ══ -->
+<section class="py-5 border-y overflow-hidden" style="border-color:var(--line);background:rgba(12,8,5,.34)">
+  <div class="marq items-center gap-10 text-[12.5px] uppercase tracking-[.26em] whitespace-nowrap">
+    <span class="flex items-center gap-10" id="marqA"></span>
+    <span class="flex items-center gap-10" id="marqB"></span>
+  </div>
+</section>
+
+<!-- ══ LETTERS ══ -->
+<section id="stories" class="py-24 sm:py-32">
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+    <div class="flex flex-wrap items-end justify-between gap-6 mb-14">
+      <div>
+        <div class="text-[11px] uppercase tracking-[.3em] opacity-70 mb-4 rv">02 — From the community</div>
+        <h2 class="display text-[clamp(2.2rem,6vw,4.4rem)] font-semibold max-w-[15ch]">
+          <span class="kin-wrap" data-kin>Letters that</span>
+          <span class="kin-wrap serif-it" data-kin>found their voice</span>
+        </h2>
+      </div>
+      <p class="max-w-[34ch] text-[14.5px] leading-relaxed opacity-80 rv" style="transition-delay:.2s">
+        Every letter below shifts the colour of this space. Read them, sit with them, then add your own.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6" id="letterGrid"></div>
+  </div>
+</section>
+
+<!-- ══ SHARE YOUR STORY ══ -->
+<section id="story" class="py-20 sm:py-28 border-y" style="border-color:var(--line);background:rgba(12,8,5,.28)">
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8 grid lg:grid-cols-12 gap-12">
+    <div class="lg:col-span-4">
+      <div class="lg:sticky lg:top-28">
+        <div class="text-[11px] uppercase tracking-[.3em] opacity-70 mb-4 rv">03 — Your turn</div>
+        <h2 class="display text-[clamp(2.2rem,5.5vw,3.6rem)] font-semibold leading-[.98] rv">
+          Share your<br><span class="serif-it">story</span>
+        </h2>
+        <p class="mt-5 text-[14.5px] leading-relaxed opacity-85 rv" style="transition-delay:.12s">
+          It's your turn to write a letter! Share your personal experiences, unique stories, thoughts or
+          emotions. Whether it's a treasured memory, a profound insight, a moment of vulnerability, or the
+          pursuit of a dream, this is a safe space for you and your community.
+        </p>
+
+        <div class="mt-8 space-y-3" id="rail"></div>
+
+        <div class="mt-8 p-4 edge text-[12.5px] leading-relaxed opacity-80 rv" style="background:rgba(255,255,255,.04);transition-delay:.3s">
+          <strong class="font-semibold">Did you know?</strong> The background colours transform with every
+          story shared, mirroring the evolving emotional state of our community.
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-8">
+      <div class="edge p-6 sm:p-10 rounded-[3px]" style="background:var(--panel);backdrop-filter:blur(6px)">
+        <div class="prog mb-8"><i id="progBar"></i></div>
+
+        <!-- STEP 1 -->
+        <div class="step on" data-step="1">
+          <div class="text-[11px] uppercase tracking-[.28em] opacity-60 mb-3">First</div>
+          <h3 class="display text-[clamp(1.6rem,3.4vw,2.4rem)] font-semibold mb-2">To whom will you be writing this letter?</h3>
+          <p class="opacity-75 text-[14.5px] mb-8">Choose a person or thing:</p>
+          <div class="grid sm:grid-cols-2 gap-3" id="recipients"></div>
+          <div class="mt-9 flex justify-end">
+            <button class="btn next px-7 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]" data-next="1">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" data-step="2">
+          <div class="text-[11px] uppercase tracking-[.28em] opacity-60 mb-3">Then</div>
+          <h3 class="display text-[clamp(1.6rem,3.4vw,2.4rem)] font-semibold mb-8">Write your letter</h3>
+          <textarea id="letter" maxlength="1000" rows="11"
+            class="paper w-full p-5 text-[15.5px] edge rounded-[3px] resize-y placeholder:opacity-45"
+            placeholder="Dear you,&#10;&#10;There is something I have never said out loud…"></textarea>
+          <div class="mt-3 flex items-center justify-between text-[12.5px] opacity-75">
+            <span id="count" class="num">1000 characters remaining</span>
+            <span id="bar" class="block h-[2px] w-32" style="background:var(--line)"><i class="block h-full origin-left" style="background:var(--c3);transform:scaleX(0);transition:transform .4s"></i></span>
+          </div>
+          <div class="mt-9 flex justify-between gap-3">
+            <button class="btn back px-6 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]" data-back="2">Back</button>
+            <button class="btn next px-7 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]" data-next="2">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3">
+          <div class="text-[11px] uppercase tracking-[.28em] opacity-60 mb-3">Next</div>
+          <h3 class="display text-[clamp(1.6rem,3.4vw,2.4rem)] font-semibold mb-2">Your emotions</h3>
+          <p class="opacity-75 text-[14.5px] mb-2">How did you feel when you wrote your letter? What emotions would you like it to evoke in your readers?</p>
+          <p class="text-[12.5px] uppercase tracking-[.2em] opacity-60 mb-6">Choose up to 2 emotions — <span id="emoCount" class="num">0/2</span></p>
+          <div class="flex flex-wrap gap-2.5" id="emotions"></div>
+          <div class="mt-7 h-[6px] w-full overflow-hidden edge rounded-full" style="background:rgba(255,255,255,.06)">
+            <div id="emoPreview" class="h-full transition-all duration-1000" style="width:12%;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3))"></div>
+          </div>
+          <div class="mt-9 flex justify-between gap-3">
+            <button class="btn back px-6 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]" data-back="3">Back</button>
+            <button class="btn next px-7 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]" data-next="3">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step" data-step="4">
+          <div class="text-[11px] uppercase tracking-[.28em] opacity-60 mb-3">Finally</div>
+          <h3 class="display text-[clamp(1.6rem,3.4vw,2.4rem)] font-semibold mb-8">Please tell us a little bit about you.</h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-[12px] uppercase tracking-[.2em] opacity-65">Name or alias</span>
+              <input id="alias" class="f w-full mt-2 px-4 py-3.5 rounded-[3px] text-[15px]" placeholder="How should we sign it?"></label>
+            <label class="block"><span class="text-[12px] uppercase tracking-[.2em] opacity-65">Email (private)</span>
+              <input id="email" type="email" class="f w-full mt-2 px-4 py-3.5 rounded-[3px] text-[15px]" placeholder="you@example.com"></label>
+            <label class="block sm:col-span-2"><span class="text-[12px] uppercase tracking-[.2em] opacity-65">Where are you writing from?</span>
+              <input id="place" class="f w-full mt-2 px-4 py-3.5 rounded-[3px] text-[15px]" placeholder="District 4, Sài Gòn / Montréal / elsewhere"></label>
+          </div>
+          <label class="flex items-start gap-3 mt-6 text-[13px] opacity-80 cursor-pointer">
+            <input id="agree" type="checkbox" class="mt-1 w-4 h-4 accent-current" style="accent-color:var(--c3)">
+            <span>I've read the community guidelines and consent to my letter being reviewed and published anonymously.</span>
+          </label>
+          <div class="mt-9 flex justify-between gap-3">
+            <button class="btn back px-6 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]" data-back="4">Back</button>
+            <button id="submitBtn" class="btn px-7 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]">Send my letter</button>
+          </div>
+          <p id="warn" class="mt-4 text-[13px] hidden" style="color:#ffd9a0"></p>
+        </div>
+
+        <!-- STEP 5 : THANK YOU -->
+        <div class="step" data-step="5">
+          <div class="text-center py-6">
+            <svg id="seal" width="112" height="112" viewBox="0 0 120 120" class="mx-auto mb-7" fill="none">
+              <circle cx="60" cy="60" r="34" stroke="var(--c3)" stroke-width="1.5" style="stroke-dasharray:214;stroke-dashoffset:214"/>
+              <circle cx="60" cy="60" r="44" stroke="var(--c3)" stroke-width="1" opacity=".45" style="stroke-dasharray:277;stroke-dashoffset:277"/>
+              <path d="M44 61l11 11 22-24" stroke="var(--cream)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:60;stroke-dashoffset:60"/>
+            </svg>
+            <h3 class="display text-[clamp(1.9rem,4.4vw,3rem)] font-semibold mb-4">Thank you!</h3>
+            <p class="max-w-[52ch] mx-auto text-[15px] leading-relaxed opacity-85">
+              We've received your letter. It will be carefully reviewed and posted unless it violates our
+              community guidelines. Our review process is typically completed within 24 hours.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3 justify-center">
+              <button id="shareBtn" class="btn px-7 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]">Share this experience</button>
+              <button id="againBtn" class="btn px-7 py-3.5 rounded-full edge text-[12px] uppercase tracking-[.2em]">Write another letter</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" class="py-24 sm:py-32">
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-12 gap-12 items-start">
+      <div class="lg:col-span-6 mask-rv rounded-[2px] overflow-hidden edge" data-parallax="0.05">
+        <img src="https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=1000&q=80"
+             alt="Lantern-lit evening street" class="w-full h-[42vh] lg:h-[560px] object-cover" loading="lazy"
+             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1000&q=80'">
+      </div>
+      <div class="lg:col-span-6 lg:pl-6">
+        <div class="text-[11px] uppercase tracking-[.3em] opacity-70 mb-4 rv">04 — About the space</div>
+        <h2 class="display text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[1] rv">
+          A room that <span class="serif-it">changes colour</span> as we speak
+        </h2>
+        <p class="mt-6 text-[15px] leading-[1.85] opacity-88 rv" style="transition-delay:.1s">
+          This empathetic space continues the conversation around the documentary <em class="serif-it">Mà Sài Gòn</em>,
+          where the film characters talk about their dreams, love, and relationships. Add to the experience by
+          sharing your own stories in the form of a letter, directing it to a specific recipient, and expressing
+          your current emotional state.
+        </p>
+        <p class="mt-4 text-[15px] leading-[1.85] opacity-88 rv" style="transition-delay:.18s">
+          The Mà Sài Gòn space will transform with every new letter to mirror our collective emotional state
+          through a spectrum of colours.
+        </p>
+
+        <div class="mt-12 grid sm:grid-cols-3 gap-px edge overflow-hidden" style="background:var(--line)">
+          <div class="p-5 rv" style="background:rgba(14,9,6,.5)">
+            <div class="text-[10px] uppercase tracking-[.26em] opacity-60 mb-2">Letters shared</div>
+            <div class="display text-3xl num" data-count="1284">0</div>
+          </div>
+          <div class="p-5 rv" style="background:rgba(14,9,6,.5);transition-delay:.08s">
+            <div class="text-[10px] uppercase tracking-[.26em] opacity-60 mb-2">Cities</div>
+            <div class="display text-3xl num" data-count="46">0</div>
+          </div>
+          <div class="p-5 rv" style="background:rgba(14,9,6,.5);transition-delay:.16s">
+            <div class="text-[10px] uppercase tracking-[.26em] opacity-60 mb-2">Review time</div>
+            <div class="display text-3xl num" data-count="24" data-suffix="h">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="border-t pt-16 pb-10" style="border-color:var(--line);background:rgba(10,7,4,.55)">
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="display text-[clamp(2rem,6vw,3.4rem)] font-semibold leading-none">Má Sài Gòn <span class="serif-it">SPACE</span></div>
+        <p class="mt-4 text-[13.5px] opacity-70 max-w-[38ch]">You're welcome here.</p>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-[.26em] opacity-60 mb-4">Contact</div>
+        <ul class="space-y-2 text-[14px]">
+          <li><span class="opacity-60">Press</span><br><a class="hover:opacity-70 transition" href="mailto:press@masaigonspace.org">press@masaigonspace.org</a></li>
+          <li class="pt-2"><span class="opacity-60">Distribution</span><br><a class="hover:opacity-70 transition" href="mailto:distribution@masaigonspace.org">distribution@masaigonspace.org</a></li>
+          <li class="pt-2"><span class="opacity-60">Production</span><br><a class="hover:opacity-70 transition" href="mailto:hello@masaigonspace.org">hello@masaigonspace.org</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-[.26em] opacity-60 mb-4">Community</div>
+        <ul class="space-y-2 text-[14px]">
+          <li><a href="#stories" class="hover:opacity-70 transition">Letters</a></li>
+          <li><a href="#story" class="hover:opacity-70 transition">Share your story</a></li>
+          <li><a href="#about" class="hover:opacity-70 transition">Guidelines</a></li>
+          <li><a href="#home" class="hover:opacity-70 transition">Back to top</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-14 pt-6 border-t flex flex-wrap gap-4 justify-between text-[12px] opacity-60" style="border-color:var(--line)">
+      <span>© <span class="num">2025</span> Mà Sài Gòn Space. An independent community project.</span>
+      <span>Privacy · Terms · Cookies</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ COOKIE ══ -->
+<div id="cookie" class="edge rounded-full pl-5 pr-2 py-2 flex items-center gap-4 max-w-[94vw]" style="background:rgba(16,10,7,.86);backdrop-filter:blur(12px)">
+  <span class="text-[13px]">This website uses cookies.</span>
+  <button id="cookieOk" class="btn flex items-center gap-2.5 px-4 py-2 rounded-full text-[12px] uppercase tracking-[.18em]">
+    OK <span class="keycap edge rounded px-2 py-[1px] text-[10px] tracking-normal">Space</span>
+  </button>
+</div>
+
+<script>
+/* ══════════ palettes ══════════ */
+const P = {
+  default:['#7a3418','#c2652b','#e8a94e'],
+  peace:['#1f5f52','#3f8f7c','#a8cfc0'],
+  excited:['#a52d16','#e2702a','#f6c453'],
+  exhausted:['#2b2f42','#545a75','#9aa0b8'],
+  grateful:['#7a4d10','#c08a26','#efd6a4'],
+  hopeful:['#0e6a6a','#37a09b','#f0cf8c'],
+  loved:['#8d1c41','#cf5269','#f2b9c3'],
+  proud:['#7a3418','#c2652b','#e8a94e'],
+  sad:['#24405e','#49709a','#a9c2da'],
+  seen:['#65283a','#a4556a','#dfb6bd'],
+  worried:['#454a31','#7b8357','#c9d0af']
+};
+const EMOTIONS = Object.keys(P).filter(k=>k!=='default');
+const LABEL = k => k.charAt(0).toUpperCase()+k.slice(1);
+
+const hex2rgb = h => [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+let cur = P.default.map(hex2rgb), tgt = P.default.map(hex2rgb);
+function setPalette(keys){
+  if(!keys.length){ tgt = P.default.map(hex2rgb); return; }
+  const avg = [0,1,2].map(i => keys.reduce((s,k)=>s+P[k][i],0)/keys.length);
+  tgt = avg.map(v=>[v[0],v[1],v[2]]);
+}
+const root = document.documentElement.style;
+function paint(){
+  root.setProperty('--c1', `rgb(${cur[0]|0},${cur[1]|0},${cur[2]|0})`);
+  root.setProperty('--c2', `rgb(${cur[3]|0},${cur[4]|0},${cur[5]|0})`);
+  root.setProperty('--c3', `rgb(${cur[6]|0},${cur[7]|0},${cur[8]|0})`);
+}
+paint();
+
+/* ══════════ ambient motes (incense-smoke drift) ══════════ */
+const cv = document.getElementById('motes'), cx = cv.getContext('2d');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W,H,parts=[];
+function sizeCv(){ W=cv.width=innerWidth*devicePixelRatio; H=cv.height=innerHeight*devicePixelRatio;
+  cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px'; }
+function seed(){
+  const n = innerWidth<640?26:52; parts=[];
+  for(let i=0;i<n;i++) parts.push({
+    x:Math.random()*W, y:Math.random()*H, r:(Math.random()*2.2+0.6)*devicePixelRatio,
+    s:(Math.random()*0.28+0.08)*devicePixelRatio, a:Math.random()*0.5+0.12,
+    d:Math.random()*Math.PI*2, w:Math.random()*0.006+0.002
+  });
+}
+sizeCv(); seed(); addEventListener('resize',()=>{sizeCv();seed();});
+
+let mx=0,my=0;
+addEventListener('pointermove',e=>{ mx=(e.clientX/innerWidth-.5); my=(e.clientY/innerHeight-.5); },{passive:true});
+
+function loop(){
+  // colour tween
+  let moving=false;
+  for(let i=0;i<9;i++){ const d=tgt[i]-cur[i]; if(Math.abs(d)>0.4){cur[i]+=d*0.055; moving=true;} else cur[i]=tgt[i]; }
+  paint();
+
+  if(!reduce){
+    cx.clearRect(0,0,W,H);
+    const c3 = getComputedStyle(root).getPropertyValue('--c3').trim() || '#e8a94e';
+    for(const p of parts){
+      p.y -= p.s; p.d += p.w; p.x += Math.sin(p.d)*0.35*devicePixelRatio + mx*0.35*devicePixelRatio;
+      if(p.y < -10){ p.y = H+10; p.x = Math.random()*W; }
+      cx.beginPath();
+      cx.arc(p.x, p.y + my*12*devicePixelRatio, p.r, 0, 6.283);
+      cx.fillStyle = c3;
+      cx.globalAlpha = p.a;
+      cx.fill();
+    }
+    cx.globalAlpha=1;
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ══════════ nav ══════════ */
+const bar = document.querySelector('nav.bar');
+addEventListener('scroll',()=>{ bar.classList.toggle('stuck', scrollY>40); },{passive:true});
+
+const mm = document.getElementById('mmenu');
+document.getElementById('burger').onclick = ()=>{ mm.classList.remove('hidden');
+  mm.querySelectorAll('.mlink').forEach((el,i)=>{ el.style.animation='none'; void el.offsetWidth;
+    el.style.animation=`stepIn .6s cubic-bezier(.16,1,.3,1) ${i*.06}s both`; }); };
+document.getElementById('mclose').onclick = ()=> mm.classList.add('hidden');
+mm.querySelectorAll('a').forEach(a=>a.onclick=()=>mm.classList.add('hidden'));
+
+/* ══════════ marquee ══════════ */
+const marqItem = `<span class="flex items-center gap-10"><span>Did you know?</span>
+  <span class="opacity-70">The background colours transform with every story shared, mirroring the evolving emotional state of our community</span>
+  <span style="color:var(--c3)">✦</span>
+  <span class="opacity-70 serif-italic serif-it">You're welcome here</span>
+  <span style="color:var(--c3)">✦</span></span>`;
+document.getElementById('marqA').innerHTML = marqItem.repeat(2);
+document.getElementById('marqB').innerHTML = marqItem.repeat(2);
+
+/* ══════════ letter gallery ══════════ */
+const LETTERS = [
+  { to:'My mother', who:'Anonymous, 24', city:'District 4, Sài Gòn', emo:'hopeful',
+    img:'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+    text:'You always left the porch light on. I spent years believing it was for the son you wanted. Tonight I understand it was for me — exactly as I am, in a dress, walking home unafraid.'},
+  { to:'The universe', who:'Lê Thị M., 31', city:'Montréal', emo:'grateful',
+    img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
+    text:'Thank you for the small hours, for the friends who became family, for a city that let me be loud. I arrived with two suitcases and one secret. I am staying with both hands open.'},
+  { to:'My partner', who:'Anonymous, 19', city:'Huế', emo:'loved',
+    img:'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+    text:'You taught me that softness is not the opposite of strength. When the world asked me to be smaller, you handed me a chair and told me to stand on it.'}
+];
+const grid = document.getElementById('letterGrid');
+grid.innerHTML = LETTERS.map((l,i)=>`
+  <article class="lcard edge rounded-[3px] overflow-hidden rv" style="background:rgba(14,9,6,.44);transition-delay:${i*.1}s">
+    <div class="mask-rv h-56 overflow-hidden" data-parallax="0.03">
+      <img src="${l.img}" alt="Portrait from the community" class="w-full h-full object-cover" loading="lazy"
+        onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80'">
+    </div>
+    <div class="p-6">
+      <div class="flex items-center justify-between text-[10.5px] uppercase tracking-[.24em] opacity-65 mb-3">
+        <span>To ${l.to}</span><span class="px-2 py-1 edge rounded-full">${LABEL(l.emo)}</span>
+      </div>
+      <p class="display text-[19px] leading-snug serif-it">"${l.text.slice(0,74)}…"</p>
+      <div class="excerpt"><p class="mt-3 text-[14px] leading-relaxed opacity-80">${l.text}</p></div>
+      <div class="mt-5 pt-4 border-t text-[12px] opacity-60 flex justify-between" style="border-color:var(--line)">
+        <span>${l.who}</span><span>${l.city}</span>
+      </div>
+    </div>
+  </article>`).join('');
+
+/* ══════════ reveals ══════════ */
+const io = new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+},{threshold:.16, rootMargin:'0px 0px -6% 0px'});
+document.querySelectorAll('.rv,.mask-rv,.sig').forEach(el=>io.observe(el));
+
+/* kinetic headings split by word */
+document.querySelectorAll('[data-kin]').forEach(el=>{
+  const words = el.textContent.trim().split(' ');
+  el.innerHTML = words.map((w,i)=>`<span style="display:inline-block;overflow:hidden;padding-bottom:.06em">
+    <span class="inline-block" style="transform:translateY(110%);transition:transform .95s cubic-bezier(.16,1,.3,1) ${i*.08}s">${w}</span></span>`).join(' ');
+});
+const kio = new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){ e.target.querySelectorAll('span span').forEach(s=>s.style.transform='translateY(0)'); kio.unobserve(e.target); }
+}),{threshold:.3});
+document.querySelectorAll('[data-kin]').forEach(el=>kio.observe(el));
+
+/* counters */
+const cio = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return;
+  const el=e.target, end=+el.dataset.count, suf=el.dataset.suffix||''; let t0=null;
+  const step=ts=>{ if(!t0)t0=ts; const p=Math.min((ts-t0)/1400,1);
+    el.textContent = Math.round(end*(1-Math.pow(1-p,3)))+suf; if(p<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step); cio.unobserve(el);
+}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+/* parallax */
+const px = [...document.querySelectorAll('[data-parallax]')];
+let ticking=false;
+addEventListener('scroll',()=>{ if(ticking) return; ticking=true; requestAnimationFrame(()=>{
+  px.forEach(el=>{ const r=el.getBoundingClientRect();
+    const off=(r.top+r.height/2-innerHeight/2)*parseFloat(el.dataset.parallax);
+    el.style.transform=`translate3d(0,${-off}px,0)`; });
+  ticking=false; }); },{passive:true});
+
+/* nav active */
+const secs=['home','stories','story','about'].map(id=>document.getElementById(id));
+const nio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){ document.querySelectorAll('.navlink').forEach(a=>
+    a.classList.toggle('active', a.dataset.nav===e.target.id)); }
+}),{threshold:.35});
+secs.forEach(s=>s&&nio.observe(s));
+
+/* spotlight follow */
+const spot=document.getElementById('spot');
+addEventListener('pointermove',e=>{ if(!spot) return;
+  spot.style.left=e.clientX+'px'; spot.style.top=e.clientY+'px'; },{passive:true});
+
+/* magnetic buttons */
+document.querySelectorAll('[data-magnet]').forEach(b=>{
+  b.addEventListener('pointermove',e=>{ const r=b.getBoundingClientRect();
+    b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px, ${(e.clientY-r.top-r.height/2)*.3}px)`; });
+  b.addEventListener('pointerleave',()=>b.style.transform='');
+});
+
+/* ══════════ FORM ══════════ */
+const state={ recipient:null, emotions:[] };
+
+const RECIPIENTS=['Myself','My mother','My father','My partner','My friends','The universe'];
+document.getElementById('recipients').innerHTML = RECIPIENTS.map((r,i)=>`
+  <button type="button" class="opt flex items-center gap-3 px-5 py-4 rounded-[3px] text-left" data-r="${r}" style="animation:stepIn .6s cubic-bezier(.16,1,.3,1) ${i*.05}s both">
+    <span class="dot"></span><span class="text-[15px]">${r}</span></button>`).join('');
+document.getElementById('recipients').addEventListener('click',e=>{
+  const b=e.target.closest('[data-r]'); if(!b) return;
+  document.querySelectorAll('#recipients .opt').forEach(o=>o.classList.remove('sel'));
+  b.classList.add('sel'); state.recipient=b.dataset.r; clearWarn();
+});
+
+const emoBox=document.getElementById('emotions');
+emoBox.innerHTML = EMOTIONS.map((k,i)=>`
+  <button type="button" class="chip px-4 py-2.5 rounded-full text-[13.5px]" data-e="${k}"
+    style="animation:stepIn .55s cubic-bezier(.16,1,.3,1) ${i*.04}s both">${LABEL(k)}</button>`).join('');
+emoBox.addEventListener('click',e=>{
+  const b=e.target.closest('[data-e]'); if(!b) return;
+  const k=b.dataset.e, idx=state.emotions.indexOf(k);
+  if(idx>-1){ state.emotions.splice(idx,1); b.classList.remove('sel'); }
+  else{
+    if(state.emotions.length>=2){
+      b.classList.add('shake'); setTimeout(()=>b.classList.remove('shake'),520);
+      const last=document.querySelector(`[data-e="${state.emotions[1]}"]`); last&&last.focus(); return;
+    }
+    state.emotions.push(k); b.classList.add('sel');
+  }
+  document.getElementById('emoCount').textContent = state.emotions.length+'/2';
+  setPalette(state.emotions);
+  const bar2=document.getElementById('emoPreview');
+  bar2.style.width = (12 + state.emotions.length*44)+'%';
+});
+
+/* counter */
+const letterEl=document.getElementById('letter'), countEl=document.getElementById('count'), barFill=document.querySelector('#bar i');
+letterEl.addEventListener('input',()=>{
+  const left=1000-letterEl.value.length;
+  countEl.textContent = left+' characters remaining';
+  barFill.style.transform = `scaleX(${letterEl.value.length/1000})`;
+});
+
+/* steps */
+const railData=[
+  {n:'01',t:'Choose a recipient'},{n:'02',t:'Write your letter'},
+  {n:'03',t:'Name your emotions'},{n:'04',t:'Tell us about you'}
+];
+const rail=document.getElementById('rail');
+rail.innerHTML=railData.map((r,i)=>`
+  <div class="railrow flex items-center gap-3 text-[13px] transition-all duration-500" data-rail="${i+1}" style="opacity:.4">
+    <span class="num w-6">${r.n}</span>
+    <span class="flex-1 h-px" style="background:var(--line)"></span>
+    <span>${r.t}</span>
+  </div>`).join('');
+
+const progBar=document.getElementById('progBar');
+let step=1;
+function go(n){
+  step=n;
+  document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on', +s.dataset.step===n));
+  progBar.style.transform=`scaleX(${Math.min(n,4)/4})`;
+  document.querySelectorAll('.railrow').forEach(r=>{
+    const on = +r.dataset.rail <= Math.min(n,4);
+    r.style.opacity = on?'1':'.4';
+    r.firstElementChild.style.color = on?'var(--c3)':'';
+  });
+  const box=document.getElementById('story');
+  const y=box.getBoundingClientRect().top+scrollY-90;
+  if(scrollY>y+80||scrollY<y-200) window.scrollTo({top:y,behavior:'smooth'});
+}
+function warn(msg){ const w=document.getElementById('warn'); w.textContent=msg; w.classList.remove('hidden'); }
+function clearWarn(){ document.getElementById('warn').classList.add('hidden'); }
+
+document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
+  const n=+b.dataset.next;
+  if(n===1 && !state.recipient) return warn('Please choose who you are writing to.');
+  if(n===2 && letterEl.value.trim().length<20) return warn('Your letter needs a little more — at least 20 characters.');
+  clearWarn(); go(n+1);
+});
+document.querySelectorAll('.back').forEach(b=>b.onclick=()=>go(+b.dataset.back-1));
+
+document.getElementById('submitBtn').onclick=()=>{
+  if(!document.getElementById('agree').checked) return warn('Please accept the community guidelines to continue.');
+  clearWarn();
+  if(state.emotions.length) setPalette(state.emotions);
+  go(5);
+  const seal=document.getElementById('seal');
+  seal.querySelectorAll('circle,path').forEach((el,i)=>{
+    el.style.transition='stroke-dashoffset 1.1s cubic-bezier(.6,0,.2,1) '+(i*.18)+'s';
+    requestAnimationFrame(()=>el.style.strokeDashoffset='0');
+  });
+};
+document.getElementById('againBtn').onclick=()=>{
+  letterEl.value=''; countEl.textContent='1000 characters remaining'; barFill.style.transform='scaleX(0)';
+  state.recipient=null; state.emotions=[];
+  document.querySelectorAll('#recipients .opt').forEach(o=>o.classList.remove('sel'));
+  document.querySelectorAll('#emotions .chip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('emoCount').textContent='0/2';
+  document.getElementById('emoPreview').style.width='12%';
+  document.getElementById('agree').checked=false;
+  setPalette([]);
+  go(1);
+};
+document.getElementById('shareBtn').onclick=function(){
+  const t='I just wrote a letter to the Mà Sài Gòn Space — an empathetic space where LGBTQ+ members come together to shine.';
+  if(navigator.share){ navigator.share({title:'Má Sài Gòn Space',text:t,url:location.href}).catch(()=>{}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(t+' '+location.href);
+    const o=this.textContent; this.textContent='Link copied'; setTimeout(()=>this.textContent=o,1800); }
+};
+go(1);
+
+/* ══════════ cookie ══════════ */
+const cookie=document.getElementById('cookie');
+function dismiss(){ cookie.classList.add('gone'); try{localStorage.setItem('msg-cookie','1')}catch(e){} }
+document.getElementById('cookieOk').onclick=dismiss;
+addEventListener('keydown',e=>{
+  if(e.code==='Space' && !cookie.classList.contains('gone')){
+    const tag=(document.activeElement.tagName||'').toLowerCase();
+    if(tag==='textarea'||tag==='input') return;
+    e.preventDefault(); dismiss();
+  }
+});
+try{ if(localStorage.getItem('msg-cookie')) cookie.classList.add('gone'); }catch(e){}
+</script>
+</body>
+</html>
