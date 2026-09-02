@@ -1,1406 +1,844 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STUDIO KAIL — From spark to screen to shelf</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;600&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap');
-        
-        :root {
-            --primary: 234 179 8;
-        }
-        
-        .tail-container {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        
-        .serif {
-            font-family: 'Instrument Serif', serif;
-        }
-        
-        .hero-bg {
-            background: linear-gradient(45deg, #111111 0%, #1a1a1a 100%);
-        }
-        
-        .nav-link {
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: rgb(234 179 8);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover:after {
-            width: 100%;
-        }
-        
-        .section-header {
-            font-size: 3.5rem;
-            line-height: 1.05;
-            letter-spacing: -4px;
-        }
-        
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-20px) scale(1.03);
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
-        }
-        
-        .grain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://picsum.photos/id/1015/2000/2000');
-            background-size: 300px;
-            mix-blend-mode: overlay;
-            opacity: 0.06;
-            pointer-events: none;
-            z-index: 1;
-            animation: grain 8s steps(10) infinite;
-        }
-        
-        @keyframes grain {
-            0% { background-position: 0 0; }
-            10% { background-position: 5% 10%; }
-            20% { background-position: 10% 5%; }
-            100% { background-position: 0 0; }
-        }
-        
-        .logo-text {
-            font-weight: 700;
-            letter-spacing: -6px;
-            font-size: 2.25rem;
-        }
-        
-        .marquee {
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(to right, rgb(234 179 8), rgb(245 158 11));
-            z-index: 50;
-        }
-        
-        .cursor-dot {
-            position: fixed;
-            width: 24px;
-            height: 24px;
-            border: 2px solid rgb(234 179 8);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
-            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
-            display: none;
-        }
-        
-        @media (min-width: 1024px) {
-            .cursor-dot {
-                display: block;
-            }
-        }
-        
-        .hero-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.25;
-            filter: contrast(120%) brightness(80%);
-        }
-        
-        .specialty-dot {
-            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zainab Kabira — Product Designer, Vancouver</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        serif: ['Instrument Serif', 'serif'],
+        sans: ['Inter', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      colors: {
+        cream: '#FDF8F1',
+        ink: '#131316',
+        vermillion: '#FF3B1F',
+        moss: '#0E3A2F',
+        sand: '#EDE5D8',
+        peach: '#FFD8B8',
+      }
+    }
+  }
+}
+</script>
+<style>
+*{scroll-behavior:smooth}
+body{background:#FDF8F1;color:#131316;font-family:'Inter',sans-serif}
+.grain{position:absolute;inset:0;opacity:.06;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}
+.sun-core{width:96px;height:96px;border-radius:999px;background:radial-gradient(circle at 35% 35%, #FFF6B8 0%, #FFD23F 35%, #FF8A1A 70%, #FF3B1F 100%);box-shadow:0 0 40px rgba(255,139,26,0.6),0 0 80px rgba(255,59,31,0.35), inset -12px -10px 20px rgba(255,59,31,0.4);position:relative}
+.sun-ring{position:absolute;inset:-22px;border-radius:999px;border:1px solid rgba(255,255,255,0.7);opacity:.5}
+.sun-ring.r2{inset:-44px;opacity:.25}
+.moon-core{width:88px;height:88px;border-radius:999px;background:radial-gradient(circle at 30% 28%, #FFFDF5 0%, #E8E0C8 55%, #CFC6A8 100%);box-shadow:0 0 50px rgba(255,255,255,0.5), inset -14px -8px 18px rgba(0,0,0,0.15);position:relative}
+.crater{position:absolute;border-radius:999px;background:rgba(0,0,0,0.07);border:1px solid rgba(0,0,0,0.06)}
+.cloud{position:absolute;background:#fff;border-radius:999px;filter:blur(0.5px);box-shadow:0 10px 40px rgba(0,0,0,0.07)}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:999px}
+.c1{width:220px;height:70px;top:14%;left:16%}.c1::before{width:120px;height:90px;left:22px;top:-28px}.c1::after{width:90px;height:70px;right:18px;top:-18px}
+.c2{width:180px;height:56px;top:22%;right:14%}.c2::before{width:100px;height:70px;left:18px;top:-22px}.c2::after{width:70px;height:54px;right:14px;top:-12px}
+.c3{width:260px;height:74px;bottom:18%;left:22%}.c3::before{width:140px;height:86px;left:30px;top:-30px}.c3::after{width:110px;height:66px;right:22px;top:-16px}
+.float{animation:float 8s ease-in-out infinite}
+.float2{animation:float 9s ease-in-out infinite 1s}
+.float3{animation:float 10s ease-in-out infinite 0.5s}
+@keyframes float{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-14px) translateX(6px)}}
+.blob{position:absolute;border-radius:999px;filter:blur(40px);opacity:.9;mix-blend-mode:soft-light}
+.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+.card-hover{transition:all .4s cubic-bezier(.16,1,.3,1)}
+.card-hover:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(19,19,22,.12)}
+.marquee{animation:marquee 22s linear infinite}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:999px;background:#131316;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+</style>
 </head>
-<body class="tail-container bg-zinc-950 text-white overflow-x-hidden">
-    <!-- progress bar -->
-    <div id="progress-bar" class="scroll-progress w-0"></div>
+<body class="bg-cream text-ink antialiased overflow-x-hidden">
+<!-- NAV -->
+<nav class="fixed top-0 w-full z-50 bg-cream/80 backdrop-blur-xl border-b border-black/[0.06]">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 h-[68px] flex items-center justify-between">
+    <div class="flex items-center gap-8">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-ink text-white grid place-items-center font-display font-bold text-[13px] tracking-tight">ZK</div>
+        <div class="hidden sm:block">
+          <div class="font-display font-bold leading-none text-[15px] tracking-tight">ZAINAB KABIRA</div>
+          <div class="text-[11px] tracking-[0.14em] text-black/50 font-medium -mt-0.5">VANCOUVER — CANADA</div>
+        </div>
+      </a>
+      <div class="hidden lg:flex items-center gap-1 ml-4">
+        <a href="#work" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">WORK</a>
+        <a href="#journey" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">JOURNEY</a>
+        <a href="#experience" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">EXPERIENCE</a>
+        <a href="#thoughts" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">THOUGHTS</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="hidden md:flex items-center gap-2 text-[12px] font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Available for Q1 2026
+      </div>
+      <button id="themeToggle" class="w-10 h-10 rounded-full bg-white border border-black/10 grid place-items-center hover:scale-105 transition shadow-sm" aria-label="Toggle day night">
+        <i data-lucide="sun" class="w-4 h-4 sun-icon"></i>
+        <i data-lucide="moon" class="w-4 h-4 moon-icon hidden"></i>
+      </button>
+      <a href="#contact" class="hidden sm:inline-flex items-center gap-2 bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-semibold hover:bg-black transition">Let's talk <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+      <button id="menuBtn" class="lg:hidden w-10 h-10 rounded-full bg-white border border-black/10 grid place-items-center"><i data-lucide="menu" class="w-4 h-4"></i></button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden border-t border-black/10 bg-cream px-6 py-6 space-y-4">
+    <a href="#work" class="block font-medium">Work</a><a href="#journey" class="block font-medium">Journey</a><a href="#experience" class="block font-medium">Experience</a><a href="#thoughts" class="block font-medium">Thoughts</a>
+  </div>
+</nav>
 
-    <!-- custom cursor -->
-    <div id="custom-cursor" class="cursor-dot hidden lg:block"></div>
+<!-- HERO -->
+<section id="hero" class="relative pt-[68px] overflow-hidden bg-cream">
+  <div class="absolute inset-0 top-[68px]">
+    <canvas id="shader" class="w-full h-full"></canvas>
+    <div class="grain"></div>
+    <!-- decorative orbs -->
+    <div class="blob w-[720px] h-[520px] bg-[#FF8A1A] top-[-80px] left-[-120px] opacity-60"></div>
+    <div class="blob w-[640px] h-[520px] bg-[#FFD23F] top-[40px] right-[-80px] opacity-60"></div>
+    <div class="blob w-[900px] h-[600px] bg-[#FFF1D6] top-[140px] left-[20%] opacity-70"></div>
+    <!-- sun / moon -->
+    <div id="sunGroup" class="absolute left-[46%] top-[18%] -translate-x-1/2 z-10">
+      <div class="sun-core float">
+        <div class="sun-ring"></div><div class="sun-ring r2"></div>
+      </div>
+    </div>
+    <div id="moonGroup" class="absolute left-[46%] top-[18%] -translate-x-1/2 z-10 hidden">
+      <div class="moon-core float">
+        <div class="crater w-5 h-5 left-5 top-4"></div>
+        <div class="crater w-3 h-3 right-6 top-7"></div>
+        <div class="crater w-7 h-7 left-8 bottom-5"></div>
+      </div>
+    </div>
+    <!-- clouds -->
+    <div class="cloud c1 float"></div>
+    <div class="cloud c2 float2"></div>
+    <div class="cloud c3 float3 hidden md:block"></div>
+    <div class="hidden md:block absolute right-[12%] top-[42%] w-[140px] h-[48px] bg-white rounded-full float2 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"></div>
+  </div>
 
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 left-0 right-0 bg-zinc-950/80 backdrop-blur-lg z-50 border-b border-white/10">
-        <div class="max-w-screen-2xl mx-auto">
-            <div class="flex items-center justify-between px-8 py-6">
-                <!-- logo -->
-                <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
-                     class="flex items-center gap-x-3 cursor-pointer group">
-                    <div class="w-8 h-8 bg-yellow-400 flex items-center justify-center text-zinc-950 font-bold text-xl rotate-12 group-active:rotate-45 transition-transform">
-                        K
-                    </div>
-                    <div>
-                        <span class="logo-text tracking-[-4px] text-4xl font-semibold text-white">KAIL</span>
-                    </div>
-                </div>
-
-                <!-- menu -->
-                <div class="hidden md:flex items-center gap-x-10 text-sm uppercase tracking-widest font-medium">
-                    <a href="#work" onclick="navigateToSection('work')" class="nav-link">Work</a>
-                    <a href="#specialties" onclick="navigateToSection('specialties')" class="nav-link">Specialties</a>
-                    <a href="#studio" onclick="navigateToSection('studio')" class="nav-link">Studio</a>
-                    <a href="#journal" onclick="navigateToSection('journal')" class="nav-link">Journal</a>
-                </div>
-
-                <div class="flex items-center gap-x-6">
-                    <button onclick="toggleContact()"
-                            class="px-7 py-3.5 bg-white text-zinc-900 hover:bg-amber-200 transition-colors rounded-3xl text-sm font-semibold flex items-center gap-x-2">
-                        <span>LET'S CONNECT</span>
-                        <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </button>
-                    
-                    <button onclick="toggleMobileMenu()" 
-                            class="md:hidden w-11 h-11 flex items-center justify-center border border-white/30 rounded-2xl">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MOBILE MENU -->
-        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-zinc-950 z-50 pt-20 px-8">
-            <div class="flex flex-col gap-y-8 text-4xl font-medium">
-                <a onclick="toggleMobileMenu();navigateToSection('work')" class="border-b border-white/10 pb-6">Work</a>
-                <a onclick="toggleMobileMenu();navigateToSection('specialties')" class="border-b border-white/10 pb-6">Specialties</a>
-                <a onclick="toggleMobileMenu();navigateToSection('studio')" class="border-b border-white/10 pb-6">The Studio</a>
-                <a onclick="toggleMobileMenu();navigateToSection('journal')" class="border-b border-white/10 pb-6">Journal</a>
-                
-                <div class="pt-8">
-                    <button onclick="toggleMobileMenu();toggleContact()" 
-                            class="w-full py-8 bg-yellow-400 text-zinc-950 font-semibold text-3xl rounded-3xl">
-                        START A PROJECT
-                    </button>
-                </div>
-                
-                <div class="mt-auto flex justify-between text-xs py-8 border-t border-white/10">
-                    <div>© 2025 STUDIO KAIL</div>
-                    <div class="flex gap-x-6">
-                        <a href="#" class="hover:text-yellow-400">INSTA</a>
-                        <a href="#" class="hover:text-yellow-400">X</a>
-                        <a href="#" class="hover:text-yellow-400">ARE.NA</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- HERO -->
-    <header class="hero-bg min-h-screen flex items-center relative overflow-hidden">
-        <!-- background video placeholder -->
-        <div class="absolute inset-0 z-0">
-            <video autoplay muted loop playsinline class="hero-video">
-                <source src="https://assets.mixkit.co/videos/preview/754/754-small.mp4" type="video/mp4">
-            </video>
-        </div>
-        
-        <div class="grain"></div>
-        
-        <div class="max-w-screen-2xl mx-auto px-8 pt-24 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <!-- left content -->
-                <div class="lg:col-span-7">
-                    <div class="max-w-2xl">
-                        <div class="inline-flex items-center gap-x-3 border border-yellow-400/30 text-yellow-400 text-xs tracking-[2px] px-6 h-8 rounded-3xl mb-8">
-                            <div class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                            NOW OPEN FOR 2025 PROJECTS
-                        </div>
-                        
-                        <h1 class="text-[92px] lg:text-[120px] leading-[0.9] font-semibold tracking-[-7px] text-white mb-4">
-                            STUDIO<br>KAIL
-                        </h1>
-                        
-                        <div class="flex items-baseline gap-x-6 mb-12">
-                            <div class="h-px w-16 bg-yellow-400"></div>
-                            <p class="text-3xl serif text-yellow-100 tracking-tight">
-                                From spark<br>to screen to shelf
-                            </p>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-4">
-                            <button onclick="navigateToSection('work')" 
-                                    class="group flex items-center gap-x-4 bg-transparent border-2 border-white hover:border-yellow-400 transition-colors px-8 h-16 rounded-3xl text-lg font-medium">
-                                <span>EXPLORE THE WORK</span>
-                                <span class="block w-3 h-px bg-white group-hover:w-8 transition-all"></span>
-                            </button>
-                            
-                            <button onclick="toggleContact()" 
-                                    class="px-10 h-16 rounded-3xl bg-yellow-400 text-zinc-950 flex items-center justify-center gap-x-3 hover:scale-105 active:scale-95 transition-all text-lg font-semibold">
-                                <i class="fa-solid fa-paper-plane"></i>
-                                <span>START COLLABORATION</span>
-                            </button>
-                        </div>
-                        
-                        <div class="mt-16 flex items-center gap-x-8 text-xs">
-                            <div class="flex -space-x-4">
-                                <div class="w-6 h-6 bg-zinc-700 border-2 border-zinc-950 rounded-2xl flex items-center justify-center text-[10px]">A</div>
-                                <div class="w-6 h-6 bg-rose-400 border-2 border-zinc-950 rounded-2xl flex items-center justify-center text-[10px]">B</div>
-                                <div class="w-6 h-6 bg-sky-400 border-2 border-zinc-950 rounded-2xl flex items-center justify-center text-[10px]">C</div>
-                            </div>
-                            <div class="text-white/60 text-sm max-w-[180px]">
-                                Trusted by visionary brands like <span class="text-yellow-400">Nike</span>, <span class="text-yellow-400">Hermès</span>, and <span class="text-yellow-400">Apple</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- right visual -->
-                <div class="lg:col-span-5 relative">
-                    <div class="relative">
-                        <!-- floating cards -->
-                        <div class="absolute -left-6 top-12 bg-zinc-900 border border-yellow-400/30 w-52 rounded-3xl p-5 shadow-2xl rotate-[-8deg] z-20 card-hover">
-                            <div class="h-40 bg-zinc-800 rounded-2xl mb-4 overflow-hidden">
-                                <img src="https://picsum.photos/id/1015/400/300" alt="Motion" 
-                                     class="w-full h-full object-cover">
-                            </div>
-                            <div class="text-xs uppercase tracking-widest text-amber-400">Motion Reel 02</div>
-                            <div class="text-lg font-medium">Nike React — The Future Is Fluid</div>
-                        </div>
-                        
-                        <div class="absolute right-8 bottom-20 bg-zinc-900 border border-white/10 w-64 rounded-3xl p-5 shadow-2xl rotate-[6deg] z-30 card-hover">
-                            <div class="flex justify-between items-center mb-6">
-                                <div>
-                                    <div class="text-xs text-teal-400">PACKAGING</div>
-                                    <div class="font-medium">LUNAR • Coffee</div>
-                                </div>
-                                <div class="text-6xl font-light text-white/10">04</div>
-                            </div>
-                            <div class="bg-white/5 h-2 rounded-3xl mb-1"></div>
-                            <div class="flex justify-between text-[10px]">
-                                <div>BRANDING</div>
-                                <div class="text-emerald-400">COMPLETE</div>
-                            </div>
-                        </div>
-                        
-                        <!-- central orb -->
-                        <div class="mx-auto w-72 h-72 lg:w-96 lg:h-96 border border-yellow-300/30 rounded-full flex items-center justify-center relative">
-                            <!-- inner rings -->
-                            <div class="absolute w-[260px] h-[260px] border border-dashed border-yellow-400/20 rounded-full animate-[spin_25s_linear_infinite]"></div>
-                            <div class="absolute w-[200px] h-[200px] border border-dashed border-yellow-400/30 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
-                            
-                            <div class="w-56 h-56 bg-gradient-to-br from-yellow-300 to-amber-500 rounded-full flex flex-col items-center justify-center text-center shadow-inner relative z-10">
-                                <div class="text-zinc-950 text-xs font-medium tracking-[3px] mb-1">EST 2018</div>
-                                <div class="text-7xl font-black text-zinc-950 tracking-tighter leading-none">KAIL</div>
-                                <div class="text-[10px] text-zinc-900 mt-6 flex items-center gap-x-5">
-                                    <div class="flex-1 h-px bg-zinc-900"></div>
-                                    <div>CREATIVE STUDIO</div>
-                                    <div class="flex-1 h-px bg-zinc-900"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- orbiting dots -->
-                            <div class="absolute top-8 left-1/2 w-4 h-4 bg-pink-400 rounded-full shadow-[0_0_25px_-3px] shadow-pink-400 animate-[spin_12s_linear_infinite]"></div>
-                            <div class="absolute top-1/3 right-4 w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_25px_-3px] shadow-cyan-400 animate-[spin_18s_linear_infinite_reverse]"></div>
-                            <div class="absolute bottom-12 left-8 w-5 h-5 bg-violet-400 rounded-full shadow-[0_0_25px_-3px] shadow-violet-400 animate-[spin_22s_linear_infinite]"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- scroll indicator -->
-        <div class="absolute bottom-12 left-1/2 flex flex-col items-center gap-y-3 z-30">
-            <div class="text-[10px] font-medium tracking-widest text-yellow-400/70">SCROLL TO DISCOVER</div>
-            <div class="w-px h-12 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent"></div>
-        </div>
-        
-        <!-- bottom bar -->
-        <div class="absolute bottom-0 left-0 right-0 h-20 border-t border-white/10 bg-black/30 backdrop-blur-md hidden xl:flex items-center justify-center gap-x-16 text-xs uppercase">
-            <div class="flex items-center gap-x-8">
-                <div onclick="navigateToSection('specialties')" class="flex items-center gap-x-2 cursor-pointer group">
-                    <span class="text-yellow-400 text-xl">01</span>
-                    <div>
-                        <div class="text-white/70 text-[10px]">BRAND STRATEGY</div>
-                        <div class="group-hover:text-yellow-400 transition-colors">Identity Systems</div>
-                    </div>
-                </div>
-                <div class="h-8 w-px bg-white/10"></div>
-                <div onclick="navigateToSection('specialties')" class="flex items-center gap-x-2 cursor-pointer group">
-                    <span class="text-yellow-400 text-xl">02</span>
-                    <div>
-                        <div class="text-white/70 text-[10px]">MOTION DESIGN</div>
-                        <div class="group-hover:text-yellow-400 transition-colors">Kinetic Stories</div>
-                    </div>
-                </div>
-                <div class="h-8 w-px bg-white/10"></div>
-                <div onclick="navigateToSection('specialties')" class="flex items-center gap-x-2 cursor-pointer group">
-                    <span class="text-yellow-400 text-xl">03</span>
-                    <div>
-                        <div class="text-white/70 text-[10px]">PACKAGING</div>
-                        <div class="group-hover:text-yellow-400 transition-colors">Tactile Objects</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="absolute bottom-8 right-8 flex items-center gap-x-2 text-xs font-mono text-white/30">
-            <div class="w-3 h-px bg-white/30"></div>
-            24°
-            <div class="w-3 h-px bg-white/30"></div>
-        </div>
-    </header>
-
-    <!-- TRUST BAR -->
-    <div class="bg-black py-6 border-b border-white/5">
-        <div class="max-w-screen-2xl mx-auto">
-            <div class="marquee flex items-center gap-x-16 text-xs opacity-40">
-                <div class="flex items-center gap-x-16 whitespace-nowrap">
-                    <span class="font-medium">NIKE</span>
-                    <span class="font-medium">HERMÈS</span>
-                    <span class="font-medium">PATAGONIA</span>
-                    <span class="font-medium">SONY</span>
-                    <span class="font-medium">ADIDAS</span>
-                    <span class="font-medium">VISA</span>
-                    <span class="font-medium">LOUIS VUITTON</span>
-                    <span class="font-medium">NIKE</span>
-                    <span class="font-medium">HERMÈS</span>
-                </div>
-            </div>
-        </div>
+  <div class="relative z-20 max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="pt-10 lg:pt-16 pb-6 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.14em] font-semibold">
+      <span class="px-3 py-1.5 rounded-full bg-white border border-black/10 shadow-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-vermillion"></span> PRODUCT DESIGNER — VANCOUVER</span>
+      <span class="hidden sm:inline-flex px-3 py-1.5 rounded-full bg-white/80 backdrop-blur border border-black/5">AI • GENERATIVE DESIGN • SYSTEMS</span>
+      <span class="ml-auto hidden lg:flex items-center gap-2 text-black/60 font-medium tracking-normal text-xs"><i data-lucide="map-pin" class="w-3 h-3"></i> 49.2827° N, 123.1207° W — PST</span>
     </div>
 
-    <!-- SPECIALTIES -->
-    <section id="specialties" class="max-w-screen-2xl mx-auto px-8 py-28">
-        <div class="flex flex-col lg:flex-row gap-20">
-            <!-- left title -->
-            <div class="lg:w-1/3">
-                <div class="sticky top-28">
-                    <div class="uppercase text-amber-400 text-sm tracking-[1.5px] font-medium mb-3">OUR CRAFT</div>
-                    <h2 class="section-header text-white">We shape<br>stories that<br>live in the<br>physical and<br>digital realms.</h2>
-                    <div class="h-px bg-white/10 my-10"></div>
-                    <p class="text-white/60 max-w-xs">
-                        Studio KAIL is a multidisciplinary creative practice based in Portland, OR. 
-                        We design identities, animate worlds, and craft packaging that people want to keep.
-                    </p>
-                    
-                    <button onclick="navigateToSection('work')" 
-                            class="mt-12 flex items-center gap-x-3 text-sm group">
-                        <div class="uppercase">See all projects</div>
-                        <div class="transition-transform group-active:rotate-45">
-                            <i class="fa-solid fa-arrow-down text-lg"></i>
-                        </div>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- specialties grid -->
-            <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- brand -->
-                <div onclick="showProjectDetail(0)" 
-                     class="card-hover bg-zinc-900 rounded-3xl p-8 cursor-pointer group">
-                    <div class="flex justify-between">
-                        <div class="text-7xl font-light text-yellow-400/70 transition-all group-hover:text-yellow-400">01</div>
-                        <div class="text-right">
-                            <span class="px-4 py-2 text-xs bg-white/10 rounded-3xl">BRAND</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-16 mb-6">
-                        <div class="h-56 bg-zinc-800 rounded-3xl overflow-hidden relative">
-                            <img src="https://picsum.photos/id/160/800/600" alt="Brand" 
-                                 class="absolute inset-0 w-full h-full object-cover transition-all group-hover:scale-110">
-                            <div class="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-zinc-900 to-transparent"></div>
-                            <div class="absolute bottom-8 left-8 text-xl font-medium">LUNAR COFFEE CO.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <div class="font-semibold text-2xl">Brand Strategy</div>
-                            <div class="text-white/50">Identity • Voice • System</div>
-                        </div>
-                        <div class="text-4xl text-yellow-400 transition-transform group-hover:rotate-12">
-                            →
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- motion -->
-                <div onclick="showProjectDetail(1)" 
-                     class="card-hover bg-zinc-900 rounded-3xl p-8 cursor-pointer group">
-                    <div class="flex justify-between">
-                        <div class="text-7xl font-light text-sky-400/70 transition-all group-hover:text-sky-400">02</div>
-                        <div class="text-right">
-                            <span class="px-4 py-2 text-xs bg-white/10 rounded-3xl">MOTION</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-16 mb-6">
-                        <div class="h-56 bg-zinc-800 rounded-3xl overflow-hidden relative flex items-center justify-center">
-                            <div class="w-40 h-40 bg-gradient-to-br from-violet-400 to-fuchsia-400 rounded-2xl flex items-center justify-center shadow-2xl animate-pulse">
-                                <i class="fa-solid fa-play text-5xl text-white"></i>
-                            </div>
-                            <div class="absolute top-6 right-6 bg-black/70 text-[10px] px-3 py-1 rounded-3xl flex items-center gap-x-1">
-                                <div class="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
-                                <span>0:42</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <div class="font-semibold text-2xl">Motion Design</div>
-                            <div class="text-white/50">Animation • Film • 3D</div>
-                        </div>
-                        <div class="text-4xl text-sky-400 transition-transform group-hover:-rotate-12">
-                            →
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- packaging -->
-                <div onclick="showProjectDetail(2)" 
-                     class="card-hover bg-zinc-900 rounded-3xl p-8 cursor-pointer group md:col-span-2 lg:col-span-1">
-                    <div class="flex justify-between">
-                        <div class="text-7xl font-light text-emerald-400/70 transition-all group-hover:text-emerald-400">03</div>
-                        <div class="text-right">
-                            <span class="px-4 py-2 text-xs bg-white/10 rounded-3xl">PACKAGING</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-auto pt-16">
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="aspect-square bg-amber-900 rounded-3xl flex items-center justify-center text-6xl font-light">☕</div>
-                            <div class="aspect-square bg-sky-900 rounded-3xl flex items-center justify-center text-6xl font-light rotate-12">📦</div>
-                            <div class="aspect-square bg-violet-900 rounded-3xl flex items-center justify-center text-6xl font-light -rotate-6">🌿</div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-16 flex justify-between items-end">
-                        <div>
-                            <div class="font-semibold text-2xl">Packaging Design</div>
-                            <div class="text-white/50">Product • Experience • Print</div>
-                        </div>
-                        <div class="text-4xl text-emerald-400 transition-transform group-hover:rotate-12">
-                            →
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- portfolio highlight -->
-                <div onclick="showProjectDetail(3)" 
-                     class="card-hover bg-gradient-to-br from-zinc-900 to-zinc-800 border border-white/10 rounded-3xl p-8 cursor-pointer group flex flex-col">
-                    <div class="flex-1 flex items-center justify-center">
-                        <div class="text-center">
-                            <div class="mx-auto mb-6 w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center">
-                                <i class="fa-solid fa-images text-3xl"></i>
-                            </div>
-                            <div class="uppercase text-xs tracking-widest text-white/40">Featured in</div>
-                            <div class="text-5xl font-light text-white mt-3 leading-none">Portfolio</div>
-                            <div class="text-xs text-yellow-400 mt-8">VIEW ALL 38 PROJECTS →</div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-[170px] font-black text-white/5 leading-none text-right">38</div>
-                </div>
-            </div>
+    <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-12 items-start">
+      <div class="pb-8 lg:pb-16">
+        <h1 class="font-serif text-[46px] sm:text-[64px] lg:text-[84px] leading-[0.85] tracking-[-0.04em]">
+          Product<br>
+          <span class="italic font-light">designer</span><br>
+          <span class="inline-flex items-center gap-3">for <span class="inline-flex items-center justify-center w-[56px] h-[36px] lg:w-[84px] lg:h-[54px] rounded-full border-[1.5px] border-ink text-[11px] font-sans font-bold tracking-widest">HUMAN</span></span><br>
+          <span class="font-display font-bold tracking-tighter">AI era.</span>
+        </h1>
+        <p class="mt-6 max-w-[520px] text-[16px] lg:text-[18px] leading-relaxed text-black/70">
+          I’m <span class="font-semibold text-ink">Zainab Kabira</span> — a Vancouver-based designer bridging architecture, human-centered research, and generative AI to craft thoughtful, adaptive products.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#work" class="inline-flex items-center gap-2 bg-ink text-white px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-black transition shadow-lg">Explore work <i data-lucide="arrow-down" class="w-4 h-4"></i></a>
+          <a href="#journey" class="inline-flex items-center gap-2 bg-white border border-black/10 px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-black hover:text-white transition">My journey <i data-lucide="play" class="w-3.5 h-3.5"></i></a>
         </div>
-    </section>
+        <div class="mt-10 grid grid-cols-3 gap-6 max-w-[520px] border-t border-black/10 pt-6">
+          <div><div class="font-display font-bold text-2xl leading-none">6+</div><div class="text-[11px] tracking-widest font-semibold text-black/50 mt-1">YEARS CRAFTING</div></div>
+          <div><div class="font-display font-bold text-2xl leading-none">30+</div><div class="text-[11px] tracking-widest font-semibold text-black/50 mt-1">PRODUCTS SHIPPED</div></div>
+          <div><div class="font-display font-bold text-2xl leading-none">12k</div><div class="text-[11px] tracking-widest font-semibold text-black/50 mt-1">USERS IMPACTED</div></div>
+        </div>
+      </div>
 
-    <!-- FEATURED WORK -->
-    <section id="work" class="bg-black py-20">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="flex justify-between items-baseline border-b border-white/10 pb-8 mb-8">
-                <div class="flex items-center gap-x-4">
-                    <span class="text-5xl font-light">Featured</span>
-                    <span class="text-yellow-400 text-5xl">Work</span>
-                </div>
-                <a onclick="navigateToSection('work');showAllWorkModal()" 
-                   class="flex items-center text-xs gap-x-2 hover:text-yellow-400 cursor-pointer">
-                    <span class="uppercase">All projects</span> 
-                    <span class="text-2xl leading-none">↗</span>
-                </a>
+      <!-- Right card -->
+      <div class="relative lg:pt-6 pb-10">
+        <div class="bg-white rounded-[28px] p-6 lg:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-black/5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] tracking-[0.14em] font-bold text-black/50">USER-CENTERED APPROACH</span>
+            <span class="w-8 h-8 rounded-full bg-cream grid place-items-center border border-black/5"><i data-lucide="sparkles" class="w-4 h-4"></i></span>
+          </div>
+          <div class="mt-6 grid grid-cols-3 gap-3">
+            <div class="rounded-2xl bg-cream p-4 border border-black/5">
+              <div class="w-8 h-8 rounded-full bg-white grid place-items-center border border-black/5"><i data-lucide="users" class="w-4 h-4"></i></div>
+              <div class="mt-3 font-display font-bold text-sm leading-tight">Research</div><div class="text-xs text-black/60">Jobs-to-be-done, field studies</div>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <!-- large project -->
-                <div onclick="showProjectDetail(0)" 
-                     class="md:col-span-7 bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer group">
-                    <div class="relative">
-                        <img src="https://picsum.photos/id/201/1200/900" alt="Nike Motion" 
-                             class="w-full aspect-video object-cover transition-all duration-700 group-hover:scale-110">
-                        <div class="absolute top-8 left-8 bg-black/70 px-5 py-2 text-xs rounded-3xl flex items-center gap-x-2">
-                            <span class="text-lime-400">●</span>
-                            <span>MOTION</span>
-                        </div>
-                        
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-3/4"></div>
-                        
-                        <div class="absolute bottom-8 left-8 right-8">
-                            <div class="flex justify-between items-end">
-                                <div class="max-w-xs">
-                                    <div class="uppercase text-amber-400 text-xs mb-2 tracking-wider">Nike • 2024</div>
-                                    <div class="text-4xl font-medium leading-tight">The React Universe</div>
-                                    <div class="text-white/60 text-sm mt-3">A 3D cinematic journey through the next generation of Nike footwear.</div>
-                                </div>
-                                <div class="text-[120px] font-black text-white/10 leading-none">01</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- side projects -->
-                <div class="md:col-span-5 flex flex-col gap-8">
-                    <div onclick="showProjectDetail(1)" 
-                         class="flex-1 bg-zinc-900 rounded-3xl p-6 flex gap-6 cursor-pointer group">
-                        <div class="flex-1">
-                            <div class="text-xs text-violet-400 mb-3">BRANDING + PACKAGING</div>
-                            <div class="text-3xl font-medium leading-none">Olive &amp; Oak<br>Provisions</div>
-                            <div class="text-xs text-white/40 mt-8">A full identity and packaging system for a Pacific Northwest apothecary.</div>
-                        </div>
-                        <div class="w-40 h-40 bg-[url('https://picsum.photos/id/29/400/400')] bg-cover bg-center rounded-3xl transition-all group-hover:rotate-6"></div>
-                    </div>
-                    
-                    <div onclick="showProjectDetail(2)" 
-                         class="flex-1 bg-zinc-900 rounded-3xl p-6 flex gap-6 cursor-pointer group">
-                        <div class="flex-1">
-                            <div class="text-xs text-teal-400 mb-3">MOTION + DIGITAL</div>
-                            <div class="text-3xl font-medium leading-none">Future<br>Ancestry</div>
-                            <div class="text-xs text-white/40 mt-8">Animated documentary about generational memory for the Smithsonian.</div>
-                        </div>
-                        <div class="w-40 h-40 bg-[url('https://picsum.photos/id/48/400/400')] bg-cover bg-center rounded-3xl transition-all group-active:scale-95"></div>
-                    </div>
-                </div>
+            <div class="rounded-2xl bg-ink text-white p-4">
+              <div class="w-8 h-8 rounded-full bg-white/15 grid place-items-center"><i data-lucide="bot" class="w-4 h-4"></i></div>
+              <div class="mt-3 font-display font-bold text-sm leading-tight">Generative</div><div class="text-xs text-white/70">AI-native prototyping</div>
             </div>
-            
-            <!-- second row -->
-            <div class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-8">
-                <div onclick="showProjectDetail(3)" class="group">
-                    <div class="rounded-3xl overflow-hidden bg-zinc-800">
-                        <img src="https://picsum.photos/id/160/600/400" alt="" 
-                             class="w-full transition-all group-hover:scale-105">
-                    </div>
-                    <div class="px-2 pt-6">
-                        <div class="flex justify-between text-xs">
-                            <div class="text-rose-400">PACKAGING</div>
-                            <div class="font-medium">SALT &amp; SEA • 2023</div>
-                        </div>
-                        <div class="text-xl mt-1">Ceramic vessels that capture the Pacific coast.</div>
-                    </div>
-                </div>
-                
-                <div onclick="showProjectDetail(4)" class="group">
-                    <div class="rounded-3xl overflow-hidden bg-zinc-800">
-                        <img src="https://picsum.photos/id/201/600/400" alt="" 
-                             class="w-full transition-all group-hover:scale-105">
-                    </div>
-                    <div class="px-2 pt-6">
-                        <div class="flex justify-between text-xs">
-                            <div class="text-fuchsia-400">BRAND</div>
-                            <div class="font-medium">KITSCH • 2024</div>
-                        </div>
-                        <div class="text-xl mt-1">Retro-futurist identity for a vinyl record label.</div>
-                    </div>
-                </div>
-                
-                <div onclick="showProjectDetail(5)" class="group hidden md:block">
-                    <div class="rounded-3xl overflow-hidden bg-zinc-800">
-                        <img src="https://picsum.photos/id/251/600/400" alt="" 
-                             class="w-full transition-all group-hover:scale-105">
-                    </div>
-                    <div class="px-2 pt-6">
-                        <div class="flex justify-between text-xs">
-                            <div class="text-cyan-400">MOTION</div>
-                            <div class="font-medium">FLUX • 2024</div>
-                        </div>
-                        <div class="text-xl mt-1">Kinetic title sequence for an indie sci-fi feature.</div>
-                    </div>
-                </div>
+            <div class="rounded-2xl bg-[#FFF1D6] p-4 border border-black/5">
+              <div class="w-8 h-8 rounded-full bg-white grid place-items-center border border-black/5"><i data-lucide="box" class="w-4 h-4"></i></div>
+              <div class="mt-3 font-display font-bold text-sm leading-tight">Systems</div><div class="text-xs text-black/60">Design → code</div>
             </div>
-        </div>
-    </section>
+          </div>
 
-    <!-- STUDIO STORY -->
-    <section id="studio" class="max-w-screen-2xl mx-auto px-8 py-28 border-t border-b border-white/10">
-        <div class="grid grid-cols-12 gap-x-8">
-            <div class="col-span-12 lg:col-span-5">
-                <div class="text-yellow-400 text-sm font-medium mb-6">THE STUDIO</div>
-                <h2 class="text-7xl leading-none tracking-tighter font-light">We are a collective of thinkers, makers, and storytellers.</h2>
-                
-                <div class="mt-16 max-w-xs text-white/60">
-                    Founded in 2018, Studio KAIL exists at the intersection of craft, technology, and culture. 
-                    Our process is rooted in research, experimentation, and an obsessive attention to detail.
-                </div>
-                
-                <div class="mt-12 flex items-center gap-x-6">
-                    <div class="flex-shrink-0">
-                        <div class="rounded-2xl overflow-hidden">
-                            <img src="https://picsum.photos/id/64/120/120" alt="Founder" 
-                                 class="w-16 h-16 object-cover">
-                        </div>
-                    </div>
-                    <div class="text-sm">
-                        <div class="font-medium">KAILA MORENO</div>
-                        <div class="text-white/40">Founder &amp; Creative Director</div>
-                    </div>
-                </div>
-                
-                <button onclick="toggleContact()" 
-                        class="mt-20 text-xs border border-yellow-400 text-yellow-400 px-8 py-6 rounded-3xl flex items-center gap-x-4 hover:bg-yellow-400 hover:text-zinc-950 transition-all">
-                    <span class="font-medium">MEET THE TEAM</span>
-                    <i class="fa-solid fa-users"></i>
-                </button>
+          <!-- Generative playground mini -->
+          <div class="mt-5 rounded-2xl bg-[#0E3A2F] text-white p-5 overflow-hidden relative">
+            <div class="flex items-center justify-between">
+              <div class="text-xs tracking-widest font-bold text-white/60">GENERATIVE PLAYGROUND</div>
+              <span class="text-[10px] px-2 py-1 rounded-full bg-white/15 border border-white/20">LIVE</span>
             </div>
-            
-            <!-- studio values -->
-            <div class="col-span-12 lg:col-span-7 mt-16 lg:mt-0">
-                <div class="grid grid-cols-2 gap-px bg-white/10">
-                    <div class="bg-zinc-900 p-8">
-                        <div class="text-6xl font-light text-white/20">01</div>
-                        <div class="text-3xl font-medium mt-6">Curiosity first</div>
-                        <div class="mt-4 text-white/50">We ask questions before we make answers.</div>
-                    </div>
-                    <div class="bg-zinc-900 p-8">
-                        <div class="text-6xl font-light text-white/20">02</div>
-                        <div class="text-3xl font-medium mt-6">Tactile digital</div>
-                        <div class="mt-4 text-white/50">Beautiful things should feel good in your hands and in your eyes.</div>
-                    </div>
-                    <div class="bg-zinc-900 p-8">
-                        <div class="text-6xl font-light text-white/20">03</div>
-                        <div class="text-3xl font-medium mt-6">Community led</div>
-                        <div class="mt-4 text-white/50">We design with people, not just for them.</div>
-                    </div>
-                    <div class="bg-zinc-900 p-8">
-                        <div class="text-6xl font-light text-white/20">04</div>
-                        <div class="text-3xl font-medium mt-6">Endless iteration</div>
-                        <div class="mt-4 text-white/50">The work is never finished, only released.</div>
-                    </div>
-                </div>
+            <canvas id="miniGen" width="360" height="120" class="w-full h-[120px] mt-3 rounded-xl bg-white/5 border border-white/10"></canvas>
+            <div class="mt-3 flex items-center gap-3">
+              <input id="genDensity" type="range" min="8" max="48" value="22" class="range flex-1 accent-white">
+              <button id="regenBtn" class="px-4 py-2 rounded-full bg-white text-ink text-xs font-bold hover:bg-cream transition">Regenerate</button>
             </div>
-        </div>
-    </section>
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
+          </div>
 
-    <!-- TESTIMONIALS / COMMUNITY -->
-    <div class="bg-zinc-950 py-16">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="flex flex-col md:flex-row gap-y-16 md:items-end">
-                <div class="md:w-5/12">
-                    <div class="text-xs uppercase text-white/30">FROM THE COMMUNITY</div>
-                    <div class="text-5xl serif text-yellow-200 leading-tight mt-3">"Working with KAIL completely transformed how we think about our brand presence in both digital and physical spaces."</div>
-                    <div class="mt-10 flex items-center gap-x-4">
-                        <div class="w-9 h-px bg-yellow-400"></div>
-                        <div>
-                            <div class="text-sm">MIA TORRES</div>
-                            <div class="text-xs text-white/40">Creative Director @ Patagonia</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="md:w-7/12 grid grid-cols-3 gap-4 text-xs">
-                    <div class="bg-zinc-900/70 p-6 rounded-3xl">
-                        “The motion work they created for our campaign increased engagement by 340%.”
-                        <div class="text-[10px] text-teal-400 mt-12">— Head of Marketing, Sonos</div>
-                    </div>
-                    <div class="bg-zinc-900/70 p-6 rounded-3xl">
-                        “Their packaging for our new product line is now in the permanent collection at the Cooper Hewitt.”
-                        <div class="text-[10px] text-rose-400 mt-12">— Founder, Aesop</div>
-                    </div>
-                    <div class="bg-zinc-900/70 p-6 rounded-3xl">
-                        “KAIL helped us discover our true visual language. The results speak for themselves.”
-                        <div class="text-[10px] text-violet-400 mt-12">— CEO, Notion</div>
-                    </div>
-                </div>
-            </div>
+          <div class="mt-4 flex items-center gap-3 text-xs">
+            <img src="https://i.pravatar.cc/100?img=32" class="w-8 h-8 rounded-full object-cover border-2 border-white shadow">
+            <div><div class="font-semibold leading-none">Collaborating with teams at Hatcha & Fireflut</div><div class="text-black/50">Available for freelance & full-time</div></div>
+            <a href="#contact" class="ml-auto w-8 h-8 rounded-full bg-ink text-white grid place-items-center"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+          </div>
         </div>
+        <!-- floating badge -->
+        <div class="absolute -left-2 lg:-left-6 bottom-16 lg:bottom-20 bg-white rounded-2xl px-4 py-3 shadow-xl border border-black/5 flex items-center gap-3 rotate-[-1.5deg]">
+          <div class="w-10 h-10 rounded-full bg-vermillion text-white grid place-items-center"><i data-lucide="wand-2" class="w-5 h-5"></i></div>
+          <div><div class="text-xs font-bold leading-none">AI + Human intuition</div><div class="text-[11px] text-black/50">Balancing automation & empathy</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-20 border-y border-black/10 bg-white/70 backdrop-blur">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-3 flex items-center gap-6 overflow-hidden">
+      <span class="text-[11px] tracking-widest font-bold whitespace-nowrap">TRUSTED BY TEAMS AT</span>
+      <div class="flex-1 overflow-hidden relative">
+        <div class="flex gap-10 marquee whitespace-nowrap text-sm font-display font-bold tracking-wide opacity-70">
+          <span>✦ HATCHA</span><span>✦ FIREFLUT</span><span>✦ EXISTENCE</span><span>✦ NORTHFOLD</span><span>✦ ARCHETYPE</span><span>✦ LUMEN LABS</span><span>✦ HATCHA</span><span>✦ FIREFLUT</span><span>✦ EXISTENCE</span><span>✦ NORTHFOLD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+  <div class="grid lg:grid-cols-[420px_1fr] gap-10 lg:gap-16">
+    <div class="lg:sticky lg:top-24 h-fit">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] tracking-widest font-bold"><span class="w-2 h-2 rounded-full bg-moss"></span> DESIGN JOURNEY</div>
+      <h2 class="mt-4 font-serif text-[42px] leading-[0.9] tracking-tight">From <span class="italic font-light">architecture</span> to adaptive interfaces.</h2>
+      <p class="mt-4 text-[15px] leading-relaxed text-black/60">Trained as an architect, I learned to think in systems, light, and human flow. Today I apply that spatial rigor to product design — where generative AI becomes a material, not a gimmick.</p>
+      <div class="mt-6 rounded-2xl overflow-hidden border border-black/10 bg-white">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" class="w-full h-[220px] object-cover">
+        <div class="p-4 flex items-center gap-3">
+          <div class="flex-1"><div class="text-xs font-bold tracking-widest">VANCOUVER STUDIO</div><div class="text-xs text-black/50">Where space meets system</div></div>
+          <span class="px-3 py-1 rounded-full bg-cream border border-black/5 text-xs font-semibold">2016 → Now</span>
+        </div>
+      </div>
     </div>
 
-    <!-- JOURNAL / INSIGHTS -->
-    <section id="journal" class="max-w-screen-2xl mx-auto px-8 py-20 bg-black">
-        <div class="flex items-center justify-between mb-8">
-            <div class="uppercase text-xs tracking-widest font-medium text-yellow-400">Journal</div>
-            <div class="text-4xl font-light">Thoughts, experiments, and stories</div>
+    <div class="relative">
+      <div class="absolute left-[15px] top-2 bottom-2 w-px bg-black/10 hidden sm:block"></div>
+      <div class="space-y-6">
+        <!-- item -->
+        <div class="relative flex gap-5">
+          <div class="hidden sm:grid w-8 h-8 rounded-full bg-ink text-white place-items-center text-xs font-bold shrink-0 mt-1">01</div>
+          <div class="flex-1 bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div><div class="text-[11px] tracking-widest font-bold text-vermillion">2016 — 2018 • ARCHITECTURE</div><h3 class="font-display font-bold text-lg leading-tight mt-1">Foundations in spatial systems</h3></div>
+              <span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold border border-black/5">B.Arch • UBC</span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-black/60">Studied how people move through environments. Thesis on generative housing — early experiments with parametric design and human behavior mapping.</p>
+            <div class="mt-4 flex flex-wrap gap-2 text-xs"><span class="px-2.5 py-1 rounded-full bg-black text-white">Parametric</span><span class="px-2.5 py-1 rounded-full bg-white border">Physical → Digital</span></div>
+          </div>
         </div>
-        
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="group cursor-pointer">
-                <div class="h-80 bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="https://picsum.photos/id/318/600/800" alt="Article" 
-                         class="h-full w-full object-cover transition-all group-hover:scale-110">
-                </div>
-                <div class="mt-6 text-sm text-amber-400">ESSAY • 14 MIN READ</div>
-                <div class="text-2xl font-medium mt-3 leading-tight">The new language of luxury is quiet, slow, and deeply considered.</div>
-                <div class="text-xs text-white/40 mt-8">BY KAILA MORENO • NOV 12 2024</div>
+        <div class="relative flex gap-5">
+          <div class="hidden sm:grid w-8 h-8 rounded-full bg-white border border-black/10 place-items-center text-xs font-bold shrink-0 mt-1">02</div>
+          <div class="flex-1 bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
+            <div class="text-[11px] tracking-widest font-bold text-black/40">2019 — 2020 • TRANSITION</div>
+            <h3 class="font-display font-bold text-lg leading-tight mt-1">Falling in love with product</h3>
+            <p class="mt-3 text-sm leading-relaxed text-black/60">Joined a health-tech startup in Gastown. Led research sprints, mapped care journeys, and shipped my first design system used by 40k+ patients.</p>
+            <div class="mt-4 grid grid-cols-3 gap-3 text-center">
+              <div class="rounded-xl bg-cream p-3 border border-black/5"><div class="font-bold">120+</div><div class="text-[11px] text-black/50">Interviews</div></div>
+              <div class="rounded-xl bg-cream p-3 border border-black/5"><div class="font-bold">3x</div><div class="text-[11px] text-black/50">Activation</div></div>
+              <div class="rounded-xl bg-cream p-3 border border-black/5"><div class="font-bold">DS 1.0</div><div class="text-[11px] text-black/50">Shipped</div></div>
             </div>
-            
-            <div class="group cursor-pointer">
-                <div class="h-80 bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="https://picsum.photos/id/327/600/800" alt="Article" 
-                         class="h-full w-full object-cover transition-all group-hover:scale-110">
-                </div>
-                <div class="mt-6 text-sm text-sky-400">CASE STUDY</div>
-                <div class="text-2xl font-medium mt-3 leading-tight">How we helped a 120-year-old winery find relevance with Gen Z.</div>
-                <div class="text-xs text-white/40 mt-8">DEC 02 2024</div>
-            </div>
-            
-            <div class="group cursor-pointer">
-                <div class="h-80 bg-zinc-900 rounded-3xl overflow-hidden relative">
-                    <img src="https://picsum.photos/id/366/600/800" alt="Article" 
-                         class="h-full w-full object-cover transition-all group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-violet-600/30"></div>
-                    <div class="absolute bottom-6 left-6 text-white text-5xl font-light">03</div>
-                </div>
-                <div class="mt-6 text-sm text-violet-400">VIDEO ESSAY • 9 MIN</div>
-                <div class="text-2xl font-medium mt-3 leading-tight">The typography of protest: a visual archive</div>
-                <div class="text-xs text-white/40 mt-8">DEC 18 2024</div>
-            </div>
+          </div>
         </div>
-    </section>
+        <div class="relative flex gap-5">
+          <div class="hidden sm:grid w-8 h-8 rounded-full bg-vermillion text-white place-items-center text-xs font-bold shrink-0 mt-1">03</div>
+          <div class="flex-1 bg-ink text-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10 blur-2xl"></div>
+            <div class="text-[11px] tracking-widest font-bold text-white/60">2021 — 2023 • BREAKTHROUGH</div>
+            <h3 class="font-display font-bold text-lg leading-tight mt-1">Designing with AI, not just for it</h3>
+            <p class="mt-3 text-sm leading-relaxed text-white/70">At Hatcha, explored how LLMs can augment creativity without erasing craft. Built generative writing tools that adapt to voice, not templates.</p>
+            <div class="mt-4 flex gap-2"><span class="px-2.5 py-1 rounded-full bg-white text-ink text-xs font-bold">AI-native</span><span class="px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-xs">0→1 shipped</span></div>
+          </div>
+        </div>
+        <div class="relative flex gap-5">
+          <div class="hidden sm:grid w-8 h-8 rounded-full bg-white border border-black/10 place-items-center text-xs font-bold shrink-0 mt-1">04</div>
+          <div class="flex-1 bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
+            <div class="text-[11px] tracking-widest font-bold text-black/40">2024 — NOW • SYSTEMS</div>
+            <h3 class="font-display font-bold text-lg leading-tight mt-1">Human at the core, AI at the edge</h3>
+            <p class="mt-3 text-sm leading-relaxed text-black/60">Now freelancing & advising. Focused on design systems for generative products, ethical AI patterns, and teaching the next wave of designers in Vancouver.</p>
+            <div class="mt-4 flex flex-wrap gap-2 text-xs font-medium"><span class="px-3 py-1.5 rounded-full bg-[#FFF1D6] border">Workshops</span><span class="px-3 py-1.5 rounded-full bg-[#FFF1D6] border">Mentorship</span><span class="px-3 py-1.5 rounded-full bg-[#FFF1D6] border">Speaking</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- FINAL CTA -->
-    <div class="bg-gradient-to-br from-yellow-400 via-amber-400 to-yellow-300 text-zinc-950 py-20">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="rounded-3xl bg-white/90 py-16 px-12 flex flex-col md:flex-row items-center gap-12">
-                <div class="flex-1">
-                    <div class="text-6xl leading-none font-medium tracking-tighter">Ready to bring your next idea to life?</div>
-                    <div class="text-xl text-zinc-600 mt-6">Whether it's a brand refresh, a motion film, or a new product packaging system — let's make something unforgettable together.</div>
-                </div>
-                
-                <div>
-                    <button onclick="toggleContact()" 
-                            class="px-16 py-8 bg-zinc-900 hover:bg-black transition-colors text-2xl text-white rounded-3xl flex items-center gap-x-6 group">
-                        <span>BEGIN THE CONVERSATION</span>
-                        <span class="text-4xl transition-transform group-active:rotate-45 inline-block">↗</span>
-                    </button>
-                </div>
-            </div>
+<!-- WORK -->
+<section id="work" class="bg-white border-y border-black/10">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-ink text-white text-[11px] tracking-widest font-bold">SELECTED WORK — 2021 → 2025</div>
+        <h2 class="mt-4 font-serif text-[40px] lg:text-[56px] leading-none tracking-tight">Highlights that <span class="italic font-light">shipped</span> & scaled.</h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 text-xs font-medium"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> 3 case studies</div>
+        <div class="flex p-1 rounded-full bg-cream border border-black/5">
+          <button data-filter="all" class="filterBtn active px-4 py-1.5 rounded-full bg-ink text-white text-xs font-bold">All</button>
+          <button data-filter="ai" class="filterBtn px-4 py-1.5 rounded-full text-xs font-bold hover:bg-white transition">AI</button>
+          <button data-filter="system" class="filterBtn px-4 py-1.5 rounded-full text-xs font-bold hover:bg-white transition">Systems</button>
         </div>
+      </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-zinc-950 pt-16 pb-8">
-        <div class="max-w-screen-2xl mx-auto px-8 grid grid-cols-12 gap-y-16">
-            <!-- col 1 -->
-            <div class="col-span-12 md:col-span-5">
-                <div class="flex items-center gap-x-3">
-                    <div class="w-9 h-9 bg-yellow-400 text-zinc-950 flex items-center justify-center text-4xl font-bold rotate-12">K</div>
-                    <div class="logo-text text-5xl text-white">KAIL</div>
-                </div>
-                <div class="text-xs max-w-xs text-white/30 mt-6 leading-relaxed">
-                    A creative studio exploring the boundaries between physical and digital product experiences since 2018.
-                </div>
-                
-                <div class="mt-20 text-xs flex gap-x-8">
-                    <div>
-                        <div class="font-medium mb-4 text-white">PORTLAND</div>
-                        <div class="text-white/30">503.555.0192</div>
-                        <div class="text-white/30">studio@kail.co</div>
-                    </div>
-                    <div>
-                        <div class="font-medium mb-4 text-white">BROOKLYN</div>
-                        <div class="text-white/30">347.555.9921</div>
-                    </div>
-                </div>
-                
-                <div class="mt-auto pt-20 text-[10px] text-white/30 flex items-center gap-x-8">
-                    <div>PRIVACY</div>
-                    <div>LEGAL</div>
-                    <div class="flex-1 h-px bg-white/10"></div>
-                    <div>© STUDIO KAIL 2025</div>
-                </div>
-            </div>
-            
-            <!-- col 2 -->
-            <div class="col-span-6 md:col-span-2">
-                <div class="uppercase text-xs font-medium text-white/60 mb-8">Navigation</div>
-                <div class="flex flex-col gap-y-6 text-sm">
-                    <a onclick="navigateToSection('work');return false" class="hover:text-yellow-300 cursor-pointer">Work</a>
-                    <a onclick="navigateToSection('specialties');return false" class="hover:text-yellow-300 cursor-pointer">Specialties</a>
-                    <a onclick="navigateToSection('studio');return false" class="hover:text-yellow-300 cursor-pointer">Studio</a>
-                    <a onclick="navigateToSection('journal');return false" class="hover:text-yellow-300 cursor-pointer">Journal</a>
-                </div>
-            </div>
-            
-            <!-- col 3 -->
-            <div class="col-span-6 md:col-span-2">
-                <div class="uppercase text-xs font-medium text-white/60 mb-8">Services</div>
-                <div class="flex flex-col gap-y-6 text-sm">
-                    <div class="hover:text-yellow-300 cursor-pointer">Brand Identity</div>
-                    <div class="hover:text-yellow-300 cursor-pointer">Motion Direction</div>
-                    <div class="hover:text-yellow-300 cursor-pointer">Packaging Systems</div>
-                    <div class="hover:text-yellow-300 cursor-pointer">Digital Experiences</div>
-                    <div class="hover:text-yellow-300 cursor-pointer">Art Direction</div>
-                </div>
-            </div>
-            
-            <!-- col 4 -->
-            <div class="col-span-12 md:col-span-3">
-                <div class="bg-zinc-900 rounded-3xl p-7 text-xs">
-                    <div class="flex justify-between">
-                        <div class="text-white/60">CURRENTLY LISTENING TO</div>
-                        <div class="text-emerald-400">LIVE</div>
-                    </div>
-                    <div class="mt-6 text-2xl font-light">Aphex Twin — Selected Ambient Works</div>
-                    
-                    <div class="h-2 bg-white/10 rounded-3xl mt-12 relative">
-                        <div class="absolute left-0 top-0 h-2 w-3/4 bg-yellow-400 rounded-3xl"></div>
-                    </div>
-                    
-                    <div class="flex text-[10px] text-white/30 justify-between mt-3">
-                        <div>2:14</div>
-                        <div>-1:03</div>
-                    </div>
-                </div>
-                
-                <div class="mt-8 text-[10px] flex items-center gap-x-5 text-white/30">
-                    <i class="fa-brands fa-instagram text-xl"></i>
-                    <i class="fa-brands fa-x-twitter text-xl"></i>
-                    <i class="fa-brands fa-behance text-xl"></i>
-                    <i class="fa-brands fa-linkedin text-xl"></i>
-                </div>
-            </div>
+    <div class="mt-10 grid lg:grid-cols-3 gap-6">
+      <!-- Hatcha -->
+      <article data-cat="ai" class="work-card group bg-cream rounded-[28px] border border-black/5 overflow-hidden card-hover flex flex-col">
+        <div class="p-6 pb-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] tracking-widest font-bold text-black/50">01 / HATCHA</span>
+            <span class="px-2.5 py-1 rounded-full bg-white border border-black/5 text-[11px] font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-vermillion"></span> AI • WRITING</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-[22px] leading-tight">Hatcha — Generative writing companion</h3>
+          <p class="mt-2 text-sm leading-relaxed text-black/60">An AI co-writer that learns your voice. Designed adaptive prompts and a canvas that feels like paper, not a chatbot.</p>
+          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold"><span class="px-2.5 py-1 rounded-full bg-white border">UX Research</span><span class="px-2.5 py-1 rounded-full bg-white border">GenAI</span><span class="px-2.5 py-1 rounded-full bg-ink text-white">0 → 1</span></div>
         </div>
-        
-        <div class="text-center text-[10px] text-white/20 mt-24">
-            MADE WITH INTENTION IN THE PACIFIC NORTHWEST
+        <div class="mx-3 rounded-2xl overflow-hidden bg-white border border-black/5 relative">
+          <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80" class="w-full h-[220px] object-cover group-hover:scale-[1.02] transition duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          <!-- interactive prompt demo -->
+          <div class="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur rounded-xl p-3 border border-black/5 shadow-lg">
+            <div class="text-[10px] tracking-widest font-bold text-black/50">TRY THE VOICE TUNER</div>
+            <div class="mt-2 flex gap-1.5">
+              <button class="voiceBtn flex-1 py-1.5 rounded-full bg-ink text-white text-xs font-bold" data-voice="Warm">Warm</button>
+              <button class="voiceBtn flex-1 py-1.5 rounded-full bg-white border text-xs font-bold" data-voice="Crisp">Crisp</button>
+              <button class="voiceBtn flex-1 py-1.5 rounded-full bg-white border text-xs font-bold" data-voice="Poetic">Poetic</button>
+            </div>
+            <div id="voiceOutput" class="mt-2 text-xs leading-relaxed bg-cream rounded-lg p-2 border border-black/5">Warm voice: “Let your ideas hatch gently — Hatcha keeps your rhythm, not someone else’s template.”</div>
+          </div>
         </div>
-    </footer>
+        <div class="p-4 flex items-center justify-between mt-auto">
+          <a href="#" onclick="openModal('hatcha');return false" class="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition">View case study <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+          <span class="text-xs text-black/50">2023 • 4.8★ • 18k users</span>
+        </div>
+      </article>
 
-    <!-- PROJECT MODAL -->
-    <div onclick="if(event.target.id === 'project-modal') hideProjectModal()" 
-         id="project-modal" 
-         class="hidden fixed inset-0 bg-black/90 backdrop-blur-xl z-[999] flex items-center justify-center">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="max-w-4xl mx-4 bg-zinc-900 rounded-3xl max-h-[90vh] overflow-hidden">
-            
-            <!-- modal header image -->
-            <div id="modal-image" class="h-80 bg-cover bg-center relative">
-                <div onclick="hideProjectModal()" 
-                     class="absolute top-6 right-6 bg-black/60 hover:bg-black text-white w-10 h-10 flex items-center justify-center rounded-2xl cursor-pointer transition-colors">
-                    ✕
-                </div>
-                
-                <div class="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-zinc-900 to-transparent"></div>
-                
-                <div id="modal-category" 
-                     class="absolute top-8 left-8 uppercase text-xs tracking-widest bg-white/90 text-zinc-900 px-6 py-3 rounded-3xl font-semibold"></div>
-            </div>
-            
-            <div class="p-10">
-                <div id="modal-title" class="text-5xl font-medium"></div>
-                <div id="modal-client" class="text-yellow-400 text-sm mt-1"></div>
-                
-                <div class="grid grid-cols-3 gap-6 my-16">
-                    <div>
-                        <div class="text-xs text-white/30">YEAR</div>
-                        <div id="modal-year" class="font-medium text-3xl">2024</div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-white/30">SCOPE</div>
-                        <div id="modal-scope" class="font-medium text-3xl">Brand, Motion, Packaging</div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-white/30">TEAM</div>
-                        <div class="font-medium text-3xl">7 creatives</div>
-                    </div>
-                </div>
-                
-                <div id="modal-description" class="text-white/70 leading-relaxed text-lg">
-                </div>
-                
-                <div class="flex gap-x-3 mt-16">
-                    <button onclick="hideProjectModal()" 
-                            class="flex-1 py-6 text-center border border-white/30 hover:border-white transition-colors rounded-3xl">
-                        CLOSE
-                    </button>
-                    <button onclick="hideProjectModal()" 
-                            class="flex-1 py-6 text-center bg-yellow-400 text-zinc-950 font-semibold rounded-3xl">
-                        SEE FULL CASE STUDY
-                    </button>
-                </div>
-            </div>
+      <!-- Fireflut -->
+      <article data-cat="system" class="work-card group bg-white rounded-[28px] border border-black/10 overflow-hidden card-hover flex flex-col">
+        <div class="p-6 pb-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] tracking-widest font-bold text-black/50">02 / FIREFLUT</span>
+            <span class="px-2.5 py-1 rounded-full bg-cream border border-black/5 text-[11px] font-bold">FINTECH • SYSTEMS</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-[22px] leading-tight">Fireflut — Money flow, visualized</h3>
+          <p class="mt-2 text-sm leading-relaxed text-black/60">Reimagined expense tracking as a living river. Drag, split, and forecast flows with an engine that learns your habits.</p>
+          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold"><span class="px-2.5 py-1 rounded-full bg-cream border">Design System</span><span class="px-2.5 py-1 rounded-full bg-cream border">Data Viz</span><span class="px-2.5 py-1 rounded-full bg-vermillion text-white">+42% retention</span></div>
         </div>
+        <div class="mx-3 rounded-2xl overflow-hidden bg-[#0E3A2F] relative p-4">
+          <div class="flex items-center justify-between text-white/70 text-[10px] tracking-widest font-bold"><span>FLOW SIMULATOR</span><span class="px-2 py-1 rounded-full bg-white/10 border border-white/20 text-white">DRAG NODES</span></div>
+          <div class="mt-3 relative h-[180px] rounded-xl bg-white p-3 overflow-hidden">
+            <svg id="flowSvg" viewBox="0 0 320 160" class="w-full h-full">
+              <path id="flowPath" d="M 20 80 C 80 20, 140 140, 220 80 S 300 80, 300 80" fill="none" stroke="#FF3B1F" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+              <circle id="dragNode" cx="160" cy="80" r="10" fill="#0E3A2F" stroke="white" stroke-width="3" style="cursor:grab; filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))"/>
+              <circle cx="20" cy="80" r="6" fill="#FFD23F" stroke="#131316" stroke-width="2"/>
+              <circle cx="300" cy="80" r="6" fill="#0E3A2F" stroke="#131316" stroke-width="2"/>
+            </svg>
+            <div class="absolute bottom-2 left-3 right-3 flex justify-between text-[11px] font-bold"><span class="px-2 py-1 rounded-full bg-cream border">Income</span><span class="px-2 py-1 rounded-full bg-ink text-white">Balance</span></div>
+          </div>
+          <div class="mt-3 grid grid-cols-3 gap-2 text-center text-white">
+            <div class="rounded-xl bg-white/10 border border-white/10 py-2"><div class="text-xs font-bold">$4.2k</div><div class="text-[10px] opacity-70">In</div></div>
+            <div class="rounded-xl bg-white text-ink py-2"><div class="text-xs font-bold">$1.1k</div><div class="text-[10px] opacity-70">Saved</div></div>
+            <div class="rounded-xl bg-white/10 border border-white/10 py-2"><div class="text-xs font-bold">12%</div><div class="text-[10px] opacity-70">Growth</div></div>
+          </div>
+        </div>
+        <div class="p-4 flex items-center justify-between mt-auto">
+          <a href="#" onclick="openModal('fireflut');return false" class="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition">View case study <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+          <span class="text-xs text-black/50">2022 • Featured in FastCo</span>
+        </div>
+      </article>
+
+      <!-- Existence -->
+      <article data-cat="ai system" class="work-card group bg-[#FFF1D6] rounded-[28px] border border-black/5 overflow-hidden card-hover flex flex-col">
+        <div class="p-6 pb-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] tracking-widest font-bold text-black/50">03 / EXISTENCE</span>
+            <span class="px-2.5 py-1 rounded-full bg-white border border-black/5 text-[11px] font-bold">ARCHITECTURE • AI</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-[22px] leading-tight">Existence — Spatial memory archive</h3>
+          <p class="mt-2 text-sm leading-relaxed text-black/60">A tool for architects to capture, generate, and inhabit memories of place. From sketch to inhabitable 3D, co-created with AI.</p>
+          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold"><span class="px-2.5 py-1 rounded-full bg-white border">Spatial UX</span><span class="px-2.5 py-1 rounded-full bg-white border">Generative 3D</span><span class="px-2.5 py-1 rounded-full bg-ink text-white">Exhibited</span></div>
+        </div>
+        <div class="mx-3 rounded-2xl overflow-hidden bg-white border border-black/5 relative">
+          <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80" class="w-full h-[200px] object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-3 left-3 right-3">
+            <div class="bg-white/95 backdrop-blur rounded-xl p-3 border border-black/5 shadow-lg">
+              <div class="flex items-center justify-between"><span class="text-[10px] tracking-widest font-bold text-black/50">MODULE GENERATOR</span><span class="text-[11px] font-bold px-2 py-1 rounded-full bg-ink text-white" id="moduleCount">6 modules</span></div>
+              <div id="moduleGrid" class="mt-2 grid grid-cols-6 gap-1.5">
+                <!-- generated via JS -->
+              </div>
+              <button id="shuffleModules" class="mt-2 w-full py-1.5 rounded-full bg-cream border text-xs font-bold hover:bg-white transition">Shuffle existence</button>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 flex items-center justify-between mt-auto">
+          <a href="#" onclick="openModal('existence');return false" class="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition">View case study <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+          <span class="text-xs text-black/50">2024 • Venice Biennale</span>
+        </div>
+      </article>
     </div>
 
-    <!-- ALL WORK MODAL -->
-    <div onclick="if(event.target.id === 'allwork-modal') hideAllWorkModal()" id="allwork-modal" 
-         class="hidden fixed inset-0 bg-black/95 z-[9999] flex items-center justify-center p-8">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="max-w-6xl w-full bg-zinc-900 rounded-3xl overflow-hidden max-h-[92vh] flex flex-col">
-            
-            <div class="px-10 py-8 border-b border-white/10 flex items-center justify-between">
-                <div class="text-3xl">All Projects • 38</div>
-                <div onclick="hideAllWorkModal()" class="cursor-pointer text-4xl leading-none text-white/30 hover:text-white">×</div>
-            </div>
-            
-            <div class="flex-1 p-10 grid grid-cols-1 md:grid-cols-2 gap-8 overflow-auto" style="max-height: calc(92vh - 130px)">
-                <!-- populated by JS -->
-            </div>
-            
-            <div class="p-6 text-xs bg-black/30 flex justify-center items-center gap-x-8 text-white/30">
-                <div class="flex items-center gap-x-1.5">
-                    <span class="block w-2 h-2 bg-yellow-400 rounded-full animate-ping"></span>
-                    <span>NEW</span>
-                </div>
-                <div>SCROLL FOR MORE ↓</div>
-            </div>
+    <div class="mt-8 rounded-[24px] bg-ink text-white p-6 lg:p-8 flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+      <div class="flex gap-4">
+        <div class="w-12 h-12 rounded-full bg-white text-ink grid place-items-center shrink-0"><i data-lucide="layers" class="w-6 h-6"></i></div>
+        <div><div class="font-display font-bold text-lg leading-tight">My process: Research → Prototype → Systemize</div><div class="text-sm text-white/60 mt-1 max-w-[560px]">Every project starts with people. I map jobs, test ugly prototypes, then systematize what works — so AI feels invisible, not intrusive.</div></div>
+      </div>
+      <a href="#experience" class="inline-flex items-center gap-2 bg-white text-ink px-6 py-3 rounded-full font-bold text-sm hover:bg-cream transition shrink-0">See how I work <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
+  <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] tracking-widest font-bold">EXPERIENCE & SKILLS</div>
+      <h2 class="mt-3 font-serif text-[40px] leading-none tracking-tight">Craft, scaled <br><span class="italic font-light">with care.</span></h2>
+
+      <div class="mt-8 bg-white rounded-2xl border border-black/10 overflow-hidden">
+        <div class="grid grid-cols-[1fr_auto] gap-4 px-5 py-3 bg-cream border-b border-black/5 text-[11px] tracking-widest font-bold text-black/50"><span>ROLE & COMPANY</span><span>YEAR</span></div>
+        <div class="divide-y divide-black/5">
+          <div class="px-5 py-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-ink text-white grid place-items-center font-bold text-xs">H</div><div><div class="font-bold text-sm leading-tight">Senior Product Designer — Hatcha</div><div class="text-xs text-black/50">Vancouver • AI Writing Tools</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-cream border">2022—24</span>
+          </div>
+          <div class="px-5 py-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-vermillion text-white grid place-items-center"><i data-lucide="flame" class="w-4 h-4"></i></div><div><div class="font-bold text-sm leading-tight">Product Designer — Fireflut</div><div class="text-xs text-black/50">Remote • Fintech OS</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white border">2020—22</span>
+          </div>
+          <div class="px-5 py-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-moss text-white grid place-items-center"><i data-lucide="building-2" class="w-4 h-4"></i></div><div><div class="font-bold text-sm leading-tight">Existence — Founder / Design Lead</div><div class="text-xs text-black/50">Vancouver • Spatial Archive</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white border">2024—Now</span>
+          </div>
+          <div class="px-5 py-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-white border grid place-items-center"><i data-lucide="graduation-cap" class="w-4 h-4"></i></div><div><div class="font-bold text-sm leading-tight">Design Mentor — UBC & BrainStation</div><div class="text-xs text-black/50">Vancouver • Teaching</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white border">2021—Now</span>
+          </div>
         </div>
+      </div>
+
+      <a href="#" class="mt-4 inline-flex items-center gap-2 text-sm font-bold">Download CV <i data-lucide="download" class="w-4 h-4"></i></a>
     </div>
 
-    <!-- CONTACT DRAWER -->
-    <div onclick="if(event.target.id === 'contact-drawer') toggleContact()" id="contact-drawer"
-         class="hidden fixed inset-0 bg-black/70 z-[99999] flex items-end lg:items-center justify-center">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="bg-zinc-900 w-full max-w-lg lg:max-w-xl rounded-t-3xl lg:rounded-3xl overflow-hidden">
-            
-            <div class="px-8 pt-8 pb-4 flex justify-between items-center border-b border-white/10">
-                <div class="font-medium text-xl">Let's make something together</div>
-                <button onclick="toggleContact()" class="text-3xl text-white/30">✕</button>
-            </div>
-            
-            <div class="p-8">
-                <form onsubmit="submitFakeForm(event)" class="space-y-8">
-                    <div>
-                        <label class="block text-xs uppercase text-white/40 mb-2">Your name or studio</label>
-                        <input id="contact-name" type="text" 
-                               class="w-full bg-transparent border-b border-white/30 focus:border-yellow-400 py-4 outline-none text-lg placeholder:text-white/20"
-                               placeholder="Taylor Kim">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs uppercase text-white/40 mb-2">Project type</label>
-                        <div class="flex flex-wrap gap-3">
-                            <div onclick="selectType(this)" class="project-type-chip active">Brand Identity</div>
-                            <div onclick="selectType(this)" class="project-type-chip">Motion Film</div>
-                            <div onclick="selectType(this)" class="project-type-chip">Packaging</div>
-                            <div onclick="selectType(this)" class="project-type-chip">Full Campaign</div>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <label class="block text-xs uppercase text-white/40 mb-2">Email</label>
-                            <input type="email" 
-                                   class="w-full bg-transparent border-b border-white/30 focus:border-yellow-400 py-4 outline-none text-lg placeholder:text-white/20"
-                                   placeholder="you@email.com">
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase text-white/40 mb-2">Budget range</label>
-                            <select class="w-full bg-transparent border-b border-white/30 focus:border-yellow-400 py-4 outline-none text-lg">
-                                <option>$25k — $50k</option>
-                                <option>$50k — $100k</option>
-                                <option>$100k+</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs uppercase text-white/40 mb-2">Tell us about your project</label>
-                        <textarea rows="5"
-                                  class="w-full bg-transparent border border-white/30 focus:border-yellow-400 p-6 outline-none resize-none rounded-3xl text-base"
-                                  placeholder="We're launching a new line of sustainable activewear and need a complete identity system..."></textarea>
-                    </div>
-                    
-                    <button type="submit"
-                            class="w-full h-16 bg-yellow-400 text-zinc-950 font-semibold text-lg rounded-3xl active:scale-[0.97] transition-transform">
-                        SEND MESSAGE
-                    </button>
-                </form>
-            </div>
-            
-            <div class="px-8 py-6 text-xs flex items-center justify-between bg-black/30">
-                <div class="flex items-center gap-x-4">
-                    <i class="fa-solid fa-lock"></i>
-                    <span class="text-white/40">Your information is safe with us</span>
-                </div>
-                <div class="text-emerald-400 text-xs font-medium">OR EMAIL US DIRECTLY</div>
-            </div>
+    <div class="space-y-6">
+      <div class="rounded-[24px] bg-white border border-black/10 p-6 shadow-sm">
+        <h3 class="font-display font-bold">AI & Generative toolkit</h3>
+        <p class="text-sm text-black/60 mt-1">I treat AI as a design material — prototyping with code, not just Figma.</p>
+        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="rounded-2xl bg-cream border p-4"><div class="text-xs font-bold tracking-widest text-black/50">PROTOTYPING</div><div class="mt-2 flex flex-wrap gap-1.5 text-xs font-semibold"><span class="px-2 py-1 rounded-full bg-white border">Figma</span><span class="px-2 py-1 rounded-full bg-white border">Framer</span><span class="px-2 py-1 rounded-full bg-ink text-white">v0 / Lovable</span></div></div>
+          <div class="rounded-2xl bg-cream border p-4"><div class="text-xs font-bold tracking-widest text-black/50">AI SYSTEMS</div><div class="mt-2 flex flex-wrap gap-1.5 text-xs font-semibold"><span class="px-2 py-1 rounded-full bg-white border">Prompt Design</span><span class="px-2 py-1 rounded-full bg-white border">RAG</span><span class="px-2 py-1 rounded-full bg-vermillion text-white">Agents</span></div></div>
+          <div class="rounded-2xl bg-cream border p-4"><div class="text-xs font-bold tracking-widest text-black/50">RESEARCH</div><div class="mt-2 text-xs leading-relaxed text-black/60">Jobs-to-be-done, diary studies, usability + AI eval harnesses</div></div>
+          <div class="rounded-2xl bg-ink text-white p-4"><div class="text-xs font-bold tracking-widest text-white/60">PRINCIPLE</div><div class="mt-2 text-xs leading-relaxed text-white/80">Automation should <span class="text-white font-bold">amplify</span> judgment, not replace it.</div></div>
         </div>
+      </div>
+
+      <div class="rounded-[24px] bg-[#FFF1D6] border border-black/5 p-6">
+        <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white grid place-items-center border"><i data-lucide="heart-handshake" class="w-5 h-5"></i></div><h3 class="font-display font-bold">User-centered, always</h3></div>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white border grid place-items-center shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></span><span><b>Co-create with users</b> — weekly testing, not big reveals. I bring engineers & users into the same FigJam.</span></li>
+          <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white border grid place-items-center shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></span><span><b>Prototype in the medium</b> — if it’s AI, we test with real models on day one.</span></li>
+          <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white border grid place-items-center shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></span><span><b>Measure what matters</b> — task success & trust, not just clicks.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="bg-ink text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-20">
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-vermillion blur-[100px] -top-40 -left-40"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[#FFD23F] blur-[90px] -bottom-40 -right-20 opacity-40"></div>
+  </div>
+  <div class="absolute top-8 left-[12%] w-[120px] h-[36px] bg-white/90 rounded-full hidden lg:block"></div>
+  <div class="absolute top-12 left-[14%] w-[70px] h-[44px] bg-white/90 rounded-full hidden lg:block"></div>
+  <div class="absolute top-16 right-[18%] w-[160px] h-[46px] bg-white/90 rounded-full hidden lg:block"></div>
+
+  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-[11px] tracking-widest font-bold">TESTIMONIALS • KIND WORDS</div>
+        <h2 class="mt-4 font-serif text-[40px] lg:text-[54px] leading-none tracking-tight">People I’ve built <span class="italic font-light text-[#FFD23F]">with.</span></h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="tPrev" class="w-10 h-10 rounded-full bg-white text-ink grid place-items-center hover:bg-cream transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+        <button id="tNext" class="w-10 h-10 rounded-full bg-white text-ink grid place-items-center hover:bg-cream transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+      </div>
     </div>
 
-    <script>
-        // Tailwind script run
-        function initializeTailwind() {
-            tailwind.config = {
-                content: [],
-                theme: {
-                    extend: {}
-                }
-            }
-        }
-        
-        // Mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById("mobile-menu")
-            menu.classList.toggle("hidden")
-        }
-        
-        // Contact drawer
-        let contactOpen = false
-        
-        function toggleContact() {
-            const drawer = document.getElementById("contact-drawer")
-            contactOpen = !contactOpen
-            
-            if (contactOpen) {
-                drawer.classList.remove("hidden")
-                drawer.classList.add("flex")
-                // reset form
-                document.getElementById("contact-name").focus()
-            } else {
-                drawer.classList.add("hidden")
-                drawer.classList.remove("flex")
-            }
-        }
-        
-        function selectType(el) {
-            document.querySelectorAll('.project-type-chip').forEach(chip => {
-                chip.classList.remove("active", "bg-yellow-400", "text-zinc-950")
-            })
-            el.classList.add("active", "bg-yellow-400", "text-zinc-950")
-        }
-        
-        function submitFakeForm(e) {
-            e.preventDefault()
-            
-            const btns = document.querySelectorAll("#contact-drawer button")
-            const originalText = btns[btns.length - 1].innerHTML
-            
-            btns[btns.length - 1].innerHTML = `
-                <span class="inline-block animate-spin mr-3">⟳</span>
-                SENDING...
-            `
-            btns[btns.length - 1].disabled = true
-            
-            setTimeout(() => {
-                btns[btns.length - 1].innerHTML = `
-                    <i class="fa-solid fa-check mr-3"></i>
-                    THANK YOU!
-                `
-                btns[btns.length - 1].style.backgroundColor = "#22c55e"
-                
-                setTimeout(() => {
-                    toggleContact()
-                    
-                    // reset button
-                    setTimeout(() => {
-                        btns[btns.length - 1].innerHTML = originalText
-                        btns[btns.length - 1].style.backgroundColor = ""
-                        btns[btns.length - 1].disabled = false
-                    }, 1200)
-                }, 1600)
-            }, 1450)
-            
-            return false
-        }
-        
-        // Progress bar
-        function setupProgressBar() {
-            const progressBar = document.getElementById("progress-bar")
-            
-            window.addEventListener("scroll", () => {
-                const scrollTop = window.scrollY
-                const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
-                const scrollPercent = scrollTop / docHeight * 100
-                progressBar.style.width = `${scrollPercent}%`
-            })
-        }
-        
-        // Custom cursor
-        function setupCustomCursor() {
-            const cursor = document.getElementById("custom-cursor")
-            
-            if (!cursor) return
-            
-            let timeout
-            
-            document.addEventListener("mousemove", (e) => {
-                cursor.style.left = `${e.clientX - 12}px`
-                cursor.style.top = `${e.clientY - 12}px`
-                
-                cursor.style.transform = `scale(1)`
-                clearTimeout(timeout)
-                
-                timeout = setTimeout(() => {
-                    cursor.style.transform = `scale(0.2)`
-                }, 800)
-            })
-            
-            // grow on interactive elements
-            const interactables = document.querySelectorAll("button, a, .card-hover")
-            interactables.forEach(item => {
-                item.addEventListener("mouseenter", () => {
-                    cursor.style.width = "40px"
-                    cursor.style.height = "40px"
-                    cursor.style.borderColor = "rgb(163 163 163)"
-                })
-                item.addEventListener("mouseleave", () => {
-                    cursor.style.width = "24px"
-                    cursor.style.height = "24px"
-                    cursor.style.borderColor = "rgb(234 179 8)"
-                })
-            })
-        }
-        
-        // Fake project data
-        const projects = [
-            {
-                title: "Nike React Universe",
-                category: "Motion",
-                client: "Nike",
-                year: "2024",
-                scope: "Motion, 3D, Campaign",
-                description: "We created a cinematic 3-minute film that visualizes the next generation of Nike's React foam technology. The piece blends live action, 3D product animation and kinetic typography to tell the story of movement without boundaries.",
-                image: "https://picsum.photos/id/201/1200/900"
-            },
-            {
-                title: "Lunar Coffee Co.",
-                category: "Brand + Packaging",
-                client: "Lunar Coffee",
-                year: "2024",
-                scope: "Identity, Packaging, Digital",
-                description: "Complete rebrand and packaging system for a third-wave coffee roaster based in Portland. The identity draws inspiration from lunar cycles and the rich textures of hand-poured coffee.",
-                image: "https://picsum.photos/id/160/1200/900"
-            },
-            {
-                title: "Future Ancestry",
-                category: "Motion Documentary",
-                client: "Smithsonian",
-                year: "2023",
-                scope: "Animation, Research, Direction",
-                description: "An animated short film exploring the science of generational trauma and inherited memory. The piece premiered at the Tribeca Film Festival and has been viewed over 2 million times online.",
-                image: "https://picsum.photos/id/48/1200/900"
-            },
-            {
-                title: "Salt & Sea Ceramics",
-                category: "Packaging",
-                client: "Salt & Sea",
-                year: "2023",
-                scope: "Packaging, Brand, Photography",
-                description: "Hand-thrown ceramic vessels and accompanying packaging for a line of Pacific Northwest sea salts. Every package tells the story of the specific beach where the salt was harvested.",
-                image: "https://picsum.photos/id/29/1200/900"
-            }
-        ]
-        
-        function showProjectDetail(index) {
-            const project = projects[index % projects.length]
-            const modal = document.getElementById("project-modal")
-            
-            document.getElementById("modal-image").style.backgroundImage = `url('${project.image}')`
-            document.getElementById("modal-category").innerHTML = project.category
-            document.getElementById("modal-title").innerHTML = project.title
-            document.getElementById("modal-client").innerHTML = project.client
-            document.getElementById("modal-year").innerHTML = project.year
-            document.getElementById("modal-scope").innerHTML = project.scope
-            document.getElementById("modal-description").innerHTML = project.description
-            
-            modal.classList.remove("hidden")
-            modal.classList.add("flex")
-            
-            // disable scroll on body
-            document.body.style.overflow = "hidden"
-        }
-        
-        function hideProjectModal() {
-            const modal = document.getElementById("project-modal")
-            modal.classList.add("hidden")
-            modal.classList.remove("flex")
-            document.body.style.overflow = "visible"
-        }
-        
-        function showAllWorkModal() {
-            const modal = document.getElementById("allwork-modal")
-            const container = modal.querySelector(".flex-1")
-            container.innerHTML = ""
-            
-            for (let i = 0; i < 8; i++) {
-                const proj = projects[i % projects.length]
-                const div = document.createElement("div")
-                div.className = "cursor-pointer group"
-                div.innerHTML = `
-                    <div class="rounded-3xl overflow-hidden border border-white/10 group-hover:border-yellow-400 transition-colors">
-                        <img src="${proj.image}" class="w-full aspect-video object-cover">
-                    </div>
-                    <div class="mt-6 px-1">
-                        <div class="flex justify-between items-baseline">
-                            <div class="text-yellow-400 text-xs">${proj.category}</div>
-                            <div class="text-xs text-white/30">${proj.year}</div>
-                        </div>
-                        <div class="text-2xl font-light mt-1 group-hover:text-yellow-400 transition-colors">${proj.title}</div>
-                        <div class="text-xs text-white/40">${proj.client}</div>
-                    </div>
-                `
-                div.onclick = () => {
-                    hideAllWorkModal()
-                    setTimeout(() => {
-                        showProjectDetail(i)
-                    }, 400)
-                }
-                container.append(div)
-            }
-            
-            modal.classList.remove("hidden")
-            modal.classList.add("flex")
-        }
-        
-        function hideAllWorkModal() {
-            const modal = document.getElementById("allwork-modal")
-            modal.classList.add("hidden")
-            modal.classList.remove("flex")
-        }
-        
-        function navigateToSection(section) {
-            let el
-            if (section === "work") {
-                el = document.getElementById("work")
-            } else if (section === "specialties") {
-                el = document.getElementById("specialties")
-            } else if (section === "studio") {
-                el = document.getElementById("studio")
-            } else if (section === "journal") {
-                el = document.getElementById("journal")
-            }
-            
-            if (el) {
-                const navHeight = 90
-                const topPos = el.getBoundingClientRect().top + window.scrollY
-                window.scrollTo({
-                    top: topPos - navHeight,
-                    behavior: "smooth"
-                })
-            }
-            
-            // close mobile menu if open
-            const mobileMenu = document.getElementById("mobile-menu")
-            if (!mobileMenu.classList.contains("hidden")) {
-                mobileMenu.classList.add("hidden")
-            }
-        }
-        
-        // Keyboard shortcuts
-        function handleKeyboard(e) {
-            if (e.metaKey && e.key === "k") {
-                e.preventDefault()
-                toggleContact()
-            }
-            
-            if (e.key === "Escape") {
-                const projectModal = document.getElementById("project-modal")
-                const allWorkModal = document.getElementById("allwork-modal")
-                const contactDrawer = document.getElementById("contact-drawer")
-                
-                if (!projectModal.classList.contains("hidden")) hideProjectModal()
-                else if (!allWorkModal.classList.contains("hidden")) hideAllWorkModal()
-                else if (!contactDrawer.classList.contains("hidden")) toggleContact()
-            }
-        }
-        
-        // Add some scroll animations with intersection observer
-        function animateOnScroll() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1
-                        entry.target.style.transform = 'translateY(0)'
-                    }
-                })
-            }, {
-                threshold: 0.15
-            })
-            
-            const els = document.querySelectorAll('.card-hover, section')
-            els.forEach((el, index) => {
-                if (index > 2) {
-                    el.style.opacity = 0
-                    el.style.transform = 'translateY(60px)'
-                    el.style.transition = 'all 1s cubic-bezier(0.23, 1, 0.32, 1)'
-                    observer.observe(el)
-                }
-            })
-        }
-        
-        // Random subtle animation on logo
-        function animateLogo() {
-            const logo = document.querySelector('.logo-text')
-            if (!logo) return
-            
-            setInterval(() => {
-                logo.style.transitionDuration = '400ms'
-                logo.style.transform = 'rotate(4deg)'
-                
-                setTimeout(() => {
-                    logo.style.transform = 'rotate(0deg)'
-                }, 220)
-            }, 8000)
-        }
-        
-        // Initialize everything
-        function initialize() {
-            initializeTailwind()
-            setupProgressBar()
-            setupCustomCursor()
-            animateOnScroll()
-            animateLogo()
-            
-            // keyboard listener
-            document.addEventListener('keydown', handleKeyboard)
-            
-            // close modals when pressing escape already handled
-            
-            // demo: open the first project automatically after 4200ms
-            setTimeout(() => {
-                // disabled for better UX on load
-                // showProjectDetail(0)
-            }, 4200)
-            
-            // make the marquee move continuously
-            const marquees = document.querySelectorAll('.marquee')
-            marquees.forEach(marquee => {
-                marquee.style.animation = 'marquee-slide 25s linear infinite'
-            })
-            
-            // add a few more css keyframes
-            const style = document.createElement('style')
-            style.innerHTML = `
-                @keyframes marquee-slide {
-                    from { transform: translateX(0); }
-                    to { transform: translateX(-50%); }
-                }
-                
-                .project-type-chip {
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                    padding: 10px 22px;
-                    border-radius: 9999px;
-                    font-size: 13px;
-                    cursor: pointer;
-                    border: 1px solid rgb(234 179 8 / 0.2);
-                }
-                
-                .project-type-chip.active {
-                    border-color: rgb(234 179 8);
-                }
-            `
-            document.head.append(style)
-            
-            // demo live clock in footer
-            console.log('%cStudio KAIL ready. Scroll to explore.', 'font-family:monospace;font-size:10px;color:#f59e0b')
-        }
-        
-        // Boot app
-        window.onload = initialize
-    </script>
+    <div class="mt-10 overflow-hidden">
+      <div id="tTrack" class="flex transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)]">
+        <!-- Card 1 -->
+        <div class="min-w-full lg:min-w-[50%] pr-0 lg:pr-6">
+          <div class="bg-white text-ink rounded-[28px] p-7 lg:p-8 h-full relative overflow-hidden">
+            <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-cream border"></div>
+            <div class="flex items-center gap-1 text-vermillion"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+            <p class="mt-4 font-serif text-[20px] leading-snug">“Zainab has a rare blend — deep user empathy and fearless systems thinking. She turned our messy AI vision for Hatcha into a product people <i>love</i> to write with.”</p>
+            <div class="mt-6 flex items-center gap-3">
+              <img src="https://i.pravatar.cc/100?img=14" class="w-10 h-10 rounded-full object-cover">
+              <div><div class="font-bold text-sm leading-none">Maya Chen</div><div class="text-xs text-black/50">CEO, Hatcha • Vancouver</div></div>
+              <span class="ml-auto hidden sm:inline-flex px-3 py-1 rounded-full bg-cream border text-xs font-bold">Hatcha</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="min-w-full lg:min-w-[50%] pr-0 lg:pr-6">
+          <div class="bg-[#FFF1D6] text-ink rounded-[28px] p-7 lg:p-8 h-full border border-white/20">
+            <div class="flex items-center gap-1 text-ink"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+            <p class="mt-4 font-serif text-[20px] leading-snug">“Fireflut’s retention jump wasn’t magic — it was Zainab’s river metaphor and obsessive prototyping. Engineers still talk about her flow simulator.”</p>
+            <div class="mt-6 flex items-center gap-3">
+              <img src="https://i.pravatar.cc/100?img=33" class="w-10 h-10 rounded-full object-cover">
+              <div><div class="font-bold text-sm leading-none">David Okoro</div><div class="text-xs text-black/50">CTO, Fireflut • Toronto</div></div>
+              <span class="ml-auto hidden sm:inline-flex px-3 py-1 rounded-full bg-white border text-xs font-bold">Fireflut</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="min-w-full lg:min-w-[50%] pr-0 lg:pr-6">
+          <div class="bg-white text-ink rounded-[28px] p-7 lg:p-8 h-full">
+            <div class="flex items-center gap-1 text-vermillion"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+            <p class="mt-4 font-serif text-[20px] leading-snug">“Existence felt impossible until Zainab mapped it. She designs for memory and emotion — not just screens. A true architect of digital place.”</p>
+            <div class="mt-6 flex items-center gap-3">
+              <img src="https://i.pravatar.cc/100?img=26" class="w-10 h-10 rounded-full object-cover">
+              <div><div class="font-bold text-sm leading-none">Sofia Marin</div><div class="text-xs text-black/50">Curator, Venice Biennale</div></div>
+              <span class="ml-auto hidden sm:inline-flex px-3 py-1 rounded-full bg-cream border text-xs font-bold">Existence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-center gap-2">
+      <div class="tDot w-8 h-1.5 rounded-full bg-white transition"></div>
+      <div class="tDot w-1.5 h-1.5 rounded-full bg-white/30 transition"></div>
+      <div class="tDot w-1.5 h-1.5 rounded-full bg-white/30 transition"></div>
+    </div>
+  </div>
+</section>
+
+<!-- THOUGHTS / BLOG -->
+<section id="thoughts" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
+  <div class="flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] tracking-widest font-bold">THOUGHTS • WRITING & TALKS</div>
+      <h2 class="mt-3 font-serif text-[40px] leading-none tracking-tight">On product, place <span class="italic font-light">& AI.</span></h2>
+    </div>
+    <a href="#" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-black/10 text-sm font-bold hover:bg-ink hover:text-white transition">View all articles <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+  </div>
+
+  <div class="mt-8 grid md:grid-cols-3 gap-6">
+    <article class="group bg-white rounded-[24px] border border-black/10 overflow-hidden card-hover">
+      <div class="relative h-[190px] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white text-[11px] font-bold border">ARCHITECTURE</span>
+        <span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-ink text-white text-[11px] font-bold">5 min</span>
+      </div>
+      <div class="p-5">
+        <div class="text-[11px] tracking-widest font-bold text-black/40">NOV 12, 2025 • ESSAY</div>
+        <h3 class="mt-1 font-display font-bold leading-tight text-[17px]">What architecture taught me about AI interfaces</h3>
+        <p class="mt-2 text-sm leading-relaxed text-black/60 line-clamp-2">Buildings choreograph attention. So should AI products — with thresholds, light, and affordances that invite, not overwhelm.</p>
+        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-bold hover:gap-2 transition">Read essay <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
+      </div>
+    </article>
+
+    <article class="group bg-white rounded-[24px] border border-black/10 overflow-hidden card-hover">
+      <div class="relative h-[190px] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-vermillion text-white text-[11px] font-bold">GENERATIVE DESIGN</span>
+        <span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-white border text-[11px] font-bold">Playground</span>
+      </div>
+      <div class="p-5">
+        <div class="text-[11px] tracking-widest font-bold text-black/40">OCT 28, 2025 • INTERACTIVE</div>
+        <h3 class="mt-1 font-display font-bold leading-tight text-[17px]">Designing prompts that feel like design tools</h3>
+        <p class="mt-2 text-sm leading-relaxed text-black/60 line-clamp-2">From slash commands to canvases — a field guide to prompt UX that respects creative flow. Includes Figma file.</p>
+        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-bold hover:gap-2 transition">Open playground <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+      </div>
+    </article>
+
+    <article class="group bg-white rounded-[24px] border border-black/10 overflow-hidden card-hover">
+      <div class="relative h-[190px] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-moss text-white text-[11px] font-bold">PRODUCT DESIGN</span>
+        <span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-white border text-[11px] font-bold">Video • 12:04</span>
+      </div>
+      <div class="p-5">
+        <div class="text-[11px] tracking-widest font-bold text-black/40">SEP 15, 2025 • TALK</div>
+        <h3 class="mt-1 font-display font-bold leading-tight text-[17px]">The human in the loop is not a fallback</h3>
+        <p class="mt-2 text-sm leading-relaxed text-black/60 line-clamp-2">Talk from Config Vancouver: why great AI products need designed friction — and how we tested trust at Hatcha.</p>
+        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-bold hover:gap-2 transition">Watch talk <i data-lucide="play" class="w-3.5 h-3.5"></i></a>
+      </div>
+    </article>
+  </div>
+
+  <div class="mt-8 rounded-[24px] bg-cream border border-black/10 p-6 flex flex-col md:flex-row gap-6 items-center">
+    <div class="flex-1">
+      <div class="font-display font-bold text-lg">Get new essays — architecture, AI, and notes from Vancouver</div>
+      <div class="text-sm text-black/60 mt-1">No spam. One email a month. Unsubscribe anytime.</div>
+    </div>
+    <form id="newsletter" class="flex w-full md:w-auto gap-2">
+      <input type="email" required placeholder="your@email.com" class="flex-1 md:w-[280px] px-4 py-3 rounded-full bg-white border border-black/10 text-sm outline-none focus:border-ink">
+      <button class="px-6 py-3 rounded-full bg-ink text-white text-sm font-bold hover:bg-black transition whitespace-nowrap">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="bg-white border-t border-black/10">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-12 lg:py-16">
+    <div class="rounded-[32px] bg-ink text-white p-8 lg:p-12 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-[420px] h-[420px] rounded-full bg-white/10 blur-3xl"></div>
+      <div class="absolute -left-20 -bottom-20 w-[360px] h-[360px] rounded-full bg-vermillion/20 blur-3xl"></div>
+      <div class="relative grid lg:grid-cols-2 gap-10">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] tracking-widest font-bold">LET'S BUILD SOMETHING THOUGHTFUL</div>
+          <h2 class="mt-4 font-serif text-[38px] lg:text-[52px] leading-[0.9] tracking-tight">Have an idea that <br><span class="italic font-light text-[#FFD23F]">needs a human touch?</span></h2>
+          <p class="mt-4 text-white/70 leading-relaxed max-w-[520px]">I’m currently taking on select product & AI projects, workshops, and advising. Based in Vancouver, working with teams worldwide.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="mailto:hello@zainabkabira.design" class="inline-flex items-center gap-2 bg-white text-ink px-6 py-3 rounded-full font-bold text-sm hover:bg-cream transition">hello@zainabkabira.design <i data-lucide="mail" class="w-4 h-4"></i></a>
+            <a href="#" class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-6 py-3 rounded-full font-bold text-sm hover:bg-white hover:text-ink transition"><i data-lucide="calendar" class="w-4 h-4"></i> Book intro call</a>
+          </div>
+          <div class="mt-8 flex items-center gap-4 text-sm text-white/60">
+            <a href="#" class="hover:text-white transition flex items-center gap-1.5"><i data-lucide="linkedin" class="w-4 h-4"></i> LinkedIn</a>
+            <span class="w-px h-4 bg-white/20"></span>
+            <a href="#" class="hover:text-white transition flex items-center gap-1.5"><i data-lucide="figma" class="w-4 h-4"></i> Figma</a>
+            <span class="w-px h-4 bg-white/20"></span>
+            <a href="#" class="hover:text-white transition flex items-center gap-1.5"><i data-lucide="twitter" class="w-4 h-4"></i> Are.na</a>
+          </div>
+        </div>
+        <form id="contactForm" class="bg-white text-ink rounded-[24px] p-6 lg:p-7 shadow-xl">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="text-xs font-bold tracking-widest">NAME <input required name="name" placeholder="Ada Lovelace" class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none focus:border-ink"></label>
+            <label class="text-xs font-bold tracking-widest">EMAIL <input required type="email" name="email" placeholder="ada@analytical.com" class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none focus:border-ink"></label>
+          </div>
+          <label class="block mt-4 text-xs font-bold tracking-widest">PROJECT TYPE
+            <select class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none">
+              <option>AI-native product (0→1)</option><option>Design system</option><option>Workshop / Speaking</option><option>Advising</option>
+            </select>
+          </label>
+          <label class="block mt-4 text-xs font-bold tracking-widest">TELL ME ABOUT IT
+            <textarea rows="4" placeholder="What are you hoping to make? Who is it for?" class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none resize-none"></textarea>
+          </label>
+          <button class="mt-5 w-full py-3.5 rounded-full bg-ink text-white font-bold text-sm hover:bg-black transition flex items-center justify-center gap-2">Send inquiry <i data-lucide="send" class="w-4 h-4"></i></button>
+          <div class="mt-3 text-center text-xs text-black/50">Avg. reply time: ~6 hours • Vancouver (PST)</div>
+        </form>
+      </div>
+    </div>
+    <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-black/50">
+      <div>© 2026 Zainab Kabira — Product Designer, Vancouver, Canada. Crafted with care & a little generative magic.</div>
+      <div class="flex items-center gap-4"><a href="#" class="hover:text-ink">Privacy</a><a href="#" class="hover:text-ink">Colophon</a><span class="hidden sm:inline">Built with Figma, Framer & love</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODALS -->
+<div id="modal-hatcha" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal('hatcha')"></div>
+  <div class="relative max-w-[760px] mx-auto my-6 lg:my-10 bg-cream rounded-[28px] overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="sticky top-0 bg-cream/90 backdrop-blur border-b border-black/10 px-6 py-4 flex items-center justify-between">
+      <div class="text-xs tracking-widest font-bold">CASE STUDY — HATCHA</div><button onclick="closeModal('hatcha')" class="w-8 h-8 rounded-full bg-white border grid place-items-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=1200&q=80" class="w-full h-[320px] object-cover">
+    <div class="p-6 lg:p-8">
+      <h3 class="font-serif text-3xl leading-tight">Hatcha — Keeping voice in a generative world</h3>
+      <p class="mt-3 text-black/60 leading-relaxed">Problem: Writers loved AI speed but hated sounding like everyone else. We built a voice-tuning system that learns from 3 samples and adapts prompts without prompt engineering.</p>
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 text-sm"><div class="rounded-xl bg-white border p-4"><div class="font-bold">Role</div><div class="text-black/60">Lead Product Designer, research → ship</div></div><div class="rounded-xl bg-white border p-4"><div class="font-bold">Impact</div><div class="text-black/60">18k users, 4.8★, 62% weekly retention</div></div><div class="rounded-xl bg-ink text-white p-4"><div class="font-bold">Stack</div><div class="text-white/70">Figma, Next.js, LLM eval harness</div></div></div>
+      <a href="#contact" onclick="closeModal('hatcha')" class="mt-6 inline-flex items-center gap-2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm">Start a similar project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+  </div>
+</div>
+
+<div id="modal-fireflut" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal('fireflut')"></div>
+  <div class="relative max-w-[760px] mx-auto my-6 lg:my-10 bg-white rounded-[28px] overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white/90 backdrop-blur border-b border-black/10 px-6 py-4 flex items-center justify-between"><div class="text-xs tracking-widest font-bold">CASE STUDY — FIREFLUT</div><button onclick="closeModal('fireflut')" class="w-8 h-8 rounded-full bg-cream border grid place-items-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+    <div class="h-[280px] bg-[#0E3A2F] grid place-items-center p-6"><div class="bg-white rounded-2xl p-4 w-full max-w-[520px]"><div class="text-xs font-bold tracking-widest">BEFORE → AFTER</div><div class="mt-2 text-sm text-black/60">From spreadsheet anxiety to a river you can dam, split, and forecast. We tested 11 metaphors with 40 users — river won on comprehension + delight.</div></div></div>
+    <div class="p-6 lg:p-8"><h3 class="font-serif text-3xl leading-tight">Fireflut — Money as flow, not cells</h3><p class="mt-3 text-black/60 leading-relaxed">Led end-to-end: journey mapping, data-viz exploration, and a design system that scales from mobile to forecasting engine. +42% retention in 4 months.</p><a href="#contact" onclick="closeModal('fireflut')" class="mt-6 inline-flex items-center gap-2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm">Discuss fintech systems <i data-lucide="arrow-right" class="w-4 h-4"></i></a></div>
+  </div>
+</div>
+
+<div id="modal-existence" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal('existence')"></div>
+  <div class="relative max-w-[760px] mx-auto my-6 lg:my-10 bg-[#FFF1D6] rounded-[28px] overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="sticky top-0 bg-[#FFF1D6]/90 backdrop-blur border-b border-black/10 px-6 py-4 flex items-center justify-between"><div class="text-xs tracking-widest font-bold">CASE STUDY — EXISTENCE</div><button onclick="closeModal('existence')" class="w-8 h-8 rounded-full bg-white border grid place-items-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+    <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&q=80" class="w-full h-[320px] object-cover">
+    <div class="p-6 lg:p-8"><h3 class="font-serif text-3xl leading-tight">Existence — An archive you can inhabit</h3><p class="mt-3 text-black/60 leading-relaxed">A spatial memory tool for architects. Capture a place with photos + notes, generate a navigable memory-scape, and invite collaborators to walk it. Exhibited at Venice Biennale 2024.</p><a href="#contact" onclick="closeModal('existence')" class="mt-6 inline-flex items-center gap-2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm">Explore spatial tools <i data-lucide="arrow-right" class="w-4 h-4"></i></a></div>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-ink text-white px-5 py-3 rounded-full text-sm font-medium shadow-xl translate-y-20 opacity-0 transition-all z-[90] flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i><span id="toastMsg">Done</span></div>
+
+<script>
+lucide.createIcons();
+
+// mobile menu
+document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('hidden'));
+
+// shader canvas (soft gradient blobs)
+const cvs=document.getElementById('shader');const ctx=cvs.getContext('2d');
+let w,h;function resize(){w=cvs.width=cvs.offsetWidth*devicePixelRatio;h=cvs.height=cvs.offsetHeight*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio);}window.addEventListener('resize',resize);resize();
+let t=0;let isNight=false;
+function drawShader(){
+  const W=cvs.offsetWidth,H=cvs.offsetHeight;
+  ctx.clearRect(0,0,W,H);
+  // base
+  ctx.fillStyle=isNight?'#0B1220':'#FDF8F1';ctx.fillRect(0,0,W,H);
+  // blobs
+  const blobs=isNight?[
+    {x:W*0.2+Math.sin(t*0.6)*40,y:H*0.3+Math.cos(t*0.4)*30,r:380,c:'rgba(91,33,182,0.55)'},
+    {x:W*0.75+Math.cos(t*0.5)*50,y:H*0.25+Math.sin(t*0.6)*20,r:420,c:'rgba(14,58,47,0.5)'},
+    {x:W*0.5+Math.sin(t*0.3)*60,y:H*0.65+Math.cos(t*0.5)*20,r:520,c:'rgba(30,58,138,0.45)'},
+  ]:[
+    {x:W*0.18+Math.sin(t*0.6)*30,y:H*0.28+Math.cos(t*0.4)*20,r:400,c:'rgba(255,139,26,0.55)'},
+    {x:W*0.78+Math.cos(t*0.5)*40,y:H*0.22+Math.sin(t*0.6)*18,r:420,c:'rgba(255,210,63,0.55)'},
+    {x:W*0.48+Math.sin(t*0.3)*50,y:H*0.68+Math.cos(t*0.5)*18,r:560,c:'rgba(255,241,214,0.9)'},
+  ];
+  blobs.forEach(b=>{const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,b.c);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();});
+  t+=0.008;requestAnimationFrame(drawShader);
+}drawShader();
+
+// theme toggle
+const toggle=document.getElementById('themeToggle');
+toggle.addEventListener('click',()=>{
+  isNight=!isNight;
+  document.body.style.background=isNight?'#0B1220':'#FDF8F1';
+  document.body.style.color=isNight?'#FDF8F1':'#131316';
+  document.getElementById('sunGroup').classList.toggle('hidden',isNight);
+  document.getElementById('moonGroup').classList.toggle('hidden',!isNight);
+  document.querySelector('.sun-icon').classList.toggle('hidden',isNight);
+  document.querySelector('.moon-icon').classList.toggle('hidden',!isNight);
+  showToast(isNight?'Night mode — moon & deep indigo':'Day mode — sun & warm peach');
+});
+
+// mini generative canvas
+const mg=document.getElementById('miniGen');const mctx=mg.getContext('2d');
+function drawMini(density=22){
+  const W=mg.width,H=mg.height;
+  mctx.clearRect(0,0,W,H);
+  // bg grid
+  mctx.fillStyle='rgba(255,255,255,0.06)';mctx.fillRect(0,0,W,H);
+  const cols=Math.floor(W/density),rows=Math.floor(H/density);
+  for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+    const px=x*density+8,py=y*density+8;
+    const r=Math.random();
+    mctx.fillStyle=r>0.7?'#FFD23F':r>0.4?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.25)';
+    if(r>0.65){mctx.beginPath();mctx.roundRect(px,py,density-10,density-10,6);mctx.fill();}
+    else if(r>0.35){mctx.beginPath();mctx.arc(px+(density-10)/2,py+(density-10)/2,(density-10)/2,0,Math.PI*2);mctx.fill();}
+    else {mctx.fillRect(px,py,density-10,2);}
+  }
+}
+drawMini(22);
+document.getElementById('regenBtn').addEventListener('click',()=>drawMini(+document.getElementById('genDensity').value));
+document.getElementById('genDensity').addEventListener('input',e=>drawMini(+e.target.value));
+
+// voice tuner
+const voices={
+  Warm:'Warm voice: “Let your ideas hatch gently — Hatcha keeps your rhythm, not someone else’s template.”',
+  Crisp:'Crisp voice: “Hatcha distills your draft to its sharpest line. No fluff. Just signal.”',
+  Poetic:'Poetic voice: “Words like light through paper — Hatcha lets meaning glow through.”'
+};
+document.querySelectorAll('.voiceBtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.voiceBtn').forEach(x=>{x.className='voiceBtn flex-1 py-1.5 rounded-full bg-white border text-xs font-bold';});
+  b.className='voiceBtn flex-1 py-1.5 rounded-full bg-ink text-white text-xs font-bold';
+  document.getElementById('voiceOutput').textContent=voices[b.dataset.voice];
+}));
+
+// flow drag
+const svg=document.getElementById('flowSvg');const node=document.getElementById('dragNode');const path=document.getElementById('flowPath');
+let dragging=false;
+function updatePath(y){
+  const ny=Math.max(20,Math.min(140,y));
+  node.setAttribute('cy',ny);
+  path.setAttribute('d',`M 20 80 C 80 ${ny-60}, 140 ${ny+60}, 220 ${ny} S 300 80, 300 80`);
+}
+node.addEventListener('pointerdown',e=>{dragging=true;node.setPointerCapture(e.pointerId);node.style.cursor='grabbing';});
+window.addEventListener('pointerup',()=>{dragging=false;node.style.cursor='grab';});
+window.addEventListener('pointermove',e=>{
+  if(!dragging) return;
+  const rect=svg.getBoundingClientRect();
+  const y=(e.clientY-rect.top)/rect.height*160;
+  updatePath(y);
+});
+// touch also
+node.addEventListener('touchmove',e=>{
+  const rect=svg.getBoundingClientRect();
+  const y=(e.touches[0].clientY-rect.top)/rect.height*160;
+  updatePath(y);
+},{passive:true});
+
+// modules
+const grid=document.getElementById('moduleGrid');
+function renderModules(){
+  grid.innerHTML='';
+  const n=6+Math.floor(Math.random()*3);
+  document.getElementById('moduleCount').textContent=n+' modules';
+  for(let i=0;i<12;i++){
+    const div=document.createElement('div');
+    const active=i<n;
+    div.className=`h-10 rounded-lg border flex items-center justify-center text-[10px] font-bold ${active?'bg-ink text-white border-ink':'bg-cream border-black/10 text-black/20'}`;
+    div.textContent=active?['◧','◨','⬢','⬣','▭'][Math.floor(Math.random()*5)]:'·';
+    grid.appendChild(div);
+  }
+}
+renderModules();
+document.getElementById('shuffleModules').addEventListener('click',renderModules);
+
+// testimonials
+let idx=0;const track=document.getElementById('tTrack');const dots=document.querySelectorAll('.tDot');
+function go(i){
+  const total=3;
+  idx=(i+total)%total;
+  const isMobile=window.innerWidth<1024;
+  track.style.transform=`translateX(-${idx*(isMobile?100:50)}%)`;
+  dots.forEach((d,k)=>{d.className=k===idx?'tDot w-8 h-1.5 rounded-full bg-white transition':'tDot w-1.5 h-1.5 rounded-full bg-white/30 transition'});
+}
+document.getElementById('tPrev').addEventListener('click',()=>go(idx-1));
+document.getElementById('tNext').addEventListener('click',()=>go(idx+1));
+setInterval(()=>go(idx+1),5000);
+window.addEventListener('resize',()=>go(idx));
+
+// filter
+document.querySelectorAll('.filterBtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filterBtn').forEach(x=>x.className='filterBtn px-4 py-1.5 rounded-full text-xs font-bold hover:bg-white transition');
+  b.className='filterBtn active px-4 py-1.5 rounded-full bg-ink text-white text-xs font-bold';
+  const f=b.dataset.filter;
+  document.querySelectorAll('.work-card').forEach(card=>{
+    const show=f==='all'||card.dataset.cat.includes(f);
+    card.style.display=show?'flex':'none';
+  });
+}));
+
+// modals
+function openModal(id){document.getElementById('modal-'+id).classList.remove('hidden');document.body.style.overflow='hidden';lucide.createIcons();}
+function closeModal(id){document.getElementById('modal-'+id).classList.add('hidden');document.body.style.overflow='';}
+window.openModal=openModal;window.closeModal=closeModal;
+
+// forms
+function showToast(msg){
+  const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;
+  t.classList.remove('translate-y-20','opacity-0');
+  setTimeout(()=>t.classList.add('translate-y-20','opacity-0'),2600);
+}
+document.getElementById('newsletter').addEventListener('submit',e=>{e.preventDefault();showToast('Subscribed — welcome to the studio notes ✨');e.target.reset();});
+document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();showToast('Inquiry sent — I’ll reply within a day 👋');e.target.reset();});
+
+// init icons again after dynamic
+setTimeout(()=>lucide.createIcons(),100);
+</script>
 </body>
 </html>
