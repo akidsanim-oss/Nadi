@@ -1,844 +1,486 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zainab Kabira — Product Designer, Vancouver</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      fontFamily: {
-        serif: ['Instrument Serif', 'serif'],
-        sans: ['Inter', 'sans-serif'],
-        display: ['Space Grotesk', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-      },
-      colors: {
-        cream: '#FDF8F1',
-        ink: '#131316',
-        vermillion: '#FF3B1F',
-        moss: '#0E3A2F',
-        sand: '#EDE5D8',
-        peach: '#FFD8B8',
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adidas Arena — Sport, Culture & Musique à Paris</title>
+  <meta name="description" content="Adidas Arena, un espace de créativité dédié au sport, à la culture et à la musique au cœur de Paris — Porte de la Chapelle." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Bebas Neue"', 'sans-serif'],
+            sans: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            arena: {
+              black: '#070708',
+              ink: '#0e0e10',
+              card: '#141416',
+              lime: '#d6ff3f',
+              mist: '#a1a1aa',
+            }
+          },
+          boxShadow: {
+            glow: '0 0 40px rgba(214, 255, 63, 0.18)',
+          }
+        }
       }
     }
-  }
-}
-</script>
-<style>
-*{scroll-behavior:smooth}
-body{background:#FDF8F1;color:#131316;font-family:'Inter',sans-serif}
-.grain{position:absolute;inset:0;opacity:.06;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}
-.sun-core{width:96px;height:96px;border-radius:999px;background:radial-gradient(circle at 35% 35%, #FFF6B8 0%, #FFD23F 35%, #FF8A1A 70%, #FF3B1F 100%);box-shadow:0 0 40px rgba(255,139,26,0.6),0 0 80px rgba(255,59,31,0.35), inset -12px -10px 20px rgba(255,59,31,0.4);position:relative}
-.sun-ring{position:absolute;inset:-22px;border-radius:999px;border:1px solid rgba(255,255,255,0.7);opacity:.5}
-.sun-ring.r2{inset:-44px;opacity:.25}
-.moon-core{width:88px;height:88px;border-radius:999px;background:radial-gradient(circle at 30% 28%, #FFFDF5 0%, #E8E0C8 55%, #CFC6A8 100%);box-shadow:0 0 50px rgba(255,255,255,0.5), inset -14px -8px 18px rgba(0,0,0,0.15);position:relative}
-.crater{position:absolute;border-radius:999px;background:rgba(0,0,0,0.07);border:1px solid rgba(0,0,0,0.06)}
-.cloud{position:absolute;background:#fff;border-radius:999px;filter:blur(0.5px);box-shadow:0 10px 40px rgba(0,0,0,0.07)}
-.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:999px}
-.c1{width:220px;height:70px;top:14%;left:16%}.c1::before{width:120px;height:90px;left:22px;top:-28px}.c1::after{width:90px;height:70px;right:18px;top:-18px}
-.c2{width:180px;height:56px;top:22%;right:14%}.c2::before{width:100px;height:70px;left:18px;top:-22px}.c2::after{width:70px;height:54px;right:14px;top:-12px}
-.c3{width:260px;height:74px;bottom:18%;left:22%}.c3::before{width:140px;height:86px;left:30px;top:-30px}.c3::after{width:110px;height:66px;right:22px;top:-16px}
-.float{animation:float 8s ease-in-out infinite}
-.float2{animation:float 9s ease-in-out infinite 1s}
-.float3{animation:float 10s ease-in-out infinite 0.5s}
-@keyframes float{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-14px) translateX(6px)}}
-.blob{position:absolute;border-radius:999px;filter:blur(40px);opacity:.9;mix-blend-mode:soft-light}
-.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-.card-hover{transition:all .4s cubic-bezier(.16,1,.3,1)}
-.card-hover:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(19,19,22,.12)}
-.marquee{animation:marquee 22s linear infinite}
-@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:999px;background:#131316;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
-</style>
+  </script>
+  <style>
+    :root { color-scheme: dark; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #070708;
+      color: #fafafa;
+      font-family: Outfit, sans-serif;
+    }
+    .stripes {
+      background-image: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 8px,
+        rgba(255,255,255,0.035) 8px,
+        rgba(255,255,255,0.035) 10px
+      );
+    }
+    .hero-overlay {
+      background:
+        linear-gradient(180deg, rgba(7,7,8,0.35) 0%, rgba(7,7,8,0.55) 40%, rgba(7,7,8,0.95) 100%),
+        radial-gradient(ellipse at 20% 20%, rgba(214,255,63,0.12), transparent 50%);
+    }
+    .nav-blur {
+      background: rgba(7,7,8,0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .event-card { transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease; }
+    .event-card:hover { transform: translateY(-8px); box-shadow: 0 24px 50px rgba(0,0,0,.45); }
+    .event-card img { transition: transform .7s cubic-bezier(.22,1,.36,1); }
+    .event-card:hover img { transform: scale(1.08); }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    .cookie-enter { animation: slideUp .5s ease forwards; }
+    @keyframes slideUp {
+      from { transform: translateY(120%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .marquee {
+      display: flex;
+      gap: 3rem;
+      animation: marquee 28s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .hamburger span { transition: all .3s ease; }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    .mobile-menu.open { max-height: 420px; }
+    .btn-lime {
+      background: #d6ff3f;
+      color: #070708;
+      font-weight: 700;
+      letter-spacing: .04em;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn-lime:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(214,255,63,.28); background: #e6ff70; }
+    .btn-ghost {
+      border: 1px solid rgba(255,255,255,.18);
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.4); }
+    .section-kicker {
+      letter-spacing: .28em;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #d6ff3f;
+      font-weight: 600;
+    }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #070708; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2e; border-radius: 8px; }
+  </style>
 </head>
-<body class="bg-cream text-ink antialiased overflow-x-hidden">
-<!-- NAV -->
-<nav class="fixed top-0 w-full z-50 bg-cream/80 backdrop-blur-xl border-b border-black/[0.06]">
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 h-[68px] flex items-center justify-between">
-    <div class="flex items-center gap-8">
-      <a href="#" class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-ink text-white grid place-items-center font-display font-bold text-[13px] tracking-tight">ZK</div>
-        <div class="hidden sm:block">
-          <div class="font-display font-bold leading-none text-[15px] tracking-tight">ZAINAB KABIRA</div>
-          <div class="text-[11px] tracking-[0.14em] text-black/50 font-medium -mt-0.5">VANCOUVER — CANADA</div>
+<body>
+  <!-- Cookie consent -->
+  <div id="cookie-banner" class="fixed bottom-0 inset-x-0 z-[80] p-4 md:p-6 cookie-enter" role="dialog" aria-live="polite" aria-label="Consentement cookies">
+    <div class="max-w-6xl mx-auto nav-blur border border-white/10 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 shadow-2xl">
+      <p class="text-sm md:text-[15px] text-zinc-200 leading-relaxed flex-1">
+        Ce site utilise des cookies pour améliorer votre expérience. En poursuivant votre navigation sur le site, vous acceptez notre utilisation des cookies.
+      </p>
+      <div class="flex items-center gap-3 shrink-0">
+        <button id="refuse-cookies" class="btn-ghost px-5 py-2.5 rounded-full text-sm font-semibold">Refuser</button>
+        <button id="accept-cookies" class="btn-lime px-6 py-2.5 rounded-full text-sm">Accepter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header id="site-header" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-5 md:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="#" class="flex items-center gap-3 group" aria-label="Adidas Arena — Accueil">
+          <span class="flex items-end gap-[3px]" aria-hidden="true">
+            <span class="w-[5px] h-5 bg-white group-hover:bg-arena-lime transition-colors"></span>
+            <span class="w-[5px] h-7 bg-white group-hover:bg-arena-lime transition-colors"></span>
+            <span class="w-[5px] h-9 bg-white group-hover:bg-arena-lime transition-colors"></span>
+          </span>
+          <span class="font-display text-2xl md:text-[28px] tracking-wide leading-none">ADIDAS ARENA</span>
+        </a>
+        <nav class="hidden lg:flex items-center gap-9 text-[13px] font-semibold uppercase tracking-[0.18em]">
+          <a href="#programmation" class="hover:text-arena-lime transition-colors">Programmation</a>
+          <a href="#business" class="hover:text-arena-lime transition-colors">Business</a>
+          <a href="#chapelle" class="hover:text-arena-lime transition-colors">Central Chapelle</a>
+          <a href="#infos" class="hover:text-arena-lime transition-colors">Infos</a>
+          <a href="#programmation" class="btn-lime px-5 py-2.5 rounded-full tracking-widest text-[12px]">Billetterie</a>
+        </nav>
+        <button id="menu-btn" class="lg:hidden hamburger w-10 h-10 flex flex-col items-center justify-center gap-[6px]" aria-label="Ouvrir le menu">
+          <span class="block w-6 h-[2px] bg-white"></span>
+          <span class="block w-6 h-[2px] bg-white"></span>
+          <span class="block w-6 h-[2px] bg-white"></span>
+        </button>
+      </div>
+      <div id="mobile-menu" class="mobile-menu lg:hidden">
+        <div class="pb-6 flex flex-col gap-4 text-sm font-semibold uppercase tracking-[0.18em]">
+          <a href="#programmation" class="py-2 border-b border-white/10">Programmation</a>
+          <a href="#business" class="py-2 border-b border-white/10">Business</a>
+          <a href="#chapelle" class="py-2 border-b border-white/10">Central Chapelle</a>
+          <a href="#infos" class="py-2 border-b border-white/10">Infos</a>
+          <a href="#programmation" class="btn-lime text-center py-3 rounded-full tracking-widest text-[12px] mt-2">Billetterie</a>
         </div>
-      </a>
-      <div class="hidden lg:flex items-center gap-1 ml-4">
-        <a href="#work" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">WORK</a>
-        <a href="#journey" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">JOURNEY</a>
-        <a href="#experience" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">EXPERIENCE</a>
-        <a href="#thoughts" class="px-4 py-2 text-[13px] font-medium tracking-wide hover:bg-black/[0.06] rounded-full transition">THOUGHTS</a>
       </div>
     </div>
-    <div class="flex items-center gap-3">
-      <div class="hidden md:flex items-center gap-2 text-[12px] font-medium">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Available for Q1 2026
-      </div>
-      <button id="themeToggle" class="w-10 h-10 rounded-full bg-white border border-black/10 grid place-items-center hover:scale-105 transition shadow-sm" aria-label="Toggle day night">
-        <i data-lucide="sun" class="w-4 h-4 sun-icon"></i>
-        <i data-lucide="moon" class="w-4 h-4 moon-icon hidden"></i>
-      </button>
-      <a href="#contact" class="hidden sm:inline-flex items-center gap-2 bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-semibold hover:bg-black transition">Let's talk <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
-      <button id="menuBtn" class="lg:hidden w-10 h-10 rounded-full bg-white border border-black/10 grid place-items-center"><i data-lucide="menu" class="w-4 h-4"></i></button>
-    </div>
-  </div>
-  <div id="mobileMenu" class="hidden lg:hidden border-t border-black/10 bg-cream px-6 py-6 space-y-4">
-    <a href="#work" class="block font-medium">Work</a><a href="#journey" class="block font-medium">Journey</a><a href="#experience" class="block font-medium">Experience</a><a href="#thoughts" class="block font-medium">Thoughts</a>
-  </div>
-</nav>
+  </header>
 
-<!-- HERO -->
-<section id="hero" class="relative pt-[68px] overflow-hidden bg-cream">
-  <div class="absolute inset-0 top-[68px]">
-    <canvas id="shader" class="w-full h-full"></canvas>
-    <div class="grain"></div>
-    <!-- decorative orbs -->
-    <div class="blob w-[720px] h-[520px] bg-[#FF8A1A] top-[-80px] left-[-120px] opacity-60"></div>
-    <div class="blob w-[640px] h-[520px] bg-[#FFD23F] top-[40px] right-[-80px] opacity-60"></div>
-    <div class="blob w-[900px] h-[600px] bg-[#FFF1D6] top-[140px] left-[20%] opacity-70"></div>
-    <!-- sun / moon -->
-    <div id="sunGroup" class="absolute left-[46%] top-[18%] -translate-x-1/2 z-10">
-      <div class="sun-core float">
-        <div class="sun-ring"></div><div class="sun-ring r2"></div>
-      </div>
-    </div>
-    <div id="moonGroup" class="absolute left-[46%] top-[18%] -translate-x-1/2 z-10 hidden">
-      <div class="moon-core float">
-        <div class="crater w-5 h-5 left-5 top-4"></div>
-        <div class="crater w-3 h-3 right-6 top-7"></div>
-        <div class="crater w-7 h-7 left-8 bottom-5"></div>
-      </div>
-    </div>
-    <!-- clouds -->
-    <div class="cloud c1 float"></div>
-    <div class="cloud c2 float2"></div>
-    <div class="cloud c3 float3 hidden md:block"></div>
-    <div class="hidden md:block absolute right-[12%] top-[42%] w-[140px] h-[48px] bg-white rounded-full float2 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"></div>
-  </div>
-
-  <div class="relative z-20 max-w-[1280px] mx-auto px-6 lg:px-8">
-    <div class="pt-10 lg:pt-16 pb-6 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.14em] font-semibold">
-      <span class="px-3 py-1.5 rounded-full bg-white border border-black/10 shadow-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-vermillion"></span> PRODUCT DESIGNER — VANCOUVER</span>
-      <span class="hidden sm:inline-flex px-3 py-1.5 rounded-full bg-white/80 backdrop-blur border border-black/5">AI • GENERATIVE DESIGN • SYSTEMS</span>
-      <span class="ml-auto hidden lg:flex items-center gap-2 text-black/60 font-medium tracking-normal text-xs"><i data-lucide="map-pin" class="w-3 h-3"></i> 49.2827° N, 123.1207° W — PST</span>
-    </div>
-
-    <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-12 items-start">
-      <div class="pb-8 lg:pb-16">
-        <h1 class="font-serif text-[46px] sm:text-[64px] lg:text-[84px] leading-[0.85] tracking-[-0.04em]">
-          Product<br>
-          <span class="italic font-light">designer</span><br>
-          <span class="inline-flex items-center gap-3">for <span class="inline-flex items-center justify-center w-[56px] h-[36px] lg:w-[84px] lg:h-[54px] rounded-full border-[1.5px] border-ink text-[11px] font-sans font-bold tracking-widest">HUMAN</span></span><br>
-          <span class="font-display font-bold tracking-tighter">AI era.</span>
+  <main>
+    <!-- Hero -->
+    <section class="relative min-h-screen flex items-end overflow-hidden">
+      <img
+        src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=2000&q=80"
+        alt="Ambiance concert à l'Adidas Arena"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 hero-overlay stripes"></div>
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pb-20 pt-40">
+        <p class="section-kicker mb-5 reveal">Porte de la Chapelle · Paris 18e</p>
+        <h1 class="font-display text-[16vw] md:text-[9.5rem] leading-[0.85] tracking-wide max-w-5xl reveal">
+          UN LIEU<br />POUR VIBRER
         </h1>
-        <p class="mt-6 max-w-[520px] text-[16px] lg:text-[18px] leading-relaxed text-black/70">
-          I’m <span class="font-semibold text-ink">Zainab Kabira</span> — a Vancouver-based designer bridging architecture, human-centered research, and generative AI to craft thoughtful, adaptive products.
+        <p class="mt-8 max-w-2xl text-lg md:text-xl text-zinc-200 font-light leading-relaxed reveal">
+          Bienvenue à l’Adidas Arena — un espace de créativité dédié au sport, à la culture et à la musique.
+          Ici, les plus grandes scènes du monde rencontrent l’énergie de Paris, dans une salle pensée pour l’excellence et l’émotion collective.
         </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#work" class="inline-flex items-center gap-2 bg-ink text-white px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-black transition shadow-lg">Explore work <i data-lucide="arrow-down" class="w-4 h-4"></i></a>
-          <a href="#journey" class="inline-flex items-center gap-2 bg-white border border-black/10 px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-black hover:text-white transition">My journey <i data-lucide="play" class="w-3.5 h-3.5"></i></a>
+        <div class="mt-10 flex flex-wrap gap-4 reveal">
+          <a href="#programmation" class="btn-lime px-8 py-4 rounded-full text-sm uppercase tracking-widest">Voir la programmation</a>
+          <a href="#chapelle" class="btn-ghost px-8 py-4 rounded-full text-sm uppercase tracking-widest">Découvrir le lieu</a>
         </div>
-        <div class="mt-10 grid grid-cols-3 gap-6 max-w-[520px] border-t border-black/10 pt-6">
-          <div><div class="font-display font-bold text-2xl leading-none">6+</div><div class="text-[11px] tracking-widest font-semibold text-black/50 mt-1">YEARS CRAFTING</div></div>
-          <div><div class="font-display font-bold text-2xl leading-none">30+</div><div class="text-[11px] tracking-widest font-semibold text-black/50 mt-1">PRODUCTS SHIPPED</div></div>
-          <div><div class="font-display font-bold text-2xl leading-none">12k</div><div class="text-[11px] tracking-widest font-semibold text-black/50 mt-1">USERS IMPACTED</div></div>
+        <div class="mt-16 grid grid-cols-3 max-w-xl gap-8 reveal">
+          <div>
+            <div class="font-display text-4xl md:text-5xl">8 000</div>
+            <div class="text-xs uppercase tracking-widest text-zinc-400 mt-1">Places</div>
+          </div>
+          <div>
+            <div class="font-display text-4xl md:text-5xl">360°</div>
+            <div class="text-xs uppercase tracking-widest text-zinc-400 mt-1">Expérience</div>
+          </div>
+          <div>
+            <div class="font-display text-4xl md:text-5xl">2024</div>
+            <div class="text-xs uppercase tracking-widest text-zinc-400 mt-1">Inauguration</div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Right card -->
-      <div class="relative lg:pt-6 pb-10">
-        <div class="bg-white rounded-[28px] p-6 lg:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-black/5">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] tracking-[0.14em] font-bold text-black/50">USER-CENTERED APPROACH</span>
-            <span class="w-8 h-8 rounded-full bg-cream grid place-items-center border border-black/5"><i data-lucide="sparkles" class="w-4 h-4"></i></span>
-          </div>
-          <div class="mt-6 grid grid-cols-3 gap-3">
-            <div class="rounded-2xl bg-cream p-4 border border-black/5">
-              <div class="w-8 h-8 rounded-full bg-white grid place-items-center border border-black/5"><i data-lucide="users" class="w-4 h-4"></i></div>
-              <div class="mt-3 font-display font-bold text-sm leading-tight">Research</div><div class="text-xs text-black/60">Jobs-to-be-done, field studies</div>
-            </div>
-            <div class="rounded-2xl bg-ink text-white p-4">
-              <div class="w-8 h-8 rounded-full bg-white/15 grid place-items-center"><i data-lucide="bot" class="w-4 h-4"></i></div>
-              <div class="mt-3 font-display font-bold text-sm leading-tight">Generative</div><div class="text-xs text-white/70">AI-native prototyping</div>
-            </div>
-            <div class="rounded-2xl bg-[#FFF1D6] p-4 border border-black/5">
-              <div class="w-8 h-8 rounded-full bg-white grid place-items-center border border-black/5"><i data-lucide="box" class="w-4 h-4"></i></div>
-              <div class="mt-3 font-display font-bold text-sm leading-tight">Systems</div><div class="text-xs text-black/60">Design → code</div>
-            </div>
-          </div>
-
-          <!-- Generative playground mini -->
-          <div class="mt-5 rounded-2xl bg-[#0E3A2F] text-white p-5 overflow-hidden relative">
-            <div class="flex items-center justify-between">
-              <div class="text-xs tracking-widest font-bold text-white/60">GENERATIVE PLAYGROUND</div>
-              <span class="text-[10px] px-2 py-1 rounded-full bg-white/15 border border-white/20">LIVE</span>
-            </div>
-            <canvas id="miniGen" width="360" height="120" class="w-full h-[120px] mt-3 rounded-xl bg-white/5 border border-white/10"></canvas>
-            <div class="mt-3 flex items-center gap-3">
-              <input id="genDensity" type="range" min="8" max="48" value="22" class="range flex-1 accent-white">
-              <button id="regenBtn" class="px-4 py-2 rounded-full bg-white text-ink text-xs font-bold hover:bg-cream transition">Regenerate</button>
-            </div>
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
-          </div>
-
-          <div class="mt-4 flex items-center gap-3 text-xs">
-            <img src="https://i.pravatar.cc/100?img=32" class="w-8 h-8 rounded-full object-cover border-2 border-white shadow">
-            <div><div class="font-semibold leading-none">Collaborating with teams at Hatcha & Fireflut</div><div class="text-black/50">Available for freelance & full-time</div></div>
-            <a href="#contact" class="ml-auto w-8 h-8 rounded-full bg-ink text-white grid place-items-center"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
-          </div>
-        </div>
-        <!-- floating badge -->
-        <div class="absolute -left-2 lg:-left-6 bottom-16 lg:bottom-20 bg-white rounded-2xl px-4 py-3 shadow-xl border border-black/5 flex items-center gap-3 rotate-[-1.5deg]">
-          <div class="w-10 h-10 rounded-full bg-vermillion text-white grid place-items-center"><i data-lucide="wand-2" class="w-5 h-5"></i></div>
-          <div><div class="text-xs font-bold leading-none">AI + Human intuition</div><div class="text-[11px] text-black/50">Balancing automation & empathy</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="relative z-20 border-y border-black/10 bg-white/70 backdrop-blur">
-    <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-3 flex items-center gap-6 overflow-hidden">
-      <span class="text-[11px] tracking-widest font-bold whitespace-nowrap">TRUSTED BY TEAMS AT</span>
-      <div class="flex-1 overflow-hidden relative">
-        <div class="flex gap-10 marquee whitespace-nowrap text-sm font-display font-bold tracking-wide opacity-70">
-          <span>✦ HATCHA</span><span>✦ FIREFLUT</span><span>✦ EXISTENCE</span><span>✦ NORTHFOLD</span><span>✦ ARCHETYPE</span><span>✦ LUMEN LABS</span><span>✦ HATCHA</span><span>✦ FIREFLUT</span><span>✦ EXISTENCE</span><span>✦ NORTHFOLD</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- JOURNEY -->
-<section id="journey" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
-  <div class="grid lg:grid-cols-[420px_1fr] gap-10 lg:gap-16">
-    <div class="lg:sticky lg:top-24 h-fit">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] tracking-widest font-bold"><span class="w-2 h-2 rounded-full bg-moss"></span> DESIGN JOURNEY</div>
-      <h2 class="mt-4 font-serif text-[42px] leading-[0.9] tracking-tight">From <span class="italic font-light">architecture</span> to adaptive interfaces.</h2>
-      <p class="mt-4 text-[15px] leading-relaxed text-black/60">Trained as an architect, I learned to think in systems, light, and human flow. Today I apply that spatial rigor to product design — where generative AI becomes a material, not a gimmick.</p>
-      <div class="mt-6 rounded-2xl overflow-hidden border border-black/10 bg-white">
-        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" class="w-full h-[220px] object-cover">
-        <div class="p-4 flex items-center gap-3">
-          <div class="flex-1"><div class="text-xs font-bold tracking-widest">VANCOUVER STUDIO</div><div class="text-xs text-black/50">Where space meets system</div></div>
-          <span class="px-3 py-1 rounded-full bg-cream border border-black/5 text-xs font-semibold">2016 → Now</span>
-        </div>
+    <!-- Marquee -->
+    <div class="border-y border-white/10 bg-arena-ink overflow-hidden py-3">
+      <div class="marquee font-display text-2xl tracking-wide text-white/70">
+        <span>SPORT</span><span class="text-arena-lime">◆</span>
+        <span>CULTURE</span><span class="text-arena-lime">◆</span>
+        <span>MUSIQUE</span><span class="text-arena-lime">◆</span>
+        <span>PARIS</span><span class="text-arena-lime">◆</span>
+        <span>ADIDAS ARENA</span><span class="text-arena-lime">◆</span>
+        <span>SPORT</span><span class="text-arena-lime">◆</span>
+        <span>CULTURE</span><span class="text-arena-lime">◆</span>
+        <span>MUSIQUE</span><span class="text-arena-lime">◆</span>
+        <span>PARIS</span><span class="text-arena-lime">◆</span>
+        <span>ADIDAS ARENA</span><span class="text-arena-lime">◆</span>
       </div>
     </div>
 
-    <div class="relative">
-      <div class="absolute left-[15px] top-2 bottom-2 w-px bg-black/10 hidden sm:block"></div>
-      <div class="space-y-6">
-        <!-- item -->
-        <div class="relative flex gap-5">
-          <div class="hidden sm:grid w-8 h-8 rounded-full bg-ink text-white place-items-center text-xs font-bold shrink-0 mt-1">01</div>
-          <div class="flex-1 bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div><div class="text-[11px] tracking-widest font-bold text-vermillion">2016 — 2018 • ARCHITECTURE</div><h3 class="font-display font-bold text-lg leading-tight mt-1">Foundations in spatial systems</h3></div>
-              <span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold border border-black/5">B.Arch • UBC</span>
-            </div>
-            <p class="mt-3 text-sm leading-relaxed text-black/60">Studied how people move through environments. Thesis on generative housing — early experiments with parametric design and human behavior mapping.</p>
-            <div class="mt-4 flex flex-wrap gap-2 text-xs"><span class="px-2.5 py-1 rounded-full bg-black text-white">Parametric</span><span class="px-2.5 py-1 rounded-full bg-white border">Physical → Digital</span></div>
+    <!-- Programmation -->
+    <section id="programmation" class="py-24 md:py-32">
+      <div class="max-w-7xl mx-auto px-5 md:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+          <div>
+            <p class="section-kicker mb-3 reveal">Programmation</p>
+            <h2 class="font-display text-6xl md:text-8xl leading-none reveal">À L’AFFICHE</h2>
           </div>
+          <p class="max-w-md text-zinc-400 reveal">Matchs internationaux, concerts mondiaux, spectacles : réservez votre place pour les prochains événements qui feront trembler l’Arena.</p>
         </div>
-        <div class="relative flex gap-5">
-          <div class="hidden sm:grid w-8 h-8 rounded-full bg-white border border-black/10 place-items-center text-xs font-bold shrink-0 mt-1">02</div>
-          <div class="flex-1 bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
-            <div class="text-[11px] tracking-widest font-bold text-black/40">2019 — 2020 • TRANSITION</div>
-            <h3 class="font-display font-bold text-lg leading-tight mt-1">Falling in love with product</h3>
-            <p class="mt-3 text-sm leading-relaxed text-black/60">Joined a health-tech startup in Gastown. Led research sprints, mapped care journeys, and shipped my first design system used by 40k+ patients.</p>
-            <div class="mt-4 grid grid-cols-3 gap-3 text-center">
-              <div class="rounded-xl bg-cream p-3 border border-black/5"><div class="font-bold">120+</div><div class="text-[11px] text-black/50">Interviews</div></div>
-              <div class="rounded-xl bg-cream p-3 border border-black/5"><div class="font-bold">3x</div><div class="text-[11px] text-black/50">Activation</div></div>
-              <div class="rounded-xl bg-cream p-3 border border-black/5"><div class="font-bold">DS 1.0</div><div class="text-[11px] text-black/50">Shipped</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="relative flex gap-5">
-          <div class="hidden sm:grid w-8 h-8 rounded-full bg-vermillion text-white place-items-center text-xs font-bold shrink-0 mt-1">03</div>
-          <div class="flex-1 bg-ink text-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10 blur-2xl"></div>
-            <div class="text-[11px] tracking-widest font-bold text-white/60">2021 — 2023 • BREAKTHROUGH</div>
-            <h3 class="font-display font-bold text-lg leading-tight mt-1">Designing with AI, not just for it</h3>
-            <p class="mt-3 text-sm leading-relaxed text-white/70">At Hatcha, explored how LLMs can augment creativity without erasing craft. Built generative writing tools that adapt to voice, not templates.</p>
-            <div class="mt-4 flex gap-2"><span class="px-2.5 py-1 rounded-full bg-white text-ink text-xs font-bold">AI-native</span><span class="px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-xs">0→1 shipped</span></div>
-          </div>
-        </div>
-        <div class="relative flex gap-5">
-          <div class="hidden sm:grid w-8 h-8 rounded-full bg-white border border-black/10 place-items-center text-xs font-bold shrink-0 mt-1">04</div>
-          <div class="flex-1 bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
-            <div class="text-[11px] tracking-widest font-bold text-black/40">2024 — NOW • SYSTEMS</div>
-            <h3 class="font-display font-bold text-lg leading-tight mt-1">Human at the core, AI at the edge</h3>
-            <p class="mt-3 text-sm leading-relaxed text-black/60">Now freelancing & advising. Focused on design systems for generative products, ethical AI patterns, and teaching the next wave of designers in Vancouver.</p>
-            <div class="mt-4 flex flex-wrap gap-2 text-xs font-medium"><span class="px-3 py-1.5 rounded-full bg-[#FFF1D6] border">Workshops</span><span class="px-3 py-1.5 rounded-full bg-[#FFF1D6] border">Mentorship</span><span class="px-3 py-1.5 rounded-full bg-[#FFF1D6] border">Speaking</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- WORK -->
-<section id="work" class="bg-white border-y border-black/10">
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
-    <div class="flex flex-wrap items-end justify-between gap-6">
-      <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-ink text-white text-[11px] tracking-widest font-bold">SELECTED WORK — 2021 → 2025</div>
-        <h2 class="mt-4 font-serif text-[40px] lg:text-[56px] leading-none tracking-tight">Highlights that <span class="italic font-light">shipped</span> & scaled.</h2>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="hidden sm:flex items-center gap-2 text-xs font-medium"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> 3 case studies</div>
-        <div class="flex p-1 rounded-full bg-cream border border-black/5">
-          <button data-filter="all" class="filterBtn active px-4 py-1.5 rounded-full bg-ink text-white text-xs font-bold">All</button>
-          <button data-filter="ai" class="filterBtn px-4 py-1.5 rounded-full text-xs font-bold hover:bg-white transition">AI</button>
-          <button data-filter="system" class="filterBtn px-4 py-1.5 rounded-full text-xs font-bold hover:bg-white transition">Systems</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-10 grid lg:grid-cols-3 gap-6">
-      <!-- Hatcha -->
-      <article data-cat="ai" class="work-card group bg-cream rounded-[28px] border border-black/5 overflow-hidden card-hover flex flex-col">
-        <div class="p-6 pb-4">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] tracking-widest font-bold text-black/50">01 / HATCHA</span>
-            <span class="px-2.5 py-1 rounded-full bg-white border border-black/5 text-[11px] font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-vermillion"></span> AI • WRITING</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-[22px] leading-tight">Hatcha — Generative writing companion</h3>
-          <p class="mt-2 text-sm leading-relaxed text-black/60">An AI co-writer that learns your voice. Designed adaptive prompts and a canvas that feels like paper, not a chatbot.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold"><span class="px-2.5 py-1 rounded-full bg-white border">UX Research</span><span class="px-2.5 py-1 rounded-full bg-white border">GenAI</span><span class="px-2.5 py-1 rounded-full bg-ink text-white">0 → 1</span></div>
-        </div>
-        <div class="mx-3 rounded-2xl overflow-hidden bg-white border border-black/5 relative">
-          <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80" class="w-full h-[220px] object-cover group-hover:scale-[1.02] transition duration-700">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-          <!-- interactive prompt demo -->
-          <div class="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur rounded-xl p-3 border border-black/5 shadow-lg">
-            <div class="text-[10px] tracking-widest font-bold text-black/50">TRY THE VOICE TUNER</div>
-            <div class="mt-2 flex gap-1.5">
-              <button class="voiceBtn flex-1 py-1.5 rounded-full bg-ink text-white text-xs font-bold" data-voice="Warm">Warm</button>
-              <button class="voiceBtn flex-1 py-1.5 rounded-full bg-white border text-xs font-bold" data-voice="Crisp">Crisp</button>
-              <button class="voiceBtn flex-1 py-1.5 rounded-full bg-white border text-xs font-bold" data-voice="Poetic">Poetic</button>
-            </div>
-            <div id="voiceOutput" class="mt-2 text-xs leading-relaxed bg-cream rounded-lg p-2 border border-black/5">Warm voice: “Let your ideas hatch gently — Hatcha keeps your rhythm, not someone else’s template.”</div>
-          </div>
-        </div>
-        <div class="p-4 flex items-center justify-between mt-auto">
-          <a href="#" onclick="openModal('hatcha');return false" class="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition">View case study <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-          <span class="text-xs text-black/50">2023 • 4.8★ • 18k users</span>
-        </div>
-      </article>
-
-      <!-- Fireflut -->
-      <article data-cat="system" class="work-card group bg-white rounded-[28px] border border-black/10 overflow-hidden card-hover flex flex-col">
-        <div class="p-6 pb-4">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] tracking-widest font-bold text-black/50">02 / FIREFLUT</span>
-            <span class="px-2.5 py-1 rounded-full bg-cream border border-black/5 text-[11px] font-bold">FINTECH • SYSTEMS</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-[22px] leading-tight">Fireflut — Money flow, visualized</h3>
-          <p class="mt-2 text-sm leading-relaxed text-black/60">Reimagined expense tracking as a living river. Drag, split, and forecast flows with an engine that learns your habits.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold"><span class="px-2.5 py-1 rounded-full bg-cream border">Design System</span><span class="px-2.5 py-1 rounded-full bg-cream border">Data Viz</span><span class="px-2.5 py-1 rounded-full bg-vermillion text-white">+42% retention</span></div>
-        </div>
-        <div class="mx-3 rounded-2xl overflow-hidden bg-[#0E3A2F] relative p-4">
-          <div class="flex items-center justify-between text-white/70 text-[10px] tracking-widest font-bold"><span>FLOW SIMULATOR</span><span class="px-2 py-1 rounded-full bg-white/10 border border-white/20 text-white">DRAG NODES</span></div>
-          <div class="mt-3 relative h-[180px] rounded-xl bg-white p-3 overflow-hidden">
-            <svg id="flowSvg" viewBox="0 0 320 160" class="w-full h-full">
-              <path id="flowPath" d="M 20 80 C 80 20, 140 140, 220 80 S 300 80, 300 80" fill="none" stroke="#FF3B1F" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
-              <circle id="dragNode" cx="160" cy="80" r="10" fill="#0E3A2F" stroke="white" stroke-width="3" style="cursor:grab; filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))"/>
-              <circle cx="20" cy="80" r="6" fill="#FFD23F" stroke="#131316" stroke-width="2"/>
-              <circle cx="300" cy="80" r="6" fill="#0E3A2F" stroke="#131316" stroke-width="2"/>
-            </svg>
-            <div class="absolute bottom-2 left-3 right-3 flex justify-between text-[11px] font-bold"><span class="px-2 py-1 rounded-full bg-cream border">Income</span><span class="px-2 py-1 rounded-full bg-ink text-white">Balance</span></div>
-          </div>
-          <div class="mt-3 grid grid-cols-3 gap-2 text-center text-white">
-            <div class="rounded-xl bg-white/10 border border-white/10 py-2"><div class="text-xs font-bold">$4.2k</div><div class="text-[10px] opacity-70">In</div></div>
-            <div class="rounded-xl bg-white text-ink py-2"><div class="text-xs font-bold">$1.1k</div><div class="text-[10px] opacity-70">Saved</div></div>
-            <div class="rounded-xl bg-white/10 border border-white/10 py-2"><div class="text-xs font-bold">12%</div><div class="text-[10px] opacity-70">Growth</div></div>
-          </div>
-        </div>
-        <div class="p-4 flex items-center justify-between mt-auto">
-          <a href="#" onclick="openModal('fireflut');return false" class="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition">View case study <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-          <span class="text-xs text-black/50">2022 • Featured in FastCo</span>
-        </div>
-      </article>
-
-      <!-- Existence -->
-      <article data-cat="ai system" class="work-card group bg-[#FFF1D6] rounded-[28px] border border-black/5 overflow-hidden card-hover flex flex-col">
-        <div class="p-6 pb-4">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] tracking-widest font-bold text-black/50">03 / EXISTENCE</span>
-            <span class="px-2.5 py-1 rounded-full bg-white border border-black/5 text-[11px] font-bold">ARCHITECTURE • AI</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-[22px] leading-tight">Existence — Spatial memory archive</h3>
-          <p class="mt-2 text-sm leading-relaxed text-black/60">A tool for architects to capture, generate, and inhabit memories of place. From sketch to inhabitable 3D, co-created with AI.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold"><span class="px-2.5 py-1 rounded-full bg-white border">Spatial UX</span><span class="px-2.5 py-1 rounded-full bg-white border">Generative 3D</span><span class="px-2.5 py-1 rounded-full bg-ink text-white">Exhibited</span></div>
-        </div>
-        <div class="mx-3 rounded-2xl overflow-hidden bg-white border border-black/5 relative">
-          <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80" class="w-full h-[200px] object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
-          <div class="absolute bottom-3 left-3 right-3">
-            <div class="bg-white/95 backdrop-blur rounded-xl p-3 border border-black/5 shadow-lg">
-              <div class="flex items-center justify-between"><span class="text-[10px] tracking-widest font-bold text-black/50">MODULE GENERATOR</span><span class="text-[11px] font-bold px-2 py-1 rounded-full bg-ink text-white" id="moduleCount">6 modules</span></div>
-              <div id="moduleGrid" class="mt-2 grid grid-cols-6 gap-1.5">
-                <!-- generated via JS -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Event 1 -->
+          <a href="https://billetterie.adidasarena.com/france-bresil-2026" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
+            <div class="relative h-64 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80" alt="France vs Brésil" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sport</div>
+              <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                <span class="font-display text-3xl leading-none">04.09.26</span>
               </div>
-              <button id="shuffleModules" class="mt-2 w-full py-1.5 rounded-full bg-cream border text-xs font-bold hover:bg-white transition">Shuffle existence</button>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-3xl tracking-wide">FRANCE VS BRÉSIL</h3>
+              <p class="text-sm text-zinc-400 mt-2">Match amical international · Basketball</p>
+              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
+            </div>
+          </a>
+
+          <!-- Event 2 -->
+          <a href="https://billetterie.adidasarena.com/xg-world-tour-paris" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
+            <div class="relative h-64 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=80" alt="XG World Tour Paris" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Concert</div>
+              <div class="absolute bottom-4 left-4 right-4">
+                <span class="font-display text-3xl leading-none">05.09.26</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-3xl tracking-wide">XG WORLD TOUR: THE CORE</h3>
+              <p class="text-sm text-zinc-400 mt-2">En concert à Paris · Unique date française</p>
+              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
+            </div>
+          </a>
+
+          <!-- Event 3 -->
+          <a href="https://billetterie.adidasarena.com/paris-basketball" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
+            <div class="relative h-64 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=1200&q=80" alt="Paris Basketball" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sport</div>
+              <div class="absolute bottom-4 left-4">
+                <span class="font-display text-3xl leading-none">18.10.26</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-3xl tracking-wide">PARIS BASKETBALL</h3>
+              <p class="text-sm text-zinc-400 mt-2">EuroLeague · Soirée à domicile</p>
+              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
+            </div>
+          </a>
+
+          <!-- Event 4 -->
+          <a href="https://billetterie.adidasarena.com/aya-nakamura" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
+            <div class="relative h-64 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80" alt="Concert Aya Nakamura" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Concert</div>
+              <div class="absolute bottom-4 left-4">
+                <span class="font-display text-3xl leading-none">07.11.26</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-3xl tracking-wide">AYA NAKAMURA</h3>
+              <p class="text-sm text-zinc-400 mt-2">Tour 2026 · Nuit exceptionnelle</p>
+              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
+            </div>
+          </a>
+
+          <!-- Event 5 -->
+          <a href="https://billetterie.adidasarena.com/volley-nations-league" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
+            <div class="relative h-64 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=1200&q=80" alt="Volley Nations League" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sport</div>
+              <div class="absolute bottom-4 left-4">
+                <span class="font-display text-3xl leading-none">22.11.26</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-3xl tracking-wide">VOLLEY NATIONS LEAGUE</h3>
+              <p class="text-sm text-zinc-400 mt-2">Équipe de France · Phase finale</p>
+              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
+            </div>
+          </a>
+
+          <!-- Event 6 -->
+          <a href="https://billetterie.adidasarena.com/dj-snake" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
+            <div class="relative h-64 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1571266028243-d220c6a5272c?auto=format&fit=crop&w=1200&q=80" alt="DJ Snake" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Concert</div>
+              <div class="absolute bottom-4 left-4">
+                <span class="font-display text-3xl leading-none">12.12.26</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-3xl tracking-wide">DJ SNAKE</h3>
+              <p class="text-sm text-zinc-400 mt-2">Live Arena · Production immersive</p>
+              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business -->
+    <section id="business" class="py-24 md:py-32 bg-arena-ink relative overflow-hidden">
+      <div class="absolute inset-0 stripes opacity-60 pointer-events-none"></div>
+      <div class="max-w-7xl mx-auto px-5 md:px-8 relative">
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+          <div>
+            <p class="section-kicker mb-3 reveal">Business</p>
+            <h2 class="font-display text-6xl md:text-8xl leading-none reveal">PRIVATISEZ<br/>L’ARENA</h2>
+            <p class="mt-8 text-zinc-300 text-lg leading-relaxed reveal">
+              Offrez à vos équipes, clients et partenaires une expérience hors normes. L’Adidas Arena se transforme pour vos conventions, lancements de produits, hospitalités premium et soirées d’entreprise — avec la même exigence que nos plus grands shows.
+            </p>
+            <ul class="mt-8 space-y-3 text-sm reveal">
+              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Espaces VIP, loges et salons privatifs</li>
+              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Plateaux événementiels jusqu’à 8 000 personnes</li>
+              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Production technique, restauration et branding sur-mesure</li>
+              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Packages hospitalités pour tous les événements</li>
+            </ul>
+            <a href="mailto:business@adidasarena.com" class="inline-block mt-10 btn-lime px-8 py-4 rounded-full text-sm uppercase tracking-widest reveal">Contacter l’équipe business</a>
+          </div>
+          <div class="grid grid-cols-2 gap-4 reveal">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80" alt="Événement d'entreprise" class="rounded-2xl h-52 md:h-72 w-full object-cover" />
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80" alt="Ambiance lounge" class="rounded-2xl h-52 md:h-72 w-full object-cover mt-8" />
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" alt="Réunion premium" class="rounded-2xl h-52 md:h-64 w-full object-cover -mt-8" />
+            <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800&q=80" alt="Foule en concert" class="rounded-2xl h-52 md:h-64 w-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Central Chapelle -->
+    <section id="chapelle" class="py-24 md:py-32">
+      <div class="max-w-7xl mx-auto px-5 md:px-8">
+        <div class="grid lg:grid-cols-12 gap-10 items-end mb-12">
+          <div class="lg:col-span-7">
+            <p class="section-kicker mb-3 reveal">Central Chapelle</p>
+            <h2 class="font-display text-6xl md:text-8xl leading-none reveal">AU CŒUR D’UN NOUVEAU PARIS</h2>
+          </div>
+          <p class="lg:col-span-5 text-zinc-400 text-lg reveal">
+            L’Adidas Arena s’inscrit dans la renaissance de la Porte de la Chapelle : un quartier reconnecté, vivant, où sport, culture et vie quotidienne se croisent.
+          </p>
+        </div>
+        <div class="relative rounded-[28px] overflow-hidden h-[420px] md:h-[540px] reveal">
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80" alt="Paris — quartier de la Chapelle" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-arena-black via-arena-black/30 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12 grid md:grid-cols-3 gap-8">
+            <div>
+              <div class="font-display text-4xl">18e</div>
+              <p class="text-sm text-zinc-300 mt-2">Arrondissement, Porte de la Chapelle — un carrefour nord de la métropole.</p>
+            </div>
+            <div>
+              <div class="font-display text-4xl">Métro 12</div>
+              <p class="text-sm text-zinc-300 mt-2">Accès direct, RER, tram et nouvelles liaisons urbaines à deux pas de l’Arena.</p>
+            </div>
+            <div>
+              <div class="font-display text-4xl">Quartier</div>
+              <p class="text-sm text-zinc-300 mt-2">Commerces, espaces publics et équipements sportifs : Central Chapelle, un pôle de vie.</p>
             </div>
           </div>
         </div>
-        <div class="p-4 flex items-center justify-between mt-auto">
-          <a href="#" onclick="openModal('existence');return false" class="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition">View case study <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-          <span class="text-xs text-black/50">2024 • Venice Biennale</span>
-        </div>
-      </article>
-    </div>
-
-    <div class="mt-8 rounded-[24px] bg-ink text-white p-6 lg:p-8 flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
-      <div class="flex gap-4">
-        <div class="w-12 h-12 rounded-full bg-white text-ink grid place-items-center shrink-0"><i data-lucide="layers" class="w-6 h-6"></i></div>
-        <div><div class="font-display font-bold text-lg leading-tight">My process: Research → Prototype → Systemize</div><div class="text-sm text-white/60 mt-1 max-w-[560px]">Every project starts with people. I map jobs, test ugly prototypes, then systematize what works — so AI feels invisible, not intrusive.</div></div>
       </div>
-      <a href="#experience" class="inline-flex items-center gap-2 bg-white text-ink px-6 py-3 rounded-full font-bold text-sm hover:bg-cream transition shrink-0">See how I work <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- EXPERIENCE -->
-<section id="experience" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
-  <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
-    <div>
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] tracking-widest font-bold">EXPERIENCE & SKILLS</div>
-      <h2 class="mt-3 font-serif text-[40px] leading-none tracking-tight">Craft, scaled <br><span class="italic font-light">with care.</span></h2>
-
-      <div class="mt-8 bg-white rounded-2xl border border-black/10 overflow-hidden">
-        <div class="grid grid-cols-[1fr_auto] gap-4 px-5 py-3 bg-cream border-b border-black/5 text-[11px] tracking-widest font-bold text-black/50"><span>ROLE & COMPANY</span><span>YEAR</span></div>
-        <div class="divide-y divide-black/5">
-          <div class="px-5 py-4 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-ink text-white grid place-items-center font-bold text-xs">H</div><div><div class="font-bold text-sm leading-tight">Senior Product Designer — Hatcha</div><div class="text-xs text-black/50">Vancouver • AI Writing Tools</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-cream border">2022—24</span>
-          </div>
-          <div class="px-5 py-4 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-vermillion text-white grid place-items-center"><i data-lucide="flame" class="w-4 h-4"></i></div><div><div class="font-bold text-sm leading-tight">Product Designer — Fireflut</div><div class="text-xs text-black/50">Remote • Fintech OS</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white border">2020—22</span>
-          </div>
-          <div class="px-5 py-4 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-moss text-white grid place-items-center"><i data-lucide="building-2" class="w-4 h-4"></i></div><div><div class="font-bold text-sm leading-tight">Existence — Founder / Design Lead</div><div class="text-xs text-black/50">Vancouver • Spatial Archive</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white border">2024—Now</span>
-          </div>
-          <div class="px-5 py-4 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-white border grid place-items-center"><i data-lucide="graduation-cap" class="w-4 h-4"></i></div><div><div class="font-bold text-sm leading-tight">Design Mentor — UBC & BrainStation</div><div class="text-xs text-black/50">Vancouver • Teaching</div></div></div><span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white border">2021—Now</span>
-          </div>
-        </div>
-      </div>
-
-      <a href="#" class="mt-4 inline-flex items-center gap-2 text-sm font-bold">Download CV <i data-lucide="download" class="w-4 h-4"></i></a>
-    </div>
-
-    <div class="space-y-6">
-      <div class="rounded-[24px] bg-white border border-black/10 p-6 shadow-sm">
-        <h3 class="font-display font-bold">AI & Generative toolkit</h3>
-        <p class="text-sm text-black/60 mt-1">I treat AI as a design material — prototyping with code, not just Figma.</p>
-        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="rounded-2xl bg-cream border p-4"><div class="text-xs font-bold tracking-widest text-black/50">PROTOTYPING</div><div class="mt-2 flex flex-wrap gap-1.5 text-xs font-semibold"><span class="px-2 py-1 rounded-full bg-white border">Figma</span><span class="px-2 py-1 rounded-full bg-white border">Framer</span><span class="px-2 py-1 rounded-full bg-ink text-white">v0 / Lovable</span></div></div>
-          <div class="rounded-2xl bg-cream border p-4"><div class="text-xs font-bold tracking-widest text-black/50">AI SYSTEMS</div><div class="mt-2 flex flex-wrap gap-1.5 text-xs font-semibold"><span class="px-2 py-1 rounded-full bg-white border">Prompt Design</span><span class="px-2 py-1 rounded-full bg-white border">RAG</span><span class="px-2 py-1 rounded-full bg-vermillion text-white">Agents</span></div></div>
-          <div class="rounded-2xl bg-cream border p-4"><div class="text-xs font-bold tracking-widest text-black/50">RESEARCH</div><div class="mt-2 text-xs leading-relaxed text-black/60">Jobs-to-be-done, diary studies, usability + AI eval harnesses</div></div>
-          <div class="rounded-2xl bg-ink text-white p-4"><div class="text-xs font-bold tracking-widest text-white/60">PRINCIPLE</div><div class="mt-2 text-xs leading-relaxed text-white/80">Automation should <span class="text-white font-bold">amplify</span> judgment, not replace it.</div></div>
-        </div>
-      </div>
-
-      <div class="rounded-[24px] bg-[#FFF1D6] border border-black/5 p-6">
-        <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white grid place-items-center border"><i data-lucide="heart-handshake" class="w-5 h-5"></i></div><h3 class="font-display font-bold">User-centered, always</h3></div>
-        <ul class="mt-4 space-y-3 text-sm">
-          <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white border grid place-items-center shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></span><span><b>Co-create with users</b> — weekly testing, not big reveals. I bring engineers & users into the same FigJam.</span></li>
-          <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white border grid place-items-center shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></span><span><b>Prototype in the medium</b> — if it’s AI, we test with real models on day one.</span></li>
-          <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white border grid place-items-center shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></span><span><b>Measure what matters</b> — task success & trust, not just clicks.</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials" class="bg-ink text-white relative overflow-hidden">
-  <div class="absolute inset-0 opacity-20">
-    <div class="absolute w-[600px] h-[600px] rounded-full bg-vermillion blur-[100px] -top-40 -left-40"></div>
-    <div class="absolute w-[500px] h-[500px] rounded-full bg-[#FFD23F] blur-[90px] -bottom-40 -right-20 opacity-40"></div>
-  </div>
-  <div class="absolute top-8 left-[12%] w-[120px] h-[36px] bg-white/90 rounded-full hidden lg:block"></div>
-  <div class="absolute top-12 left-[14%] w-[70px] h-[44px] bg-white/90 rounded-full hidden lg:block"></div>
-  <div class="absolute top-16 right-[18%] w-[160px] h-[46px] bg-white/90 rounded-full hidden lg:block"></div>
-
-  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
-    <div class="flex flex-wrap items-end justify-between gap-6">
-      <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-[11px] tracking-widest font-bold">TESTIMONIALS • KIND WORDS</div>
-        <h2 class="mt-4 font-serif text-[40px] lg:text-[54px] leading-none tracking-tight">People I’ve built <span class="italic font-light text-[#FFD23F]">with.</span></h2>
-      </div>
-      <div class="flex items-center gap-3">
-        <button id="tPrev" class="w-10 h-10 rounded-full bg-white text-ink grid place-items-center hover:bg-cream transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
-        <button id="tNext" class="w-10 h-10 rounded-full bg-white text-ink grid place-items-center hover:bg-cream transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
-      </div>
-    </div>
-
-    <div class="mt-10 overflow-hidden">
-      <div id="tTrack" class="flex transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)]">
-        <!-- Card 1 -->
-        <div class="min-w-full lg:min-w-[50%] pr-0 lg:pr-6">
-          <div class="bg-white text-ink rounded-[28px] p-7 lg:p-8 h-full relative overflow-hidden">
-            <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-cream border"></div>
-            <div class="flex items-center gap-1 text-vermillion"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
-            <p class="mt-4 font-serif text-[20px] leading-snug">“Zainab has a rare blend — deep user empathy and fearless systems thinking. She turned our messy AI vision for Hatcha into a product people <i>love</i> to write with.”</p>
-            <div class="mt-6 flex items-center gap-3">
-              <img src="https://i.pravatar.cc/100?img=14" class="w-10 h-10 rounded-full object-cover">
-              <div><div class="font-bold text-sm leading-none">Maya Chen</div><div class="text-xs text-black/50">CEO, Hatcha • Vancouver</div></div>
-              <span class="ml-auto hidden sm:inline-flex px-3 py-1 rounded-full bg-cream border text-xs font-bold">Hatcha</span>
+    <!-- Infos -->
+    <section id="infos" class="pb-28">
+      <div class="max-w-7xl mx-auto px-5 md:px-8">
+        <div class="rounded-[28px] border border-white/10 bg-arena-card p-8 md:p-14 grid md:grid-cols-2 gap-12">
+          <div>
+            <p class="section-kicker mb-3">Infos pratiques</p>
+            <h2 class="font-display text-5xl md:text-6xl">VENIR À L’ARENA</h2>
+            <p class="mt-6 text-zinc-400 leading-relaxed">
+              Adidas Arena<br />
+              Porte de la Chapelle<br />
+              75018 Paris, France
+            </p>
+            <div class="mt-8 space-y-3 text-sm">
+              <p><span class="text-arena-lime font-semibold">Métro</span> — Ligne 12, station Porte de la Chapelle</p>
+              <p><span class="text-arena-lime font-semibold">Tram</span> — T3b</p>
+              <p><span class="text-arena-lime font-semibold">Bus</span> — Lignes 35, 38, 60, 302</p>
+              <p><span class="text-arena-lime font-semibold">Vélo</span> — Stations Vélib’ à proximité</p>
             </div>
           </div>
-        </div>
-        <!-- Card 2 -->
-        <div class="min-w-full lg:min-w-[50%] pr-0 lg:pr-6">
-          <div class="bg-[#FFF1D6] text-ink rounded-[28px] p-7 lg:p-8 h-full border border-white/20">
-            <div class="flex items-center gap-1 text-ink"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
-            <p class="mt-4 font-serif text-[20px] leading-snug">“Fireflut’s retention jump wasn’t magic — it was Zainab’s river metaphor and obsessive prototyping. Engineers still talk about her flow simulator.”</p>
-            <div class="mt-6 flex items-center gap-3">
-              <img src="https://i.pravatar.cc/100?img=33" class="w-10 h-10 rounded-full object-cover">
-              <div><div class="font-bold text-sm leading-none">David Okoro</div><div class="text-xs text-black/50">CTO, Fireflut • Toronto</div></div>
-              <span class="ml-auto hidden sm:inline-flex px-3 py-1 rounded-full bg-white border text-xs font-bold">Fireflut</span>
+          <form id="newsletter" class="flex flex-col justify-center" onsubmit="event.preventDefault(); this.querySelector('.ok').classList.remove('hidden');">
+            <h3 class="font-display text-4xl">NEWSLETTER</h3>
+            <p class="text-zinc-400 mt-3 mb-6">Recevez en avant-première la programmation et les offres hospitalités.</p>
+            <label class="sr-only" for="email">Adresse e-mail</label>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <input id="email" type="email" required placeholder="votre@email.com" class="flex-1 bg-black/40 border border-white/15 rounded-full px-5 py-3 text-sm outline-none focus:border-arena-lime" />
+              <button type="submit" class="btn-lime px-7 py-3 rounded-full text-sm uppercase tracking-widest">S’inscrire</button>
             </div>
-          </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="min-w-full lg:min-w-[50%] pr-0 lg:pr-6">
-          <div class="bg-white text-ink rounded-[28px] p-7 lg:p-8 h-full">
-            <div class="flex items-center gap-1 text-vermillion"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
-            <p class="mt-4 font-serif text-[20px] leading-snug">“Existence felt impossible until Zainab mapped it. She designs for memory and emotion — not just screens. A true architect of digital place.”</p>
-            <div class="mt-6 flex items-center gap-3">
-              <img src="https://i.pravatar.cc/100?img=26" class="w-10 h-10 rounded-full object-cover">
-              <div><div class="font-bold text-sm leading-none">Sofia Marin</div><div class="text-xs text-black/50">Curator, Venice Biennale</div></div>
-              <span class="ml-auto hidden sm:inline-flex px-3 py-1 rounded-full bg-cream border text-xs font-bold">Existence</span>
-            </div>
-          </div>
+            <p class="ok hidden mt-4 text-sm text-arena-lime">Merci, vous êtes bien inscrit(e).</p>
+          </form>
         </div>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <div class="mt-6 flex items-center justify-center gap-2">
-      <div class="tDot w-8 h-1.5 rounded-full bg-white transition"></div>
-      <div class="tDot w-1.5 h-1.5 rounded-full bg-white/30 transition"></div>
-      <div class="tDot w-1.5 h-1.5 rounded-full bg-white/30 transition"></div>
-    </div>
-  </div>
-</section>
-
-<!-- THOUGHTS / BLOG -->
-<section id="thoughts" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-16 lg:py-20">
-  <div class="flex flex-wrap items-end justify-between gap-6">
-    <div>
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] tracking-widest font-bold">THOUGHTS • WRITING & TALKS</div>
-      <h2 class="mt-3 font-serif text-[40px] leading-none tracking-tight">On product, place <span class="italic font-light">& AI.</span></h2>
-    </div>
-    <a href="#" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-black/10 text-sm font-bold hover:bg-ink hover:text-white transition">View all articles <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-  </div>
-
-  <div class="mt-8 grid md:grid-cols-3 gap-6">
-    <article class="group bg-white rounded-[24px] border border-black/10 overflow-hidden card-hover">
-      <div class="relative h-[190px] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white text-[11px] font-bold border">ARCHITECTURE</span>
-        <span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-ink text-white text-[11px] font-bold">5 min</span>
+  <footer class="border-t border-white/10 py-12">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 flex flex-col md:flex-row justify-between gap-8">
+      <a href="#" class="flex items-center gap-3">
+        <span class="flex items-end gap-[3px]" aria-hidden="true">
+          <span class="w-[4px] h-4 bg-white"></span>
+          <span class="w-[4px] h-6 bg-white"></span>
+          <span class="w-[4px] h-8 bg-white"></span>
+        </span>
+        <span class="font-display text-xl tracking-wide">ADIDAS ARENA</span>
+      </a>
+      <div class="flex flex-wrap gap-6 text-xs uppercase tracking-widest text-zinc-400">
+        <a href="#programmation" class="hover:text-white">Programmation</a>
+        <a href="#business" class="hover:text-white">Business</a>
+        <a href="#chapelle" class="hover:text-white">Central Chapelle</a>
+        <a href="#" class="hover:text-white">Mentions légales</a>
+        <a href="#" class="hover:text-white">Cookies</a>
       </div>
-      <div class="p-5">
-        <div class="text-[11px] tracking-widest font-bold text-black/40">NOV 12, 2025 • ESSAY</div>
-        <h3 class="mt-1 font-display font-bold leading-tight text-[17px]">What architecture taught me about AI interfaces</h3>
-        <p class="mt-2 text-sm leading-relaxed text-black/60 line-clamp-2">Buildings choreograph attention. So should AI products — with thresholds, light, and affordances that invite, not overwhelm.</p>
-        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-bold hover:gap-2 transition">Read essay <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
-      </div>
-    </article>
-
-    <article class="group bg-white rounded-[24px] border border-black/10 overflow-hidden card-hover">
-      <div class="relative h-[190px] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-vermillion text-white text-[11px] font-bold">GENERATIVE DESIGN</span>
-        <span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-white border text-[11px] font-bold">Playground</span>
-      </div>
-      <div class="p-5">
-        <div class="text-[11px] tracking-widest font-bold text-black/40">OCT 28, 2025 • INTERACTIVE</div>
-        <h3 class="mt-1 font-display font-bold leading-tight text-[17px]">Designing prompts that feel like design tools</h3>
-        <p class="mt-2 text-sm leading-relaxed text-black/60 line-clamp-2">From slash commands to canvases — a field guide to prompt UX that respects creative flow. Includes Figma file.</p>
-        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-bold hover:gap-2 transition">Open playground <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
-      </div>
-    </article>
-
-    <article class="group bg-white rounded-[24px] border border-black/10 overflow-hidden card-hover">
-      <div class="relative h-[190px] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-moss text-white text-[11px] font-bold">PRODUCT DESIGN</span>
-        <span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-white border text-[11px] font-bold">Video • 12:04</span>
-      </div>
-      <div class="p-5">
-        <div class="text-[11px] tracking-widest font-bold text-black/40">SEP 15, 2025 • TALK</div>
-        <h3 class="mt-1 font-display font-bold leading-tight text-[17px]">The human in the loop is not a fallback</h3>
-        <p class="mt-2 text-sm leading-relaxed text-black/60 line-clamp-2">Talk from Config Vancouver: why great AI products need designed friction — and how we tested trust at Hatcha.</p>
-        <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-bold hover:gap-2 transition">Watch talk <i data-lucide="play" class="w-3.5 h-3.5"></i></a>
-      </div>
-    </article>
-  </div>
-
-  <div class="mt-8 rounded-[24px] bg-cream border border-black/10 p-6 flex flex-col md:flex-row gap-6 items-center">
-    <div class="flex-1">
-      <div class="font-display font-bold text-lg">Get new essays — architecture, AI, and notes from Vancouver</div>
-      <div class="text-sm text-black/60 mt-1">No spam. One email a month. Unsubscribe anytime.</div>
+      <p class="text-xs text-zinc-500">© 2026 Adidas Arena — Paris</p>
     </div>
-    <form id="newsletter" class="flex w-full md:w-auto gap-2">
-      <input type="email" required placeholder="your@email.com" class="flex-1 md:w-[280px] px-4 py-3 rounded-full bg-white border border-black/10 text-sm outline-none focus:border-ink">
-      <button class="px-6 py-3 rounded-full bg-ink text-white text-sm font-bold hover:bg-black transition whitespace-nowrap">Subscribe</button>
-    </form>
-  </div>
-</section>
+  </footer>
 
-<!-- CONTACT -->
-<section id="contact" class="bg-white border-t border-black/10">
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-12 lg:py-16">
-    <div class="rounded-[32px] bg-ink text-white p-8 lg:p-12 relative overflow-hidden">
-      <div class="absolute -right-20 -top-20 w-[420px] h-[420px] rounded-full bg-white/10 blur-3xl"></div>
-      <div class="absolute -left-20 -bottom-20 w-[360px] h-[360px] rounded-full bg-vermillion/20 blur-3xl"></div>
-      <div class="relative grid lg:grid-cols-2 gap-10">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] tracking-widest font-bold">LET'S BUILD SOMETHING THOUGHTFUL</div>
-          <h2 class="mt-4 font-serif text-[38px] lg:text-[52px] leading-[0.9] tracking-tight">Have an idea that <br><span class="italic font-light text-[#FFD23F]">needs a human touch?</span></h2>
-          <p class="mt-4 text-white/70 leading-relaxed max-w-[520px]">I’m currently taking on select product & AI projects, workshops, and advising. Based in Vancouver, working with teams worldwide.</p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="mailto:hello@zainabkabira.design" class="inline-flex items-center gap-2 bg-white text-ink px-6 py-3 rounded-full font-bold text-sm hover:bg-cream transition">hello@zainabkabira.design <i data-lucide="mail" class="w-4 h-4"></i></a>
-            <a href="#" class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-6 py-3 rounded-full font-bold text-sm hover:bg-white hover:text-ink transition"><i data-lucide="calendar" class="w-4 h-4"></i> Book intro call</a>
-          </div>
-          <div class="mt-8 flex items-center gap-4 text-sm text-white/60">
-            <a href="#" class="hover:text-white transition flex items-center gap-1.5"><i data-lucide="linkedin" class="w-4 h-4"></i> LinkedIn</a>
-            <span class="w-px h-4 bg-white/20"></span>
-            <a href="#" class="hover:text-white transition flex items-center gap-1.5"><i data-lucide="figma" class="w-4 h-4"></i> Figma</a>
-            <span class="w-px h-4 bg-white/20"></span>
-            <a href="#" class="hover:text-white transition flex items-center gap-1.5"><i data-lucide="twitter" class="w-4 h-4"></i> Are.na</a>
-          </div>
-        </div>
-        <form id="contactForm" class="bg-white text-ink rounded-[24px] p-6 lg:p-7 shadow-xl">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <label class="text-xs font-bold tracking-widest">NAME <input required name="name" placeholder="Ada Lovelace" class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none focus:border-ink"></label>
-            <label class="text-xs font-bold tracking-widest">EMAIL <input required type="email" name="email" placeholder="ada@analytical.com" class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none focus:border-ink"></label>
-          </div>
-          <label class="block mt-4 text-xs font-bold tracking-widest">PROJECT TYPE
-            <select class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none">
-              <option>AI-native product (0→1)</option><option>Design system</option><option>Workshop / Speaking</option><option>Advising</option>
-            </select>
-          </label>
-          <label class="block mt-4 text-xs font-bold tracking-widest">TELL ME ABOUT IT
-            <textarea rows="4" placeholder="What are you hoping to make? Who is it for?" class="mt-1 w-full px-4 py-3 rounded-xl bg-cream border border-black/10 text-sm outline-none resize-none"></textarea>
-          </label>
-          <button class="mt-5 w-full py-3.5 rounded-full bg-ink text-white font-bold text-sm hover:bg-black transition flex items-center justify-center gap-2">Send inquiry <i data-lucide="send" class="w-4 h-4"></i></button>
-          <div class="mt-3 text-center text-xs text-black/50">Avg. reply time: ~6 hours • Vancouver (PST)</div>
-        </form>
-      </div>
-    </div>
-    <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-black/50">
-      <div>© 2026 Zainab Kabira — Product Designer, Vancouver, Canada. Crafted with care & a little generative magic.</div>
-      <div class="flex items-center gap-4"><a href="#" class="hover:text-ink">Privacy</a><a href="#" class="hover:text-ink">Colophon</a><span class="hidden sm:inline">Built with Figma, Framer & love</span></div>
-    </div>
-  </div>
-</section>
+  <script>
+    const header = document.getElementById('site-header');
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const banner = document.getElementById('cookie-banner');
 
-<!-- MODALS -->
-<div id="modal-hatcha" class="fixed inset-0 z-[80] hidden">
-  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal('hatcha')"></div>
-  <div class="relative max-w-[760px] mx-auto my-6 lg:my-10 bg-cream rounded-[28px] overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-cream/90 backdrop-blur border-b border-black/10 px-6 py-4 flex items-center justify-between">
-      <div class="text-xs tracking-widest font-bold">CASE STUDY — HATCHA</div><button onclick="closeModal('hatcha')" class="w-8 h-8 rounded-full bg-white border grid place-items-center"><i data-lucide="x" class="w-4 h-4"></i></button>
-    </div>
-    <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=1200&q=80" class="w-full h-[320px] object-cover">
-    <div class="p-6 lg:p-8">
-      <h3 class="font-serif text-3xl leading-tight">Hatcha — Keeping voice in a generative world</h3>
-      <p class="mt-3 text-black/60 leading-relaxed">Problem: Writers loved AI speed but hated sounding like everyone else. We built a voice-tuning system that learns from 3 samples and adapts prompts without prompt engineering.</p>
-      <div class="mt-6 grid sm:grid-cols-3 gap-3 text-sm"><div class="rounded-xl bg-white border p-4"><div class="font-bold">Role</div><div class="text-black/60">Lead Product Designer, research → ship</div></div><div class="rounded-xl bg-white border p-4"><div class="font-bold">Impact</div><div class="text-black/60">18k users, 4.8★, 62% weekly retention</div></div><div class="rounded-xl bg-ink text-white p-4"><div class="font-bold">Stack</div><div class="text-white/70">Figma, Next.js, LLM eval harness</div></div></div>
-      <a href="#contact" onclick="closeModal('hatcha')" class="mt-6 inline-flex items-center gap-2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm">Start a similar project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
-    </div>
-  </div>
-</div>
+    const onScroll = () => {
+      if (window.scrollY > 12) header.classList.add('nav-blur', 'border-b', 'border-white/10');
+      else header.classList.remove('nav-blur', 'border-b', 'border-white/10');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
 
-<div id="modal-fireflut" class="fixed inset-0 z-[80] hidden">
-  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal('fireflut')"></div>
-  <div class="relative max-w-[760px] mx-auto my-6 lg:my-10 bg-white rounded-[28px] overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white/90 backdrop-blur border-b border-black/10 px-6 py-4 flex items-center justify-between"><div class="text-xs tracking-widest font-bold">CASE STUDY — FIREFLUT</div><button onclick="closeModal('fireflut')" class="w-8 h-8 rounded-full bg-cream border grid place-items-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-    <div class="h-[280px] bg-[#0E3A2F] grid place-items-center p-6"><div class="bg-white rounded-2xl p-4 w-full max-w-[520px]"><div class="text-xs font-bold tracking-widest">BEFORE → AFTER</div><div class="mt-2 text-sm text-black/60">From spreadsheet anxiety to a river you can dam, split, and forecast. We tested 11 metaphors with 40 users — river won on comprehension + delight.</div></div></div>
-    <div class="p-6 lg:p-8"><h3 class="font-serif text-3xl leading-tight">Fireflut — Money as flow, not cells</h3><p class="mt-3 text-black/60 leading-relaxed">Led end-to-end: journey mapping, data-viz exploration, and a design system that scales from mobile to forecasting engine. +42% retention in 4 months.</p><a href="#contact" onclick="closeModal('fireflut')" class="mt-6 inline-flex items-center gap-2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm">Discuss fintech systems <i data-lucide="arrow-right" class="w-4 h-4"></i></a></div>
-  </div>
-</div>
+    menuBtn.addEventListener('click', () => {
+      menuBtn.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      menuBtn.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }));
 
-<div id="modal-existence" class="fixed inset-0 z-[80] hidden">
-  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal('existence')"></div>
-  <div class="relative max-w-[760px] mx-auto my-6 lg:my-10 bg-[#FFF1D6] rounded-[28px] overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-[#FFF1D6]/90 backdrop-blur border-b border-black/10 px-6 py-4 flex items-center justify-between"><div class="text-xs tracking-widest font-bold">CASE STUDY — EXISTENCE</div><button onclick="closeModal('existence')" class="w-8 h-8 rounded-full bg-white border grid place-items-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-    <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&q=80" class="w-full h-[320px] object-cover">
-    <div class="p-6 lg:p-8"><h3 class="font-serif text-3xl leading-tight">Existence — An archive you can inhabit</h3><p class="mt-3 text-black/60 leading-relaxed">A spatial memory tool for architects. Capture a place with photos + notes, generate a navigable memory-scape, and invite collaborators to walk it. Exhibited at Venice Biennale 2024.</p><a href="#contact" onclick="closeModal('existence')" class="mt-6 inline-flex items-center gap-2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm">Explore spatial tools <i data-lucide="arrow-right" class="w-4 h-4"></i></a></div>
-  </div>
-</div>
+    const consent = localStorage.getItem('cookieConsent');
+    if (consent) banner.style.display = 'none';
+    const hideCookies = (value) => {
+      localStorage.setItem('cookieConsent', value);
+      banner.style.display = 'none';
+    };
+    document.getElementById('accept-cookies').addEventListener('click', () => hideCookies('accepted'));
+    document.getElementById('refuse-cookies').addEventListener('click', () => hideCookies('refused'));
 
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-ink text-white px-5 py-3 rounded-full text-sm font-medium shadow-xl translate-y-20 opacity-0 transition-all z-[90] flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i><span id="toastMsg">Done</span></div>
-
-<script>
-lucide.createIcons();
-
-// mobile menu
-document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('hidden'));
-
-// shader canvas (soft gradient blobs)
-const cvs=document.getElementById('shader');const ctx=cvs.getContext('2d');
-let w,h;function resize(){w=cvs.width=cvs.offsetWidth*devicePixelRatio;h=cvs.height=cvs.offsetHeight*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio);}window.addEventListener('resize',resize);resize();
-let t=0;let isNight=false;
-function drawShader(){
-  const W=cvs.offsetWidth,H=cvs.offsetHeight;
-  ctx.clearRect(0,0,W,H);
-  // base
-  ctx.fillStyle=isNight?'#0B1220':'#FDF8F1';ctx.fillRect(0,0,W,H);
-  // blobs
-  const blobs=isNight?[
-    {x:W*0.2+Math.sin(t*0.6)*40,y:H*0.3+Math.cos(t*0.4)*30,r:380,c:'rgba(91,33,182,0.55)'},
-    {x:W*0.75+Math.cos(t*0.5)*50,y:H*0.25+Math.sin(t*0.6)*20,r:420,c:'rgba(14,58,47,0.5)'},
-    {x:W*0.5+Math.sin(t*0.3)*60,y:H*0.65+Math.cos(t*0.5)*20,r:520,c:'rgba(30,58,138,0.45)'},
-  ]:[
-    {x:W*0.18+Math.sin(t*0.6)*30,y:H*0.28+Math.cos(t*0.4)*20,r:400,c:'rgba(255,139,26,0.55)'},
-    {x:W*0.78+Math.cos(t*0.5)*40,y:H*0.22+Math.sin(t*0.6)*18,r:420,c:'rgba(255,210,63,0.55)'},
-    {x:W*0.48+Math.sin(t*0.3)*50,y:H*0.68+Math.cos(t*0.5)*18,r:560,c:'rgba(255,241,214,0.9)'},
-  ];
-  blobs.forEach(b=>{const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,b.c);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();});
-  t+=0.008;requestAnimationFrame(drawShader);
-}drawShader();
-
-// theme toggle
-const toggle=document.getElementById('themeToggle');
-toggle.addEventListener('click',()=>{
-  isNight=!isNight;
-  document.body.style.background=isNight?'#0B1220':'#FDF8F1';
-  document.body.style.color=isNight?'#FDF8F1':'#131316';
-  document.getElementById('sunGroup').classList.toggle('hidden',isNight);
-  document.getElementById('moonGroup').classList.toggle('hidden',!isNight);
-  document.querySelector('.sun-icon').classList.toggle('hidden',isNight);
-  document.querySelector('.moon-icon').classList.toggle('hidden',!isNight);
-  showToast(isNight?'Night mode — moon & deep indigo':'Day mode — sun & warm peach');
-});
-
-// mini generative canvas
-const mg=document.getElementById('miniGen');const mctx=mg.getContext('2d');
-function drawMini(density=22){
-  const W=mg.width,H=mg.height;
-  mctx.clearRect(0,0,W,H);
-  // bg grid
-  mctx.fillStyle='rgba(255,255,255,0.06)';mctx.fillRect(0,0,W,H);
-  const cols=Math.floor(W/density),rows=Math.floor(H/density);
-  for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
-    const px=x*density+8,py=y*density+8;
-    const r=Math.random();
-    mctx.fillStyle=r>0.7?'#FFD23F':r>0.4?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.25)';
-    if(r>0.65){mctx.beginPath();mctx.roundRect(px,py,density-10,density-10,6);mctx.fill();}
-    else if(r>0.35){mctx.beginPath();mctx.arc(px+(density-10)/2,py+(density-10)/2,(density-10)/2,0,Math.PI*2);mctx.fill();}
-    else {mctx.fillRect(px,py,density-10,2);}
-  }
-}
-drawMini(22);
-document.getElementById('regenBtn').addEventListener('click',()=>drawMini(+document.getElementById('genDensity').value));
-document.getElementById('genDensity').addEventListener('input',e=>drawMini(+e.target.value));
-
-// voice tuner
-const voices={
-  Warm:'Warm voice: “Let your ideas hatch gently — Hatcha keeps your rhythm, not someone else’s template.”',
-  Crisp:'Crisp voice: “Hatcha distills your draft to its sharpest line. No fluff. Just signal.”',
-  Poetic:'Poetic voice: “Words like light through paper — Hatcha lets meaning glow through.”'
-};
-document.querySelectorAll('.voiceBtn').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.voiceBtn').forEach(x=>{x.className='voiceBtn flex-1 py-1.5 rounded-full bg-white border text-xs font-bold';});
-  b.className='voiceBtn flex-1 py-1.5 rounded-full bg-ink text-white text-xs font-bold';
-  document.getElementById('voiceOutput').textContent=voices[b.dataset.voice];
-}));
-
-// flow drag
-const svg=document.getElementById('flowSvg');const node=document.getElementById('dragNode');const path=document.getElementById('flowPath');
-let dragging=false;
-function updatePath(y){
-  const ny=Math.max(20,Math.min(140,y));
-  node.setAttribute('cy',ny);
-  path.setAttribute('d',`M 20 80 C 80 ${ny-60}, 140 ${ny+60}, 220 ${ny} S 300 80, 300 80`);
-}
-node.addEventListener('pointerdown',e=>{dragging=true;node.setPointerCapture(e.pointerId);node.style.cursor='grabbing';});
-window.addEventListener('pointerup',()=>{dragging=false;node.style.cursor='grab';});
-window.addEventListener('pointermove',e=>{
-  if(!dragging) return;
-  const rect=svg.getBoundingClientRect();
-  const y=(e.clientY-rect.top)/rect.height*160;
-  updatePath(y);
-});
-// touch also
-node.addEventListener('touchmove',e=>{
-  const rect=svg.getBoundingClientRect();
-  const y=(e.touches[0].clientY-rect.top)/rect.height*160;
-  updatePath(y);
-},{passive:true});
-
-// modules
-const grid=document.getElementById('moduleGrid');
-function renderModules(){
-  grid.innerHTML='';
-  const n=6+Math.floor(Math.random()*3);
-  document.getElementById('moduleCount').textContent=n+' modules';
-  for(let i=0;i<12;i++){
-    const div=document.createElement('div');
-    const active=i<n;
-    div.className=`h-10 rounded-lg border flex items-center justify-center text-[10px] font-bold ${active?'bg-ink text-white border-ink':'bg-cream border-black/10 text-black/20'}`;
-    div.textContent=active?['◧','◨','⬢','⬣','▭'][Math.floor(Math.random()*5)]:'·';
-    grid.appendChild(div);
-  }
-}
-renderModules();
-document.getElementById('shuffleModules').addEventListener('click',renderModules);
-
-// testimonials
-let idx=0;const track=document.getElementById('tTrack');const dots=document.querySelectorAll('.tDot');
-function go(i){
-  const total=3;
-  idx=(i+total)%total;
-  const isMobile=window.innerWidth<1024;
-  track.style.transform=`translateX(-${idx*(isMobile?100:50)}%)`;
-  dots.forEach((d,k)=>{d.className=k===idx?'tDot w-8 h-1.5 rounded-full bg-white transition':'tDot w-1.5 h-1.5 rounded-full bg-white/30 transition'});
-}
-document.getElementById('tPrev').addEventListener('click',()=>go(idx-1));
-document.getElementById('tNext').addEventListener('click',()=>go(idx+1));
-setInterval(()=>go(idx+1),5000);
-window.addEventListener('resize',()=>go(idx));
-
-// filter
-document.querySelectorAll('.filterBtn').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.filterBtn').forEach(x=>x.className='filterBtn px-4 py-1.5 rounded-full text-xs font-bold hover:bg-white transition');
-  b.className='filterBtn active px-4 py-1.5 rounded-full bg-ink text-white text-xs font-bold';
-  const f=b.dataset.filter;
-  document.querySelectorAll('.work-card').forEach(card=>{
-    const show=f==='all'||card.dataset.cat.includes(f);
-    card.style.display=show?'flex':'none';
-  });
-}));
-
-// modals
-function openModal(id){document.getElementById('modal-'+id).classList.remove('hidden');document.body.style.overflow='hidden';lucide.createIcons();}
-function closeModal(id){document.getElementById('modal-'+id).classList.add('hidden');document.body.style.overflow='';}
-window.openModal=openModal;window.closeModal=closeModal;
-
-// forms
-function showToast(msg){
-  const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;
-  t.classList.remove('translate-y-20','opacity-0');
-  setTimeout(()=>t.classList.add('translate-y-20','opacity-0'),2600);
-}
-document.getElementById('newsletter').addEventListener('submit',e=>{e.preventDefault();showToast('Subscribed — welcome to the studio notes ✨');e.target.reset();});
-document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();showToast('Inquiry sent — I’ll reply within a day 👋');e.target.reset();});
-
-// init icons again after dynamic
-setTimeout(()=>lucide.createIcons(),100);
-</script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
 </body>
 </html>
