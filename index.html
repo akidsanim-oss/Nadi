@@ -1,1044 +1,1666 @@
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoLease Maroc - Location de Véhicules au Maroc</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        'm-red': '#C8102E',
-        'm-red-dark': '#9B0020',
-        'm-green': '#006233',
-        'm-green-light': '#00804d',
-        'm-gold': '#C5A55A',
-        'm-gold-light': '#D4BC7C',
-        'm-sand': '#F5E6C8',
-        'm-sand-light': '#FAF3E6',
-        'm-terra': '#C75B39',
-        'm-terra-light': '#E07A5A',
-        'm-brown': '#3E2723',
-        'm-brown-light': '#5D4037',
-        'm-cream': '#FFF8F0',
-      },
-      fontFamily: {
-        'cairo': ['Cairo', 'sans-serif'],
-        'amiri': ['Amiri', 'serif'],
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoLease Maroc | Location Longue Durée & Prestige au Maroc</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Cairo & Amiri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'm-red': '#C8102E',
+            'm-red-dark': '#8F0B20',
+            'm-green': '#006233',
+            'm-green-light': '#008746',
+            'm-gold': '#C5A55A',
+            'm-gold-light': '#E5C985',
+            'm-sand': '#F4ECE1',
+            'm-sand-light': '#FAF5EE',
+            'm-terra': '#C75B39',
+            'm-terra-dark': '#A34224',
+            'm-brown': '#33201C',
+            'm-brown-dark': '#231411',
+            'm-cream': '#FCF8F2',
+          },
+          fontFamily: {
+            'cairo': ['Cairo', 'sans-serif'],
+            'amiri': ['Amiri', 'serif'],
+          },
+          boxShadow: {
+            'moroccan': '0 10px 30px -5px rgba(51, 32, 28, 0.12), 0 0 15px rgba(197, 165, 90, 0.2)',
+            'moroccan-lg': '0 20px 40px -10px rgba(51, 32, 28, 0.2), 0 0 25px rgba(197, 165, 90, 0.3)',
+          }
+        }
       }
     }
-  }
-}
-</script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap');
+  </script>
 
-* { font-family: 'Cairo', sans-serif; }
+  <style>
+    * { font-family: 'Cairo', sans-serif; }
+    .font-traditional { font-family: 'Amiri', serif; }
 
-body { background: #FFF8F0; }
+    /* Moroccan Geometric Zellige Background Pattern (SVG inline) */
+    .zellige-pattern {
+      background-color: #33201C;
+      background-image: radial-gradient(rgba(197, 165, 90, 0.18) 1.5px, transparent 1.5px),
+                        radial-gradient(rgba(200, 16, 46, 0.2) 1.5px, #231411 1.5px);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+    }
 
-/* Zellige Pattern */
-.zellige-bg {
-  background-color: #3E2723;
-  background-image:
-    linear-gradient(30deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
-    linear-gradient(150deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
-    linear-gradient(30deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
-    linear-gradient(150deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
-    linear-gradient(60deg, #C5A55A 25%, transparent 25.5%, transparent 75%, #C5A55A 75%, #C5A55A),
-    linear-gradient(60deg, #C5A55A 25%, transparent 25.5%, transparent 75%, #C5A55A 75%, #C5A55A);
-  background-size: 40px 70px;
-  background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
-  opacity: 0.08;
-}
+    .zellige-light-pattern {
+      background-color: #FCF8F2;
+      background-image: radial-gradient(#C5A55A 1px, transparent 1px),
+                        radial-gradient(#C8102E 1px, #FCF8F2 1px);
+      background-size: 28px 28px;
+      background-position: 0 0, 14px 14px;
+      opacity: 0.05;
+    }
 
-.zellige-overlay {
-  position: relative;
-}
-.zellige-overlay::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg 90deg, rgba(197,165,90,0.03) 90deg 180deg);
-  background-size: 60px 60px;
-  pointer-events: none;
-}
+    .moroccan-arch-border {
+      border-top-left-radius: 40px;
+      border-top-right-radius: 40px;
+    }
 
-.hero-gradient {
-  background: linear-gradient(135deg, #3E2723 0%, #C8102E 40%, #006233 100%);
-}
+    /* Zellige Moorish Border */
+    .moorish-divider {
+      height: 12px;
+      background: repeating-linear-gradient(
+        45deg,
+        #C8102E,
+        #C8102E 12px,
+        #C5A55A 12px,
+        #C5A55A 24px,
+        #006233 24px,
+        #006233 36px,
+        #33201C 36px,
+        #33201C 48px
+      );
+    }
 
-.moroccan-border {
-  border-image: repeating-linear-gradient(90deg, #C5A55A 0px, #C5A55A 10px, #C8102E 10px, #C8102E 20px, #006233 20px, #006233 30px) 4;
-}
+    .subtle-frieze {
+      height: 4px;
+      background: linear-gradient(90deg, #C8102E, #C5A55A, #006233, #C5A55A, #C8102E);
+    }
 
-.card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(62,39,35,0.15);
-}
+    /* Moroccan 8-pointed star cutout badge */
+    .star-8 {
+      position: relative;
+      background: #C5A55A;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .star-8::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      transform: rotate(45deg);
+      border-radius: 3px;
+    }
 
-.vehicle-card {
-  animation: fadeInUp 0.5s ease forwards;
-  opacity: 0;
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    /* Hero Glass & Glow */
+    .hero-glass {
+      background: rgba(35, 20, 17, 0.78);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(197, 165, 90, 0.35);
+    }
 
-.deal-badge {
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 9px; }
+    ::-webkit-scrollbar-track { background: #33201C; }
+    ::-webkit-scrollbar-thumb { background: #C5A55A; border-radius: 4px; border: 2px solid #33201C; }
+    ::-webkit-scrollbar-thumb:hover { background: #C8102E; }
 
-.moroccan-divider {
-  height: 4px;
-  background: repeating-linear-gradient(90deg, #C5A55A 0px, #C5A55A 15px, transparent 15px, transparent 20px, #C8102E 20px, #C8102E 35px, transparent 35px, transparent 40px);
-}
+    /* Transitions */
+    .card-transition {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-transition:hover {
+      transform: translateY(-8px);
+    }
 
-.nav-blur {
-  backdrop-filter: blur(12px);
-  background: rgba(255,248,240,0.92);
-}
-
-.star-pattern {
-  background-image: radial-gradient(circle, #C5A55A 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.15;
-}
-
-.moroccan-star {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: #C5A55A;
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-}
-
-.slider-container { overflow: hidden; position: relative; }
-.slider-track {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-
-.slide-enter { animation: slideIn 0.5s ease forwards; }
-@keyframes slideIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.modal-overlay {
-  background: rgba(62,39,35,0.7);
-  backdrop-filter: blur(6px);
-}
-
-.glow-gold {
-  box-shadow: 0 0 30px rgba(197,165,90,0.3);
-}
-
-.moroccan-pattern-border {
-  border: 2px solid #C5A55A;
-  border-image: repeating-linear-gradient(45deg, #C5A55A, #C5A55A 5px, #C8102E 5px, #C8102E 10px) 5;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 22px; height: 22px;
-  background: #C8102E;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 3px solid #FFF8F0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-@media (max-width: 768px) {
-  .hero-gradient h1 { font-size: 1.8rem; }
-}
-
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #FFF8F0; }
-::-webkit-scrollbar-thumb { background: #C5A55A; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #C8102E; }
-</style>
+    /* Arabesque corner ornament */
+    .arabesque-corner-tl {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 24px;
+      height: 24px;
+      border-top: 2px solid #C5A55A;
+      border-left: 2px solid #C5A55A;
+      pointer-events: none;
+    }
+    .arabesque-corner-br {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-bottom: 2px solid #C5A55A;
+      border-right: 2px solid #C5A55A;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body class="min-h-screen">
 
-<!-- Navigation -->
-<nav class="nav-blur fixed top-0 left-0 right-0 z-50 border-b-2 border-m-gold shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <div class="flex items-center gap-2">
-        <div class="w-10 h-10 bg-m-red rounded-xl flex items-center justify-center">
-          <i class="fas fa-star text-m-gold text-sm"></i>
-        </div>
-        <span class="text-xl font-bold text-m-brown">AutoLease<span class="text-m-red">Maroc</span></span>
-      </div>
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#accueil" class="text-gray-700 hover:text-m-red font-medium transition">Accueil</a>
-        <a href="#vehicules" class="text-m-red font-semibold border-b-2 border-m-red pb-1">Véhicules</a>
-        <a href="#services" class="text-gray-700 hover:text-m-red font-medium transition">Services</a>
-        <a href="#pourquoi" class="text-gray-700 hover:text-m-red font-medium transition">Pourquoi Nous</a>
-        <a href="#faq" class="text-gray-700 hover:text-m-red font-medium transition">FAQ</a>
-      </div>
-      <div class="flex items-center gap-3">
-        <a href="tel:+212522000000" class="hidden sm:flex items-center gap-2 text-m-brown hover:text-m-red transition text-sm font-medium">
-          <i class="fas fa-phone-alt"></i>
-          <span>+212 522 00 00 00</span>
-        </a>
-        <button class="bg-m-red hover:bg-m-red-dark text-white px-5 py-2 rounded-full font-semibold transition shadow-lg shadow-red-200" onclick="scrollToSection('vehicules')">
-          Devis Gratuit
-        </button>
-      </div>
-      <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
-        <i class="fas fa-bars text-xl"></i>
-      </button>
-    </div>
-  </div>
-  <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100">
-    <div class="px-4 py-4 space-y-3">
-      <a href="#accueil" class="block text-gray-700 hover:text-m-red font-medium py-2">Accueil</a>
-      <a href="#vehicules" class="block text-m-red font-semibold py-2">Véhicules</a>
-      <a href="#services" class="block text-gray-700 hover:text-m-red font-medium py-2">Services</a>
-      <a href="#pourquoi" class="block text-gray-700 hover:text-m-red font-medium py-2">Pourquoi Nous</a>
-      <a href="#faq" class="block text-gray-700 hover:text-m-red font-medium py-2">FAQ</a>
-      <a href="tel:+212522000000" class="block text-m-brown font-medium py-2"><i class="fas fa-phone-alt mr-2"></i>+212 522 00 00 00</a>
-    </div>
-  </div>
-</nav>
+<body class="bg-m-cream text-m-brown antialiased selection:bg-m-gold selection:text-m-brown-dark min-h-screen flex flex-col justify-between">
 
-<!-- Hero Section -->
-<section id="accueil" class="hero-gradient pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden zellige-overlay">
-  <div class="absolute inset-0 zellige-bg"></div>
-  <div class="absolute inset-0 opacity-5">
-    <div class="star-pattern w-full h-full"></div>
-  </div>
-  <div class="absolute top-20 left-10 w-72 h-72 bg-m-gold rounded-full blur-3xl opacity-20"></div>
-  <div class="absolute bottom-10 right-20 w-96 h-96 bg-m-green rounded-full blur-3xl opacity-15"></div>
-
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <!-- Carousel -->
-    <div id="heroCarousel" class="relative mb-8">
-      <div class="slider-container rounded-3xl overflow-hidden shadow-2xl">
-        <div id="carouselTrack" class="slider-track">
-          <div class="min-w-full relative">
-            <img src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="SUV luxe" class="w-full h-64 sm:h-80 md:h-96 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-m-brown/80 via-m-brown/40 to-transparent flex items-center">
-              <div class="p-8 md:p-12">
-                <span class="deal-badge inline-block bg-m-gold text-m-brown px-4 py-1 rounded-full text-sm font-bold mb-3">🔥 Offre du Moment</span>
-                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">SUV de Luxe au Désert</h2>
-                <p class="text-m-sand text-lg">À partir de <span class="text-m-gold font-bold text-2xl">2 490 DH/mois</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="min-w-full relative">
-            <img src="https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Voiture sport" class="w-full h-64 sm:h-80 md:h-96 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-m-red/80 via-m-red/40 to-transparent flex items-center">
-              <div class="p-8 md:p-12">
-                <span class="deal-badge inline-block bg-m-green text-white px-4 py-1 rounded-full text-sm font-bold mb-3">⚡ Nouveau</span>
-                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">Sportives Rouges à Marrakech</h2>
-                <p class="text-m-sand text-lg">À partir de <span class="text-m-gold font-bold text-2xl">3 200 DH/mois</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="min-w-full relative">
-            <img src="https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Voiture électrique" class="w-full h-64 sm:h-80 md:h-96 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-m-green/80 via-m-green/40 to-transparent flex items-center">
-              <div class="p-8 md:p-12">
-                <span class="deal-badge inline-block bg-m-terra text-white px-4 py-1 rounded-full text-sm font-bold mb-3">🌿 Écologique</span>
-                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">Électriques en Charge à Casablanca</h2>
-                <p class="text-m-sand text-lg">À partir de <span class="text-m-gold font-bold text-2xl">1 890 DH/mois</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button onclick="prevSlide()" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transition text-m-red">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <button onclick="nextSlide()" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transition text-m-red">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-      <div id="carouselDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
-    </div>
-
-    <div class="text-center mb-8">
-      <p class="text-m-sand text-lg md:text-xl max-w-2xl mx-auto font-amiri italic">"Des milliers d'offres de location au Maroc — de Casablanca à Marrakech, de Rabat à Tanger."</p>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
-        <div class="text-2xl md:text-3xl font-black text-m-red">12K+</div>
-        <div class="text-sm text-m-brown-light font-medium">Véhicules Disponibles</div>
-      </div>
-      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
-        <div class="text-2xl md:text-3xl font-black text-m-green">98%</div>
-        <div class="text-sm text-m-brown-light font-medium">Clients Satisfaits</div>
-      </div>
-      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
-        <div class="text-2xl md:text-3xl font-black text-m-terra">50+</div>
-        <div class="text-sm text-m-brown-light font-medium">Marques Automobiles</div>
-      </div>
-      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
-        <div class="text-2xl md:text-3xl font-black text-m-gold">0 DH</div>
-        <div class="text-sm text-m-brown-light font-medium">Frais Cachés</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- Search Panel -->
-<section class="py-12 md:py-16 bg-white relative">
-  <div class="absolute inset-0 zellige-overlay"></div>
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="text-center mb-8">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Trouvez Votre Véhicule Idéal</h2>
-      <p class="text-m-brown-light mt-2">À Tanger, Fès, Rabat ou n'importe où au Maroc</p>
-    </div>
-    <div class="bg-m-sand-light rounded-3xl p-6 md:p-8 border-2 border-m-gold/30 shadow-lg">
-      <!-- Toggle -->
-      <div class="flex justify-center mb-6">
-        <div class="bg-m-brown rounded-full p-1 flex">
-          <button id="btnVoiture" onclick="switchTab('voiture')" class="px-6 py-2 rounded-full text-sm font-bold transition bg-m-red text-white">
-            <i class="fas fa-car mr-1"></i> Voiture
-          </button>
-          <button id="btnUtilitaire" onclick="switchTab('utilitaire')" class="px-6 py-2 rounded-full text-sm font-bold transition text-m-sand hover:text-white">
-            <i class="fas fa-truck mr-1"></i> Utilitaire
-          </button>
-        </div>
-      </div>
-
-      <!-- Type Toggle -->
-      <div class="flex justify-center mb-6">
-        <div class="flex gap-2">
-          <button id="btnParticulier" onclick="switchType('particulier')" class="px-4 py-2 rounded-full text-sm font-semibold transition bg-m-green text-white">
-            <i class="fas fa-user mr-1"></i> Particulier
-          </button>
-          <button id="btnEntreprise" onclick="switchType('entreprise')" class="px-4 py-2 rounded-full text-sm font-semibold transition bg-m-sand text-m-brown hover:bg-m-green hover:text-white">
-            <i class="fas fa-building mr-1"></i> Entreprise
-          </button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div>
-          <label class="block text-sm font-semibold text-m-brown mb-1">Ville</label>
-          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
-            <option>Casablanca</option>
-            <option>Rabat</option>
-            <option>Marrakech</option>
-            <option>Fès</option>
-            <option>Tanger</option>
-            <option>Meknès</option>
-            <option>Agadir</option>
-            <option>Oujda</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-m-brown mb-1">Budget Mensuel</label>
-          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
-            <option>Tous les budgets</option>
-            <option>Moins de 1 500 DH</option>
-            <option>1 500 - 2 500 DH</option>
-            <option>2 500 - 4 000 DH</option>
-            <option>4 000 - 6 000 DH</option>
-            <option>Plus de 6 000 DH</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-m-brown mb-1">Marque</label>
-          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
-            <option>Toutes les marques</option>
-            <option>Renault</option>
-            <option>Peugeot</option>
-            <option>Dacia</option>
-            <option>Toyota</option>
-            <option>Mercedes</option>
-            <option>BMW</option>
-            <option>Hyundai</option>
-            <option>Kia</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div>
-          <label class="block text-sm font-semibold text-m-brown mb-1">Carburant</label>
-          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
-            <option>Tous</option>
-            <option>Essence</option>
-            <option>Diesel</option>
-            <option>Électrique</option>
-            <option>Hybride</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-m-brown mb-1">Durée</label>
-          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
-            <option>24 mois</option>
-            <option>36 mois</option>
-            <option>48 mois</option>
-            <option>60 mois</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-m-brown mb-1">Kilométrage</label>
-          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
-            <option>10 000 km/an</option>
-            <option>15 000 km/an</option>
-            <option>20 000 km/an</option>
-            <option>25 000 km/an</option>
-            <option>Illimité</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="text-center">
-        <button onclick="scrollToSection('vehicules')" class="bg-m-red hover:bg-m-red-dark text-white px-10 py-3 rounded-full font-bold text-lg transition shadow-lg shadow-red-200 hover:shadow-red-300">
-          <i class="fas fa-search mr-2"></i>Rechercher des Offres
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- Service Cards -->
-<section id="services" class="py-12 md:py-16 bg-m-sand-light">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Nos Services au Maroc</h2>
-      <p class="text-m-brown-light mt-2">Des solutions adaptées pour chaque besoin</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Electric -->
-      <div class="bg-white rounded-3xl p-6 border-2 border-m-green/20 card-hover group">
-        <div class="w-16 h-16 bg-m-green/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-m-green/20 transition">
-          <i class="fas fa-bolt text-3xl text-m-green"></i>
-        </div>
-        <h3 class="text-xl font-bold text-m-brown mb-2">Véhicules Électriques</h3>
-        <p class="text-m-brown-light text-sm leading-relaxed">Location de voitures électriques avec stations de charge à Casablanca, Rabat et Marrakech. Réduisez votre empreinte carbone tout en roulant au Maroc.</p>
-        <div class="mt-4 text-m-green font-semibold text-sm">
-          À partir de 1 890 DH/mois <i class="fas fa-arrow-right ml-1"></i>
-        </div>
-      </div>
-      <!-- In Stock -->
-      <div class="bg-white rounded-3xl p-6 border-2 border-m-gold/20 card-hover group">
-        <div class="w-16 h-16 bg-m-gold/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-m-gold/20 transition">
-          <i class="fas fa-warehouse text-3xl text-m-gold"></i>
-        </div>
-        <h3 class="text-xl font-bold text-m-brown mb-2">En Stock Immédiat</h3>
-        <p class="text-m-brown-light text-sm leading-relaxed">Plus de 2 000 véhicules disponibles immédiatement dans nos concessions à Tanger, Fès et Oujda. Livraison sous 48h partout au Maroc.</p>
-        <div class="mt-4 text-m-gold font-semibold text-sm">
-          Livraison rapide <i class="fas fa-arrow-right ml-1"></i>
-        </div>
-      </div>
-      <!-- Special Offers -->
-      <div class="bg-white rounded-3xl p-6 border-2 border-m-red/20 card-hover group">
-        <div class="w-16 h-16 bg-m-red/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-m-red/20 transition">
-          <i class="fas fa-fire text-3xl text-m-red"></i>
-        </div>
-        <h3 class="text-xl font-bold text-m-brown mb-2">Offres Spéciales</h3>
-        <p class="text-m-brown-light text-sm leading-relaxed">Promotions exclusives au Ramadan, Aïd et pendant les fêtes marocaines. Profitez de réductions allant jusqu'à 30% sur toute la gamme.</p>
-        <div class="mt-4 text-m-red font-semibold text-sm">
-          Jusqu'à -30% <i class="fas fa-arrow-right ml-1"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- Vehicle Grid -->
-<section id="vehicules" class="py-12 md:py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Offres de Location au Maroc</h2>
-      <p class="text-m-brown-light mt-2">Sélection de véhicules disponibles dans vos villes</p>
-    </div>
-
-    <!-- Filter Tabs -->
-    <div class="flex flex-wrap justify-center gap-2 mb-8">
-      <button onclick="filterVehicles('all')" class="filter-btn active px-5 py-2 rounded-full text-sm font-bold transition bg-m-red text-white border-2 border-m-red">Toutes</button>
-      <button onclick="filterVehicles('suv')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">SUV</button>
-      <button onclick="filterVehicles('citadine')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Citadines</button>
-      <button onclick="filterVehicles('berline')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Berlines</button>
-      <button onclick="filterVehicles('utilitaire')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Utilitaires</button>
-      <button onclick="filterVehicles('electrique')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Électrique</button>
-    </div>
-
-    <div id="vehicleGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <!-- Vehicles will be inserted by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- Why Choose Us -->
-<section id="pourquoi" class="py-12 md:py-16 bg-m-sand-light relative">
-  <div class="absolute inset-0 zellige-overlay"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="text-center mb-10">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Pourquoi Choisir AutoLease Maroc ?</h2>
-      <p class="text-m-brown-light mt-2 font-amiri italic">"Le meilleur service de location automobile au Royaume du Maroc"</p>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
-        <div class="w-20 h-20 mx-auto mb-4 bg-m-red/10 rounded-full flex items-center justify-center">
-          <i class="fas fa-shield-alt text-3xl text-m-red"></i>
-        </div>
-        <h3 class="font-bold text-m-brown text-lg mb-2">Garantie Complète</h3>
-        <p class="text-m-brown-light text-sm">Tous nos véhicules sont couverts par une garantie complète au Maroc, sans frais cachés.</p>
-      </div>
-      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
-        <div class="w-20 h-20 mx-auto mb-4 bg-m-green/10 rounded-full flex items-center justify-center">
-          <i class="fas fa-headset text-3xl text-m-green"></i>
-        </div>
-        <h3 class="font-bold text-m-brown text-lg mb-2">Assistance 24/7</h3>
-        <p class="text-m-brown-light text-sm">Notre équipe est disponible 24h/24, 7j/7 sur tout le territoire marocain.</p>
-      </div>
-      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
-        <div class="w-20 h-20 mx-auto mb-4 bg-m-gold/10 rounded-full flex items-center justify-center">
-          <i class="fas fa-map-marker-alt text-3xl text-m-gold"></i>
-        </div>
-        <h3 class="font-bold text-m-brown text-lg mb-2">12 Agences au Maroc</h3>
-        <p class="text-m-brown-light text-sm">Casablanca, Rabat, Marrakech, Fès, Tanger, Meknès, Agadir, Oujda et plus.</p>
-      </div>
-      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
-        <div class="w-20 h-20 mx-auto mb-4 bg-m-terra/10 rounded-full flex items-center justify-center">
-          <i class="fas fa-hand-holding-usd text-3xl text-m-terra"></i>
-        </div>
-        <h3 class="font-bold text-m-brown text-lg mb-2">Meilleurs Prix</h3>
-        <p class="text-m-brown-light text-sm">Garantie du meilleur prix. Trouvez moins cher ailleurs et on vous rembourse la différence.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- Customer Reviews -->
-<section class="py-12 md:py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Avis de Nos Clients Marocains</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-m-sand-light rounded-3xl p-6 border-2 border-m-gold/20 card-hover">
-        <div class="flex items-center gap-1 mb-3">
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-        </div>
-        <p class="text-m-brown-light text-sm mb-4 leading-relaxed">"Excellent service ! J'ai loué un SUV Duster pour un voyage de Casablanca à Marrakech. Le véhicule était impeccable et le prix très compétitif. Je recommande vivement AutoLease Maroc !"</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-m-red rounded-full flex items-center justify-center text-white font-bold">YB</div>
-          <div>
-            <div class="font-bold text-m-brown text-sm">Youssef Benali</div>
-            <div class="text-m-brown-light text-xs"><i class="fas fa-map-marker-alt mr-1"></i>Casablanca</div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-m-sand-light rounded-3xl p-6 border-2 border-m-gold/20 card-hover">
-        <div class="flex items-center gap-1 mb-3">
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-        </div>
-        <p class="text-m-brown-light text-sm mb-4 leading-relaxed">"En tant qu'entreprise à Rabat, nous avons souscrit un leasing flotte pour 15 véhicules. Le processus était simple et les tarifs entreprise sont vraiment avantageux. Merci AutoLease !"</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-m-green rounded-full flex items-center justify-center text-white font-bold">FE</div>
-          <div>
-            <div class="font-bold text-m-brown text-sm">Fatima Errami</div>
-            <div class="text-m-brown-light text-xs"><i class="fas fa-map-marker-alt mr-1"></i>Rabat</div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-m-sand-light rounded-3xl p-6 border-2 border-m-gold/20 card-hover">
-        <div class="flex items-center gap-1 mb-3">
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star text-m-gold"></i>
-          <i class="fas fa-star-half-alt text-m-gold"></i>
-        </div>
-        <p class="text-m-brown-light text-sm mb-4 leading-relaxed">"J'ai trouvé ma voiture électrique parfaite pour les trajets Tanger-Méditerranée. L'autonomie est excellente et les frais d'entretien sont minimes. Le meilleur choix que j'ai fait !"</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-m-terra rounded-full flex items-center justify-center text-white font-bold">KM</div>
-          <div>
-            <div class="font-bold text-m-brown text-sm">Karim Moussaoui</div>
-            <div class="text-m-brown-light text-xs"><i class="fas fa-map-marker-alt mr-1"></i>Tanger</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- FAQ Section -->
-<section id="faq" class="py-12 md:py-16 bg-m-sand-light">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Questions Fréquentes</h2>
-    </div>
-    <div class="space-y-4">
-      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
-          <span class="font-bold text-m-brown">Quels documents sont nécessaires pour louer une voiture au Maroc ?</span>
-          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
-        </button>
-        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
-          Pour louer un véhicule chez AutoLease Maroc, vous avez besoin de : votre carte nationale d'identité ou passeport, votre permis de conduire valide, un justificatif de domicile récent (moins de 3 mois), et pour les entreprises : un registre de commerce et une attestation d'immatriculation fiscale.
-        </div>
-      </div>
-      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
-          <span class="font-bold text-m-brown">Puis-je louer une voiture dans une ville et la rendre dans une autre ?</span>
-          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
-        </button>
-        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
-          Oui ! AutoLease Maroc offre la possibilité de récupérer et restituer votre véhicule dans n'importe laquelle de nos 12 agences au Maroc. Un supplément de 200 à 500 DH peut s'appliquer selon la distance entre les villes (par exemple Casablanca à Marrakech, ou Tanger à Fès).
-        </div>
-      </div>
-      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
-          <span class="font-bold text-m-brown">Qu'est-ce qui est inclus dans le loyer mensuel ?</span>
-          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
-        </button>
-        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
-          Chaque location inclut : l'assurance tous risques, l'assistance routière 24/7 sur tout le Maroc, l'entretien régulier, les pneumatiques, et laTaxe sur les Véhicules (TV). Le kilométrage varie selon le forfait choisi (10 000 à 25 000 km/an, ou kilométrage illimité).
-        </div>
-      </div>
-      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
-          <span class="font-bold text-m-brown">Proposez-vous des locations longue durée pour entreprises ?</span>
-          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
-        </button>
-        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
-          Absolument ! Nous proposons des solutions de fleet management pour les entreprises marocaines, avec des tarifs dégressifs à partir de 5 véhicules. Nos clients entreprises bénéficient d'un account manager dédié, de la facturation centralisée, et d'avantages fiscaux conformes à la législation marocaine.
-        </div>
-      </div>
-      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
-          <span class="font-bold text-m-brown">Comment puis-je prendre contact avec vous ?</span>
-          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
-        </button>
-        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
-          Vous pouvez nous contacter par téléphone au +212 522 00 00 00, par email à contact@autoleasemaroc.ma, ou vous rendre dans l'une de nos agences. Nous sommes présents à Casablanca (Boulevard Mohammed V), Rabat (Avenue Hassan II), Marrakech (Route de l'Ourika), Fès (Boulevard Mohammed V), et Tanger (Boulevard Mohammed VI).
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Moroccan Divider -->
-<div class="moroccan-divider"></div>
-
-<!-- Brand Gallery -->
-<section class="py-12 md:py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-        <span class="moroccan-star"></span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Nos Marques Partenaires</h2>
-      <p class="text-m-brown-light mt-2">Les meilleures marques disponibles au Maroc</p>
-    </div>
-    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6">
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Renault</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Peugeot</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Dacia</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Toyota</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Hyundai</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Mercedes</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">BMW</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Kia</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Volkswagen</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Citroën</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Ford</span>
-      </div>
-      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
-        <span class="text-xl font-bold text-m-brown-light opacity-60">Tesla</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="bg-m-brown text-m-sand pt-12 pb-6 relative">
-  <div class="absolute inset-0 zellige-bg"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-      <div>
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-10 h-10 bg-m-red rounded-xl flex items-center justify-center">
-            <i class="fas fa-star text-m-gold text-sm"></i>
-          </div>
-          <span class="text-xl font-bold text-white">AutoLease<span class="text-m-gold">Maroc</span></span>
-        </div>
-        <p class="text-sm leading-relaxed opacity-80">Le leader de la location de véhicules au Maroc. Depuis 2015, nous servons des milliers de clients à travers le Royaume.</p>
-        <div class="flex gap-3 mt-4">
-          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-facebook-f text-white text-sm"></i></a>
-          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-instagram text-white text-sm"></i></a>
-          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-linkedin-in text-white text-sm"></i></a>
-          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-youtube text-white text-sm"></i></a>
-        </div>
-      </div>
-      <div>
-        <h3 class="font-bold text-white mb-4 text-lg">Nos Agences</h3>
-        <ul class="space-y-2 text-sm opacity-80">
-          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Casablanca — Boulevard Mohammed V</li>
-          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Rabat — Avenue Hassan II</li>
-          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Marrakech — Route de l'Ourika</li>
-          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Fès — Boulevard Mohammed V</li>
-          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Tanger — Boulevard Mohammed VI</li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="font-bold text-white mb-4 text-lg">Liens Utiles</h3>
-        <ul class="space-y-2 text-sm opacity-80">
-          <li><a href="#" class="hover:text-m-gold transition">Location Particulier</a></li>
-          <li><a href="#" class="hover:text-m-gold transition">Location Entreprise</a></li>
-          <li><a href="#" class="hover:text-m-gold transition">Véhicules Électriques</a></li>
-          <li><a href="#" class="hover:text-m-gold transition">Offres Spéciales</a></li>
-          <li><a href="#" class="hover:text-m-gold transition">Programme Fidélité</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="font-bold text-white mb-4 text-lg">Contactez-Nous</h3>
-        <ul class="space-y-3 text-sm opacity-80">
-          <li class="flex items-center gap-2">
-            <i class="fas fa-phone-alt text-m-gold"></i>
-            <a href="tel:+212522000000" class="hover:text-m-gold transition">+212 522 00 00 00</a>
-          </li>
-          <li class="flex items-center gap-2">
-            <i class="fas fa-envelope text-m-gold"></i>
-            <a href="mailto:contact@autoleasemaroc.ma" class="hover:text-m-gold transition">contact@autoleasemaroc.ma</a>
-          </li>
-          <li class="flex items-center gap-2">
-            <i class="fas fa-clock text-m-gold"></i>
-            <span>Lun-Sam : 9h - 19h</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <i class="fas fa-globe text-m-gold"></i>
-            <span>www.autoleasemaroc.ma</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="border-t border-m-brown-light/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-sm opacity-60">&copy; 2024 AutoLease Maroc. Tous droits réservés.</p>
-      <div class="flex gap-4 text-sm opacity-60">
-        <a href="#" class="hover:text-m-gold transition">Politique de Confidentialité</a>
-        <a href="#" class="hover:text-m-gold transition">Conditions Générales</a>
-        <a href="#" class="hover:text-m-gold transition">Mentions Légales</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<!-- Back to Top Button -->
-<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 w-12 h-12 bg-m-red hover:bg-m-red-dark text-white rounded-full shadow-lg flex items-center justify-center transition opacity-0 pointer-events-none z-50">
-  <i class="fas fa-chevron-up"></i>
-</button>
-
-<!-- Vehicle Detail Modal -->
-<div id="vehicleModal" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
-  <div class="bg-m-cream rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
-    <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-m-brown/10 hover:bg-m-brown/20 rounded-full flex items-center justify-center transition z-10">
-      <i class="fas fa-times text-m-brown"></i>
-    </button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<script>
-// Vehicle Data
-const vehicles = [
-  { id: 1, name: "Dacia Duster 4x4", brand: "Dacia", type: "suv", fuel: "Diesel", city: "Casablanca", price: 1490, img: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Populaire", color: "#C8102E" },
-  { id: 2, name: "Renault Clio V", brand: "Renault", type: "citadine", fuel: "Essence", city: "Rabat", price: 1190, img: "https://images.pexels.com/photos/1005633/pexels-photo-1005633.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Meilleur Prix", color: "#006233" },
-  { id: 3, name: "Peugeot 308 GT", brand: "Peugeot", type: "berline", fuel: "Essence", city: "Marrakech", price: 1890, img: "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Nouveau", color: "#C5A55A" },
-  { id: 4, name: "Toyota RAV4 Hybrid", brand: "Toyota", type: "suv", fuel: "Hybride", city: "Tanger", price: 2690, img: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Écologique", color: "#006233" },
-  { id: 5, name: "Mercedes Classe A", brand: "Mercedes", type: "berline", fuel: "Essence", city: "Casablanca", price: 3490, img: "https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Premium", color: "#C8102E" },
-  { id: 6, name: "Renault Kangoo Van", brand: "Renault", type: "utilitaire", fuel: "Diesel", city: "Fès", price: 1690, img: "https://images.pexels.com/photos/2684218/pexels-photo-2684218.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Pro", color: "#C5A55A" },
-  { id: 7, name: "Hyundai Kona Electric", brand: "Hyundai", type: "electrique", fuel: "Électrique", city: "Rabat", price: 2290, img: "https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "100% Électrique", color: "#006233" },
-  { id: 8, name: "BMW Série 3", brand: "BMW", type: "berline", fuel: "Diesel", city: "Casablanca", price: 4190, img: "https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Premium", color: "#C8102E" },
-  { id: 9, name: "Dacia Sandero Stepway", brand: "Dacia", type: "citadine", fuel: "Essence", city: "Meknès", price: 990, img: "https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Offre Spéciale", color: "#C5A55A" },
-  { id: 10, name: "Peugeot Partner Tepee", brand: "Peugeot", type: "utilitaire", fuel: "Diesel", city: "Agadir", price: 1590, img: "https://images.pexels.com/photos/2684218/pexels-photo-2684218.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Familial", color: "#006233" },
-  { id: 11, name: "Kia e-Niro", brand: "Kia", type: "electrique", fuel: "Électrique", city: "Tanger", price: 2490, img: "https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Autonomie 400km", color: "#006233" },
-  { id: 12, name: "Renault Scenic", brand: "Renault", type: "suv", fuel: "Diesel", city: "Fès", price: 2090, img: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Familial", color: "#C8102E" },
-];
-
-// Render vehicles
-function renderVehicles(filter = 'all') {
-  const grid = document.getElementById('vehicleGrid');
-  const filtered = filter === 'all' ? vehicles : vehicles.filter(v => v.type === filter);
-  grid.innerHTML = '';
-  filtered.forEach((v, i) => {
-    const card = document.createElement('div');
-    card.className = 'vehicle-card bg-white rounded-3xl overflow-hidden border-2 border-m-gold/20 card-hover cursor-pointer';
-    card.style.animationDelay = `${i * 0.1}s`;
-    card.onclick = () => openModal(v);
-    card.innerHTML = `
-      <div class="relative h-48 overflow-hidden">
-        <img src="${v.img}" alt="${v.name}" class="w-full h-full object-cover hover:scale-110 transition duration-500">
-        <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold text-white" style="background:${v.color}">${v.badge}</span>
-        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-m-brown">
-          <i class="fas fa-map-marker-alt mr-1 text-m-red"></i>${v.city}
+  <!-- Top Announcement Bar (Maroc / Contact direct) -->
+  <div class="bg-m-brown-dark text-m-sand py-2 px-4 border-b border-m-gold/30 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5 text-m-gold">
+          <i class="fas fa-crown text-[11px]"></i>
+          <span class="font-bold tracking-wide uppercase">N°1 de la LLD & Location Prestige au Maroc</span>
+        </span>
+        <span class="hidden md:inline text-white/40">|</span>
+        <span class="hidden md:flex items-center gap-1 text-white/80">
+          <i class="fas fa-map-marker-alt text-m-red"></i>
+          Agences à Casablanca • Rabat • Marrakech • Tanger • Fès • Agadir
         </span>
       </div>
-      <div class="p-5">
-        <h3 class="font-bold text-m-brown text-lg mb-1">${v.name}</h3>
-        <p class="text-m-brown-light text-sm mb-3">${v.fuel} • Location 36 mois</p>
-        <div class="flex items-center justify-between">
-          <div>
-            <span class="text-2xl font-black text-m-red">${v.price.toLocaleString()} DH</span>
-            <span class="text-xs text-m-brown-light">/mois</span>
+      <div class="flex items-center gap-5 ml-auto">
+        <a href="https://wa.me/212661000000" target="_blank" class="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition">
+          <i class="fab fa-whatsapp text-sm"></i>
+          <span>WhatsApp VIP: +212 661 00 00 00</span>
+        </a>
+        <span class="text-white/30">|</span>
+        <a href="tel:+212522000000" class="flex items-center gap-1.5 hover:text-m-gold transition font-medium">
+          <i class="fas fa-phone-alt text-m-gold text-xs"></i>
+          <span>+212 522 99 88 77</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Moorish Decorative Top Ribbon -->
+  <div class="moorish-divider"></div>
+
+  <!-- Main Navigation -->
+  <header class="sticky top-0 z-50 bg-m-cream/95 backdrop-blur-md border-b border-m-gold/30 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="#accueil" class="flex items-center gap-3 group">
+          <div class="w-12 h-12 bg-gradient-to-br from-m-red to-m-brown-dark rounded-xl flex items-center justify-center shadow-lg border border-m-gold transform group-hover:rotate-6 transition duration-300">
+            <!-- Moroccan Seal Icon -->
+            <i class="fas fa-gem text-m-gold text-xl group-hover:scale-110 transition"></i>
           </div>
-          <button class="w-10 h-10 bg-m-red/10 hover:bg-m-red text-m-red hover:text-white rounded-full flex items-center justify-center transition">
-            <i class="fas fa-arrow-right"></i>
+          <div>
+            <div class="flex items-center gap-1">
+              <span class="text-2xl font-black text-m-brown tracking-tight">AutoLease</span>
+              <span class="text-2xl font-black text-m-red">MAROC</span>
+            </div>
+            <p class="text-[11px] font-bold text-m-gold uppercase tracking-widest font-traditional">تأجير السيارات الفاخرة بالمغرب</p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center space-x-7 font-semibold text-sm">
+          <a href="#accueil" class="text-m-brown hover:text-m-red transition">Accueil</a>
+          <a href="#catalogue" class="text-m-brown hover:text-m-red transition">Notre Flotte</a>
+          <a href="#services" class="text-m-brown hover:text-m-red transition">Services Exclusifs</a>
+          <a href="#simulateur" class="text-m-brown hover:text-m-red transition">Simulateur LLD</a>
+          <a href="#pourquoi" class="text-m-brown hover:text-m-red transition">L'Excellence Marocaine</a>
+          <a href="#temoignages" class="text-m-brown hover:text-m-red transition">Avis Clients</a>
+          <a href="#faq" class="text-m-brown hover:text-m-red transition">FAQ</a>
+        </nav>
+
+        <!-- CTA & Language -->
+        <div class="hidden sm:flex items-center gap-4">
+          <button onclick="scrollToSection('simulateur')" class="relative group overflow-hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-m-red to-m-red-dark text-white font-bold text-sm shadow-md hover:shadow-xl transition transform active:scale-95 border border-m-gold/40">
+            <span class="relative z-10 flex items-center gap-2">
+              <i class="fas fa-file-invoice text-m-gold"></i>
+              <span>Devis Express (0 DH Frais)</span>
+            </span>
           </button>
         </div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
 
-// Filter
-function filterVehicles(type) {
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.className = 'filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red';
-  });
-  event.target.className = 'filter-btn active px-5 py-2 rounded-full text-sm font-bold transition bg-m-red text-white border-2 border-m-red';
-  renderVehicles(type);
-}
-
-// Modal
-function openModal(vehicle) {
-  const modal = document.getElementById('vehicleModal');
-  const content = document.getElementById('modalContent');
-  content.innerHTML = `
-    <img src="${vehicle.img}" alt="${vehicle.name}" class="w-full h-56 object-cover">
-    <div class="p-6">
-      <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-3" style="background:${vehicle.color}">${vehicle.badge}</span>
-      <h2 class="text-2xl font-bold text-m-brown mb-2">${vehicle.name}</h2>
-      <p class="text-m-brown-light mb-4">${vehicle.brand} • ${vehicle.fuel} • <i class="fas fa-map-marker-alt mr-1 text-m-red"></i>${vehicle.city}</p>
-      <div class="grid grid-cols-2 gap-3 mb-6">
-        <div class="bg-m-sand-light rounded-xl p-3 text-center">
-          <div class="text-xs text-m-brown-light">Loyer mensuel</div>
-          <div class="text-xl font-black text-m-red">${vehicle.price.toLocaleString()} DH</div>
-        </div>
-        <div class="bg-m-sand-light rounded-xl p-3 text-center">
-          <div class="text-xs text-m-brown-light">Durée</div>
-          <div class="text-xl font-black text-m-green">36 mois</div>
-        </div>
-        <div class="bg-m-sand-light rounded-xl p-3 text-center">
-          <div class="text-xs text-m-brown-light">Premier loyer</div>
-          <div class="text-lg font-bold text-m-brown">${vehicle.price.toLocaleString()} DH</div>
-        </div>
-        <div class="bg-m-sand-light rounded-xl p-3 text-center">
-          <div class="text-xs text-m-brown-light">Kilométrage</div>
-          <div class="text-lg font-bold text-m-brown">15 000 km/an</div>
-        </div>
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuBtn" aria-label="Menu" class="lg:hidden text-m-brown hover:text-m-red text-2xl focus:outline-none p-2">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
-      <div class="space-y-2 mb-6 text-sm text-m-brown-light">
-        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Assurance tous risques incluse</div>
-        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Assistance routière 24/7</div>
-        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Entretien et pneumatiques inclus</div>
-        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Possibilité de changer de ville</div>
-      </div>
-      <button class="w-full bg-m-red hover:bg-m-red-dark text-white py-3 rounded-xl font-bold text-lg transition">
-        <i class="fas fa-phone-alt mr-2"></i>Demander ce véhicule
-      </button>
     </div>
-  `;
-  modal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
 
-function closeModal() {
-  document.getElementById('vehicleModal').classList.add('hidden');
-  document.body.style.overflow = '';
-}
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-m-sand-light border-b border-m-gold/30 px-6 py-6 shadow-2xl transition-all">
+      <div class="flex flex-col space-y-4 font-semibold text-m-brown">
+        <a href="#accueil" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Accueil</a>
+        <a href="#catalogue" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Notre Flotte Marocaine</a>
+        <a href="#services" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Services Clé en Main</a>
+        <a href="#simulateur" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Simulateur Tarif Dirhams</a>
+        <a href="#pourquoi" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Pourquoi Nous</a>
+        <a href="#temoignages" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Témoignages</a>
+        <a href="#faq" class="mobile-nav-link hover:text-m-red py-2">F.A.Q</a>
+        <button onclick="scrollToSection('simulateur'); toggleMobileMenu()" class="w-full bg-m-red text-white py-3 rounded-xl font-bold shadow-lg">
+          Demander mon devis immédiat
+        </button>
+      </div>
+    </div>
+  </header>
 
-document.getElementById('vehicleModal').addEventListener('click', (e) => {
-  if (e.target.id === 'vehicleModal') closeModal();
-});
+  <main>
+    <!-- HERO SECTION avec Carrousel d'Offres Principales -->
+    <section id="accueil" class="relative zellige-pattern text-white overflow-hidden py-12 lg:py-20 border-b border-m-gold/40">
+      
+      <!-- Moroccan Radial Ambient Halos -->
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-m-red/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-m-green/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-m-gold/10 rounded-full blur-3xl pointer-events-none"></div>
 
-// Carousel
-let currentSlide = 0;
-const totalSlides = 3;
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Hero Header Badge & Slogan -->
+        <div class="text-center max-w-3xl mx-auto mb-10">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-m-gold/20 border border-m-gold text-m-gold-light text-xs sm:text-sm font-bold uppercase tracking-widest mb-4">
+            <i class="fas fa-star-and-crescent text-m-gold"></i>
+            <span>Excellence & Sérénité sur toutes les routes du Royaume</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-4">
+            Roulez en toute liberté de <span class="text-transparent bg-clip-text bg-gradient-to-r from-m-gold to-amber-200">Tanger à Dakhla</span>
+          </h1>
+          <p class="text-m-sand/80 text-base sm:text-lg font-light max-w-2xl mx-auto">
+            Location Longue Durée (LLD) & moyenne durée pour cadres, entreprises et passionnés. Assurance tous risques, entretien complet et livraison VIP partout au Maroc.
+          </p>
+        </div>
 
-function initCarousel() {
-  const dots = document.getElementById('carouselDots');
-  for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('button');
-    dot.className = `w-3 h-3 rounded-full transition ${i === 0 ? 'bg-m-gold' : 'bg-white/50'}`;
-    dot.onclick = () => goToSlide(i);
-    dots.appendChild(dot);
-  }
-}
+        <!-- Interactive Hero Carousel -->
+        <div class="relative rounded-3xl overflow-hidden border-2 border-m-gold/40 shadow-2xl bg-m-brown-dark/90">
+          
+          <!-- Slide Container -->
+          <div id="carouselWrapper" class="relative h-[390px] sm:h-[480px] lg:h-[530px] w-full overflow-hidden">
+            
+            <!-- Slide 1: SUV Luxe Désert Marocain -->
+            <div class="carousel-slide absolute inset-0 opacity-100 transition-opacity duration-700 ease-in-out">
+              <img src="https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Range Rover SUV Désert Maroc" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
+              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
+              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="max-w-xl">
+                  <span class="bg-m-red text-white text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Offre Évasion Atlas & Sahara</span>
+                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Land Rover Defender 110 X-Dynamic</h3>
+                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Le monstre des pistes et du raffinement urbain. Disponible à Marrakech & Ouarzazate.</p>
+                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
+                    <span><i class="fas fa-gas-pump mr-1"></i> Diesel Mild-Hybrid</span>
+                    <span><i class="fas fa-cog mr-1"></i> BVA 8 Rapports</span>
+                    <span><i class="fas fa-shield-alt mr-1"></i> Tout-Terrain Pro</span>
+                  </div>
+                </div>
+                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
+                  <p class="text-xs text-m-sand/70 uppercase">Loyer Privilège</p>
+                  <div class="text-2xl sm:text-3xl font-black text-m-gold">14 900 <span class="text-sm font-semibold text-white">DH/mois</span></div>
+                  <button onclick="prefillAndScroll('Land Rover Defender')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
+                    Réserver ce véhicule
+                  </button>
+                </div>
+              </div>
+            </div>
 
-function goToSlide(n) {
-  currentSlide = n;
-  document.getElementById('carouselTrack').style.transform = `translateX(-${n * 100}%)`;
-  document.querySelectorAll('#carouselDots button').forEach((dot, i) => {
-    dot.className = `w-3 h-3 rounded-full transition ${i === n ? 'bg-m-gold' : 'bg-white/50'}`;
-  });
-}
+            <!-- Slide 2: Voiture Sport Rouge -->
+            <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out pointer-events-none">
+              <img src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Coupé Sport Rouge Casablanca Corniche" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
+              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
+              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="max-w-xl">
+                  <span class="bg-m-gold text-m-brown-dark text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Prestige & Vitesse</span>
+                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Porsche Carrera 911 4S Rouge Carmin</h3>
+                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Sensation pure sur la Corniche d'Ain Diab ou les lacets de l'Atlas marocain.</p>
+                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
+                    <span><i class="fas fa-bolt mr-1"></i> 450 Ch Bi-turbo</span>
+                    <span><i class="fas fa-road mr-1"></i> Échappement Sport</span>
+                    <span><i class="fas fa-check-circle mr-1"></i> Livraison Aéroport VIP</span>
+                  </div>
+                </div>
+                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
+                  <p class="text-xs text-m-sand/70 uppercase">Loyer Prestige LLD</p>
+                  <div class="text-2xl sm:text-3xl font-black text-m-gold">22 500 <span class="text-sm font-semibold text-white">DH/mois</span></div>
+                  <button onclick="prefillAndScroll('Porsche Carrera 911 4S')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
+                    Réserver ce véhicule
+                  </button>
+                </div>
+              </div>
+            </div>
 
-function nextSlide() {
-  goToSlide((currentSlide + 1) % totalSlides);
-}
+            <!-- Slide 3: Voiture Électrique Station de Recharge -->
+            <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out pointer-events-none">
+              <img src="https://images.pexels.com/photos/9800030/pexels-photo-9800030.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Voiture Électrique Recharge Maroc" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
+              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
+              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="max-w-xl">
+                  <span class="bg-m-green-light text-white text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Transition Verte Maroc 2030</span>
+                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Audi e-tron GT Quattro 100% Électrique</h3>
+                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Recharge offerte sur le réseau autoroutier Casablanca-Rabat-Tanger.</p>
+                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
+                    <span><i class="fas fa-charging-station mr-1"></i> Autonomie 490 km</span>
+                    <span><i class="fas fa-leaf mr-1"></i> Zéro Vignette Fiscale</span>
+                    <span><i class="fas fa-tachometer-alt mr-1"></i> 0-100 en 3.9s</span>
+                  </div>
+                </div>
+                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
+                  <p class="text-xs text-m-sand/70 uppercase">Loyer Flotte Green</p>
+                  <div class="text-2xl sm:text-3xl font-black text-m-gold">17 800 <span class="text-sm font-semibold text-white">DH/mois</span></div>
+                  <button onclick="prefillAndScroll('Audi e-tron GT Quattro')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
+                    Réserver ce véhicule
+                  </button>
+                </div>
+              </div>
+            </div>
 
-function prevSlide() {
-  goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
-}
+            <!-- Slide 4: Utilitaire & Flotte Entreprise -->
+            <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out pointer-events-none">
+              <img src="https://images.pexels.com/photos/6157057/pexels-photo-6157057.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Fourgon Utilitaire Entreprise Tanger Med" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
+              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
+              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="max-w-xl">
+                  <span class="bg-m-terra text-white text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Offres Entreprises & PME</span>
+                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Renault Master Grand Volume & Transit</h3>
+                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Optimisez vos transferts logistiques Casablanca Finance City et Tanger Med.</p>
+                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
+                    <span><i class="fas fa-boxes mr-1"></i> Volume 13 m³</span>
+                    <span><i class="fas fa-wrench mr-1"></i> Assistance Poids Lourds</span>
+                    <span><i class="fas fa-coins mr-1"></i> Déductibilité 100% TVA</span>
+                  </div>
+                </div>
+                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
+                  <p class="text-xs text-m-sand/70 uppercase">Loyer LLD Pro</p>
+                  <div class="text-2xl sm:text-3xl font-black text-m-gold">5 400 <span class="text-sm font-semibold text-white">DH/mois</span></div>
+                  <button onclick="prefillAndScroll('Renault Master Grand Volume')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
+                    Réserver ce véhicule
+                  </button>
+                </div>
+              </div>
+            </div>
 
-// Auto-slide
-setInterval(nextSlide, 5000);
+          </div>
 
-// Mobile menu
-function toggleMobileMenu() {
-  document.getElementById('mobileMenu').classList.toggle('hidden');
-}
+          <!-- Carousel Controls -->
+          <button onclick="prevSlide()" aria-label="Précédent" class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-m-brown-dark/70 hover:bg-m-red text-white flex items-center justify-center border border-m-gold transition z-20">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button onclick="nextSlide()" aria-label="Suivant" class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-m-brown-dark/70 hover:bg-m-red text-white flex items-center justify-center border border-m-gold transition z-20">
+            <i class="fas fa-chevron-right"></i>
+          </button>
 
-// Tab switch
-function switchTab(tab) {
-  const voitureBtn = document.getElementById('btnVoiture');
-  const utilBtn = document.getElementById('btnUtilitaire');
-  if (tab === 'voiture') {
-    voitureBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition bg-m-red text-white';
-    utilBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition text-m-sand hover:text-white';
-  } else {
-    utilBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition bg-m-red text-white';
-    voitureBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition text-m-sand hover:text-white';
-  }
-}
+          <!-- Carousel Dots -->
+          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+            <button onclick="setSlide(0)" class="carousel-dot w-8 h-2 rounded-full bg-m-gold transition-all duration-300"></button>
+            <button onclick="setSlide(1)" class="carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300"></button>
+            <button onclick="setSlide(2)" class="carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300"></button>
+            <button onclick="setSlide(3)" class="carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300"></button>
+          </div>
+        </div>
 
-// Type switch
-function switchType(type) {
-  const partBtn = document.getElementById('btnParticulier');
-  const entBtn = document.getElementById('btnEntreprise');
-  if (type === 'particulier') {
-    partBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-green text-white';
-    entBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-sand text-m-brown hover:bg-m-green hover:text-white';
-  } else {
-    entBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-green text-white';
-    partBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-sand text-m-brown hover:bg-m-green hover:text-white';
-  }
-}
+      </div>
+    </section>
 
-// FAQ toggle
-function toggleFaq(btn) {
-  const answer = btn.nextElementSibling;
-  const icon = btn.querySelector('i');
-  answer.classList.toggle('hidden');
-  icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-}
+    <!-- SEARCH & QUICK FILTER PANEL (Moroccan Multi-criteria) -->
+    <section class="relative -mt-8 z-30 max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="bg-white rounded-2xl shadow-moroccan-lg border-2 border-m-gold p-6 lg:p-8 relative">
+        <div class="arabesque-corner-tl"></div>
+        <div class="arabesque-corner-br"></div>
 
-// Smooth scroll
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
+        <!-- Search Header Tabs -->
+        <div class="flex flex-wrap items-center justify-between border-b border-m-sand pb-4 mb-6 gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-m-red text-lg"><i class="fas fa-search-location"></i></span>
+            <h2 class="font-bold text-lg sm:text-xl text-m-brown">Trouvez votre véhicule idéal au Maroc</h2>
+          </div>
+          <!-- Type Tab Selector -->
+          <div class="inline-flex p-1 bg-m-sand rounded-xl text-xs sm:text-sm font-bold">
+            <button id="tabParticulier" onclick="switchClientType('particulier')" class="px-4 py-1.5 rounded-lg bg-m-brown text-white shadow transition">Particulier</button>
+            <button id="tabEntreprise" onclick="switchClientType('entreprise')" class="px-4 py-1.5 rounded-lg text-m-brown hover:text-m-red transition">Entreprise / PME (TVA récup.)</button>
+          </div>
+        </div>
 
-// Back to top
-window.addEventListener('scroll', () => {
-  const btn = document.getElementById('backToTop');
-  if (window.scrollY > 400) {
-    btn.style.opacity = '1';
-    btn.style.pointerEvents = 'auto';
-  } else {
-    btn.style.opacity = '0';
-    btn.style.pointerEvents = 'none';
-  }
-});
+        <!-- Filter Inputs Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Category -->
+          <div>
+            <label class="block text-xs font-bold text-m-brown/70 uppercase mb-1.5">Catégorie de véhicule</label>
+            <div class="relative">
+              <select id="filterCategory" onchange="applyVehicleFilters()" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm text-m-brown font-semibold focus:outline-none focus:ring-2 focus:ring-m-red">
+                <option value="all">Tous les véhicules</option>
+                <option value="SUV">SUV & 4x4 Atlas</option>
+                <option value="Berline">Berlines Exécutives</option>
+                <option value="Sport">Sport & Coupé</option>
+                <option value="Electrique">100% Électrique / Hybride</option>
+                <option value="Utilitaire">Utilitaires Pro</option>
+              </select>
+              <i class="fas fa-car absolute right-3 top-3 text-m-gold pointer-events-none"></i>
+            </div>
+          </div>
 
-// Init
-renderVehicles();
-initCarousel();
-</script>
+          <!-- City of Delivery -->
+          <div>
+            <label class="block text-xs font-bold text-m-brown/70 uppercase mb-1.5">Ville de livraison au Maroc</label>
+            <div class="relative">
+              <select id="filterCity" onchange="applyVehicleFilters()" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm text-m-brown font-semibold focus:outline-none focus:ring-2 focus:ring-m-red">
+                <option value="all">Toutes les villes (Livraison gratuite)</option>
+                <option value="Casablanca">Casablanca (Siège Maarif & Anfa)</option>
+                <option value="Rabat">Rabat (Agdal & Hay Riad)</option>
+                <option value="Marrakech">Marrakech (Guéliz & Hivernage)</option>
+                <option value="Tanger">Tanger (Marina & Free Zone)</option>
+                <option value="Fès">Fès & Meknès</option>
+                <option value="Agadir">Agadir & Souss</option>
+              </select>
+              <i class="fas fa-map-pin absolute right-3 top-3 text-m-red pointer-events-none"></i>
+            </div>
+          </div>
 
+          <!-- Budget Max Slider -->
+          <div>
+            <div class="flex justify-between items-center mb-1.5">
+              <label class="block text-xs font-bold text-m-brown/70 uppercase">Budget Max / Mois</label>
+              <span id="budgetValue" class="text-xs font-black text-m-red">30 000 DH</span>
+            </div>
+            <input type="range" id="filterBudget" min="3000" max="30000" step="1000" value="30000" oninput="updateBudgetFilter(this.value)" class="w-full accent-m-red cursor-pointer">
+            <div class="flex justify-between text-[10px] text-m-brown/60 font-semibold mt-1">
+              <span>3 000 DH</span>
+              <span>15 000 DH</span>
+              <span>30 000 DH+</span>
+            </div>
+          </div>
+
+          <!-- Filter Action -->
+          <div class="flex items-end">
+            <button onclick="resetFilters()" class="w-full bg-m-brown hover:bg-m-brown-dark text-m-sand font-bold py-2.5 px-4 rounded-xl text-sm transition flex items-center justify-center gap-2 border border-m-gold/40">
+              <i class="fas fa-redo-alt text-xs text-m-gold"></i>
+              <span>Réinitialiser</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Quick badges -->
+        <div class="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-m-sand text-xs">
+          <span class="text-m-brown/60 font-medium">Recherches rapides :</span>
+          <button onclick="quickFilter('Electrique')" class="px-2.5 py-1 rounded-full bg-m-green/10 text-m-green font-bold hover:bg-m-green hover:text-white transition">Électriques zéro taxe</button>
+          <button onclick="quickFilter('SUV')" class="px-2.5 py-1 rounded-full bg-m-red/10 text-m-red font-bold hover:bg-m-red hover:text-white transition">SUV 4x4 Désert</button>
+          <button onclick="quickFilter('Utilitaire')" class="px-2.5 py-1 rounded-full bg-m-terra/10 text-m-terra font-bold hover:bg-m-terra hover:text-white transition">Utilitaires Tanger/Casa</button>
+          <button onclick="quickFilter('Sport')" class="px-2.5 py-1 rounded-full bg-m-gold/20 text-m-brown font-bold hover:bg-m-gold transition">Coupé & Prestige</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HIGHLIGHT FEATURE SERVICES (Moroccan Cards) -->
+    <section id="services" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-m-red font-traditional">Services & Engagements Royaux</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-m-brown mt-1">L'Art du Service Automobile au Maroc</h2>
+        <div class="w-20 h-1 bg-m-gold mx-auto my-3"></div>
+        <p class="text-m-brown/75 text-sm sm:text-base">Une formule tout compris où nous nous chargeons de tout : carte grise, vignette fiscale marocaine, révisions constructeur et assistance continue.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Service Card 1 -->
+        <div class="bg-white rounded-2xl p-7 shadow-moroccan border-t-4 border-m-green card-transition relative overflow-hidden group">
+          <div class="w-14 h-14 bg-m-green/10 rounded-2xl flex items-center justify-center text-m-green text-2xl mb-5 group-hover:bg-m-green group-hover:text-white transition">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3 class="text-xl font-bold text-m-brown mb-2">Programme Mobilité Verte Maroc</h3>
+          <p class="text-sm text-m-brown/70 leading-relaxed">Passez à l'électrique en toute confiance. Installation d'une borne de recharge Wallbox à votre domicile ou entreprise à Casablanca, Rabat ou Tanger.</p>
+          <ul class="mt-4 space-y-2 text-xs font-semibold text-m-brown/80">
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> 0% Vignette & Taxes écologiques</li>
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Bornes autoroute Casa-Rabat sans frais</li>
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Remplacement immédiat en cas de panne</li>
+          </ul>
+        </div>
+
+        <!-- Service Card 2 -->
+        <div class="bg-white rounded-2xl p-7 shadow-moroccan border-t-4 border-m-gold card-transition relative overflow-hidden group">
+          <div class="w-14 h-14 bg-m-gold/20 rounded-2xl flex items-center justify-center text-m-brown text-2xl mb-5 group-hover:bg-m-gold transition">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <span class="absolute top-4 right-4 bg-m-red text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Stock Garanti</span>
+          <h3 class="text-xl font-bold text-m-brown mb-2">Disponibilité Immédiate en 48H</h3>
+          <p class="text-sm text-m-brown/70 leading-relaxed">Plus de 150 véhicules en parc immatriculés WW, inspectés et prêts à prendre la route immédiatement pour particuliers et flottes d'affaires.</p>
+          <ul class="mt-4 space-y-2 text-xs font-semibold text-m-brown/80">
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-gold"></i> Livraison au pas de votre porte</li>
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-gold"></i> Check-in VIP aux Aéroports (CMN, RAK, TNG)</li>
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-gold"></i> Contrat digitalisé sans déplacement</li>
+          </ul>
+        </div>
+
+        <!-- Service Card 3 -->
+        <div class="bg-white rounded-2xl p-7 shadow-moroccan border-t-4 border-m-red card-transition relative overflow-hidden group">
+          <div class="w-14 h-14 bg-m-red/10 rounded-2xl flex items-center justify-center text-m-red text-2xl mb-5 group-hover:bg-m-red group-hover:text-white transition">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="text-xl font-bold text-m-brown mb-2">Assistance Tous Risques 24/7</h3>
+          <p class="text-sm text-m-brown/70 leading-relaxed">Une panne sur le col du Tichka ou un pneu endommagé sur l'autoroute de Tanger ? Notre réseau de dépanneuses intervient en moins de 45 minutes.</p>
+          <ul class="mt-4 space-y-2 text-xs font-semibold text-m-brown/80">
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-red"></i> Véhicule de relais de catégorie égale</li>
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-red"></i> Prise en charge hôtel & rapatriement</li>
+            <li class="flex items-center gap-2"><i class="fas fa-check text-m-red"></i> Ligne directe opérateur bilingue Fr/Ar</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VEHICLES CATALOG GRID: 12 REAL LEASING OFFERS -->
+    <section id="catalogue" class="py-16 bg-m-sand-light border-y border-m-gold/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header Catalogue -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-m-red font-bold text-xs uppercase tracking-widest">
+              <i class="fas fa-car-side"></i>
+              <span>Parc Automobile Neuf & Certifié</span>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-black text-m-brown mt-1">Nos 12 Offres Vedettes en Dirhams (DH)</h2>
+            <p class="text-m-brown/70 text-sm mt-1">Contrats modulables de 12 à 48 mois avec kilométrage adapté à vos besoins au Maroc.</p>
+          </div>
+          <!-- Filter Count badge -->
+          <div class="flex items-center gap-3">
+            <span id="vehicleCountBadge" class="bg-m-brown text-m-gold px-3 py-1.5 rounded-xl font-bold text-xs shadow-sm">
+              12 Véhicules Disponibles
+            </span>
+          </div>
+        </div>
+
+        <!-- Vehicles Grid Container -->
+        <div id="vehiclesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <!-- The 12 Vehicle Cards will be rendered dynamically by JavaScript with real Pexels photos and Moroccan specs -->
+        </div>
+
+        <!-- No Results Warning (hidden by default) -->
+        <div id="noVehiclesFound" class="hidden text-center py-16 bg-white rounded-2xl border border-m-gold/30 mt-6">
+          <i class="fas fa-car-crash text-5xl text-m-gold mb-3"></i>
+          <h4 class="text-xl font-bold text-m-brown">Aucun véhicule ne correspond à ces critères</h4>
+          <p class="text-sm text-m-brown/70 mt-1">Essayez d'augmenter votre budget mensuel ou sélectionnez toutes les catégories.</p>
+          <button onclick="resetFilters()" class="mt-4 px-5 py-2 bg-m-red text-white text-xs font-bold rounded-lg shadow">
+            Réinitialiser la recherche
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTERACTIVE LEASING CALCULATOR / SIMULATEUR LLD -->
+    <section id="simulateur" class="py-20 max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="bg-white rounded-3xl shadow-moroccan-lg border-2 border-m-gold overflow-hidden">
+        
+        <div class="bg-gradient-to-r from-m-brown via-m-brown-dark to-m-red p-6 sm:p-8 text-white relative">
+          <div class="arabesque-corner-tl"></div>
+          <span class="text-m-gold text-xs font-bold uppercase tracking-widest"><i class="fas fa-calculator mr-1"></i> Simulateur Transparent LLD</span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold mt-1">Configurez votre Loyer Mensuel au Dirham près</h3>
+          <p class="text-m-sand/80 text-xs sm:text-sm mt-1">Ajustez la durée, l'apport initial et le forfait kilométrique pour simuler votre mensualité tout compris.</p>
+        </div>
+
+        <div class="p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Controls (7 cols) -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Vehicle Selector for Simulator -->
+            <div>
+              <label class="block text-xs font-bold text-m-brown uppercase mb-2">Véhicule choisi</label>
+              <select id="simCarSelect" onchange="calculateSimulator()" class="w-full bg-m-sand-light border border-m-gold/60 rounded-xl px-4 py-3 text-sm font-bold text-m-brown focus:ring-2 focus:ring-m-red outline-none">
+                <option value="4200" data-name="Peugeot 208 GT Line">Peugeot 208 GT Line - Économique Urbaine</option>
+                <option value="4900" data-name="Dacia Duster 4x4 Prestige">Dacia Duster 4x4 Prestige - Pistes du Sud</option>
+                <option value="6200" data-name="Hyundai Tucson N-Line Hybrid">Hyundai Tucson N-Line Hybrid - Familiale Polyvalente</option>
+                <option value="7800" data-name="Volkswagen Golf 8 R-Line">Volkswagen Golf 8 R-Line - Compacte Sport</option>
+                <option value="9900" data-name="Mercedes-Benz Classe C 220d">Mercedes-Benz Classe C 220d - Berline d'Affaires</option>
+                <option value="12500" data-name="BMW X5 xDrive30d M-Sport">BMW X5 xDrive30d M-Sport - SUV Prestige</option>
+                <option value="14900" data-name="Land Rover Defender 110" selected>Land Rover Defender 110 - Expédition Grand Atlas</option>
+                <option value="17800" data-name="Audi e-tron GT Quattro">Audi e-tron GT Quattro - 100% Électrique</option>
+                <option value="22500" data-name="Porsche Carrera 911 4S">Porsche Carrera 911 4S - Vitesse & Légende</option>
+              </select>
+            </div>
+
+            <!-- Duration Slider -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-xs font-bold text-m-brown uppercase">Durée du contrat LLD</label>
+                <span id="simDurDisplay" class="text-sm font-black text-m-red">36 Mois</span>
+              </div>
+              <input type="range" id="simDuration" min="12" max="60" step="12" value="36" oninput="calculateSimulator()" class="w-full accent-m-red">
+              <div class="flex justify-between text-[11px] text-m-brown/60 font-semibold mt-1">
+                <span>12 mois</span>
+                <span>24 mois</span>
+                <span>36 mois</span>
+                <span>48 mois</span>
+                <span>60 mois</span>
+              </div>
+            </div>
+
+            <!-- Initial Deposit % -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-xs font-bold text-m-brown uppercase">Premier loyer majoré (Apport)</label>
+                <span id="simDepositDisplay" class="text-sm font-black text-m-gold">10% (Recommandé)</span>
+              </div>
+              <input type="range" id="simDeposit" min="0" max="30" step="5" value="10" oninput="calculateSimulator()" class="w-full accent-m-gold">
+              <div class="flex justify-between text-[11px] text-m-brown/60 font-semibold mt-1">
+                <span>0% (Sans apport)</span>
+                <span>10%</span>
+                <span>20%</span>
+                <span>30%</span>
+              </div>
+            </div>
+
+            <!-- Kilometrage slider -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-xs font-bold text-m-brown uppercase">Kilométrage Annuel Inclus</label>
+                <span id="simKmDisplay" class="text-sm font-black text-m-brown">20 000 KM / an</span>
+              </div>
+              <input type="range" id="simKm" min="10000" max="40000" step="5000" value="20000" oninput="calculateSimulator()" class="w-full accent-m-brown">
+              <div class="flex justify-between text-[11px] text-m-brown/60 font-semibold mt-1">
+                <span>10 000 km</span>
+                <span>20 000 km</span>
+                <span>30 000 km</span>
+                <span>40 000 km</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Simulator Result Card (5 cols) -->
+          <div class="lg:col-span-5 bg-m-sand-light rounded-2xl p-6 border-2 border-m-gold/50 shadow-inner flex flex-col justify-between h-full">
+            <div>
+              <span class="text-[11px] uppercase tracking-wider font-bold text-m-brown/60">Estimation immédiate TTC</span>
+              <h4 id="simCarResultName" class="text-lg font-black text-m-brown mt-0.5">Land Rover Defender 110</h4>
+              
+              <div class="my-6 bg-white p-4 rounded-xl border border-m-gold/30 text-center shadow-sm">
+                <div class="text-xs font-semibold text-m-brown/70">Loyer Mensuel Estimé :</div>
+                <div class="flex items-baseline justify-center gap-1.5 mt-1">
+                  <span id="simFinalMonthly" class="text-4xl font-black text-m-red">14 155</span>
+                  <span class="text-lg font-bold text-m-brown">DH <span class="text-xs font-normal">/mois</span></span>
+                </div>
+                <p class="text-[10px] text-m-green font-bold mt-1">✓ Entretien constructeur, pneus et vignette inclus</p>
+              </div>
+
+              <!-- Perks Included -->
+              <div class="space-y-2 text-xs text-m-brown/80 font-medium">
+                <div class="flex items-center justify-between">
+                  <span>Assurance tous risques Maroc :</span>
+                  <span class="font-bold text-m-green">Incluse (0 DH franchise)</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>Véhicule relais garanti :</span>
+                  <span class="font-bold text-m-green">24h/24 Partout au Royaume</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>Vignette & Taxe à l'essieu :</span>
+                  <span class="font-bold text-m-green">Prise en charge à 100%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-m-sand">
+              <button onclick="openBookingModalWithSimulator()" class="w-full bg-gradient-to-r from-m-red to-m-red-dark hover:from-m-red-dark hover:to-m-brown-dark text-white font-bold py-3 px-4 rounded-xl shadow-lg transition transform active:scale-95 text-sm flex items-center justify-center gap-2">
+                <i class="fas fa-check-circle text-m-gold"></i>
+                <span>Bloquer ce tarif & Recevoir le contrat</span>
+              </button>
+              <p class="text-[10px] text-center text-m-brown/60 mt-2">Engagement sans frais • Réponse sous 2 heures ouvrées</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION "POURQUOI NOUS CHOISIR" (Touches marocaines) -->
+    <section id="pourquoi" class="py-20 zellige-pattern text-white relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-xs font-bold uppercase tracking-widest text-m-gold font-traditional">Hospitalité & Fiabilité Marocaine</span>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">Pourquoi Confier Votre Mobilité à AutoLease Maroc ?</h2>
+          <div class="w-24 h-1 bg-m-red mx-auto my-3"></div>
+          <p class="text-m-sand/80 text-sm sm:text-base font-light">Depuis plus de 15 ans, nous accompagnons les fleurons de l'économie marocaine, les professions libérales et les résidents exigeants.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
+          <!-- Box 1 -->
+          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
+            <div class="w-16 h-16 bg-gradient-to-br from-m-red to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
+              <i class="fas fa-map-marked-alt text-2xl text-m-gold"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Présence dans 6 Grandes Métropoles</h3>
+            <p class="text-xs text-m-sand/75 leading-relaxed">Agences et ateliers partenaires à Casablanca, Rabat, Marrakech, Tanger Med, Fès et Agadir. Votre véhicule vous attend à la sortie de l'avion.</p>
+          </div>
+
+          <!-- Box 2 -->
+          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
+            <div class="w-16 h-16 bg-gradient-to-br from-m-green to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
+              <i class="fas fa-file-contract text-2xl text-m-gold"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Fiscalité Optimale en DH</h3>
+            <p class="text-xs text-m-sand/75 leading-relaxed">Loyers 100% déductibles pour les SARL et SA marocaines, récupération totale de TVA et aucune immobilisation de capitaux en banque.</p>
+          </div>
+
+          <!-- Box 3 -->
+          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
+            <div class="w-16 h-16 bg-gradient-to-br from-m-gold to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
+              <i class="fas fa-concierge-bell text-2xl text-m-brown-dark"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Conciergerie VIP Dédiée</h3>
+            <p class="text-xs text-m-sand/75 leading-relaxed">Un gestionnaire de compte attitré joignable directement par téléphone et WhatsApp pour vos révisions, transferts et demandes spéciales.</p>
+          </div>
+
+          <!-- Box 4 -->
+          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
+            <div class="w-16 h-16 bg-gradient-to-br from-m-terra to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
+              <i class="fas fa-tools text-2xl text-m-gold"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Entretien Réseau Constructeur</h3>
+            <p class="text-xs text-m-sand/75 leading-relaxed">Seules des pièces d'origine sont utilisées auprès des concessionnaires officiels marocains (SMEIA, CAC, Auto Nejma, Renault Maroc).</p>
+          </div>
+
+        </div>
+
+        <!-- Moroccan Stats Ribbon -->
+        <div class="mt-16 bg-m-brown-dark/95 border-2 border-m-gold/40 rounded-2xl p-8 shadow-2xl">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div class="text-3xl sm:text-4xl font-black text-m-gold">+3 850</div>
+              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Véhicules Livrés au Maroc</div>
+            </div>
+            <div>
+              <div class="text-3xl sm:text-4xl font-black text-m-red">99.4%</div>
+              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Taux de Satisfaction Client</div>
+            </div>
+            <div>
+              <div class="text-3xl sm:text-4xl font-black text-m-green-light">45 Min</div>
+              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Délai Max d'Assistance 24/7</div>
+            </div>
+            <div>
+              <div class="text-3xl sm:text-4xl font-black text-m-gold">100%</div>
+              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Couverture Territoire National</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CLIENT TESTIMONIALS (Avis Clients Marocains) -->
+    <section id="temoignages" class="py-20 bg-m-cream">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-14">
+          <span class="text-xs font-bold uppercase tracking-widest text-m-red font-traditional">Témoignages & Références</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-m-brown mt-1">Ce que Disent nos Clients au Maroc</h2>
+          <div class="w-20 h-1 bg-m-gold mx-auto my-3"></div>
+          <p class="text-m-brown/70 text-sm">Entrepreneurs à Casablanca, directeurs à Rabat, hôteliers à Marrakech ou particuliers exigeants.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <!-- Review 1 -->
+          <div class="bg-white p-7 rounded-2xl shadow-moroccan border border-m-gold/30 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-1 text-amber-500 mb-3 text-sm">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+              <p class="text-m-brown/80 text-sm italic leading-relaxed">
+                "Nous avons basculé l'ensemble de notre flotte commerciale (14 véhicules utilitaires et 3 berlines) chez AutoLease Maroc à Casablanca Finance City. La déductibilité fiscale et la réactivité du service client WhatsApp sont remarquables."
+              </p>
+            </div>
+            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-m-sand">
+              <div class="w-12 h-12 rounded-full bg-m-brown text-m-gold font-bold flex items-center justify-center text-base border border-m-gold">
+                YB
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-m-brown">Youssef Bennani</h4>
+                <p class="text-xs text-m-brown/60">DG Cabinet Consulting • Casablanca</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="bg-white p-7 rounded-2xl shadow-moroccan border border-m-gold/30 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-1 text-amber-500 mb-3 text-sm">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+              <p class="text-m-brown/80 text-sm italic leading-relaxed">
+                "J'ai pris un Porsche Macan en LLD pour mon activité à Marrakech et mes déplacements réguliers à Agadir. La livraison à l'aéroport Menara était impeccable, véhicule étincelant avec le plein. Service digne des plus grands palaces."
+              </p>
+            </div>
+            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-m-sand">
+              <div class="w-12 h-12 rounded-full bg-m-red text-white font-bold flex items-center justify-center text-base border border-m-gold">
+                LE
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-m-brown">Laila El Amrani</h4>
+                <p class="text-xs text-m-brown/60">Architecte d'Intérieur • Marrakech Guéliz</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="bg-white p-7 rounded-2xl shadow-moroccan border border-m-gold/30 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-1 text-amber-500 mb-3 text-sm">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+              <p class="text-m-brown/80 text-sm italic leading-relaxed">
+                "Installé récemment à Tanger pour un projet industriel à la Tanger Free Zone, j'avais besoin rapidement d'un SUV fiable pour toute la famille. Contrat signé en ligne et livraison du Defender en 48 heures chrono."
+              </p>
+            </div>
+            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-m-sand">
+              <div class="w-12 h-12 rounded-full bg-m-green text-white font-bold flex items-center justify-center text-base border border-m-gold">
+                MT
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-m-brown">Mehdi Tazi</h4>
+                <p class="text-xs text-m-brown/60">Directeur d'Usine • Tanger Med</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BRAND PARTNERS / GALERIE DE MARQUES -->
+    <section class="py-12 bg-white border-y border-m-gold/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-xs font-bold text-m-brown/60 uppercase tracking-widest mb-6 font-traditional">
+          Partenariats Officiels avec les plus Grandes Marques Automobiles au Maroc
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 opacity-70 grayscale hover:grayscale-0 transition duration-300">
+          <span class="text-2xl font-black tracking-widest text-m-brown">MERCEDES-BENZ</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">BMW</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">AUDI</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">PORSCHE</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">LAND ROVER</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">VOLKSWAGEN</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">RENAULT</span>
+          <span class="text-2xl font-black tracking-widest text-m-brown">PEUGEOT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FREQUENTLY ASKED QUESTIONS (FAQ) -->
+    <section id="faq" class="py-20 max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-m-red font-traditional">Toutes vos Réponses</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-m-brown mt-1">Questions Fréquentes sur la LLD au Maroc</h2>
+        <div class="w-20 h-1 bg-m-gold mx-auto my-3"></div>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ 1 -->
+        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
+          <button onclick="toggleFAQ(1)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
+            <span>Quelles sont les conditions pour souscrire un contrat de LLD au Maroc ?</span>
+            <i id="faqIcon1" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
+          </button>
+          <div id="faqContent1" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
+            Pour les <strong>particuliers marocains ou résidents</strong> : copie de la CNIE ou carte de séjour, permis de conduire marocain ou international en cours de validité, 3 derniers relevés bancaires marocains et un justificatif de domicile. Pour les <strong>entreprises (SARL, SA)</strong> : modèle J récent (moins de 3 mois), statuts, bilan financier N-1 et CIN du gérant.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
+          <button onclick="toggleFAQ(2)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
+            <span>Que comprend exactement le loyer mensuel en Dirhams (DH) ?</span>
+            <i id="faqIcon2" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
+          </button>
+          <div id="faqContent2" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
+            Notre formule "Sérénité Marocaine" inclut : la mise à disposition du véhicule neuf, l'immatriculation et la carte grise, la vignette fiscale annuelle marocaine, l'assurance tous risques avec assistance zéro kilomètre, l'entretien préventif et curatif dans le réseau agréé constructeur, ainsi que le remplacement des pneumatiques et un véhicule de relais en cas de panne ou sinistre.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
+          <button onclick="toggleFAQ(3)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
+            <span>Livrez-vous dans les aéroports du Royaume ?</span>
+            <i id="faqIcon3" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
+          </button>
+          <div id="faqContent3" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
+            Absolument. Nos agents VIP vous accueillent directement aux terminaux de l'Aéroport Mohammed V (Casablanca), Menara (Marrakech), Rabat-Salé, Tanger Ibn Battouta et Agadir Al Massira. Votre véhicule vous est remis propre, clés en main, après un état des lieux rapide sur tablette numérique.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
+          <button onclick="toggleFAQ(4)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
+            <span>Puis-je voyager dans le Sud marocain (Merzouga, Dakhla) avec les 4x4 et SUV ?</span>
+            <i id="faqIcon4" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
+          </button>
+          <div id="faqContent4" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
+            Oui, l'ensemble de notre gamme 4x4 et SUV tout-terrain (Defender, Land Cruiser, Duster 4x4) est autorisé et assuré pour la circulation sur les routes et pistes balisées à travers tout le Royaume du Maroc, du Rif jusqu'aux provinces sahariennes.
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL RESERVATION / DEMANDE DE DEVIS EN DIRHAMS -->
+  <div id="bookingModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full border-2 border-m-gold shadow-2xl overflow-hidden relative animate-scaleUp">
+      <div class="arabesque-corner-tl"></div>
+      <div class="arabesque-corner-br"></div>
+
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-m-brown to-m-red p-6 text-white flex justify-between items-start">
+        <div>
+          <span class="text-m-gold text-xs font-bold uppercase tracking-wider"><i class="fas fa-file-signature mr-1"></i> Devis Officiel AutoLease Maroc</span>
+          <h3 id="modalCarTitle" class="text-2xl font-black mt-1">Land Rover Defender 110</h3>
+          <p id="modalCarPrice" class="text-m-gold-light text-sm font-semibold">Loyer de base : 14 900 DH / mois</p>
+        </div>
+        <button onclick="closeBookingModal()" class="text-white/80 hover:text-white text-2xl font-bold p-1">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Form Body -->
+      <form id="quoteForm" onsubmit="handleQuoteSubmit(event)" class="p-6 sm:p-8 space-y-4">
+        <input type="hidden" id="modalHiddenCarName">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Nom & Prénom *</label>
+            <input type="text" required placeholder="Ex: Karim Alaoui" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Téléphone Maroc (+212) *</label>
+            <input type="tel" required placeholder="06 61 XX XX XX" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Email Professionnel / Perso *</label>
+            <input type="email" required placeholder="contact@domaine.ma" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Ville de Livraison au Maroc</label>
+            <select id="modalDeliveryCity" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
+              <option value="Casablanca">Casablanca (Livraison offerte)</option>
+              <option value="Rabat">Rabat</option>
+              <option value="Marrakech">Marrakech</option>
+              <option value="Tanger">Tanger</option>
+              <option value="Fès">Fès</option>
+              <option value="Agadir">Agadir</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Type de Contrat</label>
+            <select class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
+              <option>LLD Entreprise (Déductible)</option>
+              <option>LLD Particulier / Profession Libérale</option>
+              <option>Moyenne Durée (3 à 11 mois)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Durée souhaitée</label>
+            <select id="modalDuration" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
+              <option value="36">36 Mois (Formule Recommandée)</option>
+              <option value="48">48 Mois</option>
+              <option value="24">24 Mois</option>
+              <option value="12">12 Mois</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-m-brown uppercase mb-1">Remarques ou demandes spécifiques</label>
+          <textarea rows="2" placeholder="Siège enfant, badge autoroute Jawaz, livraison aéroport..." class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-m-red outline-none"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full bg-gradient-to-r from-m-red to-m-red-dark hover:from-m-red-dark hover:to-m-brown text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+            <i class="fas fa-paper-plane text-m-gold"></i>
+            <span>Envoyer ma demande et recevoir la proposition officielle</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS TOAST NOTIFICATION -->
+  <div id="toastSuccess" class="fixed bottom-6 right-6 z-50 bg-m-brown-dark text-white p-5 rounded-2xl border-2 border-m-gold shadow-2xl flex items-center gap-4 translate-y-32 transition-transform duration-300">
+    <div class="w-10 h-10 bg-m-green rounded-xl flex items-center justify-center text-white text-lg">
+      <i class="fas fa-check"></i>
+    </div>
+    <div>
+      <h4 class="font-bold text-sm text-m-gold">Demande Envoyée avec Succès !</h4>
+      <p class="text-xs text-m-sand/80">Notre conseiller basé à Casablanca vous contactera sous 2 heures.</p>
+    </div>
+    <button onclick="hideToast()" class="text-m-sand/50 hover:text-white ml-2 text-sm">&times;</button>
+  </div>
+
+  <!-- MOORISH BOTTOM DIVIDER -->
+  <div class="moorish-divider"></div>
+
+  <!-- FOOTER AVEC COORDONNÉES MAROCAINES -->
+  <footer class="bg-m-brown-dark text-m-sand pt-16 pb-10 border-t border-m-gold/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-m-gold/20">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-m-red rounded-xl flex items-center justify-center border border-m-gold">
+              <i class="fas fa-gem text-m-gold"></i>
+            </div>
+            <div>
+              <span class="text-2xl font-black text-white">AutoLease</span>
+              <span class="text-2xl font-black text-m-red">MAROC</span>
+            </div>
+          </div>
+          <p class="text-xs text-m-sand/75 leading-relaxed pr-4">
+            Leader de la Location Longue Durée (LLD) et de la mobilité haut de gamme au Royaume du Maroc. Solutions clés en main pour entreprises, diplomates, expatriés et particuliers exigeants.
+          </p>
+          <div class="flex items-center gap-3 text-m-gold text-lg pt-2">
+            <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-m-red hover:text-white transition"><i class="fab fa-facebook-f text-xs"></i></a>
+            <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-m-red hover:text-white transition"><i class="fab fa-instagram text-xs"></i></a>
+            <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-m-red hover:text-white transition"><i class="fab fa-linkedin-in text-xs"></i></a>
+            <a href="https://wa.me/212661000000" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-emerald-600 hover:text-white transition"><i class="fab fa-whatsapp text-xs"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Agences Régionales au Maroc -->
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-m-red pl-2">Nos Agences</h4>
+          <ul class="space-y-2.5 text-xs text-m-sand/70">
+            <li class="flex items-start gap-2">
+              <i class="fas fa-building text-m-gold mt-0.5"></i>
+              <span><strong>Casablanca :</strong> Bd d'Anfa & CFC</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-building text-m-gold mt-0.5"></i>
+              <span><strong>Rabat :</strong> Av. Annakhil, Hay Riad</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-building text-m-gold mt-0.5"></i>
+              <span><strong>Marrakech :</strong> Bd Mohammed VI, Guéliz</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-building text-m-gold mt-0.5"></i>
+              <span><strong>Tanger :</strong> Free Zone & Corniche</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-building text-m-gold mt-0.5"></i>
+              <span><strong>Agadir :</strong> Secteur Balnéaire</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Liens Rapides -->
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-m-gold pl-2">Navigation</h4>
+          <ul class="space-y-2 text-xs text-m-sand/70">
+            <li><a href="#catalogue" class="hover:text-m-gold transition">Flotte Berlines & SUV</a></li>
+            <li><a href="#catalogue" class="hover:text-m-gold transition">Utilitaires & Fourgons</a></li>
+            <li><a href="#services" class="hover:text-m-gold transition">Offre Mobilité Électrique</a></li>
+            <li><a href="#simulateur" class="hover:text-m-gold transition">Calculateur de Mensualité</a></li>
+            <li><a href="#pourquoi" class="hover:text-m-gold transition">Avantages Fiscaux Maroc</a></li>
+            <li><a href="#faq" class="hover:text-m-gold transition">Conditions d'éligibilité</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact & Urgences -->
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-m-green pl-2">Contact Direct</h4>
+          <ul class="space-y-3 text-xs text-m-sand/80">
+            <li class="flex items-center gap-2.5">
+              <i class="fas fa-phone-alt text-m-red"></i>
+              <span>+212 522 99 88 77</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i class="fab fa-whatsapp text-emerald-400"></i>
+              <span>+212 661 00 00 00</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i class="fas fa-envelope text-m-gold"></i>
+              <span>contact@autolease.ma</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i class="fas fa-headset text-m-gold"></i>
+              <span>Assistance Maroc : 24h/24 & 7j/7</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Copyright & Mentions Légales -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-m-sand/50 gap-4">
+        <p>© 2025 AutoLease Maroc S.A.R.L - RC Casablanca n° 348922 • Tous droits réservés.</p>
+        <div class="flex space-x-6">
+          <a href="#" class="hover:text-m-gold transition">Mentions Légales</a>
+          <a href="#" class="hover:text-m-gold transition">Protection des Données (CNDP)</a>
+          <a href="#" class="hover:text-m-gold transition">Conditions Générales de Location</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // 12 REAL LEASING OFFERS WITH MOROCCAN DETAILS & CURATED PEXELS CAR IMAGES
+    const vehiclesData = [
+      {
+        id: 1,
+        name: "Land Rover Defender 110 X-Dynamic",
+        category: "SUV",
+        monthlyDH: 14900,
+        image: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel MHEV",
+        trans: "Automatique 8",
+        seats: "5/7 Places",
+        consumption: "8.6 L / 100km",
+        cities: ["Casablanca", "Marrakech", "Tanger", "Agadir"],
+        badge: "Spécial Atlas & Dunes",
+        badgeColor: "bg-m-red"
+      },
+      {
+        id: 2,
+        name: "Porsche Carrera 911 4S Coupé",
+        category: "Sport",
+        monthlyDH: 22500,
+        image: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Essence 450 Ch",
+        trans: "BVA PDK",
+        seats: "2+2 Places",
+        consumption: "10.5 L / 100km",
+        cities: ["Casablanca", "Rabat", "Marrakech"],
+        badge: "Prestige VIP",
+        badgeColor: "bg-m-brown-dark"
+      },
+      {
+        id: 3,
+        name: "Audi e-tron GT Quattro RS",
+        category: "Electrique",
+        monthlyDH: 17800,
+        image: "https://images.pexels.com/photos/9800030/pexels-photo-9800030.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "100% Électrique",
+        trans: "Automatique 2 vit.",
+        seats: "5 Places",
+        consumption: "490 km autonomie",
+        cities: ["Casablanca", "Rabat", "Tanger"],
+        badge: "Zéro Vignette",
+        badgeColor: "bg-m-green"
+      },
+      {
+        id: 4,
+        name: "Mercedes-Benz Classe C 220d AMG Line",
+        category: "Berline",
+        monthlyDH: 9900,
+        image: "https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel 200 Ch",
+        trans: "9G-TRONIC",
+        seats: "5 Places",
+        consumption: "5.2 L / 100km",
+        cities: ["Casablanca", "Rabat", "Fès", "Marrakech"],
+        badge: "Exécutif Affaires",
+        badgeColor: "bg-m-gold text-m-brown-dark"
+      },
+      {
+        id: 5,
+        name: "BMW X5 xDrive30d Pack M",
+        category: "SUV",
+        monthlyDH: 12500,
+        image: "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel 298 Ch",
+        trans: "Steptronic 8",
+        seats: "5 Places",
+        consumption: "7.4 L / 100km",
+        cities: ["Casablanca", "Marrakech", "Rabat", "Tanger"],
+        badge: "Luxe & Confort",
+        badgeColor: "bg-m-brown"
+      },
+      {
+        id: 6,
+        name: "Renault Master Grand Volume L3H2",
+        category: "Utilitaire",
+        monthlyDH: 5400,
+        image: "https://images.pexels.com/photos/6157057/pexels-photo-6157057.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel dCi 150",
+        trans: "Manuelle 6",
+        seats: "3 Places",
+        consumption: "13 m³ Charge",
+        cities: ["Casablanca", "Tanger", "Fès", "Agadir"],
+        badge: "PME & Logistique",
+        badgeColor: "bg-m-terra"
+      },
+      {
+        id: 7,
+        name: "Peugeot 208 GT Line PureTech",
+        category: "Berline",
+        monthlyDH: 4200,
+        image: "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Essence 130 Ch",
+        trans: "EAT8 Automatique",
+        seats: "5 Places",
+        consumption: "5.4 L / 100km",
+        cities: ["Casablanca", "Rabat", "Marrakech", "Fès", "Tanger", "Agadir"],
+        badge: "Citadine Chic",
+        badgeColor: "bg-m-red"
+      },
+      {
+        id: 8,
+        name: "Dacia Duster 4x4 Prestige Diesel",
+        category: "SUV",
+        monthlyDH: 4900,
+        image: "https://images.pexels.com/photos/790176/pexels-photo-790176.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel dCi 115",
+        trans: "Manuelle 6 (4x4)",
+        seats: "5 Places",
+        consumption: "5.5 L / 100km",
+        cities: ["Marrakech", "Agadir", "Fès", "Casablanca"],
+        badge: "Robuste & Économique",
+        badgeColor: "bg-amber-700"
+      },
+      {
+        id: 9,
+        name: "Hyundai Tucson N-Line Hybrid 4WD",
+        category: "SUV",
+        monthlyDH: 6200,
+        image: "https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Full Hybride 230 Ch",
+        trans: "Automatique",
+        seats: "5 Places",
+        consumption: "5.9 L / 100km",
+        cities: ["Casablanca", "Rabat", "Tanger"],
+        badge: "Familiale Idéale",
+        badgeColor: "bg-m-green"
+      },
+      {
+        id: 10,
+        name: "Volkswagen Golf 8 R-Line 2.0 TDI",
+        category: "Berline",
+        monthlyDH: 7800,
+        image: "https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel 150 Ch",
+        trans: "DSG 7",
+        seats: "5 Places",
+        consumption: "4.8 L / 100km",
+        cities: ["Casablanca", "Rabat", "Tanger", "Marrakech"],
+        badge: "Best Seller Maroc",
+        badgeColor: "bg-m-brown-dark"
+      },
+      {
+        id: 11,
+        name: "Peugeot Expert Fourgon BlueHDi",
+        category: "Utilitaire",
+        monthlyDH: 4800,
+        image: "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel 145 Ch",
+        trans: "Manuelle 6",
+        seats: "3 Places",
+        consumption: "6.6 L / 100km",
+        cities: ["Casablanca", "Tanger", "Rabat", "Fès"],
+        badge: "Artisans & Pros",
+        badgeColor: "bg-m-terra"
+      },
+      {
+        id: 12,
+        name: "Toyota Land Cruiser Prado TX-L",
+        category: "SUV",
+        monthlyDH: 15500,
+        image: "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=900",
+        fuel: "Diesel D-4D",
+        trans: "Automatique 6",
+        seats: "7 Places",
+        consumption: "8.9 L / 100km",
+        cities: ["Casablanca", "Marrakech", "Agadir", "Fès"],
+        badge: "Légende du Sahara",
+        badgeColor: "bg-m-gold text-m-brown-dark"
+      }
+    ];
+
+    // Carousel State
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    let carouselInterval;
+
+    function initCarousel() {
+      showSlide(0);
+      startAutoplay();
+    }
+
+    function showSlide(index) {
+      currentSlide = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        if (i === currentSlide) {
+          slide.classList.remove('opacity-0', 'pointer-events-none');
+          slide.classList.add('opacity-100');
+        } else {
+          slide.classList.remove('opacity-100');
+          slide.classList.add('opacity-0', 'pointer-events-none');
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        if (i === currentSlide) {
+          dot.className = "carousel-dot w-8 h-2 rounded-full bg-m-gold transition-all duration-300";
+        } else {
+          dot.className = "carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300";
+        }
+      });
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+      resetAutoplay();
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+      resetAutoplay();
+    }
+
+    function setSlide(idx) {
+      showSlide(idx);
+      resetAutoplay();
+    }
+
+    function startAutoplay() {
+      carouselInterval = setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5500);
+    }
+
+    function resetAutoplay() {
+      clearInterval(carouselInterval);
+      startAutoplay();
+    }
+
+    // Render Vehicle Grid
+    function renderVehicles(vehicles) {
+      const grid = document.getElementById('vehiclesGrid');
+      const countBadge = document.getElementById('vehicleCountBadge');
+      const noFound = document.getElementById('noVehiclesFound');
+
+      grid.innerHTML = '';
+      countBadge.innerText = `${vehicles.length} Véhicule${vehicles.length > 1 ? 's' : ''} Disponible${vehicles.length > 1 ? 's' : ''}`;
+
+      if (vehicles.length === 0) {
+        noFound.classList.remove('hidden');
+        return;
+      } else {
+        noFound.classList.add('hidden');
+      }
+
+      vehicles.forEach(car => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl border border-m-gold/30 overflow-hidden shadow-sm hover:shadow-moroccan card-transition flex flex-col justify-between relative group";
+        
+        card.innerHTML = `
+          <!-- Image and Badges -->
+          <div class="relative h-48 w-full overflow-hidden bg-m-brown/10">
+            <img src="${car.image}" alt="${car.name} location Maroc" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-3 left-3 flex flex-col gap-1">
+              <span class="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md text-white ${car.badgeColor} shadow">
+                ${car.badge}
+              </span>
+            </div>
+            <div class="absolute bottom-2 right-2 bg-m-brown-dark/85 backdrop-blur-sm text-m-gold px-2.5 py-1 rounded-lg text-xs font-bold border border-m-gold/30">
+              ${car.category}
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-extrabold text-base text-m-brown leading-snug group-hover:text-m-red transition">${car.name}</h3>
+              
+              <!-- Specs Grid -->
+              <div class="grid grid-cols-2 gap-y-2 gap-x-2 my-4 text-[11px] text-m-brown/75 font-semibold bg-m-sand-light/60 p-2.5 rounded-xl border border-m-gold/20">
+                <div class="flex items-center gap-1.5"><i class="fas fa-gas-pump text-m-red"></i> ${car.fuel}</div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-cogs text-m-gold"></i> ${car.trans}</div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-users text-m-brown"></i> ${car.seats}</div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-tachometer-alt text-m-green"></i> ${car.consumption}</div>
+              </div>
+
+              <!-- Available cities tags -->
+              <div class="text-[10px] text-m-brown/60 mb-3 flex items-center flex-wrap gap-1">
+                <i class="fas fa-map-marker-alt text-m-red mr-0.5"></i>
+                ${car.cities.slice(0, 3).join(', ')}${car.cities.length > 3 ? '...' : ''}
+              </div>
+            </div>
+
+            <!-- Price and CTA -->
+            <div class="pt-3 border-t border-m-sand flex items-center justify-between mt-auto">
+              <div>
+                <span class="text-[10px] text-m-brown/60 uppercase block">Loyer Mensuel</span>
+                <div class="text-xl font-black text-m-red leading-tight">
+                  ${car.monthlyDH.toLocaleString('fr-FR')} <span class="text-xs font-bold text-m-brown">DH</span>
+                </div>
+              </div>
+              <button onclick="openBookingModal('${car.name}', ${car.monthlyDH})" class="px-3.5 py-2 rounded-xl bg-m-brown hover:bg-m-red text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                <span>Devis</span>
+                <i class="fas fa-arrow-right text-[10px] text-m-gold"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Filtering logic
+    function applyVehicleFilters() {
+      const category = document.getElementById('filterCategory').value;
+      const city = document.getElementById('filterCity').value;
+      const maxBudget = parseInt(document.getElementById('filterBudget').value);
+
+      const filtered = vehiclesData.filter(car => {
+        const matchCategory = (category === 'all' || car.category === category);
+        const matchCity = (city === 'all' || car.cities.includes(city));
+        const matchBudget = (car.monthlyDH <= maxBudget);
+        return matchCategory && matchCity && matchBudget;
+      });
+
+      renderVehicles(filtered);
+    }
+
+    function updateBudgetFilter(val) {
+      document.getElementById('budgetValue').innerText = parseInt(val).toLocaleString('fr-FR') + ' DH';
+      applyVehicleFilters();
+    }
+
+    function quickFilter(catName) {
+      document.getElementById('filterCategory').value = catName;
+      applyVehicleFilters();
+      scrollToSection('catalogue');
+    }
+
+    function resetFilters() {
+      document.getElementById('filterCategory').value = 'all';
+      document.getElementById('filterCity').value = 'all';
+      document.getElementById('filterBudget').value = 30000;
+      document.getElementById('budgetValue').innerText = '30 000 DH';
+      renderVehicles(vehiclesData);
+    }
+
+    function switchClientType(type) {
+      const tabPart = document.getElementById('tabParticulier');
+      const tabEnt = document.getElementById('tabEntreprise');
+      if (type === 'particulier') {
+        tabPart.className = "px-4 py-1.5 rounded-lg bg-m-brown text-white shadow transition";
+        tabEnt.className = "px-4 py-1.5 rounded-lg text-m-brown hover:text-m-red transition";
+      } else {
+        tabEnt.className = "px-4 py-1.5 rounded-lg bg-m-brown text-white shadow transition";
+        tabPart.className = "px-4 py-1.5 rounded-lg text-m-brown hover:text-m-red transition";
+      }
+    }
+
+    // Simulator Interactive Formula
+    function calculateSimulator() {
+      const baseMonthly = parseFloat(document.getElementById('simCarSelect').value);
+      const selectedOption = document.getElementById('simCarSelect').options[document.getElementById('simCarSelect').selectedIndex];
+      const carName = selectedOption.getAttribute('data-name');
+      
+      const duration = parseInt(document.getElementById('simDuration').value);
+      const depositPct = parseInt(document.getElementById('simDeposit').value);
+      const km = parseInt(document.getElementById('simKm').value);
+
+      // Display Labels
+      document.getElementById('simDurDisplay').innerText = `${duration} Mois`;
+      document.getElementById('simDepositDisplay').innerText = `${depositPct}% ${depositPct === 0 ? '(Sans apport)' : ''}`;
+      document.getElementById('simKmDisplay').innerText = `${(km).toLocaleString('fr-FR')} KM / an`;
+      document.getElementById('simCarResultName').innerText = carName;
+
+      // Realistic LLD simulation factor
+      // Longer duration = lower monthly
+      let durationFactor = 1.0;
+      if (duration === 12) durationFactor = 1.30;
+      else if (duration === 24) durationFactor = 1.15;
+      else if (duration === 36) durationFactor = 1.0;
+      else if (duration === 48) durationFactor = 0.90;
+      else if (duration === 60) durationFactor = 0.83;
+
+      // Deposit reduces monthly
+      const depositReduction = (depositPct / 100) * 0.45;
+
+      // Mileage factor
+      const kmFactor = 1 + ((km - 20000) / 20000) * 0.12;
+
+      let calculatedMonthly = baseMonthly * durationFactor * (1 - depositReduction) * kmFactor;
+      calculatedMonthly = Math.round(calculatedMonthly);
+
+      document.getElementById('simFinalMonthly').innerText = calculatedMonthly.toLocaleString('fr-FR');
+    }
+
+    // Booking Modal Interactions
+    function openBookingModal(carName, priceDH) {
+      document.getElementById('modalCarTitle').innerText = carName;
+      document.getElementById('modalHiddenCarName').value = carName;
+      document.getElementById('modalCarPrice').innerText = `Loyer indicatif : ${priceDH.toLocaleString('fr-FR')} DH / mois TTC`;
+      document.getElementById('bookingModal').classList.remove('hidden');
+    }
+
+    function openBookingModalWithSimulator() {
+      const selectedOption = document.getElementById('simCarSelect').options[document.getElementById('simCarSelect').selectedIndex];
+      const carName = selectedOption.getAttribute('data-name');
+      const monthly = document.getElementById('simFinalMonthly').innerText;
+      
+      document.getElementById('modalCarTitle').innerText = carName;
+      document.getElementById('modalHiddenCarName').value = carName;
+      document.getElementById('modalCarPrice').innerText = `Simulation sélectionnée : ${monthly} DH / mois TTC`;
+      document.getElementById('bookingModal').classList.remove('hidden');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.add('hidden');
+    }
+
+    function handleQuoteSubmit(e) {
+      e.preventDefault();
+      closeBookingModal();
+      const toast = document.getElementById('toastSuccess');
+      toast.classList.remove('translate-y-32');
+      setTimeout(() => {
+        hideToast();
+      }, 5000);
+      e.target.reset();
+    }
+
+    function hideToast() {
+      document.getElementById('toastSuccess').classList.add('translate-y-32');
+    }
+
+    function prefillAndScroll(carName) {
+      const match = vehiclesData.find(c => c.name.toLowerCase().includes(carName.toLowerCase()));
+      if (match) {
+        openBookingModal(match.name, match.monthlyDH);
+      } else {
+        openBookingModal(carName, 12000);
+      }
+    }
+
+    // Scroll helper
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Mobile Navigation Toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
+    });
+
+    // FAQ Accordion
+    function toggleFAQ(index) {
+      const content = document.getElementById(`faqContent${index}`);
+      const icon = document.getElementById(`faqIcon${index}`);
+      const isHidden = content.classList.contains('hidden');
+
+      // Close all first for neat accordion behavior
+      for (let i = 1; i <= 4; i++) {
+        const c = document.getElementById(`faqContent${i}`);
+        const ic = document.getElementById(`faqIcon${i}`);
+        if (c && ic) {
+          c.classList.add('hidden');
+          ic.classList.remove('rotate-180');
+        }
+      }
+
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // Close modal on escape or backdrop click
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeBookingModal();
+    });
+
+    document.getElementById('bookingModal').addEventListener('click', (e) => {
+      if (e.target.id === 'bookingModal') closeBookingModal();
+    });
+
+    // Initial setup on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initCarousel();
+      renderVehicles(vehiclesData);
+      calculateSimulator();
+    });
+  </script>
 </body>
 </html>
