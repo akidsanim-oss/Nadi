@@ -1,1068 +1,1044 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoLease Pro - Vehicle Leasing Solutions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'inter': ['Inter', 'sans-serif'],
-                        'playfair': ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        primary: { 50:'#eef2ff',100:'#dbe4ff',200:'#bac8ff',300:'#91a7ff',400:'#748ffc',500:'#5c7cfa',600:'#4c6ef5',700:'#4263eb',800:'#3b5bdb',900:'#364fc7' },
-                        accent: { 50:'#fff9db',100:'#fff3bf',200:'#ffec99',300:'#ffd43b',400:'#fcc419',500:'#fab005',600:'#f59f00',700:'#f08c00',800:'#e67700',900:'#d9730d' },
-                        dark: { 800:'#1a1a2e',900:'#16213e',950:'#0f0f23' }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        * { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; }
-        
-        .gradient-hero {
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 40%, #16213e 100%);
-        }
-        
-        .gradient-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-        }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(92, 124, 250, 0.5);
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(92, 124, 250, 0.15), 0 0 40px rgba(92, 124, 250, 0.1);
-        }
-        
-        .price-glow {
-            text-shadow: 0 0 20px rgba(250, 176, 5, 0.3);
-        }
-        
-        .slider-track {
-            background: linear-gradient(90deg, #4c6ef5, #fab005);
-        }
-        
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 6px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, #4c6ef5, #fab005);
-            outline: none;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 0 3px rgba(92,124,250,0.3);
-            transition: all 0.2s;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb:hover {
-            box-shadow: 0 2px 15px rgba(0,0,0,0.4), 0 0 0 5px rgba(92,124,250,0.4);
-            transform: scale(1.1);
-        }
-        
-        .vehicle-img-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 16px 16px 0 0;
-        }
-        
-        .vehicle-img-container img {
-            transition: transform 0.6s ease, filter 0.4s ease;
-        }
-        
-        .glass-card:hover .vehicle-img-container img {
-            transform: scale(1.08);
-            filter: brightness(1.1);
-        }
-        
-        .vehicle-img-container::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60%;
-            background: linear-gradient(to top, rgba(15,15,35,0.6), transparent);
-            pointer-events: none;
-        }
-        
-        .badge-pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        .float-anim { animation: float 4s ease-in-out infinite; }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .slide-up { animation: slideUp 0.6s ease-out forwards; }
-        
-        .filter-select {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: white;
-            transition: all 0.3s;
-        }
-        
-        .filter-select:focus {
-            border-color: #5c7cfa;
-            box-shadow: 0 0 0 3px rgba(92,124,250,0.3);
-            outline: none;
-        }
-        
-        .filter-select option {
-            background: #1a1a2e;
-            color: white;
-        }
-        
-        .type-btn {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .type-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .type-btn:hover::before { left: 100%; }
-        
-        .modal-overlay {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
-        .modal-content {
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.3s ease;
-        }
-        
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
-        
-        .progress-bar {
-            transition: width 0.5s ease;
-        }
-        
-        .shimmer {
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoLease Maroc - Location de Véhicules au Maroc</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'm-red': '#C8102E',
+        'm-red-dark': '#9B0020',
+        'm-green': '#006233',
+        'm-green-light': '#00804d',
+        'm-gold': '#C5A55A',
+        'm-gold-light': '#D4BC7C',
+        'm-sand': '#F5E6C8',
+        'm-sand-light': '#FAF3E6',
+        'm-terra': '#C75B39',
+        'm-terra-light': '#E07A5A',
+        'm-brown': '#3E2723',
+        'm-brown-light': '#5D4037',
+        'm-cream': '#FFF8F0',
+      },
+      fontFamily: {
+        'cairo': ['Cairo', 'sans-serif'],
+        'amiri': ['Amiri', 'serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap');
 
-        .hero-shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-        }
-        
-        .tab-indicator {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .comparison-table tr:hover td {
-            background: rgba(92, 124, 250, 0.08);
-        }
+* { font-family: 'Cairo', sans-serif; }
 
-        .feature-icon {
-            background: linear-gradient(135deg, rgba(92,124,250,0.2), rgba(250,176,5,0.2));
-        }
+body { background: #FFF8F0; }
 
-        @keyframes countUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .count-anim { animation: countUp 0.5s ease-out; }
-    </style>
+/* Zellige Pattern */
+.zellige-bg {
+  background-color: #3E2723;
+  background-image:
+    linear-gradient(30deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
+    linear-gradient(150deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
+    linear-gradient(30deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
+    linear-gradient(150deg, #C8102E 12%, transparent 12.5%, transparent 87%, #C8102E 87.5%, #C8102E),
+    linear-gradient(60deg, #C5A55A 25%, transparent 25.5%, transparent 75%, #C5A55A 75%, #C5A55A),
+    linear-gradient(60deg, #C5A55A 25%, transparent 25.5%, transparent 75%, #C5A55A 75%, #C5A55A);
+  background-size: 40px 70px;
+  background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+  opacity: 0.08;
+}
+
+.zellige-overlay {
+  position: relative;
+}
+.zellige-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg 90deg, rgba(197,165,90,0.03) 90deg 180deg);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #3E2723 0%, #C8102E 40%, #006233 100%);
+}
+
+.moroccan-border {
+  border-image: repeating-linear-gradient(90deg, #C5A55A 0px, #C5A55A 10px, #C8102E 10px, #C8102E 20px, #006233 20px, #006233 30px) 4;
+}
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(62,39,35,0.15);
+}
+
+.vehicle-card {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.deal-badge {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.moroccan-divider {
+  height: 4px;
+  background: repeating-linear-gradient(90deg, #C5A55A 0px, #C5A55A 15px, transparent 15px, transparent 20px, #C8102E 20px, #C8102E 35px, transparent 35px, transparent 40px);
+}
+
+.nav-blur {
+  backdrop-filter: blur(12px);
+  background: rgba(255,248,240,0.92);
+}
+
+.star-pattern {
+  background-image: radial-gradient(circle, #C5A55A 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.15;
+}
+
+.moroccan-star {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #C5A55A;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.slider-container { overflow: hidden; position: relative; }
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide-enter { animation: slideIn 0.5s ease forwards; }
+@keyframes slideIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-overlay {
+  background: rgba(62,39,35,0.7);
+  backdrop-filter: blur(6px);
+}
+
+.glow-gold {
+  box-shadow: 0 0 30px rgba(197,165,90,0.3);
+}
+
+.moroccan-pattern-border {
+  border: 2px solid #C5A55A;
+  border-image: repeating-linear-gradient(45deg, #C5A55A, #C5A55A 5px, #C8102E 5px, #C8102E 10px) 5;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  background: #C8102E;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid #FFF8F0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+  .hero-gradient h1 { font-size: 1.8rem; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #FFF8F0; }
+::-webkit-scrollbar-thumb { background: #C5A55A; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #C8102E; }
+</style>
 </head>
-<body class="bg-dark-950 text-white min-h-screen">
+<body class="min-h-screen">
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 sm:h-20">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                        <i class="fas fa-car-side text-white text-lg"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-bold tracking-tight">AutoLease</span>
-                        <span class="text-accent-400 font-light text-sm ml-1">Pro</span>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Vehicles</a>
-                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Business</a>
-                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Offers</a>
-                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Contact</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button class="hidden sm:flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-sm">
-                        <i class="fas fa-phone-alt text-primary-400"></i>
-                        <span>0330 123 4567</span>
-                    </button>
-                    <button class="w-10 h-10 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 flex items-center justify-center hover:shadow-lg hover:shadow-primary-500/25 transition-all">
-                        <i class="fas fa-user text-sm"></i>
-                    </button>
-                </div>
-            </div>
+<!-- Navigation -->
+<nav class="nav-blur fixed top-0 left-0 right-0 z-50 border-b-2 border-m-gold shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 bg-m-red rounded-xl flex items-center justify-center">
+          <i class="fas fa-star text-m-gold text-sm"></i>
         </div>
-    </nav>
+        <span class="text-xl font-bold text-m-brown">AutoLease<span class="text-m-red">Maroc</span></span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#accueil" class="text-gray-700 hover:text-m-red font-medium transition">Accueil</a>
+        <a href="#vehicules" class="text-m-red font-semibold border-b-2 border-m-red pb-1">Véhicules</a>
+        <a href="#services" class="text-gray-700 hover:text-m-red font-medium transition">Services</a>
+        <a href="#pourquoi" class="text-gray-700 hover:text-m-red font-medium transition">Pourquoi Nous</a>
+        <a href="#faq" class="text-gray-700 hover:text-m-red font-medium transition">FAQ</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="tel:+212522000000" class="hidden sm:flex items-center gap-2 text-m-brown hover:text-m-red transition text-sm font-medium">
+          <i class="fas fa-phone-alt"></i>
+          <span>+212 522 00 00 00</span>
+        </a>
+        <button class="bg-m-red hover:bg-m-red-dark text-white px-5 py-2 rounded-full font-semibold transition shadow-lg shadow-red-200" onclick="scrollToSection('vehicules')">
+          Devis Gratuit
+        </button>
+      </div>
+      <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100">
+    <div class="px-4 py-4 space-y-3">
+      <a href="#accueil" class="block text-gray-700 hover:text-m-red font-medium py-2">Accueil</a>
+      <a href="#vehicules" class="block text-m-red font-semibold py-2">Véhicules</a>
+      <a href="#services" class="block text-gray-700 hover:text-m-red font-medium py-2">Services</a>
+      <a href="#pourquoi" class="block text-gray-700 hover:text-m-red font-medium py-2">Pourquoi Nous</a>
+      <a href="#faq" class="block text-gray-700 hover:text-m-red font-medium py-2">FAQ</a>
+      <a href="tel:+212522000000" class="block text-m-brown font-medium py-2"><i class="fas fa-phone-alt mr-2"></i>+212 522 00 00 00</a>
+    </div>
+  </div>
+</nav>
 
-    <!-- Hero Section -->
-    <section class="gradient-hero relative min-h-screen flex items-center overflow-hidden pt-20">
-        <div class="hero-shape w-96 h-96 bg-primary-600 top-20 -left-48"></div>
-        <div class="hero-shape w-80 h-80 bg-accent-600 bottom-20 right-10"></div>
-        <div class="hero-shape w-64 h-64 bg-primary-400 top-1/2 left-1/2"></div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 w-full">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
-                    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20">
-                        <span class="w-2 h-2 rounded-full bg-green-400 badge-pulse"></span>
-                        <span class="text-sm text-primary-300">2025 Models Now Available</span>
-                    </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight">
-                        Drive Your <br>
-                        <span class="font-playfair italic bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400 bg-clip-text text-transparent">Dream Vehicle</span>
-                        <br>For Less
-                    </h1>
-                    
-                    <p class="text-gray-400 text-lg max-w-lg leading-relaxed">
-                        Personal & Business leasing from trusted UK suppliers. 
-                        Compare deals, filter by your budget, and drive away today.
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-6">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
-                                <i class="fas fa-check-circle text-green-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold">50K+</div>
-                                <div class="text-xs text-gray-400">Happy Leasers</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center">
-                                <i class="fas fa-car text-primary-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold">200+</div>
-                                <div class="text-xs text-gray-400">Vehicles</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl bg-accent-500/20 flex items-center justify-center">
-                                <i class="fas fa-tag text-accent-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold">0%</div>
-                                <div class="text-xs text-gray-400">Deposit Option</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative float-anim hidden lg:block">
-                    <div class="glass-card rounded-3xl p-6 max-w-lg mx-auto">
-                        <div class="vehicle-img-container rounded-2xl overflow-hidden mb-4 h-52">
-                            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80" alt="Featured Car" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-xl font-bold">BMW 3 Series</h3>
-                                <p class="text-sm text-gray-400">320i M Sport Auto</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-accent-400 price-glow">£299</div>
-                                <div class="text-xs text-gray-400">/month</div>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-center space-x-3">
-                            <span class="px-3 py-1 rounded-full text-xs bg-primary-500/20 text-primary-300 border border-primary-500/30">Personal</span>
-                            <span class="px-3 py-1 rounded-full text-xs bg-green-500/20 text-green-300 border border-green-500/30">In Stock</span>
-                            <span class="px-3 py-1 rounded-full text-xs bg-white/10 text-gray-300 border border-white/20">Automatic</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Hero Section -->
+<section id="accueil" class="hero-gradient pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden zellige-overlay">
+  <div class="absolute inset-0 zellige-bg"></div>
+  <div class="absolute inset-0 opacity-5">
+    <div class="star-pattern w-full h-full"></div>
+  </div>
+  <div class="absolute top-20 left-10 w-72 h-72 bg-m-gold rounded-full blur-3xl opacity-20"></div>
+  <div class="absolute bottom-10 right-20 w-96 h-96 bg-m-green rounded-full blur-3xl opacity-15"></div>
 
-    <!-- Vehicle Type & Leasing Type Selection -->
-    <section class="relative z-10 -mt-8 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-card rounded-2xl p-2 sm:p-3 max-w-2xl mx-auto">
-                <div class="grid grid-cols-2 gap-1">
-                    <!-- Vehicle Type -->
-                    <div class="relative">
-                        <div class="tab-indicator absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl transition-all" id="vehicleTabIndicator"></div>
-                        <div class="relative flex rounded-xl overflow-hidden">
-                            <button onclick="setVehicleType('car')" id="carBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-primary-600 text-white font-semibold text-sm sm:text-base">
-                                <i class="fas fa-car"></i>
-                                <span>Cars</span>
-                            </button>
-                            <button onclick="setVehicleType('van')" id="vanBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base">
-                                <i class="fas fa-shuttle-van"></i>
-                                <span>Vans</span>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Leasing Type -->
-                    <div class="relative">
-                        <div class="tab-indicator absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-accent-600 to-accent-700 rounded-xl transition-all" id="leasingTabIndicator" style="left: 50%"></div>
-                        <div class="relative flex rounded-xl overflow-hidden">
-                            <button onclick="setLeasingType('personal')" id="personalBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-accent-600 text-white font-semibold text-sm sm:text-base">
-                                <i class="fas fa-user"></i>
-                                <span>Personal</span>
-                            </button>
-                            <button onclick="setLeasingType('business')" id="businessBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base">
-                                <i class="fas fa-briefcase"></i>
-                                <span>Business</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Carousel -->
+    <div id="heroCarousel" class="relative mb-8">
+      <div class="slider-container rounded-3xl overflow-hidden shadow-2xl">
+        <div id="carouselTrack" class="slider-track">
+          <div class="min-w-full relative">
+            <img src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="SUV luxe" class="w-full h-64 sm:h-80 md:h-96 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-m-brown/80 via-m-brown/40 to-transparent flex items-center">
+              <div class="p-8 md:p-12">
+                <span class="deal-badge inline-block bg-m-gold text-m-brown px-4 py-1 rounded-full text-sm font-bold mb-3">🔥 Offre du Moment</span>
+                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">SUV de Luxe au Désert</h2>
+                <p class="text-m-sand text-lg">À partir de <span class="text-m-gold font-bold text-2xl">2 490 DH/mois</span></p>
+              </div>
             </div>
+          </div>
+          <div class="min-w-full relative">
+            <img src="https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Voiture sport" class="w-full h-64 sm:h-80 md:h-96 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-m-red/80 via-m-red/40 to-transparent flex items-center">
+              <div class="p-8 md:p-12">
+                <span class="deal-badge inline-block bg-m-green text-white px-4 py-1 rounded-full text-sm font-bold mb-3">⚡ Nouveau</span>
+                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">Sportives Rouges à Marrakech</h2>
+                <p class="text-m-sand text-lg">À partir de <span class="text-m-gold font-bold text-2xl">3 200 DH/mois</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="min-w-full relative">
+            <img src="https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Voiture électrique" class="w-full h-64 sm:h-80 md:h-96 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-m-green/80 via-m-green/40 to-transparent flex items-center">
+              <div class="p-8 md:p-12">
+                <span class="deal-badge inline-block bg-m-terra text-white px-4 py-1 rounded-full text-sm font-bold mb-3">🌿 Écologique</span>
+                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2">Électriques en Charge à Casablanca</h2>
+                <p class="text-m-sand text-lg">À partir de <span class="text-m-gold font-bold text-2xl">1 890 DH/mois</span></p>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
-
-    <!-- Filters Section -->
-    <section class="py-8 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass rounded-2xl p-4 sm:p-6 mb-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold flex items-center space-x-2">
-                        <i class="fas fa-filter text-primary-400"></i>
-                        <span>Filter Vehicles</span>
-                    </h3>
-                    <button onclick="resetFilters()" class="text-sm text-gray-400 hover:text-white flex items-center space-x-1 transition-colors">
-                        <i class="fas fa-redo-alt text-xs"></i>
-                        <span>Reset</span>
-                    </button>
-                </div>
-                
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Make</label>
-                        <select id="filterMake" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                            <option value="">All Makes</option>
-                            <option value="BMW">BMW</option>
-                            <option value="Audi">Audi</option>
-                            <option value="Mercedes">Mercedes-Benz</option>
-                            <option value="Volkswagen">Volkswagen</option>
-                            <option value="Ford">Ford</option>
-                            <option value="Toyota">Toyota</option>
-                            <option value="Tesla">Tesla</option>
-                            <option value="Hyundai">Hyundai</option>
-                        </select>
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Model</label>
-                        <select id="filterModel" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                            <option value="">All Models</option>
-                        </select>
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Body Style</label>
-                        <select id="filterBody" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                            <option value="">All Types</option>
-                            <option value="Saloon">Saloon</option>
-                            <option value="Estate">Estate</option>
-                            <option value="Hatchback">Hatchback</option>
-                            <option value="SUV">SUV</option>
-                            <option value="Coupe">Coupe</option>
-                            <option value="Convertible">Convertible</option>
-                            <option value="MPV">MPV</option>
-                            <option value="Van">Van</option>
-                        </select>
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Fuel Type</label>
-                        <select id="filterFuel" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                            <option value="">All Fuel</option>
-                            <option value="Petrol">Petrol</option>
-                            <option value="Diesel">Diesel</option>
-                            <option value="Hybrid">Hybrid</option>
-                            <option value="Electric">Electric</option>
-                        </select>
-                    </div>
-                    
-                    <div class="space-y-1 col-span-2">
-                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">
-                            Monthly Budget: <span id="budgetValue" class="text-accent-400 font-bold">£500</span>
-                        </label>
-                        <div class="flex items-center space-x-3 pt-2">
-                            <span class="text-xs text-gray-500">£100</span>
-                            <input type="range" id="filterBudget" min="100" max="1500" value="500" step="25" oninput="updateBudget()" onchange="applyFilters()" class="flex-1">
-                            <span class="text-xs text-gray-500">£1500</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Results Section -->
-    <section class="py-4 pb-16 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-bold" id="resultsTitle">Cars for Personal Leasing</h2>
-                    <p class="text-sm text-gray-400 mt-1"><span id="resultsCount">0</span> vehicles found matching your criteria</p>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <select id="sortBy" onchange="applyFilters()" class="filter-select px-4 py-2 rounded-xl text-sm">
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
-                        <option value="name-asc">Name: A-Z</option>
-                        <option value="name-desc">Name: Z-A</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- Vehicle Grid -->
-            <div id="vehicleGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Populated by JS -->
-            </div>
-            
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden text-center py-20">
-                <div class="w-24 h-24 mx-auto rounded-full bg-gray-800 flex items-center justify-center mb-6">
-                    <i class="fas fa-car-crash text-4xl text-gray-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">No vehicles found</h3>
-                <p class="text-gray-400 mb-6">Try adjusting your filters to see more results</p>
-                <button onclick="resetFilters()" class="px-6 py-3 bg-primary-600 hover:bg-primary-700 rounded-xl font-semibold transition-all">
-                    Reset Filters
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Choose Us -->
-    <section class="py-20 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Why Choose AutoLease Pro?</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">We're committed to making vehicle leasing simple, transparent, and stress-free for everyone.</p>
-            </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="glass-card rounded-2xl p-6 text-center">
-                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
-                        <i class="fas fa-shield-alt text-2xl text-primary-400"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Fully Insured</h3>
-                    <p class="text-sm text-gray-400">Comprehensive insurance included with every lease</p>
-                </div>
-                <div class="glass-card rounded-2xl p-6 text-center">
-                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
-                        <i class="fas fa-money-bill-wave text-2xl text-accent-400"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Fixed Payments</h3>
-                    <p class="text-sm text-gray-400">No hidden fees, transparent pricing every month</p>
-                </div>
-                <div class="glass-card rounded-2xl p-6 text-center">
-                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
-                        <i class="fas fa-exchange-alt text-2xl text-green-400"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Flexible Terms</h3>
-                    <p class="text-sm text-gray-400">24 to 60 month contracts, upgrade anytime</p>
-                </div>
-                <div class="glass-card rounded-2xl p-6 text-center">
-                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
-                        <i class="fas fa-headset text-2xl text-purple-400"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">24/7 Support</h3>
-                    <p class="text-sm text-gray-400">Round-the-clock roadside assistance included</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Comparison Modal -->
-    <div id="comparisonModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-        <div class="modal-content glass-card rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-auto">
-            <div class="p-6" id="modalContent">
-                <!-- Populated by JS -->
-            </div>
-        </div>
+      </div>
+      <button onclick="prevSlide()" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transition text-m-red">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button onclick="nextSlide()" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transition text-m-red">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div id="carouselDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
     </div>
 
-    <!-- Enquiry Modal -->
-    <div id="enquiryModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-        <div class="modal-content glass-card rounded-3xl max-w-lg w-full">
-            <div class="p-6 sm:p-8" id="enquiryContent">
-                <!-- Populated by JS -->
-            </div>
-        </div>
+    <div class="text-center mb-8">
+      <p class="text-m-sand text-lg md:text-xl max-w-2xl mx-auto font-amiri italic">"Des milliers d'offres de location au Maroc — de Casablanca à Marrakech, de Rabat à Tanger."</p>
     </div>
 
-    <script>
-        // ============ DATA ============
-        const vehicles = [
-            { id:1, make:"BMW", model:"3 Series", body:"Saloon", fuel:"Petrol", price:299, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&q=80", desc:"320i M Sport Auto with premium features", badges:["Popular","Low Mileage"] },
-            { id:2, make:"Audi", model:"A4", body:"Saloon", fuel:"Diesel", price:275, type:"car", leasing:"personal", term:"36", mileage:"10000", image:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=500&q=80", desc:"35 TDI S Line S Tronic automatic", badges:["Best Value"] },
-            { id:3, make:"Mercedes", model:"C-Class", body:"Estate", fuel:"Hybrid", price:389, type:"car", leasing:"business", term:"48", mileage:"12000", image:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=500&q=80", desc:"C 300 de AMG Line Premium Plus", badges:["Hybrid","Premium"] },
-            { id:4, make:"Tesla", model:"Model 3", body:"Saloon", fuel:"Electric", price:349, type:"car", leasing:"personal", term:"36", mileage:"8000", image:"https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=500&q=80", desc:"Long Range AWD with autopilot", badges:["Electric","Zero Tax"] },
-            { id:5, make:"Volkswagen", model:"Golf", body:"Hatchback", fuel:"Petrol", price:199, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=500&q=80", desc:"1.5 TSI 150ps EVO Match Edition", badges:["Economy"] },
-            { id:6, make:"Ford", model:"Transit Custom", body:"Van", fuel:"Diesel", price:249, type:"van", leasing:"business", term:"48", mileage:"10000", image:"https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=500&q=80", desc:"290 L1 H1 2.0 EcoBlue Limited", badges:["Best Seller","L1"] },
-            { id:7, make:"BMW", model:"X3", body:"SUV", fuel:"Diesel", price:429, type:"car", leasing:"business", term:"36", mileage:"12000", image:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", desc:"xDrive20d M Sport Auto", badges:["SUV","M Sport"] },
-            { id:8, make:"Toyota", model:"Yaris", body:"Hatchback", fuel:"Hybrid", price:189, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1621993202322-8c4cf7f7d54a?w=500&q=80", desc:"1.5 VVT-i Hybrid Excel", badges:["Hybrid","ULEV"] },
-            { id:9, make:"Audi", model:"Q5", body:"SUV", fuel:"Petrol", price:399, type:"car", leasing:"business", term:"48", mileage:"10000", image:"https://images.unsplash.com/photo-1606619619849-8c1a3c0a7e70?w=500&q=80", desc:"45 TFSI S Line Quattro S Tronic", badges:["Quattro","Popular"] },
-            { id:10, make:"Hyundai", model:"Tucson", body:"SUV", fuel:"Hybrid", price:299, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1633695028498-78bb3259fa10?w=500&q=80", desc:"1.6 T-GDi Hybrid Ultimate N Line", badges:["New Model"] },
-            { id:11, make:"Mercedes", model:"A-Class", body:"Hatchback", fuel:"Petrol", price:259, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1617531653332-bd46c16f4d68?w=500&q=80", desc:"A 180 AMG Line Executive", badges:["AMG"] },
-            { id:12, make:"Ford", model:"Transit Connect", body:"Van", fuel:"Diesel", price:199, type:"van", leasing:"business", term:"48", mileage:"10000", image:"https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=500&q=80", desc:"L2 1.5 EcoBlue 120ps Limited", badges:["Compact Van"] },
-            { id:13, make:"Volkswagen", model:"Polo", body:"Hatchback", fuel:"Petrol", price:159, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&q=80", desc:"1.0 TSI 95ps R-Line", badges:["R-Line","Best Value"] },
-            { id:14, make:"Tesla", model:"Model Y", body:"SUV", fuel:"Electric", price:449, type:"car", leasing:"business", term:"36", mileage:"10000", image:"https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&q=80", desc:"Long Range AWD 7 seat", badges:["Electric","7 Seater"] },
-            { id:15, make:"BMW", model:"5 Series", body:"Saloon", fuel:"Diesel", price:449, type:"car", leasing:"business", term:"48", mileage:"12000", image:"https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=500&q=80", desc:"520d M Sport Auto with Pro Media", badges:["Business","M Sport"] },
-            { id:16, make:"Toyota", model:"Corolla", body:"Estate", fuel:"Hybrid", price:239, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500&q=80", desc:"1.8 VVT-i Hybrid Excel Touring", badges:["Hybrid","Estate"] },
-        ];
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
+        <div class="text-2xl md:text-3xl font-black text-m-red">12K+</div>
+        <div class="text-sm text-m-brown-light font-medium">Véhicules Disponibles</div>
+      </div>
+      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
+        <div class="text-2xl md:text-3xl font-black text-m-green">98%</div>
+        <div class="text-sm text-m-brown-light font-medium">Clients Satisfaits</div>
+      </div>
+      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
+        <div class="text-2xl md:text-3xl font-black text-m-terra">50+</div>
+        <div class="text-sm text-m-brown-light font-medium">Marques Automobiles</div>
+      </div>
+      <div class="bg-white/95 rounded-2xl p-4 text-center border border-m-gold/30 card-hover">
+        <div class="text-2xl md:text-3xl font-black text-m-gold">0 DH</div>
+        <div class="text-sm text-m-brown-light font-medium">Frais Cachés</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const modelMap = {
-            "BMW":["3 Series","X3","5 Series"],
-            "Audi":["A4","Q5"],
-            "Mercedes":["C-Class","A-Class"],
-            "Volkswagen":["Golf","Polo"],
-            "Ford":["Transit Custom","Transit Connect"],
-            "Toyota":["Yaris","Corolla"],
-            "Tesla":["Model 3","Model Y"],
-            "Hyundai":["Tucson"]
-        };
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        const fuelIcons = { Petrol:"fa-gas-pump", Diesel:"fa-truck-droplet", Hybrid:"fa-leaf", Electric:"fa-bolt" };
-        const fuelColors = { Petrol:"text-orange-400", Diesel:"text-yellow-600", Hybrid:"text-green-400", Electric:"text-blue-400" };
+<!-- Search Panel -->
+<section class="py-12 md:py-16 bg-white relative">
+  <div class="absolute inset-0 zellige-overlay"></div>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Trouvez Votre Véhicule Idéal</h2>
+      <p class="text-m-brown-light mt-2">À Tanger, Fès, Rabat ou n'importe où au Maroc</p>
+    </div>
+    <div class="bg-m-sand-light rounded-3xl p-6 md:p-8 border-2 border-m-gold/30 shadow-lg">
+      <!-- Toggle -->
+      <div class="flex justify-center mb-6">
+        <div class="bg-m-brown rounded-full p-1 flex">
+          <button id="btnVoiture" onclick="switchTab('voiture')" class="px-6 py-2 rounded-full text-sm font-bold transition bg-m-red text-white">
+            <i class="fas fa-car mr-1"></i> Voiture
+          </button>
+          <button id="btnUtilitaire" onclick="switchTab('utilitaire')" class="px-6 py-2 rounded-full text-sm font-bold transition text-m-sand hover:text-white">
+            <i class="fas fa-truck mr-1"></i> Utilitaire
+          </button>
+        </div>
+      </div>
 
-        // ============ STATE ============
-        let state = {
-            vehicleType: 'car',
-            leasingType: 'personal',
-            make: '',
-            model: '',
-            body: '',
-            fuel: '',
-            budget: 500,
-            sort: 'price-asc'
-        };
+      <!-- Type Toggle -->
+      <div class="flex justify-center mb-6">
+        <div class="flex gap-2">
+          <button id="btnParticulier" onclick="switchType('particulier')" class="px-4 py-2 rounded-full text-sm font-semibold transition bg-m-green text-white">
+            <i class="fas fa-user mr-1"></i> Particulier
+          </button>
+          <button id="btnEntreprise" onclick="switchType('entreprise')" class="px-4 py-2 rounded-full text-sm font-semibold transition bg-m-sand text-m-brown hover:bg-m-green hover:text-white">
+            <i class="fas fa-building mr-1"></i> Entreprise
+          </button>
+        </div>
+      </div>
 
-        // ============ AUDIO ============
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function playSound(type) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            if (type === 'click') {
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-            } else if (type === 'modal') {
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-            }
-        }
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-semibold text-m-brown mb-1">Ville</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
+            <option>Casablanca</option>
+            <option>Rabat</option>
+            <option>Marrakech</option>
+            <option>Fès</option>
+            <option>Tanger</option>
+            <option>Meknès</option>
+            <option>Agadir</option>
+            <option>Oujda</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-m-brown mb-1">Budget Mensuel</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
+            <option>Tous les budgets</option>
+            <option>Moins de 1 500 DH</option>
+            <option>1 500 - 2 500 DH</option>
+            <option>2 500 - 4 000 DH</option>
+            <option>4 000 - 6 000 DH</option>
+            <option>Plus de 6 000 DH</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-m-brown mb-1">Marque</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
+            <option>Toutes les marques</option>
+            <option>Renault</option>
+            <option>Peugeot</option>
+            <option>Dacia</option>
+            <option>Toyota</option>
+            <option>Mercedes</option>
+            <option>BMW</option>
+            <option>Hyundai</option>
+            <option>Kia</option>
+          </select>
+        </div>
+      </div>
 
-        // ============ TABS ============
-        function setVehicleType(type) {
-            playSound('click');
-            state.vehicleType = type;
-            
-            const carBtn = document.getElementById('carBtn');
-            const vanBtn = document.getElementById('vanBtn');
-            const indicator = document.getElementById('vehicleTabIndicator');
-            
-            if (type === 'car') {
-                carBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-primary-600 text-white font-semibold text-sm sm:text-base transition-all';
-                vanBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
-                indicator.style.left = '0';
-            } else {
-                vanBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-primary-600 text-white font-semibold text-sm sm:text-base transition-all';
-                carBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
-                indicator.style.left = '50%';
-            }
-            
-            applyFilters();
-        }
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="block text-sm font-semibold text-m-brown mb-1">Carburant</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
+            <option>Tous</option>
+            <option>Essence</option>
+            <option>Diesel</option>
+            <option>Électrique</option>
+            <option>Hybride</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-m-brown mb-1">Durée</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
+            <option>24 mois</option>
+            <option>36 mois</option>
+            <option>48 mois</option>
+            <option>60 mois</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-m-brown mb-1">Kilométrage</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-m-gold/30 bg-white text-m-brown focus:border-m-red focus:outline-none font-medium">
+            <option>10 000 km/an</option>
+            <option>15 000 km/an</option>
+            <option>20 000 km/an</option>
+            <option>25 000 km/an</option>
+            <option>Illimité</option>
+          </select>
+        </div>
+      </div>
 
-        function setLeasingType(type) {
-            playSound('click');
-            state.leasingType = type;
-            
-            const personalBtn = document.getElementById('personalBtn');
-            const businessBtn = document.getElementById('businessBtn');
-            const indicator = document.getElementById('leasingTabIndicator');
-            
-            if (type === 'personal') {
-                personalBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-accent-600 text-white font-semibold text-sm sm:text-base transition-all';
-                businessBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
-                indicator.style.left = '50%';
-                indicator.style.transform = 'none';
-            } else {
-                businessBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-accent-600 text-white font-semibold text-sm sm:text-base transition-all';
-                personalBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
-                indicator.style.left = '0';
-            }
-            
-            applyFilters();
-        }
+      <div class="text-center">
+        <button onclick="scrollToSection('vehicules')" class="bg-m-red hover:bg-m-red-dark text-white px-10 py-3 rounded-full font-bold text-lg transition shadow-lg shadow-red-200 hover:shadow-red-300">
+          <i class="fas fa-search mr-2"></i>Rechercher des Offres
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // ============ FILTERS ============
-        function updateBudget() {
-            const val = document.getElementById('filterBudget').value;
-            document.getElementById('budgetValue').textContent = '£' + val;
-            state.budget = parseInt(val);
-        }
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        function populateModels() {
-            const make = document.getElementById('filterMake').value;
-            const modelSelect = document.getElementById('filterModel');
-            modelSelect.innerHTML = '<option value="">All Models</option>';
-            
-            if (make && modelMap[make]) {
-                modelMap[make].forEach(m => {
-                    const opt = document.createElement('option');
-                    opt.value = m;
-                    opt.textContent = m;
-                    modelSelect.appendChild(opt);
-                });
-            }
-        }
+<!-- Service Cards -->
+<section id="services" class="py-12 md:py-16 bg-m-sand-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Nos Services au Maroc</h2>
+      <p class="text-m-brown-light mt-2">Des solutions adaptées pour chaque besoin</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Electric -->
+      <div class="bg-white rounded-3xl p-6 border-2 border-m-green/20 card-hover group">
+        <div class="w-16 h-16 bg-m-green/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-m-green/20 transition">
+          <i class="fas fa-bolt text-3xl text-m-green"></i>
+        </div>
+        <h3 class="text-xl font-bold text-m-brown mb-2">Véhicules Électriques</h3>
+        <p class="text-m-brown-light text-sm leading-relaxed">Location de voitures électriques avec stations de charge à Casablanca, Rabat et Marrakech. Réduisez votre empreinte carbone tout en roulant au Maroc.</p>
+        <div class="mt-4 text-m-green font-semibold text-sm">
+          À partir de 1 890 DH/mois <i class="fas fa-arrow-right ml-1"></i>
+        </div>
+      </div>
+      <!-- In Stock -->
+      <div class="bg-white rounded-3xl p-6 border-2 border-m-gold/20 card-hover group">
+        <div class="w-16 h-16 bg-m-gold/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-m-gold/20 transition">
+          <i class="fas fa-warehouse text-3xl text-m-gold"></i>
+        </div>
+        <h3 class="text-xl font-bold text-m-brown mb-2">En Stock Immédiat</h3>
+        <p class="text-m-brown-light text-sm leading-relaxed">Plus de 2 000 véhicules disponibles immédiatement dans nos concessions à Tanger, Fès et Oujda. Livraison sous 48h partout au Maroc.</p>
+        <div class="mt-4 text-m-gold font-semibold text-sm">
+          Livraison rapide <i class="fas fa-arrow-right ml-1"></i>
+        </div>
+      </div>
+      <!-- Special Offers -->
+      <div class="bg-white rounded-3xl p-6 border-2 border-m-red/20 card-hover group">
+        <div class="w-16 h-16 bg-m-red/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-m-red/20 transition">
+          <i class="fas fa-fire text-3xl text-m-red"></i>
+        </div>
+        <h3 class="text-xl font-bold text-m-brown mb-2">Offres Spéciales</h3>
+        <p class="text-m-brown-light text-sm leading-relaxed">Promotions exclusives au Ramadan, Aïd et pendant les fêtes marocaines. Profitez de réductions allant jusqu'à 30% sur toute la gamme.</p>
+        <div class="mt-4 text-m-red font-semibold text-sm">
+          Jusqu'à -30% <i class="fas fa-arrow-right ml-1"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function applyFilters() {
-            state.make = document.getElementById('filterMake').value;
-            state.model = document.getElementById('filterModel').value;
-            state.body = document.getElementById('filterBody').value;
-            state.fuel = document.getElementById('filterFuel').value;
-            state.sort = document.getElementById('sortBy').value;
-            
-            renderVehicles();
-        }
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        function resetFilters() {
-            playSound('click');
-            state = { ...state, make:'', model:'', body:'', fuel:'', budget:500 };
-            document.getElementById('filterMake').value = '';
-            document.getElementById('filterModel').value = '';
-            document.getElementById('filterBody').value = '';
-            document.getElementById('filterFuel').value = '';
-            document.getElementById('filterBudget').value = 500;
-            document.getElementById('budgetValue').textContent = '£500';
-            populateModels();
-            renderVehicles();
-        }
+<!-- Vehicle Grid -->
+<section id="vehicules" class="py-12 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Offres de Location au Maroc</h2>
+      <p class="text-m-brown-light mt-2">Sélection de véhicules disponibles dans vos villes</p>
+    </div>
 
-        // ============ RENDER ============
-        function getFiltered() {
-            return vehicles.filter(v => {
-                if (v.type !== state.vehicleType) return false;
-                if (v.leasing !== state.leasingType && v.leasing !== 'both') return false;
-                if (state.make && v.make !== state.make) return false;
-                if (state.model && v.model !== state.model) return false;
-                if (state.body && v.body !== state.body) return false;
-                if (state.fuel && v.fuel !== state.fuel) return false;
-                if (v.price > state.budget) return false;
-                return true;
-            });
-        }
+    <!-- Filter Tabs -->
+    <div class="flex flex-wrap justify-center gap-2 mb-8">
+      <button onclick="filterVehicles('all')" class="filter-btn active px-5 py-2 rounded-full text-sm font-bold transition bg-m-red text-white border-2 border-m-red">Toutes</button>
+      <button onclick="filterVehicles('suv')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">SUV</button>
+      <button onclick="filterVehicles('citadine')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Citadines</button>
+      <button onclick="filterVehicles('berline')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Berlines</button>
+      <button onclick="filterVehicles('utilitaire')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Utilitaires</button>
+      <button onclick="filterVehicles('electrique')" class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red">Électrique</button>
+    </div>
 
-        function getSorted(list) {
-            const s = state.sort;
-            if (s === 'price-asc') return [...list].sort((a,b) => a.price - b.price);
-            if (s === 'price-desc') return [...list].sort((a,b) => b.price - a.price);
-            if (s === 'name-asc') return [...list].sort((a,b) => a.model.localeCompare(b.model));
-            if (s === 'name-desc') return [...list].sort((a,b) => b.model.localeCompare(a.model));
-            return list;
-        }
+    <div id="vehicleGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Vehicles will be inserted by JS -->
+    </div>
+  </div>
+</section>
 
-        function renderVehicles() {
-            const grid = document.getElementById('vehicleGrid');
-            const empty = document.getElementById('emptyState');
-            const count = document.getElementById('resultsCount');
-            const title = document.getElementById('resultsTitle');
-            
-            const typeLabel = state.vehicleType === 'car' ? 'Cars' : 'Vans';
-            const leaseLabel = state.leasingType.charAt(0).toUpperCase() + state.leasingType.slice(1);
-            title.textContent = `${typeLabel} for ${leaseLabel} Leasing`;
-            
-            let filtered = getSorted(getFiltered());
-            count.textContent = filtered.length;
-            
-            if (filtered.length === 0) {
-                grid.classList.add('hidden');
-                empty.classList.remove('hidden');
-                return;
-            }
-            
-            grid.classList.remove('hidden');
-            empty.classList.add('hidden');
-            
-            grid.innerHTML = filtered.map((v, i) => `
-                <div class="glass-card rounded-2xl overflow-hidden slide-up" style="animation-delay: ${i * 0.08}s">
-                    <div class="vehicle-img-container h-44 sm:h-52">
-                        <img src="${v.image}" alt="${v.make} ${v.model}" class="w-full h-full object-cover" loading="lazy"
-                             onerror="this.src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=500&q=80'">
-                        <div class="absolute top-3 left-3 z-10 flex flex-wrap gap-1">
-                            ${v.badges.map(b => `<span class="px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold ${b.includes('Electric')||b.includes('Hybrid')?'bg-green-500/80 text-white':'bg-primary-600/90 text-white'} backdrop-blur-sm">${b}</span>`).join('')}
-                        </div>
-                        <button onclick="toggleCompare(${v.id})" class="compare-btn absolute top-3 right-3 z-10 w-9 h-9 rounded-xl glass flex items-center justify-center hover:bg-white/20 transition-all" id="compare-${v.id}" title="Add to comparison">
-                            <i class="fas fa-balance-scale text-sm"></i>
-                        </button>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <div class="text-xs text-gray-400">${v.make}</div>
-                                <h3 class="font-bold text-base sm:text-lg leading-tight">${v.model}</h3>
-                                <div class="flex items-center space-x-1 mt-1">
-                                    <i class="fas ${fuelIcons[v.fuel]} text-xs ${fuelColors[v.fuel]}"></i>
-                                    <span class="text-xs text-gray-400">${v.fuel}</span>
-                                    <span class="text-gray-600 mx-1">•</span>
-                                    <i class="fas fa-cog text-xs text-gray-400"></i>
-                                    <span class="text-xs text-gray-400">Auto</span>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-xl sm:text-2xl font-bold text-accent-400 price-glow">£${v.price}</div>
-                                <div class="text-[10px] sm:text-xs text-gray-400">/month inc. VAT</div>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-2 text-[10px] sm:text-xs">
-                            <div class="flex items-center space-x-1.5 text-gray-400">
-                                <i class="fas fa-calendar-alt text-primary-400/70"></i>
-                                <span>${v.term} months</span>
-                            </div>
-                            <div class="flex items-center space-x-1.5 text-gray-400">
-                                <i class="fas fa-road text-primary-400/70"></i>
-                                <span>${v.mileage} mi/yr</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex gap-2">
-                            <button onclick="openEnquiry(${v.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-sm font-semibold transition-all hover:shadow-lg hover:shadow-primary-500/20 active:scale-95">
-                                Enquire Now
-                            </button>
-                            <button onclick="openModal(${v.id})" class="w-11 h-11 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all active:scale-95" title="View Details">
-                                <i class="fas fa-expand-alt text-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        // ============ MODALS ============
-        let compared = [];
+<!-- Why Choose Us -->
+<section id="pourquoi" class="py-12 md:py-16 bg-m-sand-light relative">
+  <div class="absolute inset-0 zellige-overlay"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-10">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Pourquoi Choisir AutoLease Maroc ?</h2>
+      <p class="text-m-brown-light mt-2 font-amiri italic">"Le meilleur service de location automobile au Royaume du Maroc"</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
+        <div class="w-20 h-20 mx-auto mb-4 bg-m-red/10 rounded-full flex items-center justify-center">
+          <i class="fas fa-shield-alt text-3xl text-m-red"></i>
+        </div>
+        <h3 class="font-bold text-m-brown text-lg mb-2">Garantie Complète</h3>
+        <p class="text-m-brown-light text-sm">Tous nos véhicules sont couverts par une garantie complète au Maroc, sans frais cachés.</p>
+      </div>
+      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
+        <div class="w-20 h-20 mx-auto mb-4 bg-m-green/10 rounded-full flex items-center justify-center">
+          <i class="fas fa-headset text-3xl text-m-green"></i>
+        </div>
+        <h3 class="font-bold text-m-brown text-lg mb-2">Assistance 24/7</h3>
+        <p class="text-m-brown-light text-sm">Notre équipe est disponible 24h/24, 7j/7 sur tout le territoire marocain.</p>
+      </div>
+      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
+        <div class="w-20 h-20 mx-auto mb-4 bg-m-gold/10 rounded-full flex items-center justify-center">
+          <i class="fas fa-map-marker-alt text-3xl text-m-gold"></i>
+        </div>
+        <h3 class="font-bold text-m-brown text-lg mb-2">12 Agences au Maroc</h3>
+        <p class="text-m-brown-light text-sm">Casablanca, Rabat, Marrakech, Fès, Tanger, Meknès, Agadir, Oujda et plus.</p>
+      </div>
+      <div class="text-center p-6 bg-white rounded-3xl border-2 border-m-gold/20 card-hover">
+        <div class="w-20 h-20 mx-auto mb-4 bg-m-terra/10 rounded-full flex items-center justify-center">
+          <i class="fas fa-hand-holding-usd text-3xl text-m-terra"></i>
+        </div>
+        <h3 class="font-bold text-m-brown text-lg mb-2">Meilleurs Prix</h3>
+        <p class="text-m-brown-light text-sm">Garantie du meilleur prix. Trouvez moins cher ailleurs et on vous rembourse la différence.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function toggleCompare(id) {
-            playSound('click');
-            const idx = compared.indexOf(id);
-            const btn = document.getElementById(`compare-${id}`);
-            if (idx > -1) {
-                compared.splice(idx, 1);
-                btn.classList.remove('bg-primary-600', 'text-white');
-            } else {
-                if (compared.length >= 3) { alert('Maximum 3 vehicles for comparison'); return; }
-                compared.push(id);
-                btn.classList.add('bg-primary-600', 'text-white');
-            }
-        }
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        function openModal(id) {
-            playSound('modal');
-            const v = vehicles.find(x => x.id === id);
-            const modal = document.getElementById('comparisonModal');
-            document.getElementById('modalContent').innerHTML = `
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold">${v.make} ${v.model}</h2>
-                        <p class="text-gray-400">${v.desc}</p>
-                    </div>
-                    <button onclick="closeModal('comparisonModal')" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="vehicle-img-container rounded-2xl overflow-hidden mb-6 h-64">
-                    <img src="${v.image}" alt="${v.make} ${v.model}" class="w-full h-full object-cover">
-                </div>
-                
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                    <div class="glass rounded-xl p-4 text-center">
-                        <i class="fas fa-pound-sign text-primary-400 text-xl mb-2"></i>
-                        <div class="text-xl font-bold">£${v.price}<span class="text-sm text-gray-400">/mo</span></div>
-                        <div class="text-xs text-gray-400 mt-1">Monthly Payment</div>
-                    </div>
-                    <div class="glass rounded-xl p-4 text-center">
-                        <i class="fas ${fuelIcons[v.fuel]} ${fuelColors[v.fuel]} text-xl mb-2"></i>
-                        <div class="text-xl font-bold">${v.fuel}</div>
-                        <div class="text-xs text-gray-400 mt-1">Fuel Type</div>
-                    </div>
-                    <div class="glass rounded-xl p-4 text-center">
-                        <i class="fas fa-calendar-alt text-accent-400 text-xl mb-2"></i>
-                        <div class="text-xl font-bold">${v.term}</div>
-                        <div class="text-xs text-gray-400 mt-1">Month Term</div>
-                    </div>
-                    <div class="glass rounded-xl p-4 text-center">
-                        <i class="fas fa-road text-green-400 text-xl mb-2"></i>
-                        <div class="text-xl font-bold">${v.mileage}</div>
-                        <div class="text-xs text-gray-400 mt-1">Miles / Year</div>
-                    </div>
-                </div>
-                
-                <div class="glass rounded-2xl p-5 mb-6">
-                    <h3 class="font-semibold mb-4 flex items-center space-x-2">
-                        <i class="fas fa-list-check text-primary-400"></i>
-                        <span>What's Included</span>
-                    </h3>
-                    <div class="grid sm:grid-cols-2 gap-3 text-sm">
-                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Road Tax Included</span></div>
-                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Breakdown Cover</span></div>
-                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Manufacturer Warranty</span></div>
-                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Free Delivery</span></div>
-                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Registration & Plates</span></div>
-                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>First MOT Included</span></div>
-                    </div>
-                </div>
-                
-                <div class="flex gap-3">
-                    <button onclick="closeModal('comparisonModal'); openEnquiry(${v.id})" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 font-semibold transition-all hover:shadow-lg hover:shadow-primary-500/20 active:scale-95">
-                        <i class="fas fa-paper-plane mr-2"></i>Apply Now
-                    </button>
-                    ${compared.length > 1 ? `<button onclick="closeModal('comparisonModal'); showComparison()" class="py-3 px-6 rounded-xl glass hover:bg-white/20 font-semibold transition-all active:scale-95">
-                        <i class="fas fa-balance-scale mr-2"></i>Compare (${compared.length})
-                    </button>` : ''}
-                </div>
-            `;
-            modal.classList.add('active');
-        }
+<!-- Customer Reviews -->
+<section class="py-12 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Avis de Nos Clients Marocains</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-m-sand-light rounded-3xl p-6 border-2 border-m-gold/20 card-hover">
+        <div class="flex items-center gap-1 mb-3">
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+        </div>
+        <p class="text-m-brown-light text-sm mb-4 leading-relaxed">"Excellent service ! J'ai loué un SUV Duster pour un voyage de Casablanca à Marrakech. Le véhicule était impeccable et le prix très compétitif. Je recommande vivement AutoLease Maroc !"</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-m-red rounded-full flex items-center justify-center text-white font-bold">YB</div>
+          <div>
+            <div class="font-bold text-m-brown text-sm">Youssef Benali</div>
+            <div class="text-m-brown-light text-xs"><i class="fas fa-map-marker-alt mr-1"></i>Casablanca</div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-m-sand-light rounded-3xl p-6 border-2 border-m-gold/20 card-hover">
+        <div class="flex items-center gap-1 mb-3">
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+        </div>
+        <p class="text-m-brown-light text-sm mb-4 leading-relaxed">"En tant qu'entreprise à Rabat, nous avons souscrit un leasing flotte pour 15 véhicules. Le processus était simple et les tarifs entreprise sont vraiment avantageux. Merci AutoLease !"</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-m-green rounded-full flex items-center justify-center text-white font-bold">FE</div>
+          <div>
+            <div class="font-bold text-m-brown text-sm">Fatima Errami</div>
+            <div class="text-m-brown-light text-xs"><i class="fas fa-map-marker-alt mr-1"></i>Rabat</div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-m-sand-light rounded-3xl p-6 border-2 border-m-gold/20 card-hover">
+        <div class="flex items-center gap-1 mb-3">
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star text-m-gold"></i>
+          <i class="fas fa-star-half-alt text-m-gold"></i>
+        </div>
+        <p class="text-m-brown-light text-sm mb-4 leading-relaxed">"J'ai trouvé ma voiture électrique parfaite pour les trajets Tanger-Méditerranée. L'autonomie est excellente et les frais d'entretien sont minimes. Le meilleur choix que j'ai fait !"</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-m-terra rounded-full flex items-center justify-center text-white font-bold">KM</div>
+          <div>
+            <div class="font-bold text-m-brown text-sm">Karim Moussaoui</div>
+            <div class="text-m-brown-light text-xs"><i class="fas fa-map-marker-alt mr-1"></i>Tanger</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function openEnquiry(id) {
-            playSound('modal');
-            const v = vehicles.find(x => x.id === id);
-            const modal = document.getElementById('enquiryModal');
-            document.getElementById('enquiryContent').innerHTML = `
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-xl font-bold">Enquire About</h2>
-                        <p class="text-primary-400 font-semibold">${v.make} ${v.model} — £${v.price}/mo</p>
-                    </div>
-                    <button onclick="closeModal('enquiryModal')" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <form onsubmit="submitEnquiry(event, ${v.id})" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="space-y-1">
-                            <label class="text-xs text-gray-400 font-medium">First Name *</label>
-                            <input type="text" required placeholder="John" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-xs text-gray-400 font-medium">Last Name *</label>
-                            <input type="text" required placeholder="Doe" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium">Email Address *</label>
-                        <input type="email" required placeholder="john@example.com" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium">Phone Number *</label>
-                        <input type="tel" required placeholder="07XXX XXX XXX" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="space-y-1">
-                            <label class="text-xs text-gray-400 font-medium">Term (Months)</label>
-                            <select class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                                <option>24</option>
-                                <option selected>36</option>
-                                <option>48</option>
-                                <option>60</option>
-                            </select>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-xs text-gray-400 font-medium">Annual Miles</label>
-                            <select class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
-                                <option>5000</option>
-                                <option selected>8000</option>
-                                <option>10000</option>
-                                <option>12000</option>
-                                <option>15000</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-400 font-medium">Additional Notes</label>
-                        <textarea rows="3" placeholder="Any specific requirements..." class="filter-select w-full px-3 py-2.5 rounded-xl text-sm resize-none"></textarea>
-                    </div>
-                    <div class="flex items-start space-x-2">
-                        <input type="checkbox" required id="terms" class="mt-1 accent-primary-600">
-                        <label for="terms" class="text-xs text-gray-400">I agree to the <a href="#" class="text-primary-400 underline">terms & conditions</a> and consent to being contacted about this enquiry.</label>
-                    </div>
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-accent-600 to-accent-700 hover:from-accent-500 hover:to-accent-600 font-semibold transition-all hover:shadow-lg hover:shadow-accent-500/20 active:scale-95">
-                        <i class="fas fa-paper-plane mr-2"></i>Submit Enquiry
-                    </button>
-                </form>
-            `;
-            modal.classList.add('active');
-        }
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        function closeModal(id) {
-            playSound('click');
-            document.getElementById(id).classList.remove('active');
-        }
+<!-- FAQ Section -->
+<section id="faq" class="py-12 md:py-16 bg-m-sand-light">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Questions Fréquentes</h2>
+    </div>
+    <div class="space-y-4">
+      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
+          <span class="font-bold text-m-brown">Quels documents sont nécessaires pour louer une voiture au Maroc ?</span>
+          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
+          Pour louer un véhicule chez AutoLease Maroc, vous avez besoin de : votre carte nationale d'identité ou passeport, votre permis de conduire valide, un justificatif de domicile récent (moins de 3 mois), et pour les entreprises : un registre de commerce et une attestation d'immatriculation fiscale.
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
+          <span class="font-bold text-m-brown">Puis-je louer une voiture dans une ville et la rendre dans une autre ?</span>
+          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
+          Oui ! AutoLease Maroc offre la possibilité de récupérer et restituer votre véhicule dans n'importe laquelle de nos 12 agences au Maroc. Un supplément de 200 à 500 DH peut s'appliquer selon la distance entre les villes (par exemple Casablanca à Marrakech, ou Tanger à Fès).
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
+          <span class="font-bold text-m-brown">Qu'est-ce qui est inclus dans le loyer mensuel ?</span>
+          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
+          Chaque location inclut : l'assurance tous risques, l'assistance routière 24/7 sur tout le Maroc, l'entretien régulier, les pneumatiques, et laTaxe sur les Véhicules (TV). Le kilométrage varie selon le forfait choisi (10 000 à 25 000 km/an, ou kilométrage illimité).
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
+          <span class="font-bold text-m-brown">Proposez-vous des locations longue durée pour entreprises ?</span>
+          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
+          Absolument ! Nous proposons des solutions de fleet management pour les entreprises marocaines, avec des tarifs dégressifs à partir de 5 véhicules. Nos clients entreprises bénéficient d'un account manager dédié, de la facturation centralisée, et d'avantages fiscaux conformes à la législation marocaine.
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-2xl border-2 border-m-gold/20 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left">
+          <span class="font-bold text-m-brown">Comment puis-je prendre contact avec vous ?</span>
+          <i class="fas fa-chevron-down text-m-red transition-transform"></i>
+        </button>
+        <div class="faq-answer hidden px-5 pb-5 text-m-brown-light text-sm leading-relaxed">
+          Vous pouvez nous contacter par téléphone au +212 522 00 00 00, par email à contact@autoleasemaroc.ma, ou vous rendre dans l'une de nos agences. Nous sommes présents à Casablanca (Boulevard Mohammed V), Rabat (Avenue Hassan II), Marrakech (Route de l'Ourika), Fès (Boulevard Mohammed V), et Tanger (Boulevard Mohammed VI).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function submitEnquiry(e, id) {
-            e.preventDefault();
-            const v = vehicles.find(x => x.id === id);
-            closeModal('enquiryModal');
-            
-            // Success notification
-            const notif = document.createElement('div');
-            notif.className = 'fixed top-24 right-4 z-50 glass-card rounded-xl p-4 flex items-center space-x-3 slide-up';
-            notif.innerHTML = `<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center"><i class="fas fa-check text-green-400"></i></div><div><div class="font-semibold text-sm">Enquiry Submitted!</div><div class="text-xs text-gray-400">We'll contact you about ${v.make} ${v.model} shortly.</div></div>`;
-            document.body.appendChild(notif);
-            setTimeout(() => notif.remove(), 4000);
-            playSound('modal');
-        }
+<!-- Moroccan Divider -->
+<div class="moroccan-divider"></div>
 
-        function showComparison() {
-            if (compared.length < 2) return;
-            playSound('modal');
-            const vList = compared.map(id => vehicles.find(x => x.id === id));
-            const modal = document.getElementById('comparisonModal');
-            
-            document.getElementById('modalContent').innerHTML = `
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold">Compare Vehicles</h2>
-                    <button onclick="closeModal('comparisonModal')" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full comparison-table text-sm">
-                        <thead>
-                            <tr>
-                                <th class="text-left p-3 text-gray-400 font-medium text-xs uppercase tracking-wider">Specification</th>
-                                ${vList.map(v => `<th class="p-3 text-center"><div class="text-base font-bold">${v.make} ${v.model}</div><div class="text-xs text-gray-400">${v.body}</div></th>`).join('')}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="p-3 text-gray-400 font-medium">Monthly Price</td>${vList.map(v => `<td class="p-3 text-center font-bold text-accent-400">£${v.price}/mo</td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Fuel Type</td>${vList.map(v => `<td class="p-3 text-center"><i class="fas ${fuelIcons[v.fuel]} ${fuelColors[v.fuel]} mr-1"></i>${v.fuel}</td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Body Style</td>${vList.map(v => `<td class="p-3 text-center">${v.body}</td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Contract Term</td>${vList.map(v => `<td class="p-3 text-center">${v.term} months</td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Annual Mileage</td>${vList.map(v => `<td class="p-3 text-center">${v.mileage} mi</td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Transmission</td>${vList.map(v => `<td class="p-3 text-center">Automatic</td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Leasing Type</td>${vList.map(v => `<td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-xs ${v.leasing==='personal'?'bg-accent-500/20 text-accent-300':'bg-primary-500/20 text-primary-300'}">${v.leasing.charAt(0).toUpperCase()+v.leasing.slice(1)}</span></td>`).join('')}</tr>
-                            <tr><td class="p-3 text-gray-400 font-medium">Description</td>${vList.map(v => `<td class="p-3 text-center text-xs text-gray-400">${v.desc}</td>`).join('')}</tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-4 flex gap-3 flex-wrap">
-                    ${vList.map(v => `<button onclick="closeModal('comparisonModal'); openEnquiry(${v.id})" class="flex-1 min-w-[140px] py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-sm font-semibold transition-all active:scale-95">Enquire →</button>`).join('')}
-                </div>
-            `;
-            modal.classList.add('active');
-            compared = [];
-            document.querySelectorAll('.compare-btn').forEach(b => b.classList.remove('bg-primary-600','text-white'));
-        }
+<!-- Brand Gallery -->
+<section class="py-12 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+        <span class="moroccan-star"></span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-m-brown">Nos Marques Partenaires</h2>
+      <p class="text-m-brown-light mt-2">Les meilleures marques disponibles au Maroc</p>
+    </div>
+    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6">
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Renault</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Peugeot</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Dacia</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Toyota</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Hyundai</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Mercedes</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">BMW</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Kia</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Volkswagen</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Citroën</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Ford</span>
+      </div>
+      <div class="bg-m-sand-light rounded-2xl p-4 flex items-center justify-center h-20 card-hover border border-m-gold/20">
+        <span class="text-xl font-bold text-m-brown-light opacity-60">Tesla</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Close modals on overlay click
-        document.getElementById('comparisonModal').addEventListener('click', (e) => {
-            if (e.target.id === 'comparisonModal') closeModal('comparisonModal');
-        });
-        document.getElementById('enquiryModal').addEventListener('click', (e) => {
-            if (e.target.id === 'enquiryModal') closeModal('enquiryModal');
-        });
+<!-- Footer -->
+<footer class="bg-m-brown text-m-sand pt-12 pb-6 relative">
+  <div class="absolute inset-0 zellige-bg"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-10 h-10 bg-m-red rounded-xl flex items-center justify-center">
+            <i class="fas fa-star text-m-gold text-sm"></i>
+          </div>
+          <span class="text-xl font-bold text-white">AutoLease<span class="text-m-gold">Maroc</span></span>
+        </div>
+        <p class="text-sm leading-relaxed opacity-80">Le leader de la location de véhicules au Maroc. Depuis 2015, nous servons des milliers de clients à travers le Royaume.</p>
+        <div class="flex gap-3 mt-4">
+          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-facebook-f text-white text-sm"></i></a>
+          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-instagram text-white text-sm"></i></a>
+          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-linkedin-in text-white text-sm"></i></a>
+          <a href="#" class="w-9 h-9 bg-m-red rounded-full flex items-center justify-center hover:bg-m-red-dark transition"><i class="fab fa-youtube text-white text-sm"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-4 text-lg">Nos Agences</h3>
+        <ul class="space-y-2 text-sm opacity-80">
+          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Casablanca — Boulevard Mohammed V</li>
+          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Rabat — Avenue Hassan II</li>
+          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Marrakech — Route de l'Ourika</li>
+          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Fès — Boulevard Mohammed V</li>
+          <li><i class="fas fa-map-marker-alt mr-2 text-m-gold"></i>Tanger — Boulevard Mohammed VI</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-4 text-lg">Liens Utiles</h3>
+        <ul class="space-y-2 text-sm opacity-80">
+          <li><a href="#" class="hover:text-m-gold transition">Location Particulier</a></li>
+          <li><a href="#" class="hover:text-m-gold transition">Location Entreprise</a></li>
+          <li><a href="#" class="hover:text-m-gold transition">Véhicules Électriques</a></li>
+          <li><a href="#" class="hover:text-m-gold transition">Offres Spéciales</a></li>
+          <li><a href="#" class="hover:text-m-gold transition">Programme Fidélité</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-4 text-lg">Contactez-Nous</h3>
+        <ul class="space-y-3 text-sm opacity-80">
+          <li class="flex items-center gap-2">
+            <i class="fas fa-phone-alt text-m-gold"></i>
+            <a href="tel:+212522000000" class="hover:text-m-gold transition">+212 522 00 00 00</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-envelope text-m-gold"></i>
+            <a href="mailto:contact@autoleasemaroc.ma" class="hover:text-m-gold transition">contact@autoleasemaroc.ma</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-clock text-m-gold"></i>
+            <span>Lun-Sam : 9h - 19h</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-globe text-m-gold"></i>
+            <span>www.autoleasemaroc.ma</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-m-brown-light/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-sm opacity-60">&copy; 2024 AutoLease Maroc. Tous droits réservés.</p>
+      <div class="flex gap-4 text-sm opacity-60">
+        <a href="#" class="hover:text-m-gold transition">Politique de Confidentialité</a>
+        <a href="#" class="hover:text-m-gold transition">Conditions Générales</a>
+        <a href="#" class="hover:text-m-gold transition">Mentions Légales</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-        // ============ INIT ============
-        document.addEventListener('DOMContentLoaded', () => {
-            populateModels();
-            renderVehicles();
-            
-            // Budget slider listener
-            document.getElementById('filterMake').addEventListener('change', () => {
-                populateModels();
-                applyFilters();
-            });
-        });
-    </script>
+<!-- Back to Top Button -->
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 w-12 h-12 bg-m-red hover:bg-m-red-dark text-white rounded-full shadow-lg flex items-center justify-center transition opacity-0 pointer-events-none z-50">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- Vehicle Detail Modal -->
+<div id="vehicleModal" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
+  <div class="bg-m-cream rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+    <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-m-brown/10 hover:bg-m-brown/20 rounded-full flex items-center justify-center transition z-10">
+      <i class="fas fa-times text-m-brown"></i>
+    </button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// Vehicle Data
+const vehicles = [
+  { id: 1, name: "Dacia Duster 4x4", brand: "Dacia", type: "suv", fuel: "Diesel", city: "Casablanca", price: 1490, img: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Populaire", color: "#C8102E" },
+  { id: 2, name: "Renault Clio V", brand: "Renault", type: "citadine", fuel: "Essence", city: "Rabat", price: 1190, img: "https://images.pexels.com/photos/1005633/pexels-photo-1005633.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Meilleur Prix", color: "#006233" },
+  { id: 3, name: "Peugeot 308 GT", brand: "Peugeot", type: "berline", fuel: "Essence", city: "Marrakech", price: 1890, img: "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Nouveau", color: "#C5A55A" },
+  { id: 4, name: "Toyota RAV4 Hybrid", brand: "Toyota", type: "suv", fuel: "Hybride", city: "Tanger", price: 2690, img: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Écologique", color: "#006233" },
+  { id: 5, name: "Mercedes Classe A", brand: "Mercedes", type: "berline", fuel: "Essence", city: "Casablanca", price: 3490, img: "https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Premium", color: "#C8102E" },
+  { id: 6, name: "Renault Kangoo Van", brand: "Renault", type: "utilitaire", fuel: "Diesel", city: "Fès", price: 1690, img: "https://images.pexels.com/photos/2684218/pexels-photo-2684218.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Pro", color: "#C5A55A" },
+  { id: 7, name: "Hyundai Kona Electric", brand: "Hyundai", type: "electrique", fuel: "Électrique", city: "Rabat", price: 2290, img: "https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "100% Électrique", color: "#006233" },
+  { id: 8, name: "BMW Série 3", brand: "BMW", type: "berline", fuel: "Diesel", city: "Casablanca", price: 4190, img: "https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Premium", color: "#C8102E" },
+  { id: 9, name: "Dacia Sandero Stepway", brand: "Dacia", type: "citadine", fuel: "Essence", city: "Meknès", price: 990, img: "https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Offre Spéciale", color: "#C5A55A" },
+  { id: 10, name: "Peugeot Partner Tepee", brand: "Peugeot", type: "utilitaire", fuel: "Diesel", city: "Agadir", price: 1590, img: "https://images.pexels.com/photos/2684218/pexels-photo-2684218.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Familial", color: "#006233" },
+  { id: 11, name: "Kia e-Niro", brand: "Kia", type: "electrique", fuel: "Électrique", city: "Tanger", price: 2490, img: "https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Autonomie 400km", color: "#006233" },
+  { id: 12, name: "Renault Scenic", brand: "Renault", type: "suv", fuel: "Diesel", city: "Fès", price: 2090, img: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=600", badge: "Familial", color: "#C8102E" },
+];
+
+// Render vehicles
+function renderVehicles(filter = 'all') {
+  const grid = document.getElementById('vehicleGrid');
+  const filtered = filter === 'all' ? vehicles : vehicles.filter(v => v.type === filter);
+  grid.innerHTML = '';
+  filtered.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.className = 'vehicle-card bg-white rounded-3xl overflow-hidden border-2 border-m-gold/20 card-hover cursor-pointer';
+    card.style.animationDelay = `${i * 0.1}s`;
+    card.onclick = () => openModal(v);
+    card.innerHTML = `
+      <div class="relative h-48 overflow-hidden">
+        <img src="${v.img}" alt="${v.name}" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+        <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold text-white" style="background:${v.color}">${v.badge}</span>
+        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-m-brown">
+          <i class="fas fa-map-marker-alt mr-1 text-m-red"></i>${v.city}
+        </span>
+      </div>
+      <div class="p-5">
+        <h3 class="font-bold text-m-brown text-lg mb-1">${v.name}</h3>
+        <p class="text-m-brown-light text-sm mb-3">${v.fuel} • Location 36 mois</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-2xl font-black text-m-red">${v.price.toLocaleString()} DH</span>
+            <span class="text-xs text-m-brown-light">/mois</span>
+          </div>
+          <button class="w-10 h-10 bg-m-red/10 hover:bg-m-red text-m-red hover:text-white rounded-full flex items-center justify-center transition">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// Filter
+function filterVehicles(type) {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.className = 'filter-btn px-5 py-2 rounded-full text-sm font-bold transition bg-white text-m-brown border-2 border-m-gold/30 hover:border-m-red';
+  });
+  event.target.className = 'filter-btn active px-5 py-2 rounded-full text-sm font-bold transition bg-m-red text-white border-2 border-m-red';
+  renderVehicles(type);
+}
+
+// Modal
+function openModal(vehicle) {
+  const modal = document.getElementById('vehicleModal');
+  const content = document.getElementById('modalContent');
+  content.innerHTML = `
+    <img src="${vehicle.img}" alt="${vehicle.name}" class="w-full h-56 object-cover">
+    <div class="p-6">
+      <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-3" style="background:${vehicle.color}">${vehicle.badge}</span>
+      <h2 class="text-2xl font-bold text-m-brown mb-2">${vehicle.name}</h2>
+      <p class="text-m-brown-light mb-4">${vehicle.brand} • ${vehicle.fuel} • <i class="fas fa-map-marker-alt mr-1 text-m-red"></i>${vehicle.city}</p>
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <div class="bg-m-sand-light rounded-xl p-3 text-center">
+          <div class="text-xs text-m-brown-light">Loyer mensuel</div>
+          <div class="text-xl font-black text-m-red">${vehicle.price.toLocaleString()} DH</div>
+        </div>
+        <div class="bg-m-sand-light rounded-xl p-3 text-center">
+          <div class="text-xs text-m-brown-light">Durée</div>
+          <div class="text-xl font-black text-m-green">36 mois</div>
+        </div>
+        <div class="bg-m-sand-light rounded-xl p-3 text-center">
+          <div class="text-xs text-m-brown-light">Premier loyer</div>
+          <div class="text-lg font-bold text-m-brown">${vehicle.price.toLocaleString()} DH</div>
+        </div>
+        <div class="bg-m-sand-light rounded-xl p-3 text-center">
+          <div class="text-xs text-m-brown-light">Kilométrage</div>
+          <div class="text-lg font-bold text-m-brown">15 000 km/an</div>
+        </div>
+      </div>
+      <div class="space-y-2 mb-6 text-sm text-m-brown-light">
+        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Assurance tous risques incluse</div>
+        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Assistance routière 24/7</div>
+        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Entretien et pneumatiques inclus</div>
+        <div class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Possibilité de changer de ville</div>
+      </div>
+      <button class="w-full bg-m-red hover:bg-m-red-dark text-white py-3 rounded-xl font-bold text-lg transition">
+        <i class="fas fa-phone-alt mr-2"></i>Demander ce véhicule
+      </button>
+    </div>
+  `;
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('vehicleModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('vehicleModal').addEventListener('click', (e) => {
+  if (e.target.id === 'vehicleModal') closeModal();
+});
+
+// Carousel
+let currentSlide = 0;
+const totalSlides = 3;
+
+function initCarousel() {
+  const dots = document.getElementById('carouselDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = `w-3 h-3 rounded-full transition ${i === 0 ? 'bg-m-gold' : 'bg-white/50'}`;
+    dot.onclick = () => goToSlide(i);
+    dots.appendChild(dot);
+  }
+}
+
+function goToSlide(n) {
+  currentSlide = n;
+  document.getElementById('carouselTrack').style.transform = `translateX(-${n * 100}%)`;
+  document.querySelectorAll('#carouselDots button').forEach((dot, i) => {
+    dot.className = `w-3 h-3 rounded-full transition ${i === n ? 'bg-m-gold' : 'bg-white/50'}`;
+  });
+}
+
+function nextSlide() {
+  goToSlide((currentSlide + 1) % totalSlides);
+}
+
+function prevSlide() {
+  goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
+}
+
+// Auto-slide
+setInterval(nextSlide, 5000);
+
+// Mobile menu
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+
+// Tab switch
+function switchTab(tab) {
+  const voitureBtn = document.getElementById('btnVoiture');
+  const utilBtn = document.getElementById('btnUtilitaire');
+  if (tab === 'voiture') {
+    voitureBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition bg-m-red text-white';
+    utilBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition text-m-sand hover:text-white';
+  } else {
+    utilBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition bg-m-red text-white';
+    voitureBtn.className = 'px-6 py-2 rounded-full text-sm font-bold transition text-m-sand hover:text-white';
+  }
+}
+
+// Type switch
+function switchType(type) {
+  const partBtn = document.getElementById('btnParticulier');
+  const entBtn = document.getElementById('btnEntreprise');
+  if (type === 'particulier') {
+    partBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-green text-white';
+    entBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-sand text-m-brown hover:bg-m-green hover:text-white';
+  } else {
+    entBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-green text-white';
+    partBtn.className = 'px-4 py-2 rounded-full text-sm font-semibold transition bg-m-sand text-m-brown hover:bg-m-green hover:text-white';
+  }
+}
+
+// FAQ toggle
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const icon = btn.querySelector('i');
+  answer.classList.toggle('hidden');
+  icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+// Smooth scroll
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// Back to top
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backToTop');
+  if (window.scrollY > 400) {
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  } else {
+    btn.style.opacity = '0';
+    btn.style.pointerEvents = 'none';
+  }
+});
+
+// Init
+renderVehicles();
+initCarousel();
+</script>
+
 </body>
 </html>
