@@ -1,486 +1,1080 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adidas Arena — Sport, Culture & Musique à Paris</title>
-  <meta name="description" content="Adidas Arena, un espace de créativité dédié au sport, à la culture et à la musique au cœur de Paris — Porte de la Chapelle." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['"Bebas Neue"', 'sans-serif'],
-            sans: ['Outfit', 'sans-serif'],
-          },
-          colors: {
-            arena: {
-              black: '#070708',
-              ink: '#0e0e10',
-              card: '#141416',
-              lime: '#d6ff3f',
-              mist: '#a1a1aa',
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURELIUS PRIME | Sovereign Financial Intelligence</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Cinzel"', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            50: '#FAF8F0',
+                            100: '#F3EED9',
+                            200: '#E7DCB2',
+                            300: '#D9C686',
+                            400: '#C8AD57',
+                            500: '#B89736',
+                            600: '#9B7C28',
+                            700: '#79601E',
+                            800: '#5A4617',
+                        },
+                        obsidian: {
+                            950: '#050608',
+                            900: '#0A0C10',
+                            850: '#0F1217',
+                            800: '#151921',
+                            700: '#1E232E',
+                            600: '#2A3140'
+                        }
+                    },
+                    boxShadow: {
+                        'luxury': '0 20px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(184, 151, 54, 0.1)',
+                        'glow': '0 0 35px rgba(200, 173, 87, 0.25)',
+                        'inner-gold': 'inset 0 1px 1px 0 rgba(255, 245, 210, 0.25)',
+                    }
+                }
             }
-          },
-          boxShadow: {
-            glow: '0 0 40px rgba(214, 255, 63, 0.18)',
-          }
         }
-      }
-    }
-  </script>
-  <style>
-    :root { color-scheme: dark; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: #070708;
-      color: #fafafa;
-      font-family: Outfit, sans-serif;
-    }
-    .stripes {
-      background-image: repeating-linear-gradient(
-        -55deg,
-        transparent,
-        transparent 8px,
-        rgba(255,255,255,0.035) 8px,
-        rgba(255,255,255,0.035) 10px
-      );
-    }
-    .hero-overlay {
-      background:
-        linear-gradient(180deg, rgba(7,7,8,0.35) 0%, rgba(7,7,8,0.55) 40%, rgba(7,7,8,0.95) 100%),
-        radial-gradient(ellipse at 20% 20%, rgba(214,255,63,0.12), transparent 50%);
-    }
-    .nav-blur {
-      background: rgba(7,7,8,0.72);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-    .event-card { transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease; }
-    .event-card:hover { transform: translateY(-8px); box-shadow: 0 24px 50px rgba(0,0,0,.45); }
-    .event-card img { transition: transform .7s cubic-bezier(.22,1,.36,1); }
-    .event-card:hover img { transform: scale(1.08); }
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
-    .reveal.in { opacity: 1; transform: none; }
-    .cookie-enter { animation: slideUp .5s ease forwards; }
-    @keyframes slideUp {
-      from { transform: translateY(120%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .marquee {
-      display: flex;
-      gap: 3rem;
-      animation: marquee 28s linear infinite;
-      white-space: nowrap;
-    }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-    .hamburger span { transition: all .3s ease; }
-    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-    .mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
-    .mobile-menu.open { max-height: 420px; }
-    .btn-lime {
-      background: #d6ff3f;
-      color: #070708;
-      font-weight: 700;
-      letter-spacing: .04em;
-      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-    }
-    .btn-lime:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(214,255,63,.28); background: #e6ff70; }
-    .btn-ghost {
-      border: 1px solid rgba(255,255,255,.18);
-      transition: background .2s ease, border-color .2s ease;
-    }
-    .btn-ghost:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.4); }
-    .section-kicker {
-      letter-spacing: .28em;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: #d6ff3f;
-      font-weight: 600;
-    }
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #070708; }
-    ::-webkit-scrollbar-thumb { background: #2a2a2e; border-radius: 8px; }
-  </style>
+    </script>
+
+    <style>
+        /* Ambient subtle gradient glow */
+        .ambient-radial {
+            background: radial-gradient(circle at 50% 0%, rgba(184, 151, 54, 0.12) 0%, rgba(10, 12, 16, 0) 70%);
+        }
+        .luxury-border {
+            border: 1px solid rgba(217, 198, 134, 0.18);
+        }
+        .luxury-card {
+            background: linear-gradient(135deg, rgba(21, 25, 33, 0.75) 0%, rgba(10, 12, 16, 0.85) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .luxury-card:hover {
+            border-color: rgba(200, 173, 87, 0.35);
+        }
+        /* Glass Input */
+        .glass-input {
+            background: rgba(15, 18, 23, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-input:focus {
+            border-color: #C8AD57;
+            box-shadow: 0 0 15px rgba(200, 173, 87, 0.2);
+            outline: none;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0C10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E232E;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B89736;
+        }
+    </style>
 </head>
-<body>
-  <!-- Cookie consent -->
-  <div id="cookie-banner" class="fixed bottom-0 inset-x-0 z-[80] p-4 md:p-6 cookie-enter" role="dialog" aria-live="polite" aria-label="Consentement cookies">
-    <div class="max-w-6xl mx-auto nav-blur border border-white/10 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 shadow-2xl">
-      <p class="text-sm md:text-[15px] text-zinc-200 leading-relaxed flex-1">
-        Ce site utilise des cookies pour améliorer votre expérience. En poursuivant votre navigation sur le site, vous acceptez notre utilisation des cookies.
-      </p>
-      <div class="flex items-center gap-3 shrink-0">
-        <button id="refuse-cookies" class="btn-ghost px-5 py-2.5 rounded-full text-sm font-semibold">Refuser</button>
-        <button id="accept-cookies" class="btn-lime px-6 py-2.5 rounded-full text-sm">Accepter</button>
-      </div>
-    </div>
-  </div>
+<body class="bg-obsidian-950 text-slate-300 font-sans antialiased overflow-x-hidden selection:bg-gold-500/20 selection:text-gold-200">
 
-  <!-- Header -->
-  <header id="site-header" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-5 md:px-8">
-      <div class="flex items-center justify-between h-20">
-        <a href="#" class="flex items-center gap-3 group" aria-label="Adidas Arena — Accueil">
-          <span class="flex items-end gap-[3px]" aria-hidden="true">
-            <span class="w-[5px] h-5 bg-white group-hover:bg-arena-lime transition-colors"></span>
-            <span class="w-[5px] h-7 bg-white group-hover:bg-arena-lime transition-colors"></span>
-            <span class="w-[5px] h-9 bg-white group-hover:bg-arena-lime transition-colors"></span>
-          </span>
-          <span class="font-display text-2xl md:text-[28px] tracking-wide leading-none">ADIDAS ARENA</span>
-        </a>
-        <nav class="hidden lg:flex items-center gap-9 text-[13px] font-semibold uppercase tracking-[0.18em]">
-          <a href="#programmation" class="hover:text-arena-lime transition-colors">Programmation</a>
-          <a href="#business" class="hover:text-arena-lime transition-colors">Business</a>
-          <a href="#chapelle" class="hover:text-arena-lime transition-colors">Central Chapelle</a>
-          <a href="#infos" class="hover:text-arena-lime transition-colors">Infos</a>
-          <a href="#programmation" class="btn-lime px-5 py-2.5 rounded-full tracking-widest text-[12px]">Billetterie</a>
-        </nav>
-        <button id="menu-btn" class="lg:hidden hamburger w-10 h-10 flex flex-col items-center justify-center gap-[6px]" aria-label="Ouvrir le menu">
-          <span class="block w-6 h-[2px] bg-white"></span>
-          <span class="block w-6 h-[2px] bg-white"></span>
-          <span class="block w-6 h-[2px] bg-white"></span>
-        </button>
-      </div>
-      <div id="mobile-menu" class="mobile-menu lg:hidden">
-        <div class="pb-6 flex flex-col gap-4 text-sm font-semibold uppercase tracking-[0.18em]">
-          <a href="#programmation" class="py-2 border-b border-white/10">Programmation</a>
-          <a href="#business" class="py-2 border-b border-white/10">Business</a>
-          <a href="#chapelle" class="py-2 border-b border-white/10">Central Chapelle</a>
-          <a href="#infos" class="py-2 border-b border-white/10">Infos</a>
-          <a href="#programmation" class="btn-lime text-center py-3 rounded-full tracking-widest text-[12px] mt-2">Billetterie</a>
+    <!-- Ambient Mesh Glow Background -->
+    <div class="fixed inset-0 pointer-events-none z-0 ambient-radial"></div>
+    <div class="fixed top-1/4 -right-48 w-96 h-96 bg-gold-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed bottom-10 -left-48 w-96 h-96 bg-blue-900/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/[0.06] bg-obsidian-950/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-3.5 group">
+                <div class="w-10 h-10 rounded-lg border border-gold-400/30 flex items-center justify-center bg-gradient-to-br from-obsidian-800 to-obsidian-900 shadow-glow">
+                    <span class="font-serif text-lg font-bold text-gold-300 tracking-wider">Æ</span>
+                </div>
+                <div>
+                    <span class="font-serif tracking-[0.25em] text-sm text-white font-semibold group-hover:text-gold-300 transition-colors uppercase">AURELIUS</span>
+                    <span class="block text-[9px] font-sans tracking-[0.35em] text-gold-400/80 font-medium">PRIME CAPITAL</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-xs tracking-wider uppercase font-medium">
+                <a href="#dashboard" class="text-slate-400 hover:text-gold-300 transition-colors">Executive Terminal</a>
+                <a href="#test-users" class="text-slate-400 hover:text-gold-300 transition-colors flex items-center space-x-1.5">
+                    <span>Test Accounts</span>
+                    <span class="bg-gold-400/10 text-gold-400 text-[10px] px-1.5 py-0.5 rounded border border-gold-400/20">3 Live</span>
+                </a>
+                <a href="#security" class="text-slate-400 hover:text-gold-300 transition-colors">Sovereign Protocol</a>
+                <a href="#login-portal" class="text-slate-400 hover:text-gold-300 transition-colors">Client Portal</a>
+            </nav>
+
+            <!-- Quick Action Button -->
+            <div class="flex items-center space-x-3">
+                <button onclick="scrollToSection('login-portal')" class="hidden sm:inline-flex items-center space-x-2 text-xs font-semibold px-4 py-2.5 rounded-lg border border-gold-400/40 text-gold-300 hover:bg-gold-400/10 transition-all shadow-inner-gold">
+                    <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+                    <span>Secure Access</span>
+                </button>
+                <button onclick="scrollToSection('dashboard')" class="bg-gradient-to-r from-gold-500 to-gold-400 text-obsidian-950 px-5 py-2.5 rounded-lg font-semibold text-xs tracking-wide uppercase hover:shadow-glow hover:brightness-110 transition-all duration-200">
+                    Launch Terminal
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="relative min-h-screen flex items-end overflow-hidden">
-      <img
-        src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=2000&q=80"
-        alt="Ambiance concert à l'Adidas Arena"
-        class="absolute inset-0 w-full h-full object-cover"
-      />
-      <div class="absolute inset-0 hero-overlay stripes"></div>
-      <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pb-20 pt-40">
-        <p class="section-kicker mb-5 reveal">Porte de la Chapelle · Paris 18e</p>
-        <h1 class="font-display text-[16vw] md:text-[9.5rem] leading-[0.85] tracking-wide max-w-5xl reveal">
-          UN LIEU<br />POUR VIBRER
-        </h1>
-        <p class="mt-8 max-w-2xl text-lg md:text-xl text-zinc-200 font-light leading-relaxed reveal">
-          Bienvenue à l’Adidas Arena — un espace de créativité dédié au sport, à la culture et à la musique.
-          Ici, les plus grandes scènes du monde rencontrent l’énergie de Paris, dans une salle pensée pour l’excellence et l’émotion collective.
-        </p>
-        <div class="mt-10 flex flex-wrap gap-4 reveal">
-          <a href="#programmation" class="btn-lime px-8 py-4 rounded-full text-sm uppercase tracking-widest">Voir la programmation</a>
-          <a href="#chapelle" class="btn-ghost px-8 py-4 rounded-full text-sm uppercase tracking-widest">Découvrir le lieu</a>
-        </div>
-        <div class="mt-16 grid grid-cols-3 max-w-xl gap-8 reveal">
-          <div>
-            <div class="font-display text-4xl md:text-5xl">8 000</div>
-            <div class="text-xs uppercase tracking-widest text-zinc-400 mt-1">Places</div>
-          </div>
-          <div>
-            <div class="font-display text-4xl md:text-5xl">360°</div>
-            <div class="text-xs uppercase tracking-widest text-zinc-400 mt-1">Expérience</div>
-          </div>
-          <div>
-            <div class="font-display text-4xl md:text-5xl">2024</div>
-            <div class="text-xs uppercase tracking-widest text-zinc-400 mt-1">Inauguration</div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <main class="relative z-10 pt-28">
+        
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 pt-12 pb-20 text-center relative">
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border border-gold-400/25 bg-gold-500/5 text-gold-300 text-xs font-medium mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="tracking-widest uppercase text-[10px]">Tier-1 Sovereign Custody System</span>
+                <span class="text-gold-500/50">|</span>
+                <span class="text-slate-400">v4.8 Institutional Release</span>
+            </div>
 
-    <!-- Marquee -->
-    <div class="border-y border-white/10 bg-arena-ink overflow-hidden py-3">
-      <div class="marquee font-display text-2xl tracking-wide text-white/70">
-        <span>SPORT</span><span class="text-arena-lime">◆</span>
-        <span>CULTURE</span><span class="text-arena-lime">◆</span>
-        <span>MUSIQUE</span><span class="text-arena-lime">◆</span>
-        <span>PARIS</span><span class="text-arena-lime">◆</span>
-        <span>ADIDAS ARENA</span><span class="text-arena-lime">◆</span>
-        <span>SPORT</span><span class="text-arena-lime">◆</span>
-        <span>CULTURE</span><span class="text-arena-lime">◆</span>
-        <span>MUSIQUE</span><span class="text-arena-lime">◆</span>
-        <span>PARIS</span><span class="text-arena-lime">◆</span>
-        <span>ADIDAS ARENA</span><span class="text-arena-lime">◆</span>
-      </div>
-    </div>
+            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white max-w-4xl mx-auto leading-[1.1]">
+                Command Capital with <span class="bg-gradient-to-r from-gold-200 via-gold-400 to-amber-200 bg-clip-text text-transparent">Absolute Precision.</span>
+            </h1>
 
-    <!-- Programmation -->
-    <section id="programmation" class="py-24 md:py-32">
-      <div class="max-w-7xl mx-auto px-5 md:px-8">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-          <div>
-            <p class="section-kicker mb-3 reveal">Programmation</p>
-            <h2 class="font-display text-6xl md:text-8xl leading-none reveal">À L’AFFICHE</h2>
-          </div>
-          <p class="max-w-md text-zinc-400 reveal">Matchs internationaux, concerts mondiaux, spectacles : réservez votre place pour les prochains événements qui feront trembler l’Arena.</p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Event 1 -->
-          <a href="https://billetterie.adidasarena.com/france-bresil-2026" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
-            <div class="relative h-64 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80" alt="France vs Brésil" class="w-full h-full object-cover" />
-              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sport</div>
-              <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                <span class="font-display text-3xl leading-none">04.09.26</span>
-              </div>
-            </div>
-            <div class="p-6">
-              <h3 class="font-display text-3xl tracking-wide">FRANCE VS BRÉSIL</h3>
-              <p class="text-sm text-zinc-400 mt-2">Match amical international · Basketball</p>
-              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
-            </div>
-          </a>
-
-          <!-- Event 2 -->
-          <a href="https://billetterie.adidasarena.com/xg-world-tour-paris" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
-            <div class="relative h-64 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=80" alt="XG World Tour Paris" class="w-full h-full object-cover" />
-              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Concert</div>
-              <div class="absolute bottom-4 left-4 right-4">
-                <span class="font-display text-3xl leading-none">05.09.26</span>
-              </div>
-            </div>
-            <div class="p-6">
-              <h3 class="font-display text-3xl tracking-wide">XG WORLD TOUR: THE CORE</h3>
-              <p class="text-sm text-zinc-400 mt-2">En concert à Paris · Unique date française</p>
-              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
-            </div>
-          </a>
-
-          <!-- Event 3 -->
-          <a href="https://billetterie.adidasarena.com/paris-basketball" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
-            <div class="relative h-64 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=1200&q=80" alt="Paris Basketball" class="w-full h-full object-cover" />
-              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sport</div>
-              <div class="absolute bottom-4 left-4">
-                <span class="font-display text-3xl leading-none">18.10.26</span>
-              </div>
-            </div>
-            <div class="p-6">
-              <h3 class="font-display text-3xl tracking-wide">PARIS BASKETBALL</h3>
-              <p class="text-sm text-zinc-400 mt-2">EuroLeague · Soirée à domicile</p>
-              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
-            </div>
-          </a>
-
-          <!-- Event 4 -->
-          <a href="https://billetterie.adidasarena.com/aya-nakamura" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
-            <div class="relative h-64 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80" alt="Concert Aya Nakamura" class="w-full h-full object-cover" />
-              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Concert</div>
-              <div class="absolute bottom-4 left-4">
-                <span class="font-display text-3xl leading-none">07.11.26</span>
-              </div>
-            </div>
-            <div class="p-6">
-              <h3 class="font-display text-3xl tracking-wide">AYA NAKAMURA</h3>
-              <p class="text-sm text-zinc-400 mt-2">Tour 2026 · Nuit exceptionnelle</p>
-              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
-            </div>
-          </a>
-
-          <!-- Event 5 -->
-          <a href="https://billetterie.adidasarena.com/volley-nations-league" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
-            <div class="relative h-64 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=1200&q=80" alt="Volley Nations League" class="w-full h-full object-cover" />
-              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sport</div>
-              <div class="absolute bottom-4 left-4">
-                <span class="font-display text-3xl leading-none">22.11.26</span>
-              </div>
-            </div>
-            <div class="p-6">
-              <h3 class="font-display text-3xl tracking-wide">VOLLEY NATIONS LEAGUE</h3>
-              <p class="text-sm text-zinc-400 mt-2">Équipe de France · Phase finale</p>
-              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
-            </div>
-          </a>
-
-          <!-- Event 6 -->
-          <a href="https://billetterie.adidasarena.com/dj-snake" class="event-card group block bg-arena-card rounded-2xl overflow-hidden border border-white/5" target="_blank" rel="noopener">
-            <div class="relative h-64 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1571266028243-d220c6a5272c?auto=format&fit=crop&w=1200&q=80" alt="DJ Snake" class="w-full h-full object-cover" />
-              <div class="absolute top-4 left-4 bg-arena-lime text-arena-black text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Concert</div>
-              <div class="absolute bottom-4 left-4">
-                <span class="font-display text-3xl leading-none">12.12.26</span>
-              </div>
-            </div>
-            <div class="p-6">
-              <h3 class="font-display text-3xl tracking-wide">DJ SNAKE</h3>
-              <p class="text-sm text-zinc-400 mt-2">Live Arena · Production immersive</p>
-              <span class="inline-flex items-center gap-2 mt-5 text-xs font-bold uppercase tracking-widest text-arena-lime">Réserver →</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Business -->
-    <section id="business" class="py-24 md:py-32 bg-arena-ink relative overflow-hidden">
-      <div class="absolute inset-0 stripes opacity-60 pointer-events-none"></div>
-      <div class="max-w-7xl mx-auto px-5 md:px-8 relative">
-        <div class="grid lg:grid-cols-2 gap-14 items-center">
-          <div>
-            <p class="section-kicker mb-3 reveal">Business</p>
-            <h2 class="font-display text-6xl md:text-8xl leading-none reveal">PRIVATISEZ<br/>L’ARENA</h2>
-            <p class="mt-8 text-zinc-300 text-lg leading-relaxed reveal">
-              Offrez à vos équipes, clients et partenaires une expérience hors normes. L’Adidas Arena se transforme pour vos conventions, lancements de produits, hospitalités premium et soirées d’entreprise — avec la même exigence que nos plus grands shows.
+            <p class="mt-6 text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Institutional-grade algorithmic wealth management, multi-jurisdiction custody telemetry, and autonomous liquidity deployment for family offices and sovereign funds.
             </p>
-            <ul class="mt-8 space-y-3 text-sm reveal">
-              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Espaces VIP, loges et salons privatifs</li>
-              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Plateaux événementiels jusqu’à 8 000 personnes</li>
-              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Production technique, restauration et branding sur-mesure</li>
-              <li class="flex gap-3"><span class="text-arena-lime">▸</span> Packages hospitalités pour tous les événements</li>
-            </ul>
-            <a href="mailto:business@adidasarena.com" class="inline-block mt-10 btn-lime px-8 py-4 rounded-full text-sm uppercase tracking-widest reveal">Contacter l’équipe business</a>
-          </div>
-          <div class="grid grid-cols-2 gap-4 reveal">
-            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80" alt="Événement d'entreprise" class="rounded-2xl h-52 md:h-72 w-full object-cover" />
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80" alt="Ambiance lounge" class="rounded-2xl h-52 md:h-72 w-full object-cover mt-8" />
-            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" alt="Réunion premium" class="rounded-2xl h-52 md:h-64 w-full object-cover -mt-8" />
-            <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800&q=80" alt="Foule en concert" class="rounded-2xl h-52 md:h-64 w-full object-cover" />
-          </div>
+
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <button onclick="scrollToSection('test-users')" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-500 text-obsidian-950 font-bold text-xs uppercase tracking-widest shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center space-x-2">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>Select Test Persona</span>
+                </button>
+                <button onclick="scrollToSection('login-portal')" class="px-7 py-3.5 rounded-xl border border-white/10 hover:border-gold-400/40 bg-obsidian-900/60 backdrop-blur-md text-white font-medium text-xs uppercase tracking-widest transition-all flex items-center space-x-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-gold-400"></i>
+                    <span>Client Authorization</span>
+                </button>
+            </div>
+
+            <!-- Instant Feature Badges -->
+            <div class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto pt-6 border-t border-white/[0.05]">
+                <div class="text-left px-4 py-2 border-l border-gold-400/20">
+                    <div class="text-white font-serif font-bold text-xl">$14.2B+</div>
+                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Custodied Assets</div>
+                </div>
+                <div class="text-left px-4 py-2 border-l border-gold-400/20">
+                    <div class="text-emerald-400 font-serif font-bold text-xl">3.82</div>
+                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Sharpe Ratio Alpha</div>
+                </div>
+                <div class="text-left px-4 py-2 border-l border-gold-400/20">
+                    <div class="text-white font-serif font-bold text-xl">&lt; 0.42ms</div>
+                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Execution Latency</div>
+                </div>
+                <div class="text-left px-4 py-2 border-l border-gold-400/20">
+                    <div class="text-gold-300 font-serif font-bold text-xl">SOC2 Type II</div>
+                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Cryptographic HSM</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: TEST USERS SHOWCASE (Interactive Switcher) -->
+        <section id="test-users" class="max-w-7xl mx-auto px-6 py-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-white/[0.08]">
+                <div>
+                    <div class="flex items-center space-x-2 text-gold-400 text-xs font-semibold tracking-wider uppercase mb-1">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                        <span>Zero Friction Sandbox</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-serif text-white font-bold">Authorized Test Personas</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">Select a pre-configured profile to dynamically adapt live terminal telemetry and permissions.</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex items-center space-x-2 text-xs text-slate-400">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Sandbox Sandbox Mode Active</span>
+                </div>
+            </div>
+
+            <!-- 3 Persona Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- User 1: Sovereign Wealth / Executive -->
+                <div onclick="selectUser('elizabeth')" id="card-elizabeth" class="persona-card luxury-card rounded-2xl p-6 cursor-pointer border-2 transition-all duration-300 relative group overflow-hidden border-gold-400 shadow-glow">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gold-400/10 rounded-bl-full pointer-events-none transition-opacity"></div>
+                    <div class="flex items-start justify-between">
+                        <div class="w-14 h-14 rounded-full border border-gold-400/40 p-0.5 relative">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Elizabeth Vance" class="w-full h-full object-cover rounded-full">
+                            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-obsidian-950 rounded-full"></span>
+                        </div>
+                        <span id="badge-elizabeth" class="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded bg-gold-400 text-obsidian-950 flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3"></i>
+                            <span>Active Persona</span>
+                        </span>
+                    </div>
+
+                    <div class="mt-5">
+                        <h3 class="text-white font-serif text-lg font-bold">Lady Elizabeth Vance</h3>
+                        <p class="text-gold-400/90 text-xs font-medium">Principal & Managing Partner</p>
+                        <p class="text-slate-400 text-xs mt-2 line-clamp-2">Sovereign Tier Access with $8.4B mandate authorization, multi-signature custody, and board oversight.</p>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase">Mandate</span>
+                            <span class="text-white font-mono font-medium">$8,450,200,000</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-slate-500 block text-[10px] uppercase">Clearance</span>
+                            <span class="text-gold-300 font-medium">Tier-0 Sovereign</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between">
+                        <button class="w-full py-2.5 rounded-lg bg-gold-400/15 border border-gold-400/30 text-gold-300 hover:bg-gold-400 hover:text-obsidian-950 font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center space-x-2">
+                            <span>Simulate Elizabeth</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- User 2: Chief Risk Officer -->
+                <div onclick="selectUser('aris')" id="card-aris" class="persona-card luxury-card rounded-2xl p-6 cursor-pointer border border-white/10 transition-all duration-300 relative group overflow-hidden hover:border-gold-400/40">
+                    <div class="flex items-start justify-between">
+                        <div class="w-14 h-14 rounded-full border border-slate-700 p-0.5 relative">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Dr. Aris Thorne" class="w-full h-full object-cover rounded-full">
+                            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-obsidian-950 rounded-full"></span>
+                        </div>
+                        <span id="badge-aris" class="hidden text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded bg-gold-400 text-obsidian-950 flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3"></i>
+                            <span>Active Persona</span>
+                        </span>
+                    </div>
+
+                    <div class="mt-5">
+                        <h3 class="text-white font-serif text-lg font-bold">Dr. Aris Thorne</h3>
+                        <p class="text-blue-400 text-xs font-medium">Head of Quantitative Risk</p>
+                        <p class="text-slate-400 text-xs mt-2 line-clamp-2">Stress-testing models, Monte Carlo variance oversight, and systemic liquidity risk management.</p>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase">Supervised Alpha</span>
+                            <span class="text-white font-mono font-medium">$3,120,000,000</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-slate-500 block text-[10px] uppercase">Clearance</span>
+                            <span class="text-blue-300 font-medium">Tier-1 Risk Control</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between">
+                        <button class="w-full py-2.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 group-hover:border-gold-400/30 group-hover:text-gold-300 font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center space-x-2">
+                            <span>Simulate Aris</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- User 3: Lead Algo Trader / Quantitative Analyst -->
+                <div onclick="selectUser('kaelen')" id="card-kaelen" class="persona-card luxury-card rounded-2xl p-6 cursor-pointer border border-white/10 transition-all duration-300 relative group overflow-hidden hover:border-gold-400/40">
+                    <div class="flex items-start justify-between">
+                        <div class="w-14 h-14 rounded-full border border-slate-700 p-0.5 relative">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Kaelen Chen" class="w-full h-full object-cover rounded-full">
+                            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-obsidian-950 rounded-full"></span>
+                        </div>
+                        <span id="badge-kaelen" class="hidden text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded bg-gold-400 text-obsidian-950 flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3"></i>
+                            <span>Active Persona</span>
+                        </span>
+                    </div>
+
+                    <div class="mt-5">
+                        <h3 class="text-white font-serif text-lg font-bold">Kaelen Chen</h3>
+                        <p class="text-purple-400 text-xs font-medium">Principal Execution Strategist</p>
+                        <p class="text-slate-400 text-xs mt-2 line-clamp-2">High-frequency order-routing routing algorithms, dark pool arbitrage, and low-latency API node execution.</p>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase">Daily Flow</span>
+                            <span class="text-white font-mono font-medium">$420,800,000</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-slate-500 block text-[10px] uppercase">Clearance</span>
+                            <span class="text-purple-300 font-medium">Tier-1 Quant Engine</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between">
+                        <button class="w-full py-2.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 group-hover:border-gold-400/30 group-hover:text-gold-300 font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center space-x-2">
+                            <span>Simulate Kaelen</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: EXECUTIVE DASHBOARD -->
+        <section id="dashboard" class="max-w-7xl mx-auto px-6 py-12 scroll-mt-20">
+            <!-- Terminal Frame Wrapper -->
+            <div class="rounded-3xl border border-white/10 bg-obsidian-900/90 shadow-luxury overflow-hidden backdrop-blur-2xl">
+                <!-- Window Titlebar -->
+                <div class="px-6 py-4 border-b border-white/[0.07] bg-obsidian-850/80 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                        </div>
+                        <div class="h-4 w-px bg-white/10"></div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-mono text-slate-400">SESSION:</span>
+                            <span id="active-session-label" class="text-xs font-mono font-semibold text-gold-300 bg-gold-400/10 px-2 py-0.5 rounded border border-gold-400/20">ELIZABETH_VANCE // MANAGING_PARTNER</span>
+                        </div>
+                    </div>
+
+                    <!-- Timeframe Toggles -->
+                    <div class="flex items-center space-x-1 bg-obsidian-950 p-1 rounded-xl border border-white/10 text-xs font-medium">
+                        <button onclick="updateChartTimeframe('1D', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">1D</button>
+                        <button onclick="updateChartTimeframe('1W', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">1W</button>
+                        <button onclick="updateChartTimeframe('1M', this)" class="tf-btn px-3 py-1 rounded-lg bg-gold-400 text-obsidian-950 font-bold">1M</button>
+                        <button onclick="updateChartTimeframe('1Y', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">1Y</button>
+                        <button onclick="updateChartTimeframe('ALL', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">MAX</button>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-mono text-emerald-400 tracking-wider">SECURE FEED // SYNCED</span>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content Area -->
+                <div class="p-6 sm:p-8 space-y-8">
+
+                    <!-- Top Telemetry Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <!-- Stat Card 1 -->
+                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
+                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
+                                <span id="stat-1-title">Net Liquidity Mandate</span>
+                                <i data-lucide="wallet" class="w-4 h-4 text-gold-400"></i>
+                            </div>
+                            <div class="mt-3 flex items-baseline space-x-2">
+                                <span id="stat-1-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">$8,450,210,400</span>
+                            </div>
+                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-emerald-400">
+                                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                                <span id="stat-1-diff" class="+4.2% MoM">+3.84% (+$312.4M)</span>
+                                <span class="text-slate-500 font-sans ml-1 text-[11px]">vs S&P benchmark</span>
+                            </div>
+                        </div>
+
+                        <!-- Stat Card 2 -->
+                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
+                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
+                                <span id="stat-2-title">Dynamic Sharpe Index</span>
+                                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <div class="mt-3 flex items-baseline space-x-2">
+                                <span id="stat-2-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">3.91 α</span>
+                            </div>
+                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-emerald-400">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                                <span id="stat-2-diff">99.98% Confidence</span>
+                                <span class="text-slate-500 font-sans ml-1 text-[11px]">VAR 1.1%</span>
+                            </div>
+                        </div>
+
+                        <!-- Stat Card 3 -->
+                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
+                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
+                                <span id="stat-3-title">Staked Institutional Yield</span>
+                                <i data-lucide="percent" class="w-4 h-4 text-amber-400"></i>
+                            </div>
+                            <div class="mt-3 flex items-baseline space-x-2">
+                                <span id="stat-3-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">14.88%</span>
+                            </div>
+                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-gold-300">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                <span id="stat-3-diff">Compound APY</span>
+                                <span class="text-slate-500 font-sans ml-1 text-[11px]">Treasury + Arb</span>
+                            </div>
+                        </div>
+
+                        <!-- Stat Card 4 -->
+                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
+                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
+                                <span id="stat-4-title">Active Vault Safeguards</span>
+                                <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i>
+                            </div>
+                            <div class="mt-3 flex items-baseline space-x-2">
+                                <span id="stat-4-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">12 Nodes</span>
+                            </div>
+                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-blue-400">
+                                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                                <span id="stat-4-diff">Multi-Sig Zurich / SG</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Grid: Chart & Allocation -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Chart Container (2 Cols) -->
+                        <div class="lg:col-span-2 luxury-card rounded-2xl p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h4 class="text-white font-serif font-bold text-base">Portfolio Performance & Yield Curve</h4>
+                                    <p class="text-slate-400 text-xs">Real-time valuation aggregated across Zurich, Singapore, and London custodial vaults</p>
+                                </div>
+                                <div class="flex items-center space-x-3 text-xs">
+                                    <span class="flex items-center space-x-1 text-gold-300">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-gold-400 inline-block"></span>
+                                        <span>Alpha Strategy</span>
+                                    </span>
+                                    <span class="flex items-center space-x-1 text-slate-500">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-slate-600 inline-block"></span>
+                                        <span>Treasury 10Y</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Canvas Chart -->
+                            <div class="h-72 w-full relative">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Allocation & Risk Breakdown (1 Col) -->
+                        <div class="luxury-card rounded-2xl p-6 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="text-white font-serif font-bold text-base">Sovereign Allocation</h4>
+                                    <span class="text-[11px] font-mono text-gold-400 bg-gold-400/10 px-2 py-0.5 rounded">OPTIMAL</span>
+                                </div>
+                                <p class="text-slate-400 text-xs mb-4">Dynamically rebalanced every 4 hours via automated convex optimization algorithms.</p>
+                                
+                                <div class="space-y-4 text-xs">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-slate-300 font-medium">Algorithmic Arbitrage</span>
+                                            <span class="text-white font-mono">42.5%</span>
+                                        </div>
+                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-gold-400 h-full rounded-full" style="width: 42.5%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-slate-300 font-medium">Physical Bullion & Gold Swaps</span>
+                                            <span class="text-white font-mono">27.0%</span>
+                                        </div>
+                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-amber-500 h-full rounded-full" style="width: 27%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-slate-300 font-medium">Sovereign Debt (AAA Tier)</span>
+                                            <span class="text-white font-mono">18.5%</span>
+                                        </div>
+                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-blue-400 h-full rounded-full" style="width: 18.5%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-slate-300 font-medium">Uncorrelated Volatility Swaps</span>
+                                            <span class="text-white font-mono">12.0%</span>
+                                        </div>
+                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-purple-400 h-full rounded-full" style="width: 12%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs">
+                                <span class="text-slate-400">Total Liquid Collateral</span>
+                                <span class="text-emerald-400 font-mono font-semibold">100.0% Verified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Live Execution Telemetry -->
+                    <div class="luxury-card rounded-2xl p-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.07] mb-4 gap-2">
+                            <div>
+                                <h4 class="text-white font-serif font-bold text-sm">Real-Time Execution Ledger</h4>
+                                <p class="text-slate-400 text-xs">Sub-millisecond cryptographic settlement logs across connected liquidity partners.</p>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs font-mono text-slate-400">
+                                <span>LEDGER HASH:</span>
+                                <span class="text-gold-300">0x9F4C...B821</span>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="text-slate-500 uppercase tracking-wider font-semibold border-b border-white/[0.05]">
+                                        <th class="pb-3">Timestamp</th>
+                                        <th class="pb-3">Action</th>
+                                        <th class="pb-3">Instrument</th>
+                                        <th class="pb-3">Volume</th>
+                                        <th class="pb-3">Route / Vault</th>
+                                        <th class="pb-3 text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="execution-table-body" class="divide-y divide-white/[0.03] font-mono">
+                                    <!-- Populated dynamically via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: LUXURY LOGIN PORTAL -->
+        <section id="login-portal" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-16">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-gold-400 text-xs font-semibold tracking-widest uppercase inline-block mb-2">Private Banking & Node Authentication</span>
+                <h2 class="text-3xl sm:text-4xl font-serif text-white font-bold tracking-tight">Aurelius Sovereign Gate</h2>
+                <p class="text-slate-400 text-sm mt-3">High-entropy cryptographic verification. Use the instant auto-fill buttons to test credential handshake without passwords.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Left Details / Fast Persona Auto-Fill -->
+                <div class="md:col-span-5 luxury-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between border-gold-400/20">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-9 h-9 rounded-lg bg-gold-400/10 border border-gold-400/30 flex items-center justify-center text-gold-300">
+                                <i data-lucide="fingerprint" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-serif font-bold text-sm">Sandbox Access Pass</h3>
+                                <p class="text-slate-400 text-xs">1-Click credentials injector</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-300 text-xs leading-relaxed mb-6">
+                            Evaluate platform access levels immediately. Click any sandbox persona below to populate the secure input fields instantly:
+                        </p>
+
+                        <!-- Quick Fill Buttons -->
+                        <div class="space-y-3">
+                            <button onclick="autoFillLogin('elizabeth@aurelius.prime', '••••••••••••', 'Managing Partner (Tier-0)')" class="w-full text-left p-3 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 border border-white/10 hover:border-gold-400/40 transition-all flex items-center justify-between group">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-2 h-2 rounded-full bg-gold-400"></div>
+                                    <div>
+                                        <div class="text-white text-xs font-semibold group-hover:text-gold-300">Elizabeth Vance</div>
+                                        <div class="text-[10px] text-slate-500 font-mono">elizabeth@aurelius.prime</div>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] uppercase font-semibold text-gold-400 bg-gold-400/10 px-2 py-0.5 rounded">Auto Fill</span>
+                            </button>
+
+                            <button onclick="autoFillLogin('thorne@aurelius.prime', '••••••••••••', 'Chief Risk Officer (Tier-1)')" class="w-full text-left p-3 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 border border-white/10 hover:border-gold-400/40 transition-all flex items-center justify-between group">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+                                    <div>
+                                        <div class="text-white text-xs font-semibold group-hover:text-blue-300">Dr. Aris Thorne</div>
+                                        <div class="text-[10px] text-slate-500 font-mono">thorne@aurelius.prime</div>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] uppercase font-semibold text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded">Auto Fill</span>
+                            </button>
+
+                            <button onclick="autoFillLogin('kaelen.chen@aurelius.prime', '••••••••••••', 'Principal Execution (Tier-1)')" class="w-full text-left p-3 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 border border-white/10 hover:border-gold-400/40 transition-all flex items-center justify-between group">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-2 h-2 rounded-full bg-purple-400"></div>
+                                    <div>
+                                        <div class="text-white text-xs font-semibold group-hover:text-purple-300">Kaelen Chen</div>
+                                        <div class="text-[10px] text-slate-500 font-mono">kaelen.chen@aurelius.prime</div>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] uppercase font-semibold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">Auto Fill</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-white/[0.08] flex items-center space-x-2 text-slate-500 text-[11px]">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-gold-400/80"></i>
+                        <span>Zero logs kept. Quantum-resistant cipher handshake.</span>
+                    </div>
+                </div>
+
+                <!-- Right Form: Actual Login Interface -->
+                <div class="md:col-span-7 luxury-card rounded-2xl p-6 sm:p-8 relative">
+                    <!-- Auth Method Pill Tabs -->
+                    <div class="flex items-center space-x-2 p-1 bg-obsidian-950 rounded-xl border border-white/10 mb-6 text-xs font-semibold">
+                        <button id="tab-pass" onclick="switchLoginTab('password')" class="flex-1 py-2 rounded-lg bg-gold-400 text-obsidian-950 transition-all flex items-center justify-center space-x-1.5 shadow-sm">
+                            <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                            <span>Vault Key</span>
+                        </button>
+                        <button id="tab-hardware" onclick="switchLoginTab('hardware')" class="flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center justify-center space-x-1.5">
+                            <i data-lucide="usb" class="w-3.5 h-3.5"></i>
+                            <span>YubiKey / WebAuthn</span>
+                        </button>
+                        <button id="tab-totp" onclick="switchLoginTab('totp')" class="flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center justify-center space-x-1.5">
+                            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                            <span>2FA Seed</span>
+                        </button>
+                    </div>
+
+                    <!-- The Form -->
+                    <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1.5">Client Identifier / Sovereign ID</label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+                                <input id="login-email" type="email" required value="elizabeth@aurelius.prime" placeholder="partner@fund.com" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-white text-xs font-mono placeholder:text-slate-600">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-slate-400 text-xs uppercase tracking-wider font-semibold">Cryptographic Passphrase</label>
+                                <a href="javascript:void(0)" onclick="notifyReset()" class="text-[11px] text-gold-400 hover:underline">Emergency Recovery Key?</a>
+                            </div>
+                            <div class="relative">
+                                <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+                                <input id="login-pass" type="password" required value="sovereign-vault-9921" placeholder="Enter high-entropy passphrase" class="glass-input w-full pl-10 pr-10 py-3 rounded-xl text-white text-xs font-mono placeholder:text-slate-600">
+                                <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-3 text-slate-500 hover:text-slate-300">
+                                    <i data-lucide="eye" id="eye-icon" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2FA Simulated Input -->
+                        <div id="totp-container">
+                            <label class="block text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1.5">Time-Based Hardware OTP (6-Digits)</label>
+                            <div class="relative">
+                                <i data-lucide="smartphone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+                                <input id="login-totp" type="text" maxlength="6" value="849 201" placeholder="123 456" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-white text-xs font-mono tracking-widest placeholder:text-slate-600">
+                            </div>
+                        </div>
+
+                        <!-- Remember Device & Geo-Fencing -->
+                        <div class="flex items-center justify-between pt-1">
+                            <label class="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer">
+                                <input type="checkbox" checked class="rounded border-slate-700 bg-obsidian-900 text-gold-500 focus:ring-gold-400 h-4 w-4">
+                                <span>Bind session to Hardware TPM enclave</span>
+                            </label>
+                            <span class="text-[11px] text-emerald-400 flex items-center space-x-1 font-mono">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Zurich Geo-Enforce</span>
+                            </span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button id="auth-submit-btn" type="submit" class="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-500 text-obsidian-950 font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-[0.99] transition-all shadow-glow flex items-center justify-center space-x-2">
+                            <i data-lucide="unlock" class="w-4 h-4"></i>
+                            <span id="btn-text">Authenticate & Access Terminal</span>
+                        </button>
+                    </form>
+
+                    <!-- Feedback Alert / Toast -->
+                    <div id="auth-alert" class="hidden mt-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center space-x-2.5 animate-fadeIn">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                        <span id="auth-alert-msg">Identity verified via Multi-Sig Zurich relay. Updating dashboard view...</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECURITY & ACCREDITATION BANNER -->
+        <section id="security" class="max-w-7xl mx-auto px-6 py-12 border-t border-white/[0.06]">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
+                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">FINMA / SEC Regulated</h5>
+                    <p class="text-slate-500 text-[11px] mt-1">Direct institutional custodianship</p>
+                </div>
+                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
+                    <i data-lucide="cpu" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
+                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">FIPS 140-2 Level 4 HSM</h5>
+                    <p class="text-slate-500 text-[11px] mt-1">Cold enclave signing keys</p>
+                </div>
+                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
+                    <i data-lucide="lock" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
+                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">Zero-Knowledge Audits</h5>
+                    <p class="text-slate-500 text-[11px] mt-1">Continuous mathematical proof</p>
+                </div>
+                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
+                    <i data-lucide="globe" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
+                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">Sovereign Jurisdictions</h5>
+                    <p class="text-slate-500 text-[11px] mt-1">Switzerland, Singapore & UK</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/[0.08] bg-obsidian-950 py-12 mt-12 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <span class="font-serif tracking-widest text-white text-sm font-bold">AURELIUS PRIME</span>
+                <span>© 2025 Aurelius Prime Global Custody Ltd.</span>
+            </div>
+            <div class="flex items-center space-x-6 text-slate-400 text-xs">
+                <a href="#test-users" class="hover:text-gold-300 transition-colors">Test Sandbox</a>
+                <a href="#dashboard" class="hover:text-gold-300 transition-colors">Terminal Preview</a>
+                <a href="#login-portal" class="hover:text-gold-300 transition-colors">Client Sign-in</a>
+                <a href="javascript:void(0)" class="hover:text-gold-300 transition-colors">Confidential Disclosures</a>
+            </div>
         </div>
-      </div>
-    </section>
+    </footer>
 
-    <!-- Central Chapelle -->
-    <section id="chapelle" class="py-24 md:py-32">
-      <div class="max-w-7xl mx-auto px-5 md:px-8">
-        <div class="grid lg:grid-cols-12 gap-10 items-end mb-12">
-          <div class="lg:col-span-7">
-            <p class="section-kicker mb-3 reveal">Central Chapelle</p>
-            <h2 class="font-display text-6xl md:text-8xl leading-none reveal">AU CŒUR D’UN NOUVEAU PARIS</h2>
-          </div>
-          <p class="lg:col-span-5 text-zinc-400 text-lg reveal">
-            L’Adidas Arena s’inscrit dans la renaissance de la Porte de la Chapelle : un quartier reconnecté, vivant, où sport, culture et vie quotidienne se croisent.
-          </p>
-        </div>
-        <div class="relative rounded-[28px] overflow-hidden h-[420px] md:h-[540px] reveal">
-          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80" alt="Paris — quartier de la Chapelle" class="w-full h-full object-cover" />
-          <div class="absolute inset-0 bg-gradient-to-t from-arena-black via-arena-black/30 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12 grid md:grid-cols-3 gap-8">
-            <div>
-              <div class="font-display text-4xl">18e</div>
-              <p class="text-sm text-zinc-300 mt-2">Arrondissement, Porte de la Chapelle — un carrefour nord de la métropole.</p>
-            </div>
-            <div>
-              <div class="font-display text-4xl">Métro 12</div>
-              <p class="text-sm text-zinc-300 mt-2">Accès direct, RER, tram et nouvelles liaisons urbaines à deux pas de l’Arena.</p>
-            </div>
-            <div>
-              <div class="font-display text-4xl">Quartier</div>
-              <p class="text-sm text-zinc-300 mt-2">Commerces, espaces publics et équipements sportifs : Central Chapelle, un pôle de vie.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
 
-    <!-- Infos -->
-    <section id="infos" class="pb-28">
-      <div class="max-w-7xl mx-auto px-5 md:px-8">
-        <div class="rounded-[28px] border border-white/10 bg-arena-card p-8 md:p-14 grid md:grid-cols-2 gap-12">
-          <div>
-            <p class="section-kicker mb-3">Infos pratiques</p>
-            <h2 class="font-display text-5xl md:text-6xl">VENIR À L’ARENA</h2>
-            <p class="mt-6 text-zinc-400 leading-relaxed">
-              Adidas Arena<br />
-              Porte de la Chapelle<br />
-              75018 Paris, France
-            </p>
-            <div class="mt-8 space-y-3 text-sm">
-              <p><span class="text-arena-lime font-semibold">Métro</span> — Ligne 12, station Porte de la Chapelle</p>
-              <p><span class="text-arena-lime font-semibold">Tram</span> — T3b</p>
-              <p><span class="text-arena-lime font-semibold">Bus</span> — Lignes 35, 38, 60, 302</p>
-              <p><span class="text-arena-lime font-semibold">Vélo</span> — Stations Vélib’ à proximité</p>
-            </div>
-          </div>
-          <form id="newsletter" class="flex flex-col justify-center" onsubmit="event.preventDefault(); this.querySelector('.ok').classList.remove('hidden');">
-            <h3 class="font-display text-4xl">NEWSLETTER</h3>
-            <p class="text-zinc-400 mt-3 mb-6">Recevez en avant-première la programmation et les offres hospitalités.</p>
-            <label class="sr-only" for="email">Adresse e-mail</label>
-            <div class="flex flex-col sm:flex-row gap-3">
-              <input id="email" type="email" required placeholder="votre@email.com" class="flex-1 bg-black/40 border border-white/15 rounded-full px-5 py-3 text-sm outline-none focus:border-arena-lime" />
-              <button type="submit" class="btn-lime px-7 py-3 rounded-full text-sm uppercase tracking-widest">S’inscrire</button>
-            </div>
-            <p class="ok hidden mt-4 text-sm text-arena-lime">Merci, vous êtes bien inscrit(e).</p>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
+        // Persona State Data
+        const personas = {
+            elizabeth: {
+                name: "Lady Elizabeth Vance",
+                role: "Managing Partner // Sovereign Tier-0",
+                sessionTag: "ELIZABETH_VANCE // MANAGING_PARTNER",
+                mandate: "$8,450,210,400",
+                mandateTitle: "Net Liquidity Mandate",
+                mandateDiff: "+3.84% (+$312.4M)",
+                sharpe: "3.91 α",
+                sharpeDiff: "99.98% Confidence",
+                yield: "14.88%",
+                nodes: "12 Enclaves",
+                email: "elizabeth@aurelius.prime",
+                chartData: [4200, 4800, 5600, 6400, 7100, 7900, 8450],
+                table: [
+                    { time: "14:28:01.02", act: "ALLOCATE", item: "Zurich Vault Gold Swaps", vol: "+$45,000,000", route: "CH-ZUR-01", status: "SETTLED" },
+                    { time: "14:12:44.19", act: "REBALANCE", item: "US Treasury 3M Bill Index", vol: "-$22,500,000", route: "NY-FED-FEED", status: "SETTLED" },
+                    { time: "13:58:12.78", act: "DIVIDEND", item: "Autonomous Quant Alpha IV", vol: "+$6,140,000", route: "SG-SIN-04", status: "SETTLED" },
+                    { time: "13:30:00.00", act: "MULTI-SIG", item: "Custodial Quorum Signature", vol: "--", route: "GLOBAL-HSM", status: "CONFIRMED" }
+                ]
+            },
+            aris: {
+                name: "Dr. Aris Thorne",
+                role: "Chief Risk Officer // Tier-1 Risk Control",
+                sessionTag: "DR_ARIS_THORNE // RISK_CONTROL_OFFICER",
+                mandate: "$3,120,400,000",
+                mandateTitle: "Supervised Risk Mandate",
+                mandateDiff: "VAR: 0.82% Max Exposure",
+                sharpe: "4.15 α",
+                sharpeDiff: "Stress Test: 99.99%",
+                yield: "11.24%",
+                nodes: "18 Sensors",
+                email: "thorne@aurelius.prime",
+                chartData: [2800, 2900, 2950, 3010, 3080, 3110, 3120],
+                table: [
+                    { time: "14:29:45.33", act: "RISK-ALERT", item: "EUR/CHF Volatility Delta", vol: "0.012 σ", route: "SYS-ENGINE-A", status: "CONTAINED" },
+                    { time: "14:02:11.89", act: "HEDGE", item: "Dynamic S&P Put Matrix", vol: "+$18,400,000", route: "CBOE-DIRECT", status: "SETTLED" },
+                    { time: "13:45:08.12", act: "SIMULATION", item: "Monte Carlo 100K Paths", vol: "PASSED", route: "ZUR-NODE-2", status: "VERIFIED" },
+                    { time: "13:10:42.50", act: "MARGIN-CALL", item: "Prime Broker Collateral Check", vol: "142% Buffer", route: "GLOBAL-RISK", status: "CLEARED" }
+                ]
+            },
+            kaelen: {
+                name: "Kaelen Chen",
+                role: "Principal Execution Strategist // Tier-1 Quant",
+                sessionTag: "KAELEN_CHEN // QUANT_HIGH_FREQ_DESK",
+                mandate: "$420,800,000",
+                mandateTitle: "Active Intraday Flow",
+                mandateDiff: "Execution Latency: 0.38ms",
+                sharpe: "4.78 α",
+                sharpeDiff: "Fill Ratio: 99.94%",
+                yield: "22.40%",
+                nodes: "6 Fast Nodes",
+                email: "kaelen.chen@aurelius.prime",
+                chartData: [210, 245, 290, 330, 380, 405, 420.8],
+                table: [
+                    { time: "14:31:02.10", act: "SNIPE", item: "Arbitrage Pair FX JPY/USD", vol: "+$12,000,000", route: "TYO-EBS-1", status: "EXECUTED" },
+                    { time: "14:30:58.82", act: "ORDER-ROUTE", item: "Dark Pool Liquidity Batch", vol: "+$34,500,000", route: "LDN-LSE-DARK", status: "FILLED" },
+                    { time: "14:28:10.05", act: "CANCEL", item: "Passive Limit Spread QQQ", vol: "$5,000,000", route: "NASDAQ-DIRECT", status: "CLEARED" },
+                    { time: "14:25:01.44", act: "ROUTE", item: "Latency Arbitrage CME Micro", vol: "+$8,900,000", route: "CHI-CME-01", status: "FILLED" }
+                ]
+            }
+        };
 
-  <footer class="border-t border-white/10 py-12">
-    <div class="max-w-7xl mx-auto px-5 md:px-8 flex flex-col md:flex-row justify-between gap-8">
-      <a href="#" class="flex items-center gap-3">
-        <span class="flex items-end gap-[3px]" aria-hidden="true">
-          <span class="w-[4px] h-4 bg-white"></span>
-          <span class="w-[4px] h-6 bg-white"></span>
-          <span class="w-[4px] h-8 bg-white"></span>
-        </span>
-        <span class="font-display text-xl tracking-wide">ADIDAS ARENA</span>
-      </a>
-      <div class="flex flex-wrap gap-6 text-xs uppercase tracking-widest text-zinc-400">
-        <a href="#programmation" class="hover:text-white">Programmation</a>
-        <a href="#business" class="hover:text-white">Business</a>
-        <a href="#chapelle" class="hover:text-white">Central Chapelle</a>
-        <a href="#" class="hover:text-white">Mentions légales</a>
-        <a href="#" class="hover:text-white">Cookies</a>
-      </div>
-      <p class="text-xs text-zinc-500">© 2026 Adidas Arena — Paris</p>
-    </div>
-  </footer>
+        let currentPersonaKey = 'elizabeth';
+        let chartInstance = null;
 
-  <script>
-    const header = document.getElementById('site-header');
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const banner = document.getElementById('cookie-banner');
+        // Initialize Chart.js with luxury dark theme
+        function initChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            const goldGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            goldGradient.addColorStop(0, 'rgba(212, 175, 55, 0.45)');
+            goldGradient.addColorStop(1, 'rgba(212, 175, 55, 0.00)');
 
-    const onScroll = () => {
-      if (window.scrollY > 12) header.classList.add('nav-blur', 'border-b', 'border-white/10');
-      else header.classList.remove('nav-blur', 'border-b', 'border-white/10');
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+            const data = personas[currentPersonaKey].chartData;
 
-    menuBtn.addEventListener('click', () => {
-      menuBtn.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-    });
-    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      menuBtn.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    }));
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan 05', 'Jan 10', 'Jan 15', 'Jan 20', 'Jan 25', 'Jan 30', 'Feb 05'],
+                    datasets: [
+                        {
+                            label: 'Alpha Mandate',
+                            data: data,
+                            borderColor: '#D4AF37',
+                            borderWidth: 2.5,
+                            pointBackgroundColor: '#F3EED9',
+                            pointBorderColor: '#0A0C10',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: true,
+                            backgroundColor: goldGradient,
+                            tension: 0.38
+                        },
+                        {
+                            label: 'Treasury Benchmark',
+                            data: data.map(v => v * 0.72),
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderWidth: 1.5,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0.2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0F1217',
+                            titleColor: '#D4AF37',
+                            bodyColor: '#FFFFFF',
+                            borderColor: 'rgba(212, 175, 55, 0.3)',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Capital: $' + context.raw.toLocaleString() + ' M';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                            ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10 } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                            ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
 
-    const consent = localStorage.getItem('cookieConsent');
-    if (consent) banner.style.display = 'none';
-    const hideCookies = (value) => {
-      localStorage.setItem('cookieConsent', value);
-      banner.style.display = 'none';
-    };
-    document.getElementById('accept-cookies').addEventListener('click', () => hideCookies('accepted'));
-    document.getElementById('refuse-cookies').addEventListener('click', () => hideCookies('refused'));
+        // Render dynamic table rows
+        function renderTable(personaKey) {
+            const tbody = document.getElementById('execution-table-body');
+            tbody.innerHTML = '';
+            const items = personas[personaKey].table;
 
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  </script>
+            items.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white/[0.02] transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3 text-slate-400">${row.time}</td>
+                    <td class="py-3 font-semibold ${row.act.includes('RISK') ? 'text-amber-400' : 'text-gold-300'}">${row.act}</td>
+                    <td class="py-3 text-white font-sans">${row.item}</td>
+                    <td class="py-3 text-slate-200">${row.vol}</td>
+                    <td class="py-3 text-slate-400">${row.route}</td>
+                    <td class="py-3 text-right">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${row.status === 'CONTAINED' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
+                            ${row.status}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Select a Test User from the persona section
+        function selectUser(key) {
+            currentPersonaKey = key;
+            const p = personas[key];
+
+            // Update Card borders and Badges
+            ['elizabeth', 'aris', 'kaelen'].forEach(k => {
+                const card = document.getElementById(`card-${k}`);
+                const badge = document.getElementById(`badge-${k}`);
+                if (k === key) {
+                    card.classList.add('border-gold-400', 'shadow-glow');
+                    card.classList.remove('border-white/10');
+                    badge.classList.remove('hidden');
+                } else {
+                    card.classList.remove('border-gold-400', 'shadow-glow');
+                    card.classList.add('border-white/10');
+                    badge.classList.add('hidden');
+                }
+            });
+
+            // Update Dashboard values
+            document.getElementById('active-session-label').innerText = p.sessionTag;
+            document.getElementById('stat-1-title').innerText = p.mandateTitle;
+            document.getElementById('stat-1-val').innerText = p.mandate;
+            document.getElementById('stat-1-diff').innerText = p.mandateDiff;
+
+            document.getElementById('stat-2-val').innerText = p.sharpe;
+            document.getElementById('stat-2-diff').innerText = p.sharpeDiff;
+
+            document.getElementById('stat-3-val').innerText = p.yield;
+            document.getElementById('stat-4-val').innerText = p.nodes;
+
+            // Update Chart
+            if (chartInstance) {
+                chartInstance.data.datasets[0].data = p.chartData;
+                chartInstance.data.datasets[1].data = p.chartData.map(v => v * 0.72);
+                chartInstance.update();
+            }
+
+            // Update Table
+            renderTable(key);
+
+            // Auto-fill form values in the login box
+            document.getElementById('login-email').value = p.email;
+
+            // Smoothly jump down to glance at the dashboard
+            const dashboardEl = document.getElementById('dashboard');
+            dashboardEl.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Auto fill helper from the login section
+        function autoFillLogin(email, pass, roleLabel) {
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-pass').value = 'authenticated-token-9988';
+            document.getElementById('login-totp').value = Math.floor(100000 + Math.random() * 900000);
+
+            // Trigger visual pulse
+            const alert = document.getElementById('auth-alert');
+            alert.classList.remove('hidden');
+            document.getElementById('auth-alert-msg').innerText = `Credentials mapped for ${roleLabel}. Click 'Authenticate' below.`;
+            
+            lucide.createIcons();
+        }
+
+        // Handle Form Submission
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const alert = document.getElementById('auth-alert');
+
+            // Simulate high-security processing state
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-75');
+            btnText.innerText = "Encrypting Handshake (Zurich Enclave)...";
+
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75');
+                btnText.innerText = "Access Granted // Redirecting";
+                alert.classList.remove('hidden');
+                document.getElementById('auth-alert-msg').innerText = "Cryptographic session confirmed. Launching telemetry...";
+
+                // Map to corresponding persona if matching email
+                const email = document.getElementById('login-email').value.toLowerCase();
+                if (email.includes('thorne')) selectUser('aris');
+                else if (email.includes('chen')) selectUser('kaelen');
+                else selectUser('elizabeth');
+
+                // Scroll to dashboard
+                setTimeout(() => {
+                    document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+                    btnText.innerText = "Authenticate & Access Terminal";
+                }, 800);
+            }, 1000);
+        }
+
+        // Switch login tabs (Password vs Hardware vs Totp)
+        function switchLoginTab(type) {
+            const tabs = ['pass', 'hardware', 'totp'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (t === type || (type === 'password' && t === 'pass')) {
+                    el.className = "flex-1 py-2 rounded-lg bg-gold-400 text-obsidian-950 font-semibold transition-all flex items-center justify-center space-x-1.5 shadow-sm";
+                } else {
+                    el.className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center justify-center space-x-1.5";
+                }
+            });
+
+            if (type === 'hardware') {
+                document.getElementById('login-pass').placeholder = "Insert Hardware Security Key (YubiKey) or tap TouchID";
+            } else {
+                document.getElementById('login-pass').placeholder = "Enter high-entropy passphrase";
+            }
+        }
+
+        // Toggle Password visibility
+        function togglePasswordVisibility() {
+            const input = document.getElementById('login-pass');
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+
+        // Chart timeframe button toggle
+        function updateChartTimeframe(tf, btn) {
+            document.querySelectorAll('.tf-btn').forEach(b => {
+                b.className = "tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors";
+            });
+            btn.className = "tf-btn px-3 py-1 rounded-lg bg-gold-400 text-obsidian-950 font-bold";
+
+            // Add slight randomness to chart on timeframe click to feel alive
+            if (chartInstance) {
+                const base = personas[currentPersonaKey].chartData;
+                const multiplier = tf === '1D' ? 0.98 : tf === '1W' ? 0.95 : tf === '1Y' ? 1.15 : 1.0;
+                chartInstance.data.datasets[0].data = base.map(v => Math.round(v * (multiplier + (Math.random() * 0.05 - 0.02))));
+                chartInstance.update();
+            }
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function notifyReset() {
+            alert("Emergency HSM Cold Recovery: Please contact your designated family office sovereign custody liaison in Zurich or Singapore.");
+        }
+
+        // On Mount
+        window.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            renderTable('elizabeth');
+        });
+    </script>
 </body>
 </html>
