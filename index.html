@@ -1,1183 +1,341 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="The Tea Story — small-batch, single-origin tea in a playful interactive 3D brewing experience.">
-<meta name="theme-color" content="#15110d">
-<title>The Tea Story — A Brew-tea-ful 3D Experience</title>
-<style>
-:root {
-  --bg: #14100c;
-  --panel: rgba(31, 25, 18, .76);
-  --cream: #f6eddf;
-  --gold: #e0b955;
-  --active: #d8a945;
-  --text: #f3eadc;
-  --dim: #bfae97;
-  --line: rgba(224, 185, 85, .18);
-  --green: #8eae72;
-  --radius: 22px;
-  --ease: cubic-bezier(.16, 1, .3, 1);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  min-height: 100%;
-  overflow-x: hidden;
-  color: var(--text);
-  background: var(--bg);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-::selection { color: #17110b; background: var(--gold); }
-button, a { color: inherit; font: inherit; }
-button { border: 0; background: none; cursor: pointer; }
-a { text-decoration: none; }
-h1, h2, h3, .serif {
-  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  letter-spacing: -.025em;
-}
-#stage {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(circle at 76% 35%, rgba(117, 91, 43, .25), transparent 28%),
-    radial-gradient(circle at 28% 12%, rgba(85, 64, 36, .35), transparent 36%),
-    radial-gradient(circle at 75% 78%, rgba(38, 67, 39, .25), transparent 32%),
-    linear-gradient(145deg, #211910 0%, #0b0907 72%);
-}
-#stage canvas { display: block; width: 100%; height: 100%; }
-#grain, #vignette {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-#grain {
-  opacity: .045;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
-}
-#vignette {
-  background:
-    linear-gradient(90deg, rgba(10, 8, 6, .62), transparent 56%),
-    radial-gradient(circle at center, transparent 48%, rgba(4, 3, 2, .46) 100%);
-}
-.layer { position: relative; z-index: 2; pointer-events: none; }
-.layer a, .layer button, .layer article, .layer .interactive, .layer footer { pointer-events: auto; }
-.topbar {
-  position: fixed;
-  top: 0; right: 0; left: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem clamp(1rem, 4vw, 3.5rem);
-  border-bottom: 1px solid transparent;
-  transition: padding .3s var(--ease), background .3s, border-color .3s;
-  pointer-events: auto;
-}
-.topbar.scrolled {
-  padding-top: .7rem;
-  padding-bottom: .7rem;
-  border-color: var(--line);
-  background: rgba(18, 14, 10, .74);
-  backdrop-filter: blur(18px);
-}
-.logo { display: inline-flex; align-items: center; gap: .7rem; }
-.logo-mark {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #f0d078, #a dig 72%, #6b4e1e);
-  box-shadow: 0 6px 14px rgba(224, 185, 85, .25), inset 0 -4px 8px rgba(0,0,0,.25);
-  position: relative;
-}
-.logo-mark::after {
-  content: "";
-  position: absolute;
-  inset: 10px 14px 8px;
-  border-radius: 40% 40% 48% 48%;
-  background: rgba(20, 14, 8, .35);
-}
-.logo strong { display: block; font-family: Georgia, serif; font-size: 1rem; line-height: 1.1; }
-.logo small {
-  display: block;
-  margin-top: .18rem;
-  color: var(--gold);
-  font-size: .55rem;
-  letter-spacing: .25em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1.8rem;
-  color: var(--dim);
-  font-size: .78rem;
-}
-.nav-links a { transition: color .25s; }
-.nav-links a:hover { color: var(--gold); }
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .55rem;
-  min-height: 46px;
-  padding: .78rem 1.45rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  color: #1a140d;
-  background: linear-gradient(135deg, #edca6d, #b98731);
-  box-shadow: 0 17px 38px -17px rgba(224, 185, 85, .75);
-  font-size: .82rem;
-  font-weight: 750;
-  cursor: pointer;
-  transition: transform .3s var(--ease), box-shadow .3s, border-color .3s, color .3s, background .3s;
-}
-.button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 24px 46px -18px rgba(224, 185, 85, .86);
-}
-.button:active { transform: scale(.98); }
-.button.ghost {
-  color: var(--cream);
-  border-color: var(--line);
-  background: rgba(246, 237, 223, .06);
-  box-shadow: none;
-  backdrop-filter: blur(12px);
-}
-.button.ghost:hover {
-  color: var(--gold);
-  border-color: rgba(224, 185, 85, .55);
-}
-.button.small { min-height: 38px; padding: .58rem 1.1rem; font-size: .73rem; }
-.button .arrow { transition: transform .3s var(--ease); }
-.button:hover .arrow { transform: translateX(4px); }
-.hero {
-  position: relative;
-  min-height: 100svh;
-  display: grid;
-  align-items: center;
-  padding: 7.5rem clamp(1.2rem, 6vw, 5rem) 4rem;
-}
-.hero-grid {
-  width: min(1240px, 100%);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
-  align-items: center;
-  gap: 2rem;
-}
-.hero-copy { position: relative; z-index: 3; max-width: 680px; }
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: .6rem;
-  padding: .48rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--gold);
-  background: rgba(224, 185, 85, .08);
-  backdrop-filter: blur(10px);
-  font-size: .65rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-}
-.eyebrow::before {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 16px currentColor;
-  content: "";
-  animation: pulse 2.2s ease-in-out infinite;
-}
-.hero h1 {
-  max-width: 13ch;
-  margin: 1.5rem 0 1.15rem;
-  color: var(--cream);
-  font-size: clamp(3.1rem, 7vw, 6.4rem);
-  font-weight: 600;
-  line-height: .94;
-}
-.hero h1 em { color: var(--gold); font-style: italic; font-weight: inherit; }
-.hero-copy p {
-  max-width: 42ch;
-  color: var(--dim);
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-}
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .8rem;
-  margin-top: 2rem;
-}
-.trust-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .65rem 1.2rem;
-  margin-top: 2.1rem;
-  color: rgba(191, 174, 151, .76);
-  font-size: .68rem;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-}
-.trust-line span::before {
-  margin-right: .45rem;
-  color: var(--green);
-  content: "✓";
-}
-#orbit-pad {
-  position: absolute;
-  z-index: 2;
-  top: 0; right: 0;
-  width: 52%;
-  height: 100%;
-  cursor: grab;
-  pointer-events: auto;
-  touch-action: none;
-}
-#orbit-pad:active { cursor: grabbing; }
-.scene-label {
-  position: absolute;
-  right: clamp(1.2rem, 7vw, 7rem);
-  bottom: 13%;
-  display: inline-flex;
-  align-items: center;
-  gap: .65rem;
-  padding: .55rem .9rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--dim);
-  background: rgba(16, 12, 9, .52);
-  backdrop-filter: blur(12px);
-  font-size: .66rem;
-  letter-spacing: .08em;
-  pointer-events: none;
-}
-.scene-label b { color: var(--active); font-weight: 700; }
-.scroll-cue {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 50%;
-  width: 23px; height: 38px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-.scroll-cue::after {
-  position: absolute;
-  top: 7px; left: 50%;
-  width: 3px; height: 7px;
-  border-radius: 4px;
-  background: var(--gold);
-  content: "";
-  transform: translateX(-50%);
-  animation: scrollDrop 1.8s var(--ease) infinite;
-}
-.content-band {
-  position: relative;
-  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.2rem, 5vw, 4rem);
-  border-top: 1px solid rgba(224, 185, 85, .12);
-  background:
-    linear-gradient(180deg, rgba(13, 10, 8, .55), rgba(20, 15, 10, .88) 40%, rgba(12, 9, 7, .95));
-}
-.band-inner {
-  width: min(1120px, 100%);
-  margin: 0 auto;
-}
-.section-head {
-  max-width: 640px;
-  margin-bottom: clamp(2rem, 5vw, 3.5rem);
-}
-.section-head .tag {
-  color: var(--gold);
-  font-size: .68rem;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-}
-.section-head h2 {
-  margin: .7rem 0 .9rem;
-  color: var(--cream);
-  font-size: clamp(2rem, 4.2vw, 3.2rem);
-  line-height: 1.05;
-}
-.section-head p { color: var(--dim); max-width: 52ch; }
-.values {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-.value-card {
-  padding: 1.5rem 1.35rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel);
-  backdrop-filter: blur(16px);
-  transition: transform .35s var(--ease), border-color .35s, background .35s;
-}
-.value-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(224, 185, 85, .4);
-  background: rgba(40, 32, 22, .85);
-}
-.value-icon {
-  width: 42px; height: 42px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 1rem;
-  border-radius: 14px;
-  background: rgba(224, 185, 85, .1);
-  color: var(--gold);
-  font-size: 1.15rem;
-}
-.value-card h3 {
-  margin-bottom: .45rem;
-  color: var(--cream);
-  font-size: 1.2rem;
-}
-.value-card p { color: var(--dim); font-size: .92rem; }
-.products {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.1rem;
-  margin-top: .5rem;
-}
-.product-card {
-  position: relative;
-  overflow: hidden;
-  padding: 1.4rem;
-  border: 1px solid var(--line);
-  border-radius: calc(var(--radius) + 4px);
-  background:
-    radial-gradient(circle at 80% 0%, rgba(224, 185, 85, .12), transparent 45%),
-    var(--panel);
-  backdrop-filter: blur(16px);
-  transition: transform .35s var(--ease), border-color .35s, box-shadow .35s;
-}
-.product-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(224, 185, 85, .45);
-  box-shadow: 0 28px 50px -28px rgba(0, 0, 0, .65);
-}
-.product-swatch {
-  height: 120px;
-  margin-bottom: 1.1rem;
-  border-radius: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.product-swatch::after {
-  content: "";
-  position: absolute;
-  inset: auto 18% 12px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, .28);
-  filter: blur(6px);
-}
-.leaf-pile {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 2.6rem;
-  filter: drop-shadow(0 10px 16px rgba(0,0,0,.35));
-}
-.p-jade .product-swatch { background: linear-gradient(160deg, #2f4a2c, #6f8f5a 55%, #c5d39a); }
-.p-amber .product-swatch { background: linear-gradient(160deg, #5a3418, #b pen  55%, #e8c sp  078); }
-.p-smoke .product-swatch { background: linear-gradient(160deg, #2a2420, #6b5b4a 55%, #c4b49a); }
-.product-card h3 { color: var(--cream); font-size: 1.25rem; margin-bottom: .35rem; }
-.product-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: .5rem;
-  margin: .85rem 0 1rem;
-  color: var(--dim);
-  font-size: .78rem;
-}
-.product-meta strong { color: var(--gold); font-size: 1rem; }
-.brew-strip {
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 1.5rem;
-  align-items: center;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border: 1px solid var(--line);
-  border-radius: calc(var(--radius) + 8px);
-  background:
-    radial-gradient(circle at 100% 0%, rgba(142, 174, 114, .12), transparent 40%),
-    rgba(24, 19, 14, .8);
-  backdrop-filter: blur(18px);
-}
-.brew-steps {
-  display: grid;
-  gap: .75rem;
-  margin-top: 1.2rem;
-}
-.step {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: .85rem;
-  align-items: start;
-  padding: .85rem 1rem;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, .03);
-  border: 1px solid transparent;
-  transition: border-color .3s, background .3s;
-}
-.step.active, .step:hover {
-  border-color: var(--line);
-  background: rgba(224, 185, 85, .06);
-}
-.step-num {
-  width: 28px; height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(224, 185, 85, .15);
-  color: var(--gold);
-  font-size: .72rem;
-  font-weight: 700;
-}
-.step h4 { color: var(--cream); font-size: .95rem; font-family: inherit; letter-spacing: 0; }
-.step p { color: var(--dim); font-size: .82rem; }
-.brew-visual {
-  min-height: 280px;
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 70%, rgba(224, 185, 85, .2), transparent 45%),
-    linear-gradient(180deg, #1a1510, #0e0b08);
-  border: 1px solid var(--line);
-}
-.brew-visual .cup {
-  position: absolute;
-  left: 50%;
-  bottom: 18%;
-  width: 140px; height: 110px;
-  transform: translateX(-50%);
-  border-radius: 12px 12px 40px 40px;
-  background: linear-gradient(90deg, rgba(246,237,223,.12), rgba(246,237,223,.04));
-  border: 2px solid rgba(246, 237, 223, .2);
-  border-top: 0;
-  box-shadow: inset 0 -20px 40px rgba(180, 120, 40, .25);
-}
-.brew-visual .cup::before {
-  content: "";
-  position: absolute;
-  right: -28px; top: 18px;
-  width: 34px; height: 50px;
-  border: 2px solid rgba(246, 237, 223, .2);
-  border-left: 0;
-  border-radius: 0 24px 24px 0;
-}
-.brew-visual .liquid {
-  position: absolute;
-  left: 6px; right: 6px; bottom: 6px;
-  height: 62%;
-  border-radius: 8px 8px 34px 34px;
-  background: linear-gradient(180deg, #c9a04a, #7a4e1c);
-  animation: brewFill 4s ease-in-out infinite alternate;
-}
-.brew-visual .steam span {
-  position: absolute;
-  bottom: 55%;
-  width: 8px; height: 40px;
-  border-radius: 20px;
-  background: linear-gradient(transparent, rgba(246, 237, 223, .35), transparent);
-  animation: steam 2.4s ease-in-out infinite;
-  filter: blur(2px);
-}
-.brew-visual .steam span:nth-child(1) { left: 42%; animation-delay: 0s; }
-.brew-visual .steam span:nth-child(2) { left: 50%; height: 52px; animation-delay: .4s; }
-.brew-visual .steam span:nth-child(3) { left: 58%; animation-delay: .8s; }
-.cta-band {
-  margin-top: clamp(3rem, 7vw, 5rem);
-  padding: clamp(2rem, 5vw, 3rem);
-  border-radius: calc(var(--radius) + 10px);
-  border: 1px solid rgba(224, 185, 85, .28);
-  background:
-    radial-gradient(circle at 0% 50%, rgba(224, 185, 85, .16), transparent 40%),
-    radial-gradient(circle at 100% 50%, rgba(142, 174, 114, .1), transparent 35%),
-    linear-gradient(135deg, rgba(36, 28, 18, .95), rgba(18, 14, 10, .98));
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-}
-.cta-band h2 {
-  color: var(--cream);
-  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-  line-height: 1.1;
-  margin-bottom: .5rem;
-}
-.cta-band p { color: var(--dim); max-width: 42ch; }
-.cta-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
-footer {
-  position: relative;
-  z-index: 2;
-  padding: 2.5rem clamp(1.2rem, 5vw, 4rem) 3rem;
-  border-top: 1px solid rgba(224, 185, 85, .1);
-  color: var(--dim);
-  font-size: .85rem;
-  pointer-events: auto;
-}
-.footer-inner {
-  width: min(1120px, 100%);
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1.5rem;
-  align-items: center;
-}
-.footer-links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
-.footer-links a:hover { color: var(--gold); }
-.toast {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  z-index: 40;
-  transform: translateX(-50%) translateY(120%);
-  padding: .85rem 1.2rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(24, 18, 12, .92);
-  backdrop-filter: blur(16px);
-  color: var(--cream);
-  font-size: .82rem;
-  box-shadow: 0 20px 40px rgba(0,0,0,.4);
-  transition: transform .45s var(--ease);
-  pointer-events: none;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-.mobile-nav { display: none; }
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: .45; transform: scale(.85); }
-}
-@keyframes scrollDrop {
-  0% { opacity: 0; transform: translateX(-50%) translateY(0); }
-  40% { opacity: 1; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(14px); }
-}
-@keyframes brewFill {
-  from { height: 42%; filter: hue-rotate(-8deg); }
-  to { height: 72%; filter: hue-rotate(6deg); }
-}
-@keyframes steam {
-  0% { opacity: 0; transform: translateY(10px) scaleX(1); }
-  40% { opacity: .7; }
-  100% { opacity: 0; transform: translateY(-36px) scaleX(1.4); }
-}
-@media (max-width: 980px) {
-  .nav-links { display: none; }
-  .mobile-nav { display: inline-flex; }
-  .hero-grid { grid-template-columns: 1fr; }
-  #orbit-pad {
-    position: relative;
-    width: 100%;
-    height: 42vh;
-    order: -1;
-    margin-bottom: 1rem;
+<title>Tableau Produits UX Copy — Preview interactive</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          blue: '#0F3D5C',
+          blueLight: '#1B6091',
+          teal: '#0E7C86',
+          green: '#16A34A',
+          greenDark: '#15803D',
+          gold: '#D4A017',
+          goldLight: '#F5D06F',
+          cream: '#FFF9EE',
+          bg: '#F4F7FA'
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
   }
-  .hero { padding-top: 6rem; }
-  .scene-label { right: 1rem; bottom: 8%; }
-  .values, .products { grid-template-columns: 1fr; }
-  .brew-strip { grid-template-columns: 1fr; }
 }
-@media (max-width: 560px) {
-  .hero h1 { max-width: 10ch; }
-  .trust-line { gap: .5rem .8rem; font-size: .6rem; }
-  .cta-band { text-align: left; }
-}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #F4F7FA 0%, #E8F0F5 100%); }
+  .tab-active { background: linear-gradient(135deg, #0F3D5C, #1B6091); color: #fff; box-shadow: 0 8px 20px -8px rgba(15,61,92,.5); }
+  .tab-inactive { background: #fff; color: #0F3D5C; border: 1px solid #E1E8ED; }
+  .tab-inactive:hover { background: #F0F7FB; }
+  .row-alt:nth-child(even) { background: #F7FBFD; }
+  .badge-gold { background: linear-gradient(135deg, #D4A017, #F5D06F); color: #4a3400; }
+  .badge-emo { background: linear-gradient(135deg, #FFF3CE, #FFE199); color: #7a5a00; border: 1px solid #E8C568; }
+  .cta-primary { background: linear-gradient(135deg, #16A34A, #15803D); color: #fff; }
+  .cta-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 20px -6px rgba(22,163,74,.5); }
+  .cta-secondary { background: #fff; color: #0F3D5C; border: 1.5px solid #B8CFDD; }
+  .cta-secondary:hover { background: #F0F7FB; border-color: #0F3D5C; }
+  .price-old { text-decoration: line-through; color: #94A3B8; font-size: .85rem; }
+  .scroll-fade::-webkit-scrollbar { height: 10px; width: 10px; }
+  .scroll-fade::-webkit-scrollbar-track { background: #E1E8ED; border-radius: 10px; }
+  .scroll-fade::-webkit-scrollbar-thumb { background: #0F3D5C; border-radius: 10px; }
+  .sticky-col { position: sticky; left: 0; z-index: 5; }
+  .fade-in { animation: fadeIn .35s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+  .check-item:hover { background: #F0F7FB; }
+  input[type="checkbox"].big { width: 22px; height: 22px; accent-color: #16A34A; cursor: pointer; }
+  .principle-card { transition: all .25s ease; }
+  .principle-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -20px rgba(15,61,92,.3); }
+  .bad { background: #FEF2F2; border-left: 3px solid #EF4444; color: #7F1D1D; }
+  .good { background: #F0FDF4; border-left: 3px solid #16A34A; color: #14532D; }
 </style>
 </head>
-<body>
-<div id="stage" aria-hidden="true"></div>
-<div id="grain"></div>
-<div id="vignette"></div>
+<body class="min-h-screen">
 
-<header class="topbar" id="topbar">
-  <a class="logo" href="#top" aria-label="The Tea Story home">
-    <span class="logo-mark" aria-hidden="true"></span>
-    <span>
-      <strong>The Tea Story</strong>
-      <small>Single-origin · Small-batch</small>
-    </span>
-  </a>
-  <nav class="nav-links" aria-label="Primary">
-    <a href="#values">Values</a>
-    <a href="#collection">Collection</a>
-    <a href="#brew">Brew</a>
-    <a href="#cta">Shop</a>
-  </nav>
-  <button class="button small" id="nav-cta" type="button">Try the ritual <span class="arrow">→</span></button>
-</header>
-
-<main class="layer" id="top">
-  <section class="hero">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <div class="eyebrow">Interactive 3D brew desk</div>
-        <h1>Pour a slower <em>story</em> into every cup</h1>
-        <p>Small-batch leaves, single-origin farms, and a playful 3D ritual that makes steeping feel like theatre. Drag the scene. Taste the craft.</p>
-        <div class="hero-actions">
-          <button class="button" id="cta-primary" type="button">Start brewing <span class="arrow">→</span></button>
-          <a class="button ghost" href="#collection">Meet the leaves</a>
-        </div>
-        <div class="trust-line">
-          <span>Plastic-free packs</span>
-          <span>Farm-direct lots</span>
-          <span>Steep-ready guides</span>
-        </div>
+<!-- HEADER -->
+<header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-blue to-brand-teal flex items-center justify-center text-white shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h13m-13 6H4a1 1 0 01-1-1V5a1 1 0 011-1h5m0 13V4m0 0h13a1 1 0 011 1v6H9"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-lg sm:text-xl font-bold text-brand-blue leading-tight">tableau_produits_ux_copy.xlsx</h1>
+        <p class="text-xs text-slate-500">Fichier Excel • 3 onglets • Orienté conversion</p>
       </div>
     </div>
-    <div id="orbit-pad" title="Drag to orbit" aria-label="3D tea scene orbit control"></div>
-    <div class="scene-label">Drag to orbit · <b id="brew-state">Idle steam</b></div>
-    <div class="scroll-cue" aria-hidden="true"></div>
-  </section>
-
-  <section class="content-band" id="values">
-    <div class="band-inner">
-      <div class="section-head">
-        <div class="tag">Brand values</div>
-        <h2>Leaf-first. Farm-honest. Cup-joyful.</h2>
-        <p>We keep the supply chain short and the ritual long — traceable gardens, gentle processing, and packaging that disappears without guilt.</p>
-      </div>
-      <div class="values">
-        <article class="value-card interactive">
-          <div class="value-icon">🌱</div>
-          <h3>Single-origin clarity</h3>
-          <p>One garden, one harvest, one honest flavor story — never blended into anonymity.</p>
-        </article>
-        <article class="value-card interactive">
-          <div class="value-icon">🔥</div>
-          <h3>Small-batch craft</h3>
-          <p>Roasted and rolled in tight lots so aroma stays vivid from chest to teapot.</p>
-        </article>
-        <article class="value-card interactive">
-          <div class="value-icon">♻️</div>
-          <h3>Soft on the planet</h3>
-          <p>Compostable pouches, reusable tins, and zero theatre around “eco” claims.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="content-band" id="collection" style="padding-top:0;">
-    <div class="band-inner">
-      <div class="section-head">
-        <div class="tag">Featured leaves</div>
-        <h2>Three cups. Three moods.</h2>
-        <p>Curated bestsellers for morning lift, afternoon glow, and evening quiet.</p>
-      </div>
-      <div class="products">
-        <article class="product-card p-jade interactive" data-product="jade">
-          <div class="product-swatch"><div class="leaf-pile">🍃</div></div>
-          <h3>Jade Spine Oolong</h3>
-          <p style="color:var(--dim);font-size:.9rem;">Floral steam, honeyed finish, high-mountain lift.</p>
-          <div class="product-meta"><span>85°C · 3 min</span><strong>$28</strong></div>
-          <button class="button small ghost add-btn" type="button" data-name="Jade Spine Oolong">Add to tray</button>
-        </article>
-        <article class="product-card p-amber interactive" data-product="amber">
-          <div class="product-swatch" style="background:linear-gradient(160deg,#5a3418,#c47a32 55%,#e8c078);"><div class="leaf-pile">🍂</div></div>
-          <h3>Amber Gate Black</h3>
-          <p style="color:var(--dim);font-size:.9rem;">Malt, cocoa husk, and a sunset-bright pour.</p>
-          <div class="product-meta"><span>95°C · 4 min</span><strong>$24</strong></div>
-          <button class="button small ghost add-btn" type="button" data-name="Amber Gate Black">Add to tray</button>
-        </article>
-        <article class="product-card p-smoke interactive" data-product="smoke">
-          <div class="product-swatch" style="background:linear-gradient(160deg,#2a2420,#6b5b4a 55%,#c4b49a);"><div class="leaf-pile">🌿</div></div>
-          <h3>Smoke & Cedar Pu-erh</h3>
-          <p style="color:var(--dim);font-size:.9rem;">Forest floor depth with a clean, camphor edge.</p>
-          <div class="product-meta"><span>100°C · rinse + 20s</span><strong>$32</strong></div>
-          <button class="button small ghost add-btn" type="button" data-name="Smoke & Cedar Pu-erh">Add to tray</button>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="content-band" id="brew" style="padding-top:0;">
-    <div class="band-inner">
-      <div class="section-head">
-        <div class="tag">The ritual</div>
-        <h2>Four steps. Zero rush.</h2>
-        <p>A calm loop you can run with our 3D desk — heat, bloom, pour, pause.</p>
-      </div>
-      <div class="brew-strip interactive">
-        <div>
-          <h3 class="serif" style="font-size:1.6rem;color:var(--cream);">Brew like you mean it</h3>
-          <div class="brew-steps">
-            <div class="step active" data-step="0">
-              <div class="step-num">1</div>
-              <div><h4>Heat with intention</h4><p>Match water to the leaf — never a rolling boil for jade greens.</p></div>
-            </div>
-            <div class="step" data-step="1">
-              <div class="step-num">2</div>
-              <div><h4>Wake the leaves</h4><p>A short rinse opens aroma and softens tightly rolled oolongs.</p></div>
-            </div>
-            <div class="step" data-step="2">
-              <div class="step-num">3</div>
-              <div><h4>Steep, don’t bully</h4><p>Time the infusion; swirl once; listen for the quiet bloom.</p></div>
-            </div>
-            <div class="step" data-step="3">
-              <div class="step-num">4</div>
-              <div><h4>Pour & share</h4><p>Decant fully so the next steep stays bright, not bitter.</p></div>
-            </div>
-          </div>
-        </div>
-        <div class="brew-visual" id="brew-visual" aria-hidden="true">
-          <div class="steam"><span></span><span></span><span></span></div>
-          <div class="cup"><div class="liquid"></div></div>
-        </div>
-      </div>
-
-      <div class="cta-band" id="cta">
-        <div>
-          <h2>Ready for your first tray?</h2>
-          <p>Build a three-tin starter ritual — free steep guide and carbon-neutral shipping on first orders.</p>
-        </div>
-        <div class="cta-actions">
-          <button class="button" id="cta-shop" type="button">Shop the collection <span class="arrow">→</span></button>
-          <button class="button ghost" id="cta-guide" type="button">Get the brew guide</button>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <div>© <span id="year"></span> The Tea Story · Crafted for slow mornings</div>
-    <div class="footer-links">
-      <a href="#values">Values</a>
-      <a href="#collection">Collection</a>
-      <a href="#brew">Brew</a>
-      <a href="#top">Back to top</a>
+    <div class="flex items-center gap-2">
+      <span class="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-brand-greenDark bg-green-50 border border-green-200 px-3 py-1.5 rounded-full">
+        <span class="w-2 h-2 bg-brand-green rounded-full animate-pulse"></span> Version finalisée
+      </span>
+      <button class="cta-primary px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Télécharger
+      </button>
     </div>
   </div>
+
+  <!-- TABS -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-3">
+    <div class="flex flex-wrap gap-2">
+      <button data-tab="products" class="tab-btn tab-active px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
+        <span class="w-5 h-5 rounded-md bg-white/20 flex items-center justify-center text-xs font-bold">1</span>
+        Tableau Produits
+      </button>
+      <button data-tab="guide" class="tab-btn tab-inactive px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
+        <span class="w-5 h-5 rounded-md bg-brand-blue/10 flex items-center justify-center text-xs font-bold">2</span>
+        Guide UX Copy
+      </button>
+      <button data-tab="checklist" class="tab-btn tab-inactive px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
+        <span class="w-5 h-5 rounded-md bg-brand-blue/10 flex items-center justify-center text-xs font-bold">3</span>
+        Checklist Publication
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+<!-- ============= TAB 1 : PRODUCTS ============= -->
+<section id="tab-products" class="tab-content fade-in">
+  <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold text-brand-blue">Onglet 1 — Tableau Produits</h2>
+      <p class="text-sm text-slate-600 mt-1">10 produits · 11 colonnes optimisées conversion · Volets figés</p>
+    </div>
+    <div class="flex gap-2 text-xs">
+      <span class="px-2.5 py-1 bg-white border border-slate-200 rounded-md text-slate-700 font-medium">🎨 Palette bleu/vert</span>
+      <span class="px-2.5 py-1 bg-white border border-slate-200 rounded-md text-slate-700 font-medium">🏆 Badges dorés</span>
+      <span class="px-2.5 py-1 bg-white border border-slate-200 rounded-md text-slate-700 font-medium">🟢 CTA vert conversion</span>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+    <div class="overflow-x-auto scroll-fade">
+      <table class="min-w-[1400px] w-full text-sm">
+        <thead>
+          <tr class="bg-gradient-to-r from-brand-blue to-brand-blueLight text-white text-xs uppercase tracking-wide">
+            <th class="sticky-col bg-brand-blue px-3 py-3 text-left font-semibold">Réf.</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[180px]">Nom (accroche)</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[220px]">Sous-titre UX</th>
+            <th class="px-3 py-3 text-left font-semibold">Catégorie</th>
+            <th class="px-3 py-3 text-left font-semibold">Prix</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[200px]">Bénéfice clé</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[160px]">Preuve sociale</th>
+            <th class="px-3 py-3 text-left font-semibold">Badge</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[180px]">CTA principal</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[150px]">CTA secondaire</th>
+            <th class="px-3 py-3 text-left font-semibold min-w-[200px]">Réassurance</th>
+          </tr>
+        </thead>
+        <tbody id="products-body" class="text-slate-700"></tbody>
+      </table>
+    </div>
+    <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+      <span>10 lignes affichées · Volets figés sur l'en-tête et la colonne Réf.</span>
+      <span class="font-medium text-brand-blue">Feuille active : Tableau Produits</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============= TAB 2 : GUIDE ============= -->
+<section id="tab-guide" class="tab-content hidden">
+  <div class="mb-5">
+    <h2 class="text-2xl sm:text-3xl font-bold text-brand-blue">Onglet 2 — Guide UX Copy</h2>
+    <p class="text-sm text-slate-600 mt-1">Les 10 règles d'or du copy commercial, avec exemples ❌ vs ✅</p>
+  </div>
+  <div id="guide-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+</section>
+
+<!-- ============= TAB 3 : CHECKLIST ============= -->
+<section id="tab-checklist" class="tab-content hidden">
+  <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold text-brand-blue">Onglet 3 — Checklist Avant Publication</h2>
+      <p class="text-sm text-slate-600 mt-1">12 points de contrôle qualité à valider pour chaque fiche produit</p>
+    </div>
+    <div class="text-right">
+      <div class="text-3xl font-bold text-brand-green" id="check-score">0 / 12</div>
+      <div class="text-xs text-slate-500">Points validés</div>
+    </div>
+  </div>
+
+  <div class="w-full bg-slate-200 rounded-full h-2 mb-6 overflow-hidden">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-green to-brand-greenDark transition-all duration-500" style="width:0%"></div>
+  </div>
+
+  <div id="checklist-container" class="bg-white rounded-2xl shadow-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden"></div>
+
+  <div class="mt-6 p-5 bg-gradient-to-r from-brand-cream to-white border border-brand-goldLight rounded-2xl flex items-start gap-3">
+    <div class="w-10 h-10 rounded-full badge-gold flex items-center justify-center text-lg flex-shrink-0">💡</div>
+    <div>
+      <h4 class="font-semibold text-brand-blue">Astuce Pro</h4>
+      <p class="text-sm text-slate-700 mt-1">Ne publiez jamais une fiche produit sans avoir coché <strong>au minimum 10/12 items</strong>. Un CTA à la 1ʳᵉ personne + une preuve sociale chiffrée augmentent en moyenne le taux de conversion de <strong>+27%</strong>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="max-w-7xl mx-auto px-4 sm:px-6 py-8 text-center text-xs text-slate-500">
+  Aperçu interactif du fichier <strong>tableau_produits_ux_copy.xlsx</strong> — Conçu pour la conversion.
 </footer>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-(function () {
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+// ============ DATA ============
+const products = [
+  { ref:"P001", nom:"Diffuseur Zen™", sub:"Transformez votre salon en havre de paix en 30 secondes", cat:"Bien-être", price:"49€", old:"79€", benefit:"Endormez-vous 2× plus vite grâce à 6 huiles apaisantes", social:"⭐ 4.9/5 · 2 847 avis", badge:"BEST-SELLER", cta:"Je respire mieux →", cta2:"Voir la démo", reassure:"✓ Livraison 48h · Retour 30j offert" },
+  { ref:"P002", nom:"Coussin Lombaire ErgoFit", sub:"Dites adieu aux douleurs de dos, même après 8h assis", cat:"Ergonomie", price:"39€", old:"59€", benefit:"Soulagement immédiat validé par 87% des kinés", social:"👥 12 000+ acheteurs", badge:"TENDANCE", cta:"Je soulage mon dos →", cta2:"Comparer", reassure:"✓ Garantie 2 ans · Essai 60j" },
+  { ref:"P003", nom:"Lampe Aurora Sunrise", sub:"Réveillez-vous naturellement, sans stress ni alarme", cat:"Sommeil", price:"89€", old:"129€", benefit:"Simulation solaire progressive sur 30 min", social:"⭐ 4.8/5 · 1 240 avis", badge:"COUP DE ❤️", cta:"J'améliore mes matins →", cta2:"Voir les couleurs", reassure:"✓ Économe en énergie · SAV FR" },
+  { ref:"P004", nom:"Gourde ThermoPure 750", sub:"Eau glacée 24h, café chaud 12h — où que vous soyez", cat:"Hydratation", price:"29€", old:"45€", benefit:"Double paroi inox — zéro plastique, 100% pure", social:"🌍 Adoptée par 50 000 sportifs", badge:"ÉCO", cta:"Je m'hydrate mieux →", cta2:"Choisir ma couleur", reassure:"✓ Sans BPA · Garantie à vie" },
+  { ref:"P005", nom:"Casque FocusPro X", sub:"Concentrez-vous à 100%, même dans un open-space bruyant", cat:"Audio", price:"149€", old:"199€", benefit:"Réduction de bruit active -35 dB", social:"⭐ 4.7/5 · 3 500 avis", badge:"NOUVEAU", cta:"Je m'isole du bruit →", cta2:"Écouter un extrait", reassure:"✓ Autonomie 40h · Test 30j" },
+  { ref:"P006", nom:"Sérum GlowVit C", sub:"Une peau lumineuse dès le 7ᵉ jour, garantie", cat:"Beauté", price:"34€", old:"49€", benefit:"Vitamine C stabilisée 15% + acide hyaluronique", social:"💚 94% de peaux plus lumineuses", badge:"BEST-SELLER", cta:"Je révèle mon éclat →", cta2:"Voir la routine", reassure:"✓ Vegan · Fabriqué en France" },
+  { ref:"P007", nom:"Sac Nomad Weekender", sub:"3 jours d'aventure dans un seul sac, mains libres", cat:"Voyage", price:"79€", old:"119€", benefit:"12 poches intelligentes + compartiment laptop 16\"", social:"✈️ 8 000+ globe-trotters conquis", badge:"TENDANCE", cta:"Je prépare mon voyage →", cta2:"Voir capacités", reassure:"✓ Waterproof · Garantie 5 ans" },
+  { ref:"P008", nom:"Yoga Mat AlignPro", sub:"Chaque posture parfaite, sans jamais glisser", cat:"Sport", price:"59€", old:"89€", benefit:"Marqueurs d'alignement + adhérence pro", social:"🧘 Recommandé par 200 profs", badge:"COUP DE ❤️", cta:"Je démarre ma séance →", cta2:"Voir le guide", reassure:"✓ Antibactérien · Sac inclus" },
+  { ref:"P009", nom:"Chargeur MagFlow 3-en-1", sub:"Iphone, Watch, AirPods : tout rechargé en une nuit", cat:"Tech", price:"69€", old:"99€", benefit:"MagSafe 15W + Qi certifié Apple", social:"⭐ 4.9/5 · 1 890 avis", badge:"NOUVEAU", cta:"Je désencombre mon bureau →", cta2:"Compatibilités", reassure:"✓ Certifié MFi · SAV réactif" },
+  { ref:"P010", nom:"Théière Infusia Glass", sub:"Un thé parfait à chaque tasse, sans effort", cat:"Cuisine", price:"39€", old:"55€", benefit:"Infuseur amovible + verre borosilicate résistant", social:"🍃 Élue produit de l'année 2024", badge:"ÉDITION LIMITÉE", cta:"Je m'offre ce moment →", cta2:"Découvrir les thés", reassure:"✓ Passe au lave-vaisselle" }
+];
 
-  /* ---------- Structured brand data ---------- */
-  const brand = {
-    name: 'The Tea Story',
-    promise: 'Small-batch, single-origin tea with a playful 3D brew ritual',
-    values: [
-      { id: 'origin', title: 'Single-origin clarity', blurb: 'One garden, one harvest, one honest flavor story.' },
-      { id: 'batch', title: 'Small-batch craft', blurb: 'Tight lots that keep aroma vivid from chest to teapot.' },
-      { id: 'planet', title: 'Soft on the planet', blurb: 'Compostable pouches, reusable tins, no greenwashing.' }
-    ],
-    products: [
-      { id: 'jade', name: 'Jade Spine Oolong', price: 28, steep: '85°C · 3 min', mood: 'floral lift' },
-      { id: 'amber', name: 'Amber Gate Black', price: 24, steep: '95°C · 4 min', mood: 'malt sunset' },
-      { id: 'smoke', name: 'Smoke & Cedar Pu-erh', price: 32, steep: '100°C · rinse + 20s', mood: 'forest depth' }
-    ],
-    ctas: {
-      primary: 'Start brewing',
-      shop: 'Shop the collection',
-      guide: 'Get the brew guide',
-      add: 'Add to tray'
-    }
-  };
+const principles = [
+  { n:1, titre:"L'accroche vend le bénéfice, pas le produit", desc:"Le client n'achète pas un objet, il achète une transformation.", bad:"Diffuseur d'huiles essentielles 300ml", good:"Transformez votre salon en havre de paix en 30 secondes" },
+  { n:2, titre:"L'ancrage de prix multiplie la valeur perçue", desc:"Un prix barré à côté du prix actuel révèle immédiatement l'économie.", bad:"49€", good:"49€ ~~79€~~ (-38%)" },
+  { n:3, titre:"La preuve sociale doit être chiffrée", desc:"Les chiffres précis inspirent 3× plus confiance que le vague.", bad:"Beaucoup de clients satisfaits", good:"⭐ 4.9/5 · 2 847 avis vérifiés" },
+  { n:4, titre:"Le CTA parle à la 1ʳᵉ personne", desc:"« Je » engage le client dans l'action, « Ajouter » ne fait que décrire.", bad:"Ajouter au panier", good:"Je respire mieux →" },
+  { n:5, titre:"Le badge émotionnel crée l'urgence", desc:"BEST-SELLER, TENDANCE, ÉDITION LIMITÉE : ils déclenchent le FOMO.", bad:"Disponible", good:"🔥 BEST-SELLER · Stock limité" },
+  { n:6, titre:"Le ton est enthousiaste, jamais agressif", desc:"On invite, on n'oblige pas. Le point d'exclamation reste rare.", bad:"ACHETEZ MAINTENANT !!! DERNIÈRE CHANCE !!!", good:"Ce moment vous attend — offrez-le-vous 💚" },
+  { n:7, titre:"La réassurance lève les 3 dernières objections", desc:"Livraison, retour, garantie : les objections tuent le panier.", bad:"Livraison possible", good:"✓ Livraison 48h · Retour 30j · Garantie 2 ans" },
+  { n:8, titre:"Chaque copy est scannable en 3 secondes", desc:"Le client lit en diagonale : structurez avec des puces et des icônes.", bad:"Long paragraphe descriptif sans hiérarchie visuelle...", good:"✓ Bénéfice 1  ✓ Bénéfice 2  ✓ Bénéfice 3" },
+  { n:9, titre:"Le sous-titre promet, le bénéfice prouve", desc:"L'un séduit émotionnellement, l'autre rassure rationnellement.", bad:"Produit de haute qualité", good:"Endormez-vous 2× plus vite grâce à 6 huiles apaisantes" },
+  { n:10, titre:"Un CTA secondaire à basse friction", desc:"Tous les visiteurs ne sont pas prêts à acheter : offrez une porte d'entrée douce.", bad:"[Seul bouton : Acheter]", good:"Je respire mieux → · Voir la démo" }
+];
 
-  /* ---------- Toast + CTAs ---------- */
-  const toast = document.getElementById('toast');
-  let toastTimer;
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
-  }
+const checklist = [
+  "L'accroche exprime clairement un bénéfice client (pas une caractéristique)",
+  "Le sous-titre UX contient une promesse concrète et mesurable",
+  "Un prix ancré (barré) est visible pour révéler l'économie réalisée",
+  "Le bénéfice clé répond à la question « Why buy now? »",
+  "Une preuve sociale chiffrée est présente (note, nombre d'avis, %)",
+  "Le badge émotionnel est cohérent avec la réalité produit",
+  "Le CTA principal est formulé à la 1ʳᵉ personne du singulier",
+  "Un CTA secondaire à basse friction est proposé",
+  "La micro-copy de réassurance couvre livraison / retour / garantie",
+  "Le ton reste enthousiaste, jamais agressif ni culpabilisant",
+  "La fiche est scannable en moins de 5 secondes",
+  "Aucune faute d'orthographe, de typo ou d'incohérence de prix"
+];
 
-  document.getElementById('cta-primary')?.addEventListener('click', () => {
-    document.getElementById('brew')?.scrollIntoView({ behavior: 'smooth' });
-    triggerPour();
-    showToast('Ritual primed — drag the pot to explore.');
+// ============ RENDER PRODUCTS ============
+const badgeMap = {
+  "BEST-SELLER": "badge-gold",
+  "TENDANCE": "badge-emo",
+  "COUP DE ❤️": "bg-pink-100 text-pink-800 border border-pink-200",
+  "NOUVEAU": "bg-blue-100 text-brand-blue border border-blue-200",
+  "ÉCO": "bg-emerald-100 text-emerald-800 border border-emerald-200",
+  "ÉDITION LIMITÉE": "bg-purple-100 text-purple-800 border border-purple-200"
+};
+
+const pbody = document.getElementById('products-body');
+products.forEach((p, i) => {
+  const bClass = badgeMap[p.badge] || 'badge-gold';
+  const rowBg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+  pbody.insertAdjacentHTML('beforeend', `
+    <tr class="${rowBg} hover:bg-blue-50/50 transition-colors border-b border-slate-100">
+      <td class="sticky-col ${rowBg} px-3 py-3 font-mono text-xs font-semibold text-brand-blue">${p.ref}</td>
+      <td class="px-3 py-3 font-semibold text-brand-blue">${p.nom}</td>
+      <td class="px-3 py-3 text-slate-600 italic">${p.sub}</td>
+      <td class="px-3 py-3"><span class="inline-block px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-700">${p.cat}</span></td>
+      <td class="px-3 py-3">
+        <div class="font-bold text-brand-blue">${p.price}</div>
+        <div class="price-old">${p.old}</div>
+      </td>
+      <td class="px-3 py-3 text-slate-700 text-xs leading-relaxed">${p.benefit}</td>
+      <td class="px-3 py-3 text-xs font-medium text-slate-700">${p.social}</td>
+      <td class="px-3 py-3"><span class="inline-block px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wide ${bClass}">${p.badge}</span></td>
+      <td class="px-3 py-3"><button class="cta-primary px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap">${p.cta}</button></td>
+      <td class="px-3 py-3"><button class="cta-secondary px-3 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap">${p.cta2}</button></td>
+      <td class="px-3 py-3 text-xs text-brand-greenDark font-medium">${p.reassure}</td>
+    </tr>
+  `);
+});
+
+// ============ RENDER GUIDE ============
+const gGrid = document.getElementById('guide-grid');
+principles.forEach(p => {
+  gGrid.insertAdjacentHTML('beforeend', `
+    <div class="principle-card bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+      <div class="flex items-start gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-blue to-brand-teal text-white flex items-center justify-center font-bold flex-shrink-0">${p.n}</div>
+        <div>
+          <h3 class="font-bold text-brand-blue leading-tight">${p.titre}</h3>
+          <p class="text-xs text-slate-600 mt-1">${p.desc}</p>
+        </div>
+      </div>
+      <div class="space-y-2 mt-4">
+        <div class="bad px-3 py-2 rounded-lg text-xs">
+          <span class="font-bold mr-1">❌</span> ${p.bad}
+        </div>
+        <div class="good px-3 py-2 rounded-lg text-xs">
+          <span class="font-bold mr-1">✅</span> ${p.good}
+        </div>
+      </div>
+    </div>
+  `);
+});
+
+// ============ RENDER CHECKLIST ============
+const cContainer = document.getElementById('checklist-container');
+checklist.forEach((item, i) => {
+  cContainer.insertAdjacentHTML('beforeend', `
+    <label class="check-item flex items-center gap-4 px-5 py-4 cursor-pointer transition-colors">
+      <input type="checkbox" class="big check-input" data-idx="${i}">
+      <span class="w-8 h-8 rounded-full bg-brand-bg border border-slate-200 flex items-center justify-center text-xs font-bold text-brand-blue flex-shrink-0">${(i+1).toString().padStart(2,'0')}</span>
+      <span class="text-sm text-slate-800 font-medium flex-1">${item}</span>
+    </label>
+  `);
+});
+
+const scoreEl = document.getElementById('check-score');
+const barEl = document.getElementById('progress-bar');
+document.querySelectorAll('.check-input').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const total = document.querySelectorAll('.check-input:checked').length;
+    scoreEl.textContent = `${total} / 12`;
+    barEl.style.width = (total/12*100) + '%';
+    scoreEl.classList.toggle('text-brand-green', total >= 10);
+    scoreEl.classList.toggle('text-brand-gold', total < 10 && total >= 6);
+    scoreEl.classList.toggle('text-slate-400', total < 6);
   });
-  document.getElementById('nav-cta')?.addEventListener('click', () => {
-    document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+// ============ TABS ============
+const tabs = document.querySelectorAll('.tab-btn');
+const contents = document.querySelectorAll('.tab-content');
+tabs.forEach(t => {
+  t.addEventListener('click', () => {
+    tabs.forEach(x => { x.classList.remove('tab-active'); x.classList.add('tab-inactive'); });
+    t.classList.add('tab-active'); t.classList.remove('tab-inactive');
+    const target = t.dataset.tab;
+    contents.forEach(c => c.classList.add('hidden'));
+    const activeC = document.getElementById('tab-' + target);
+    activeC.classList.remove('hidden');
+    activeC.classList.remove('fade-in');
+    void activeC.offsetWidth;
+    activeC.classList.add('fade-in');
   });
-  document.getElementById('cta-shop')?.addEventListener('click', () => {
-    document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' });
-    showToast('Featured leaves unlocked.');
-  });
-  document.getElementById('cta-guide')?.addEventListener('click', () => {
-    showToast('Brew guide sent to your kettle (check inbox).');
-  });
-  document.querySelectorAll('.add-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const name = btn.getAttribute('data-name');
-      showToast(`${name} added to your tray`);
-      btn.textContent = 'On tray ✓';
-      setTimeout(() => { btn.textContent = brand.ctas.add; }, 1800);
-      pulseProduct(name);
-    });
-  });
-
-  /* ---------- Topbar scroll ---------- */
-  const topbar = document.getElementById('topbar');
-  const onScroll = () => {
-    topbar.classList.toggle('scrolled', window.scrollY > 24);
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* ---------- Brew steps cycle ---------- */
-  const steps = Array.from(document.querySelectorAll('.step'));
-  let stepIndex = 0;
-  if (!reduced && steps.length) {
-    setInterval(() => {
-      steps.forEach((s) => s.classList.remove('active'));
-      stepIndex = (stepIndex + 1) % steps.length;
-      steps[stepIndex].classList.add('active');
-    }, 3200);
-  }
-
-  /* ---------- Three.js scene ---------- */
-  const stage = document.getElementById('stage');
-  const orbitPad = document.getElementById('orbit-pad');
-  const brewState = document.getElementById('brew-state');
-
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  stage.appendChild(renderer.domElement);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(2.8, 1.9, 4.2);
-
-  const root = new THREE.Group();
-  scene.add(root);
-
-  /* Lights */
-  const hemi = new THREE.HemisphereLight(0xffe6b0, 0x1a120a, 1.05);
-  scene.add(hemi);
-  const key = new THREE.DirectionalLight(0xffd27a, 1.35);
-  key.position.set(4, 6, 3);
-  scene.add(key);
-  const fill = new THREE.DirectionalLight(0x8eae72, 0.35);
-  fill.position.set(-4, 2, -2);
-  scene.add(fill);
-  const rim = new THREE.PointLight(0xe0b955, 1.2, 12);
-  rim.position.set(-1.5, 2.2, 2.5);
-  scene.add(rim);
-
-  /* Materials */
-  const ceramic = new THREE.MeshStandardMaterial({
-    color: 0xf2e6d4, roughness: 0.42, metalness: 0.08
-  });
-  const ceramicDark = new THREE.MeshStandardMaterial({
-    color: 0x2a2118, roughness: 0.55, metalness: 0.12
-  });
-  const goldMat = new THREE.MeshStandardMaterial({
-    color: 0xc9a24a, roughness: 0.35, metalness: 0.7, emissive: 0x3a2a08, emissiveIntensity: 0.25
-  });
-  const teaMat = new THREE.MeshStandardMaterial({
-    color: 0xa86b24, roughness: 0.2, metalness: 0.05, transparent: true, opacity: 0.88
-  });
-  const woodMat = new THREE.MeshStandardMaterial({
-    color: 0x3b2a1a, roughness: 0.8, metalness: 0.05
-  });
-  const leafMat = new THREE.MeshStandardMaterial({
-    color: 0x6f8f4a, roughness: 0.55, metalness: 0.05, side: THREE.DoubleSide
-  });
-  const leafDark = new THREE.MeshStandardMaterial({
-    color: 0x3d5a32, roughness: 0.6, metalness: 0.05, side: THREE.DoubleSide
-  });
-
-  /* Tray */
-  const tray = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.2, 0.12, 64), woodMat);
-  tray.position.y = -0.85;
-  root.add(tray);
-  const trayLip = new THREE.Mesh(new THREE.TorusGeometry(2.12, 0.04, 12, 64), goldMat);
-  trayLip.rotation.x = Math.PI / 2;
-  trayLip.position.y = -0.78;
-  root.add(trayLip);
-
-  /* Teapot group */
-  const pot = new THREE.Group();
-  pot.position.set(-0.55, -0.15, 0.15);
-  root.add(pot);
-
-  const body = new THREE.Mesh(new THREE.SphereGeometry(0.72, 48, 32), ceramic);
-  body.scale.set(1.05, 0.85, 0.95);
-  pot.add(body);
-
-  const lid = new THREE.Mesh(new THREE.SphereGeometry(0.38, 32, 24, 0, Math.PI * 2, 0, Math.PI * 0.5), ceramic);
-  lid.position.y = 0.48;
-  pot.add(lid);
-  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), goldMat);
-  knob.position.y = 0.72;
-  pot.add(knob);
-
-  const spout = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.08, 0.14, 0.7, 16),
-    ceramic
-  );
-  spout.position.set(0.75, 0.15, 0);
-  spout.rotation.z = -Math.PI / 2.6;
-  pot.add(spout);
-
-  const handle = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.06, 12, 32, Math.PI * 1.3), ceramic);
-  handle.position.set(-0.72, 0.05, 0);
-  handle.rotation.set(0, 0, Math.PI / 2.2);
-  pot.add(handle);
-
-  const potBand = new THREE.Mesh(new THREE.TorusGeometry(0.74, 0.025, 8, 48), goldMat);
-  potBand.rotation.x = Math.PI / 2;
-  potBand.position.y = 0.05;
-  pot.add(potBand);
-
-  /* Cup */
-  const cupGrp = new THREE.Group();
-  cupGrp.position.set(1.05, -0.55, 0.35);
-  root.add(cupGrp);
-
-  const cupOuter = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.38, 0.3, 0.55, 32, 1, true),
-    ceramic
-  );
-  cupGrp.add(cupOuter);
-  const cupInner = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.35, 0.28, 0.52, 32, 1, true),
-    ceramicDark
-  );
-  cupInner.position.y = 0.01;
-  cupGrp.add(cupInner);
-  const cupBottom = new THREE.Mesh(new THREE.CircleGeometry(0.3, 32), ceramic);
-  cupBottom.rotation.x = -Math.PI / 2;
-  cupBottom.position.y = -0.27;
-  cupGrp.add(cupBottom);
-  const tea = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.27, 0.28, 32), teaMat);
-  tea.position.y = -0.05;
-  cupGrp.add(tea);
-  const cupHandle = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.035, 10, 24, Math.PI), ceramic);
-  cupHandle.position.set(0.42, 0.02, 0);
-  cupHandle.rotation.y = Math.PI / 2;
-  cupGrp.add(cupHandle);
-
-  /* Saucer */
-  const saucer = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.5, 0.05, 32), ceramic);
-  saucer.position.set(1.05, -0.82, 0.35);
-  root.add(saucer);
-
-  /* Leaves scattered */
-  const leafGeo = new THREE.SphereGeometry(0.12, 10, 8);
-  leafGeo.scale(1, 0.25, 0.55);
-  const leaves = new THREE.Group();
-  root.add(leaves);
-  for (let i = 0; i < 18; i++) {
-    const m = i % 2 ? leafMat : leafDark;
-    const leaf = new THREE.Mesh(leafGeo, m);
-    const a = (i / 18) * Math.PI * 2;
-    const r = 1.1 + Math.random() * 0.7;
-    leaf.position.set(Math.cos(a) * r, -0.76, Math.sin(a) * r * 0.7);
-    leaf.rotation.set(Math.random() * 0.6, a, Math.random() * 1.2);
-    leaf.scale.setScalar(0.7 + Math.random() * 0.6);
-    leaves.add(leaf);
-  }
-
-  /* Floating leaf particles */
-  const floatLeaves = new THREE.Group();
-  root.add(floatLeaves);
-  for (let i = 0; i < 10; i++) {
-    const leaf = new THREE.Mesh(leafGeo, leafMat);
-    leaf.position.set((Math.random() - 0.5) * 3.5, Math.random() * 2, (Math.random() - 0.5) * 2.5);
-    leaf.scale.setScalar(0.35 + Math.random() * 0.35);
-    leaf.userData = {
-      speed: 0.15 + Math.random() * 0.25,
-      phase: Math.random() * Math.PI * 2,
-      radius: 0.2 + Math.random() * 0.4
-    };
-    floatLeaves.add(leaf);
-  }
-
-  /* Steam particles (simple sprites via meshes) */
-  const steamGroup = new THREE.Group();
-  steamGroup.position.set(1.05, -0.1, 0.35);
-  root.add(steamGroup);
-  const steamMat = new THREE.MeshBasicMaterial({
-    color: 0xf6eddf, transparent: true, opacity: 0.18, depth: THREE.FrontSide
-  });
-  const steams = [];
-  for (let i = 0; i < 8; i++) {
-    const s = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 8), steamMat.clone());
-    s.material.opacity = 0.05 + Math.random() * 0.12;
-    s.userData = { phase: Math.random() * Math.PI * 2, speed: 0.35 + Math.random() * 0.4 };
-    steamGroup.add(s);
-    steams.push(s);
-  }
-
-  /* Soft ground glow */
-  const glow = new THREE.Mesh(
-    new THREE.CircleGeometry(2.8, 48),
-    new THREE.MeshBasicMaterial({ color: 0xe0b955, transparent: true, opacity: 0.06 })
-  );
-  glow.rotation.x = -Math.PI / 2;
-  glow.position.y = -0.88;
-  root.add(glow);
-
-  /* Orbit interaction */
-  const target = new THREE.Vector3(0.2, 0.1, 0);
-  let spherical = { theta: 0.55, phi: 1.15, radius: 5.2 };
-  let targetSpherical = { ...spherical };
-  let dragging = false;
-  let lastX = 0, lastY = 0;
-  let autoRotate = true;
-  let pourT = 0;
-
-  function applyCamera() {
-    const { theta, phi, radius } = spherical;
-    camera.position.x = target.x + radius * Math.sin(phi) * Math.cos(theta);
-    camera.position.y = target.y + radius * Math.cos(phi);
-    camera.position.z = target.z + radius * Math.sin(phi) * Math.sin(theta);
-    camera.lookAt(target);
-  }
-  applyCamera();
-
-  function onPointerDown(e) {
-    dragging = true;
-    autoRotate = false;
-    lastX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
-    lastY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-    if (brewState) brewState.textContent = 'Orbiting';
-  }
-  function onPointerMove(e) {
-    if (!dragging) return;
-    const x = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
-    const y = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-    const dx = x - lastX;
-    const dy = y - lastY;
-    lastX = x; lastY = y;
-    targetSpherical.theta -= dx * 0.005;
-    targetSpherical.phi = Math.min(1.45, Math.max(0.55, targetSpherical.phi + dy * 0.004));
-  }
-  function onPointerUp() {
-    dragging = false;
-    if (brewState) brewState.textContent = pourT > 0 ? 'Pouring' : 'Idle steam';
-    setTimeout(() => { if (!dragging) autoRotate = true; }, 2200);
-  }
-  function onWheel(e) {
-    e.preventDefault();
-    targetSpherical.radius = Math.min(7.5, Math.max(3.4, targetSpherical.radius + e.deltaY * 0.004));
-  }
-
-  orbitPad.addEventListener('pointerdown', onPointerDown);
-  window.addEventListener('pointermove', onPointerMove);
-  window.addEventListener('pointerup', onPointerUp);
-  orbitPad.addEventListener('wheel', onWheel, { passive: false });
-  orbitPad.addEventListener('touchstart', (e) => onPointerDown(e.touches[0]), { passive: true });
-  orbitPad.addEventListener('touchmove', (e) => { onPointerMove(e.touches[0]); e.preventDefault(); }, { passive: false });
-  orbitPad.addEventListener('touchend', onPointerUp);
-
-  function triggerPour() {
-    pourT = 1;
-    autoRotate = false;
-    targetSpherical.theta = 0.2;
-    targetSpherical.phi = 1.05;
-    if (brewState) brewState.textContent = 'Pouring';
-  }
-
-  function pulseProduct(name) {
-    const map = { 'Jade Spine Oolong': 0x8eae72, 'Amber Gate Black': 0xc47a32, 'Smoke & Cedar Pu-erh': 0x6b5b4a };
-    const c = map[name] || 0xe0b955;
-    teaMat.color.setHex(c);
-    rim.color.setHex(c);
-    pourT = 0.6;
-  }
-
-  /* Responsive */
-  function onResize() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  }
-  window.addEventListener('resize', onResize);
-
-  /* Animation loop */
-  const clock = new THREE.Clock();
-  function animate() {
-    requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-    const dt = Math.min(clock.getDelta(), 0.05);
-
-    if (autoRotate && !dragging && !reduced) {
-      targetSpherical.theta += dt * 0.18;
-    }
-
-    spherical.theta += (targetSpherical.theta - spherical.theta) * 0.08;
-    spherical.phi += (targetSpherical.phi - spherical.phi) * 0.08;
-    spherical.radius += (targetSpherical.radius - spherical.radius) * 0.08;
-    applyCamera();
-
-    root.position.y = Math.sin(t * 0.7) * 0.04;
-    pot.rotation.y = Math.sin(t * 0.35) * 0.06;
-
-    if (pourT > 0) {
-      pourT = Math.max(0, pourT - dt * 0.35);
-      pot.rotation.z = -Math.sin((1 - pourT) * Math.PI) * 0.55 * Math.min(1, (1 - pourT) * 2);
-      tea.scale.y = 0.7 + (1 - pourT) * 0.35;
-      tea.position.y = -0.08 + (1 - pourT) * 0.04;
-      if (pourT === 0) {
-        pot.rotation.z = 0;
-        if (brewState && !dragging) brewState.textContent = 'Idle steam';
-      }
-    } else if (!reduced) {
-      tea.position.y = -0.05 + Math.sin(t * 1.5) * 0.01;
-    }
-
-    floatLeaves.children.forEach((leaf, i) => {
-      const u = leaf.userData;
-      leaf.position.y += Math.sin(t * u.speed + u.phase) * 0.002;
-      leaf.position.x += Math.cos(t * u.speed * 0.7 + u.phase) * 0.0015;
-      leaf.rotation.z = t * 0.4 + u.phase;
-      leaf.rotation.x = Math.sin(t * 0.5 + i) * 0.4;
-    });
-
-    steams.forEach((s, i) => {
-      const u = s.userData;
-      const p = (t * u.speed + u.phase) % 1;
-      s.position.set(
-        Math.sin(t + i) * 0.08,
-        p * 1.1,
-        Math.cos(t * 0.8 + i) * 0.08
-      );
-      const fade = Math.sin(p * Math.PI);
-      s.scale.setScalar(0.6 + p * 1.6);
-      s.material.opacity = 0.16 * fade;
-    });
-
-    rim.intensity = 1.05 + Math.sin(t * 2) * 0.2;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  /* Expose minimal API for CTAs already wired */
-  window.TeaStory = { brand, triggerPour, showToast };
-})();
+});
 </script>
+
 </body>
 </html>
