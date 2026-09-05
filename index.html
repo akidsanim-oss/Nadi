@@ -1,1549 +1,1686 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DE LA CALLE! | Modern Mexican Tepache | Fermented Soda</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De La Calle – Tepache Mexicain Authentique | Démo Vitrine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-  <!-- Three.js CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- Confetti for checkout celebration -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    /* ===== RESET & DESIGN SYSTEM ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --bg-cream: #FAF6EE;
-      --bg-yellow: #FFD23F;
+      --bg: #FFFDF8;
+      --card-bg: #FFFFFF;
+      --text: #1E1B18;
+      --text-muted: #645E59;
+      --yellow: #F7C948;
+      --mango: #FF8A00;
       --terracotta: #D84A38;
-      --clay: #B73225;
-      --mex-pink: #E60067;
-      --agave-green: #2B6149;
-      --deep-teal: #004D47;
-      --text-dark: #191414;
-      --text-muted: #665D52;
-      --can-shadow: rgba(25, 20, 20, 0.15);
-      --font-display: 'Alfa Slab One', cursive;
-      --font-heading: 'Space Grotesk', sans-serif;
-      --font-body: 'Plus Jakarta Sans', sans-serif;
-      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      --strawberry: #E63956;
+      --cactus: #2E7D5B;
+      --mandarin: #F97316;
+      --prickly: #9D174D;
+      --grapefruit: #EC4899;
+      --dark-card: #181512;
+      --border: #EFE8DA;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+      --shadow-md: 0 12px 30px rgba(0,0,0,0.08);
+      --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
     }
 
     body {
-      background-color: var(--bg-cream);
-      color: var(--text-dark);
-      font-family: var(--font-body);
-      overflow-x: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* Announcement Bar */
-    .announcement-bar {
-      background: var(--terracotta);
-      color: #FFF;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+    h1, h2, h3, h4, .brand-font {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 900;
       text-transform: uppercase;
-      padding: 0.6rem 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    /* ===== ANNOUNCEMENT BAR ===== */
+    .announcement {
+      background: #000;
+      color: #fff;
+      font-size: 0.8rem;
       text-align: center;
+      padding: 8px 16px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 110;
+    }
+    .announcement span { color: var(--yellow); }
+
+    /* ===== HEADER ===== */
+    header {
       position: sticky;
       top: 0;
       z-index: 100;
+      background: rgba(255, 253, 248, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--border);
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 1.5rem;
-      overflow: hidden;
-    }
-
-    .announcement-bar span {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    /* Navigation */
-    header {
-      background: rgba(250, 246, 238, 0.95);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 36px;
-      z-index: 99;
-      border-bottom: 2px solid var(--text-dark);
-      padding: 0.8rem 2.5rem;
-      display: flex;
       justify-content: space-between;
-      align-items: center;
+      padding: 14px 40px;
     }
 
     .brand-logo {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      color: var(--terracotta);
-      text-decoration: none;
-      letter-spacing: -0.02em;
       display: flex;
       align-items: center;
-      gap: 0.3rem;
-      text-transform: uppercase;
-      text-shadow: 2px 2px 0px var(--text-dark);
+      gap: 8px;
+      cursor: pointer;
+    }
+    .brand-logo svg { width: 34px; height: 34px; fill: var(--terracotta); }
+    .brand-logo span {
+      font-size: 1.8rem;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 900;
+      color: var(--terracotta);
+      letter-spacing: -0.04em;
     }
 
-    .nav-links {
+    nav.nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 32px;
       list-style: none;
     }
-
-    .nav-link {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      text-decoration: none;
-      color: var(--text-dark);
+    nav.nav-links button {
       font-size: 0.95rem;
-      letter-spacing: 0.03em;
+      font-weight: 700;
+      color: var(--text);
+      transition: color 0.2s;
       position: relative;
-      cursor: pointer;
-      transition: var(--transition);
     }
-
-    .nav-link:hover, .nav-link.active {
+    nav.nav-links button:hover, nav.nav-links button.active {
       color: var(--terracotta);
     }
-
-    .nav-link.active::after {
+    nav.nav-links button.active::after {
       content: '';
       position: absolute;
       bottom: -6px;
       left: 0;
       width: 100%;
-      height: 3px;
+      height: 2px;
       background: var(--terracotta);
-      border-radius: 2px;
     }
 
-    .nav-actions {
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 16px;
     }
 
-    .btn-cart {
-      background: var(--text-dark);
-      color: #FFF;
-      border: 2px solid var(--text-dark);
-      padding: 0.6rem 1.2rem;
+    .cart-btn-nav {
+      position: relative;
+      background: var(--text);
+      color: #fff;
+      padding: 10px 18px;
       border-radius: 999px;
-      font-family: var(--font-heading);
       font-weight: 700;
-      cursor: pointer;
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      transition: var(--transition);
-      box-shadow: 2px 2px 0px var(--terracotta);
+      gap: 8px;
+      transition: transform 0.2s, background 0.2s;
     }
-
-    .btn-cart:hover {
-      background: var(--terracotta);
-      border-color: var(--terracotta);
-      box-shadow: 2px 2px 0px var(--text-dark);
-      transform: translate(-1px, -1px);
-    }
-
+    .cart-btn-nav:hover { background: var(--terracotta); transform: scale(1.02); }
     .cart-badge {
-      background: var(--bg-yellow);
-      color: var(--text-dark);
-      width: 22px;
-      height: 22px;
+      background: var(--yellow);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    /* ===== FLOATING SOCIALS ===== */
+    .floating-socials {
+      position: fixed;
+      right: 18px;
+      bottom: 24px;
+      z-index: 95;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .floating-socials a {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .floating-socials a:hover {
+      transform: translateY(-4px) scale(1.08);
+      background: var(--yellow);
     }
 
-    /* Hero Section with 3D Canvas */
-    .hero {
+    /* ===== PAGES CONTAINER ===== */
+    .page-view { display: none; }
+    .page-view.active-view { display: block; }
+
+    /* ===== HERO SECTION ===== */
+    .hero-container {
       position: relative;
-      min-height: 88vh;
+      background: radial-gradient(circle at 75% 40%, rgba(247, 201, 72, 0.3) 0%, rgba(255, 253, 248, 0) 70%),
+                  radial-gradient(circle at 20% 80%, rgba(216, 74, 56, 0.15) 0%, rgba(255, 253, 248, 0) 60%);
+      padding: 40px 60px 80px;
+      min-height: 86vh;
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1.1fr 0.9fr;
       align-items: center;
-      padding: 3rem 4.5rem;
-      background: radial-gradient(circle at 75% 45%, #FFE7A8 0%, var(--bg-cream) 70%);
+      gap: 40px;
       overflow: hidden;
     }
 
     .hero-content {
-      z-index: 10;
       max-width: 620px;
+      z-index: 2;
     }
-
-    .hero-tagline {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--bg-yellow);
-      border: 2px solid var(--text-dark);
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      padding: 0.4rem 1rem;
-      border-radius: 999px;
-      margin-bottom: 1.5rem;
-      box-shadow: 3px 3px 0px var(--text-dark);
-    }
-
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: 4.4rem;
-      line-height: 0.95;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      color: var(--text-dark);
-      letter-spacing: -0.01em;
-    }
-
-    .hero-title span.accent {
-      color: var(--terracotta);
+    .hero-tag {
       display: inline-block;
-      text-shadow: 3px 3px 0px var(--bg-yellow);
+      background: #FCEFD5;
+      color: #8C4B00;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
     }
-
+    .hero-title {
+      font-size: 4.8rem;
+      line-height: 0.95;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+    .hero-title span { color: var(--terracotta); }
     .hero-subtitle {
       font-size: 1.25rem;
       color: var(--text-muted);
-      margin-bottom: 2rem;
-      line-height: 1.5;
+      margin-bottom: 36px;
+      font-weight: 500;
     }
-
-    .hero-actions {
+    .hero-cta-group {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: 1.2rem;
-      margin-bottom: 2.5rem;
+      gap: 16px;
+      flex-wrap: wrap;
     }
-
-    .btn-primary {
+    .btn-main {
       background: var(--terracotta);
-      color: #FFF;
-      border: 2px solid var(--text-dark);
-      padding: 0.9rem 2.2rem;
-      font-family: var(--font-heading);
+      color: #fff;
       font-weight: 800;
-      font-size: 1.05rem;
-      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 1rem;
       letter-spacing: 0.05em;
+      transition: all 0.2s;
+      box-shadow: 0 10px 25px rgba(216, 74, 56, 0.3);
+    }
+    .btn-main:hover {
+      background: #b83c2c;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(216, 74, 56, 0.4);
+    }
+    .btn-outline {
+      border: 2px solid var(--text);
+      color: var(--text);
+      font-weight: 800;
+      padding: 14px 32px;
       border-radius: 999px;
-      cursor: pointer;
-      box-shadow: 4px 4px 0px var(--text-dark);
-      transition: var(--transition);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover {
+      background: var(--text);
+      color: #fff;
     }
 
-    .btn-primary:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--text-dark);
-      background: var(--clay);
-    }
-
-    .btn-secondary {
-      background: #FFF;
-      color: var(--text-dark);
-      border: 2px solid var(--text-dark);
-      padding: 0.9rem 2rem;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.05rem;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      border-radius: 999px;
-      cursor: pointer;
-      box-shadow: 4px 4px 0px var(--text-dark);
-      transition: var(--transition);
-      text-decoration: none;
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-yellow);
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--text-dark);
-    }
-
-    .flavor-selector-wrap {
+    .hero-stats {
       display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
+      gap: 36px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid var(--border);
     }
+    .stat-item h3 { font-size: 2rem; color: var(--text); margin-bottom: 2px; }
+    .stat-item p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
-    .flavor-selector-label {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-
-    .flavor-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .flavor-pill {
-      background: #FFF;
-      border: 2px solid var(--text-dark);
-      padding: 0.45rem 1rem;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      font-family: var(--font-heading);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .flavor-pill .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.2);
-    }
-
-    .flavor-pill:hover, .flavor-pill.active {
-      transform: scale(1.04);
-      border-color: var(--text-dark);
-      box-shadow: 2px 2px 0px var(--text-dark);
-      background: var(--bg-yellow);
-    }
-
-    /* 3D WebGL Canvas Container */
+    /* 3D CAN VIEWPORT */
     .hero-3d-wrap {
       position: relative;
-      height: 620px;
-      width: 100%;
+      height: 580px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
-    #webgl-container {
+    #canvas3d {
       width: 100%;
       height: 100%;
+      outline: none;
       cursor: grab;
-      position: relative;
+    }
+    #canvas3d:active { cursor: grabbing; }
+
+    .flavor-selector-pills {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 8px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-md);
       z-index: 5;
     }
-
-    #webgl-container:active {
-      cursor: grabbing;
+    .pill-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      transition: transform 0.2s;
+      position: relative;
+    }
+    .pill-btn:hover, .pill-btn.active {
+      transform: scale(1.25);
+      border-color: #000;
     }
 
-    .can-3d-controls-hint {
+    .interactive-hint {
       position: absolute;
-      bottom: 20px;
-      right: 30px;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(4px);
-      border: 2px solid var(--text-dark);
-      border-radius: 999px;
-      padding: 0.4rem 0.9rem;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
       font-size: 0.75rem;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      pointer-events: none;
-      box-shadow: 2px 2px 0px var(--text-dark);
-      z-index: 12;
-    }
-
-    .flavor-floating-badge {
-      position: absolute;
-      top: 10%;
-      left: 0;
-      background: #FFF;
-      border: 2px solid var(--text-dark);
-      padding: 0.9rem 1.3rem;
-      border-radius: 16px;
-      box-shadow: 4px 4px 0px var(--text-dark);
-      z-index: 12;
-      animation: floatBadge 4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .flavor-floating-badge .badge-title {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      color: var(--terracotta);
-      text-transform: uppercase;
-      line-height: 1.1;
-    }
-
-    .flavor-floating-badge .badge-sub {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    @keyframes floatBadge {
-      0%, 100% { transform: translateY(0px) rotate(-2deg); }
-      50% { transform: translateY(-10px) rotate(1deg); }
-    }
-
-    /* Benefits Grid Section */
-    .section-benefits {
-      padding: 5rem 4.5rem;
-      background: #FFF;
-      border-top: 2px solid var(--text-dark);
-      border-bottom: 2px solid var(--text-dark);
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 680px;
-      margin: 0 auto 3.5rem auto;
-    }
-
-    .section-subtitle {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      color: var(--terracotta);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: 2.8rem;
-      text-transform: uppercase;
-      color: var(--text-dark);
-      line-height: 1.1;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-    }
-
-    .benefit-card {
-      background: var(--bg-cream);
-      border: 2px solid var(--text-dark);
-      border-radius: 18px;
-      padding: 2.2rem;
-      box-shadow: 5px 5px 0px var(--text-dark);
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .benefit-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 7px 7px 0px var(--terracotta);
-    }
-
-    .benefit-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--bg-yellow);
-      border: 2px solid var(--text-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-    }
-
-    .benefit-card h3 {
-      font-family: var(--font-heading);
-      font-size: 1.3rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .benefit-card p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    /* Tasting Carousel Section */
-    .section-flavors {
-      padding: 5rem 4.5rem;
-      background: #FFE9B3;
-      border-bottom: 2px solid var(--text-dark);
-    }
-
-    .flavors-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .flavor-card {
-      background: #FFF;
-      border: 2px solid var(--text-dark);
-      border-radius: 20px;
-      padding: 1.8rem;
-      box-shadow: 4px 4px 0px var(--text-dark);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .flavor-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 6px 6px 0px var(--text-dark);
-    }
-
-    .flavor-swatch {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 3px solid var(--text-dark);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-    }
-
-    .flavor-card h4 {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      margin-bottom: 0.4rem;
-      text-transform: uppercase;
-    }
-
-    .flavor-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 1.2rem;
-      flex-grow: 1;
-    }
-
-    .flavor-card .btn-quick-add {
-      background: var(--text-dark);
-      color: #FFF;
-      border: 2px solid var(--text-dark);
+      font-weight: 600;
+      padding: 6px 14px;
       border-radius: 999px;
-      padding: 0.5rem 1.1rem;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 0.82rem;
-      cursor: pointer;
-      transition: var(--transition);
-      width: 100%;
-    }
-
-    .flavor-card .btn-quick-add:hover {
-      background: var(--terracotta);
-      border-color: var(--terracotta);
-    }
-
-    /* Cart Drawer Modal */
-    .cart-drawer-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(25, 20, 20, 0.6);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+    }
+
+    /* ===== WHAT IS TEPACHE ===== */
+    .section-tepache {
+      padding: 100px 40px;
+      background: #191614;
+      color: #FFF;
+      position: relative;
+      overflow: hidden;
+    }
+    .tepache-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .tepache-badge {
+      color: var(--yellow);
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .tepache-title {
+      font-size: 3.6rem;
+      line-height: 1.05;
+      margin-bottom: 28px;
+    }
+    .tepache-desc {
+      font-size: 1.15rem;
+      color: #B5AEA5;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+    .tepache-highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .th-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 24px;
+      border-radius: var(--radius-md);
+    }
+    .th-card h4 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: var(--yellow);
+    }
+    .th-card p {
+      font-size: 0.9rem;
+      color: #A39B92;
+    }
+
+    .tepache-visual {
+      position: relative;
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
     }
-
-    .cart-drawer-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
+    .tepache-circle {
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #F7C948 0%, #D84A38 100%);
+      opacity: 0.85;
+      filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 80px rgba(247, 201, 72, 0.4);
     }
-
-    .cart-drawer {
-      width: 100%;
-      max-width: 420px;
-      height: 100%;
-      background: var(--bg-cream);
-      border-left: 2px solid var(--text-dark);
+    .tepache-circle-inner {
+      width: 80%;
+      height: 80%;
+      border: 2px dashed rgba(255,255,255,0.4);
+      border-radius: 50%;
       display: flex;
       flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 2rem;
-      box-shadow: -8px 0 25px rgba(0,0,0,0.15);
-    }
-
-    .cart-drawer-overlay.open .cart-drawer {
-      transform: translateX(0);
-    }
-
-    .drawer-header {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding-bottom: 1.2rem;
-      border-bottom: 2px solid var(--text-dark);
-      margin-bottom: 1.5rem;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+    }
+    .tepache-circle-inner span {
+      font-size: 3.5rem;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 900;
+      line-height: 1;
     }
 
-    .drawer-header h3 {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
+    /* ===== FLAVOR SHOWCASE / BEST SELLERS ===== */
+    .section-flavors {
+      padding: 90px 40px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .section-head {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 50px;
+    }
+    .section-head h2 { font-size: 3.2rem; margin-bottom: 12px; }
+    .section-head p { color: var(--text-muted); font-size: 1.1rem; }
+
+    .flavors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .product-card-wrap:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(0,0,0,0.15);
+    }
+
+    .prod-art {
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .prod-art svg {
+      width: 120px;
+      height: 180px;
+      filter: drop-shadow(0 15px 15px rgba(0,0,0,0.15));
+      transition: transform 0.3s;
+    }
+    .product-card-wrap:hover .prod-art svg {
+      transform: scale(1.08) rotate(2deg);
+    }
+
+    .badge-pill {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 800;
       text-transform: uppercase;
+      background: #000;
+      color: #fff;
     }
 
-    .close-drawer {
-      background: none;
-      border: 2px solid var(--text-dark);
-      border-radius: 50%;
+    .prod-details h3 { font-size: 1.4rem; margin-bottom: 6px; }
+    .prod-notes { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; min-height: 40px; }
+    
+    .nutrition-tags {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .n-tag {
+      background: #F5F2EC;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #4A443E;
+    }
+
+    .prod-bottom {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .prod-price { font-size: 1.35rem; font-weight: 900; font-family: 'Cabinet Grotesk', sans-serif; }
+    .prod-price small { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+
+    .btn-add {
+      background: var(--text);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-add:hover {
+      background: var(--terracotta);
+      transform: scale(1.04);
+    }
+
+    /* ===== MODAL DETAIL PRODUIT ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 840px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
       width: 36px;
       height: 36px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      cursor: pointer;
+      border-radius: 50%;
+      background: #F3EEE7;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: var(--transition);
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 5;
     }
-
-    .close-drawer:hover {
-      background: var(--terracotta);
-      color: #FFF;
+    .modal-visual {
+      background: #FAF6EE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
     }
+    .modal-visual svg { width: 170px; height: 260px; }
+    .modal-info {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-info h2 { font-size: 2.2rem; margin-bottom: 8px; }
+    .modal-info .modal-tagline { color: var(--terracotta); font-weight: 700; margin-bottom: 16px; }
+    .modal-info p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; }
+    .nutrition-table {
+      background: #FAF7F2;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      text-align: center;
+      gap: 10px;
+    }
+    .nt-item h5 { font-size: 1.1rem; color: var(--text); }
+    .nt-item span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
-    .cart-items-list {
+    /* ===== CART DRAWER ===== */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -440px;
+      width: 420px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #fff;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+      z-index: 250;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-drawer.open { right: 0; }
+    .cart-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 240;
+      display: none;
+    }
+    .cart-backdrop.open { display: block; }
+
+    .cart-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cart-header h3 { font-size: 1.5rem; }
+    .cart-items-wrap {
       flex: 1;
       overflow-y: auto;
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 18px;
     }
-
-    .cart-item {
+    .cart-item-row {
+      display: grid;
+      grid-template-columns: 55px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-info h4 { font-size: 1rem; margin-bottom: 4px; }
+    .cart-item-info span { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .qty-controls {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      background: #FFF;
-      border: 2px solid var(--text-dark);
-      border-radius: 12px;
-      padding: 0.8rem;
+      gap: 8px;
+      background: #F3EEE7;
+      padding: 4px 8px;
+      border-radius: 999px;
+      margin-top: 6px;
+      width: fit-content;
     }
-
-    .cart-item-img {
-      width: 48px;
-      height: 48px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      background: var(--bg-yellow);
-      border: 1px solid var(--text-dark);
-    }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
-    .cart-item-title {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .cart-item-price {
-      font-size: 0.85rem;
-      color: var(--terracotta);
-      font-weight: 700;
-    }
-
+    .qty-btn { font-weight: bold; width: 20px; height: 20px; }
     .cart-footer {
-      border-top: 2px solid var(--text-dark);
-      padding-top: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      background: #FAF7F2;
     }
-
-    .cart-total-row {
+    .cart-subtotal {
       display: flex;
       justify-content: space-between;
-      font-family: var(--font-heading);
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 16px;
     }
-
-    .btn-checkout {
+    .cart-checkout-btn {
       width: 100%;
       background: var(--terracotta);
-      color: #FFF;
-      border: 2px solid var(--text-dark);
-      padding: 1rem;
-      font-family: var(--font-heading);
-      font-weight: 800;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: #fff;
+      padding: 16px;
       border-radius: 999px;
-      cursor: pointer;
-      box-shadow: 4px 4px 0px var(--text-dark);
-      transition: var(--transition);
+      font-weight: 800;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .cart-checkout-btn:hover { background: #ba3d2e; }
+
+    /* ===== PAGE: OUR STORY ===== */
+    .story-hero {
+      padding: 90px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .story-text h2 { font-size: 3.5rem; line-height: 1; margin-bottom: 24px; color: var(--terracotta); }
+    .story-text p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
+    .founders-card {
+      background: #FAF4E8;
+      border: 2px dashed #E2CEB0;
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      text-align: center;
+    }
+    .founders-badge {
+      display: inline-block;
+      background: #000;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
     }
 
-    .btn-checkout:hover {
-      background: var(--clay);
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--text-dark);
+    /* ===== PAGE: HISTORY ===== */
+    .history-timeline {
+      max-width: 900px;
+      margin: 60px auto 100px;
+      padding: 0 20px;
+      position: relative;
     }
+    .history-timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      background: var(--border);
+    }
+    .timeline-node {
+      position: relative;
+      margin-bottom: 60px;
+      width: 50%;
+      padding: 0 36px;
+    }
+    .timeline-node:nth-child(odd) { left: 0; text-align: right; }
+    .timeline-node:nth-child(even) { left: 50%; text-align: left; }
+    .timeline-node::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      background: var(--terracotta);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(216, 74, 56, 0.2);
+    }
+    .timeline-node:nth-child(odd)::after { right: -8px; }
+    .timeline-node:nth-child(even)::after { left: -8px; }
+    .node-year { font-size: 1.4rem; font-weight: 900; color: var(--terracotta); margin-bottom: 6px; }
+    .node-title { font-size: 1.2rem; margin-bottom: 8px; }
+    .node-desc { font-size: 0.95rem; color: var(--text-muted); }
 
-    /* Footer */
-    footer {
-      background: var(--text-dark);
-      color: #FFF;
-      padding: 3rem 4.5rem;
+    /* ===== PAGE: SUBSCRIBE ===== */
+    .subscribe-plans {
+      max-width: 1200px;
+      margin: 40px auto 100px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .plan-card {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .plan-card.featured {
+      border-color: var(--terracotta);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-8px);
+    }
+    .featured-tag {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--terracotta);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+    .plan-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+    .plan-price { font-size: 2.8rem; font-weight: 900; color: var(--text); margin-bottom: 20px; }
+    .plan-price span { font-size: 1rem; color: var(--text-muted); font-weight: 600; }
+    .plan-perks { list-style: none; margin-bottom: 30px; display: flex; flex-direction: column; gap: 12px; }
+    .plan-perks li { font-size: 0.95rem; color: var(--text-muted); }
+
+    /* ===== PAGE: WHERE TO BUY ===== */
+    .locator-wrap {
+      max-width: 800px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .locator-search {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 24px auto 40px;
+    }
+    .locator-search input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 2px solid var(--border);
+      border-radius: 999px;
+      font-size: 1rem;
+      outline: none;
+    }
+    .locator-search input:focus { border-color: var(--terracotta); }
+    .store-list {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 16px;
+      text-align: left;
     }
-
-    .footer-top {
+    .store-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      padding-bottom: 2rem;
     }
 
-    .footer-brand {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      color: var(--bg-yellow);
+    /* ===== FOOTER ===== */
+    footer {
+      background: #110F0D;
+      color: #fff;
+      padding: 80px 40px 40px;
     }
-
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-col h4 { font-size: 1.1rem; margin-bottom: 18px; color: var(--yellow); }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { color: #A8A199; font-size: 0.9rem; text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: #fff; }
     .footer-bottom {
+      max-width: 1200px;
+      margin: 30px auto 0;
       display: flex;
       justify-content: space-between;
       font-size: 0.85rem;
-      color: #A0988E;
-      flex-wrap: wrap;
-      gap: 1rem;
+      color: #6C665F;
     }
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .hero {
-        grid-template-columns: 1fr;
-        padding: 2.5rem 2rem;
-        text-align: center;
-      }
-      .hero-content {
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .hero-actions {
-        justify-content: center;
-      }
-      .flavor-pills {
-        justify-content: center;
-      }
-      .hero-3d-wrap {
-        height: 480px;
-      }
-      .flavors-cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    /* TOAST ALERT */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #000;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      z-index: 300;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+    .toast-msg.show { transform: translateX(-50%) translateY(0); }
 
-    @media (max-width: 640px) {
-      header {
-        padding: 0.8rem 1.2rem;
-      }
-      .nav-links {
-        display: none;
-      }
-      .hero-title {
-        font-size: 3rem;
-      }
-      .section-benefits, .section-flavors {
-        padding: 3.5rem 1.5rem;
-      }
-      .flavors-cards-grid {
-        grid-template-columns: 1fr;
-      }
-      .hero-3d-wrap {
-        height: 380px;
-      }
+    @media (max-width: 900px) {
+      .hero-container { grid-template-columns: 1fr; padding: 30px 20px; }
+      .hero-title { font-size: 3.2rem; }
+      .tepache-grid { grid-template-columns: 1fr; gap: 40px; }
+      .story-hero { grid-template-columns: 1fr; }
+      .subscribe-plans { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .modal-box { grid-template-columns: 1fr; }
+      header { padding: 14px 20px; }
+      nav.nav-links { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Announcement Bar -->
-  <div class="announcement-bar">
-    <span>🌮 FREE SHIPPING OVER 2 12-PACKS</span>
-    <span>⚡ CERTIFIED ORGANIC & LOW SUGAR</span>
-    <span>🇲🇽 AUTHENTIC FERMENTED RECIPE</span>
+  <!-- Announcement Bar -->
+  <div class="announcement">
+    🇲🇽 TEPACHE TRADITIONNEL FERMENTÉ • <span>LIVRAISON GRATUITE DÈS 4 PACKS</span> • SANTÉ INTESTINALE NATURELLE
   </div>
 
-  <!-- Main Navigation -->
+  <!-- Header -->
   <header>
-    <a href="#" class="brand-logo">DE LA CALLE!</a>
-    <ul class="nav-links">
-      <li><a class="nav-link active" href="#hero">Tepache 3D</a></li>
-      <li><a class="nav-link" href="#flavors">Flavors</a></li>
-      <li><a class="nav-link" href="#benefits">Tradition</a></li>
-      <li><a class="nav-link" href="#reviews">Reviews</a></li>
-    </ul>
-    <div class="nav-actions">
-      <button class="btn-cart" id="btn-open-cart">
-        <span>Cart</span>
-        <div class="cart-badge" id="cart-counter">3</div>
+    <div class="brand-logo" onclick="switchPage('home')">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <span>DE LA CALLE</span>
+    </div>
+
+    <nav class="nav-links">
+      <li><button class="nav-item active" onclick="switchPage('home')">Accueil</button></li>
+      <li><button class="nav-item" onclick="switchPage('shop')">Boutique</button></li>
+      <li><button class="nav-item" onclick="switchPage('story')">Notre Histoire</button></li>
+      <li><button class="nav-item" onclick="switchPage('history')">Tradition</button></li>
+      <li><button class="nav-item" onclick="switchPage('subscribe')">Abonnement -10%</button></li>
+      <li><button class="nav-item" onclick="switchPage('locator')">Où Trouver</button></li>
+    </nav>
+
+    <div class="header-actions">
+      <button class="cart-btn-nav" onclick="openCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Panier <span class="cart-badge" id="cartCount">0</span>
       </button>
     </div>
   </header>
 
-  <!-- Hero Section with Interactive 3D WebGL -->
-  <main>
-    <section class="hero" id="hero">
+  <!-- Floating Social Sidebar -->
+  <div class="floating-socials">
+    <a href="#" title="Instagram">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <a href="#" title="WhatsApp">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </a>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- PAGE: HOME -->
+  <!-- ============================================== -->
+  <div id="page-home" class="page-view active-view">
+    <!-- Hero Section -->
+    <section class="hero-container">
       <div class="hero-content">
-        <div class="hero-tagline">
-          <span>🍍</span> Certified Organic Mexican Soda
-        </div>
-        <h1 class="hero-title">
-          FERMENTED <br><span class="accent">FIZZ OF MEXICO</span>
-        </h1>
-        <p class="hero-subtitle">
-          Brewed from pineapple rinds, organic turbinado sugar, and aromatic spices. Crisp, bubbly, gut-friendly, and naturally invigorating.
-        </p>
-
-        <div class="hero-actions">
-          <button class="btn-primary" id="btn-add-hero">
-            <span>Add 12-Pack to Cart • $39</span>
-          </button>
-          <a href="#flavors" class="btn-secondary">Explore Flavors</a>
+        <span class="hero-tag">Boisson Fermentée Ancestrale Mexicaine</span>
+        <h1 class="hero-title">Le goût frais <span>de la rue</span> dans une canette.</h1>
+        <p class="hero-subtitle">Élaboré à partir d’écorces d’ananas certifiées bio, d’épices chaudes et de sucre turbinado. Faible en sucre, riche en prébiotiques vivants.</p>
+        
+        <div class="hero-cta-group">
+          <button class="btn-main" onclick="switchPage('shop')">Découvrir les Parfums</button>
+          <button class="btn-outline" onclick="switchPage('story')">L'Histoire de Rafa & Alex</button>
         </div>
 
-        <div class="flavor-selector-wrap">
-          <div class="flavor-selector-label">Interactive 3D Can Flavor</div>
-          <div class="flavor-pills" id="flavor-pill-list">
-            <button class="flavor-pill active" data-flavor="pineapple">
-              <span class="dot" style="background:#FFC837;"></span> Pineapple Spice
-            </button>
-            <button class="flavor-pill" data-flavor="mangochili">
-              <span class="dot" style="background:#FF512F;"></span> Mango Chili
-            </button>
-            <button class="flavor-pill" data-flavor="cactus">
-              <span class="dot" style="background:#2B6149;"></span> Prickly Pear Cactus
-            </button>
-            <button class="flavor-pill" data-flavor="grapefruit">
-              <span class="dot" style="background:#E60067;"></span> Grapefruit Lime
-            </button>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h3>&lt; 40 kcal</h3>
+            <p>Par Canette</p>
+          </div>
+          <div class="stat-item">
+            <h3>Bio & Cru</h3>
+            <p>Ananas Fermenté</p>
+          </div>
+          <div class="stat-item">
+            <h3>Prébiotiques</h3>
+            <p>Pour le Microbiome</p>
           </div>
         </div>
       </div>
 
-      <!-- 3D Canvas Area -->
+      <!-- 3D Can Experience -->
       <div class="hero-3d-wrap">
-        <div class="flavor-floating-badge" id="flavor-badge">
-          <div class="badge-title" id="badge-name">Pineapple Spice</div>
-          <div class="badge-sub">40 Calories • Gut Friendly</div>
+        <div class="interactive-hint">✦ Glisser pour tourner la canette 3D</div>
+        <div id="canvas3d"></div>
+        <div class="flavor-selector-pills" id="canPills"></div>
+      </div>
+    </section>
+
+    <!-- What is Tepache -->
+    <section class="section-tepache">
+      <div class="tepache-grid">
+        <div>
+          <span class="tepache-badge">HÉRITAGE AZTÈQUE</span>
+          <h2 class="tepache-title">Qu'est-ce que le Tepache ?</h2>
+          <p class="tepache-desc">Né il y a des siècles dans les vallées du Mexique central, le tepache est un breuvage fermenté naturellement et rafraîchissant. Préparé avec des écorces d'ananas mûries sous le soleil, de la cannelle douce et du piloncillo pur.</p>
+          
+          <div class="tepache-highlights">
+            <div class="th-card">
+              <h4>Fermentation Spontanée</h4>
+              <p>Fermenté en petits lots pour préserver un équilibre parfait de bulles vivantes et d'arômes d'agrumes.</p>
+            </div>
+            <div class="th-card">
+              <h4>Énergie Légère</h4>
+              <p>Moins de 4g de sucre de canne brut, sans édulcorants artificiels ni arômes synthétiques.</p>
+            </div>
+          </div>
         </div>
 
-        <div id="webgl-container"></div>
-
-        <div class="can-3d-controls-hint">
-          <span>🔄</span> Drag to rotate & inspect in 3D
+        <div class="tepache-visual">
+          <div class="tepache-circle">
+            <div class="tepache-circle-inner">
+              <span>100%</span>
+              <p style="font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Authenticité Mexicaine</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Benefits Highlights -->
-    <section class="section-benefits" id="benefits">
-      <div class="section-header">
-        <div class="section-subtitle">Real Heritage • Real Ingredients</div>
-        <h2 class="section-title">Why Mexico Loves Tepache</h2>
+    <!-- Best Sellers Showcase -->
+    <section class="section-flavors">
+      <div class="section-head">
+        <h2>Parfums Phares</h2>
+        <p>Inspirés des étals bigarrés des marchés traditionnels de Mexico.</p>
       </div>
 
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-icon">🍍</div>
-          <h3>Naturally Fermented</h3>
-          <p>Rooted in centuries-old Mexican street market heritage. Fermented slowly for a layered, effervescent tropical depth.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">🦠</div>
-          <h3>Gut Health Friendly</h3>
-          <p>Packed with organic acids, prebiotics, and probiotics that keep your micro-biome refreshed and thriving all day.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">🌿</div>
-          <h3>Under 40 Calories</h3>
-          <p>Sweetened naturally with organic turbinado sugar and real fruit purées. Never synthetic sweeteners or preservatives.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">🌶️</div>
-          <h3>Bold Latin Botanicals</h3>
-          <p>Infused with cinnamon sticks, crushed cloves, and subtle chili peppers for an authentic Mexican street cart fiesta.</p>
-        </div>
+      <div class="flavors-grid" id="homeProductGrid">
+        <!-- Injected via JavaScript -->
       </div>
     </section>
+  </div>
 
-    <!-- Tasting Grid -->
-    <section class="section-flavors" id="flavors">
-      <div class="section-header">
-        <div class="section-subtitle">Street-Side Refreshment</div>
-        <h2 class="section-title">The Four Signature Brews</h2>
-      </div>
+  <!-- ============================================== -->
+  <!-- PAGE: SHOP -->
+  <!-- ============================================== -->
+  <div id="page-shop" class="page-view">
+    <div style="background:#FAF6EE; padding:60px 40px; text-align:center; border-bottom:1px solid var(--border);">
+      <h1 style="font-size:3.5rem; margin-bottom:12px;">La Taquería Liquide</h1>
+      <p style="color:var(--text-muted); font-size:1.15rem; max-width:600px; margin:0 auto;">
+        Commandez nos 7 saveurs emblématiques ou optez pour nos Packs Découverte en packs de 12 canettes.
+      </p>
+    </div>
 
-      <div class="flavors-cards-grid">
-        <div class="flavor-card" onclick="selectFlavorByName('pineapple')">
-          <div class="flavor-swatch" style="background:#FFE600;">🍍</div>
-          <h4>Pineapple Spice</h4>
-          <p>The timeless authentic standard. Juicy charred pineapple, Mexican canela cinnamon & cloves.</p>
-          <button class="btn-quick-add" onclick="event.stopPropagation(); addToCart('Pineapple Spice 12-Pack', 39);">Add To Cart ($39)</button>
-        </div>
-        <div class="flavor-card" onclick="selectFlavorByName('mangochili')">
-          <div class="flavor-swatch" style="background:#FF6A00;">🥭</div>
-          <h4>Mango Chili</h4>
-          <p>Ripe coastal mango pureed with a dash of habanero and smoky tajín spice. Sweet & fiery.</p>
-          <button class="btn-quick-add" onclick="event.stopPropagation(); addToCart('Mango Chili 12-Pack', 39);">Add To Cart ($39)</button>
-        </div>
-        <div class="flavor-card" onclick="selectFlavorByName('cactus')">
-          <div class="flavor-swatch" style="background:#2B6149; color:#FFF;">🌵</div>
-          <h4>Prickly Pear</h4>
-          <p>Desert nopal cactus bloom paired with vibrant red prickly pear and a zest of key lime.</p>
-          <button class="btn-quick-add" onclick="event.stopPropagation(); addToCart('Prickly Pear 12-Pack', 39);">Add To Cart ($39)</button>
-        </div>
-        <div class="flavor-card" onclick="selectFlavorByName('grapefruit')">
-          <div class="flavor-swatch" style="background:#E60067; color:#FFF;">🍈</div>
-          <h4>Grapefruit Lime</h4>
-          <p>Crisp ruby red citrus sparkling soda, infused with sea salt crystals and fresh mint leaves.</p>
-          <button class="btn-quick-add" onclick="event.stopPropagation(); addToCart('Grapefruit Lime 12-Pack', 39);">Add To Cart ($39)</button>
-        </div>
-      </div>
+    <section class="section-flavors">
+      <div class="flavors-grid" id="shopFullGrid"></div>
     </section>
-  </main>
+  </div>
 
-  <!-- Cart Drawer -->
-  <div class="cart-drawer-overlay" id="cart-drawer-overlay">
-    <div class="cart-drawer">
-      <div class="drawer-header">
-        <h3>Tu Canasta (Cart)</h3>
-        <button class="close-drawer" id="btn-close-cart">&times;</button>
+  <!-- ============================================== -->
+  <!-- PAGE: OUR STORY -->
+  <!-- ============================================== -->
+  <div id="page-story" class="page-view">
+    <div class="story-hero">
+      <div class="story-text">
+        <span class="hero-tag">Les Fondateurs</span>
+        <h2>Rafa & Alex</h2>
+        <p>Rafael Silva a grandi à Mexico, berceau d'une gastronomie de rue vibrante. Sa grand-mère préparait le tepache dans de grandes jarres en terre cuite dans la cour familiale.</p>
+        <p>Après avoir rencontré Alex Celis, passionné d'agriculture durable et de fermentation, l'évidence s'est imposée : réinventer cette tradition millénaire tout en respectant scrupuleusement les petits producteurs de fruits mexicains.</p>
       </div>
-      <div class="cart-items-list" id="cart-items-list">
-        <!-- Dynamically injected cart items -->
-      </div>
-      <div class="cart-footer">
-        <div class="cart-total-row">
-          <span>Subtotal</span>
-          <span id="cart-subtotal">$117.00</span>
-        </div>
-        <button class="btn-checkout" id="btn-checkout">Checkout & Celebrate 🎉</button>
+      <div class="founders-card">
+        <span class="founders-badge">NOTRE MISSION</span>
+        <h3 style="font-size:2rem; margin-bottom:16px;">Célébrer la Culture de Rue Mexicaine</h3>
+        <p style="color:var(--text-muted); line-height:1.7;">
+          Chaque canette de De La Calle soutient directement les coopératives fruitières de Veracruz et Oaxaca et perpétue un savoir-faire artisanal vieux de plusieurs millénaires.
+        </p>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-top">
-      <div class="footer-brand">DE LA CALLE!</div>
-      <p style="max-width: 450px;">Honoring the street tepacheros of Mexico City, Guadalajara, and Oaxaca with organic craft fermented soda.</p>
+  <!-- ============================================== -->
+  <!-- PAGE: HISTORY -->
+  <!-- ============================================== -->
+  <div id="page-history" class="page-view">
+    <div style="text-align:center; padding:70px 20px 20px;">
+      <span class="hero-tag">De l'Ancien au Moderne</span>
+      <h1 style="font-size:3.6rem;">Histoire du Tepache</h1>
     </div>
+
+    <div class="history-timeline">
+      <div class="timeline-node">
+        <div class="node-year">700 AV. J.-C.</div>
+        <div class="node-title">Origines Nahuatl</div>
+        <div class="node-desc">Le mot vient du nahuatl « tepiātl » (boisson de maïs). Les Aztèques et Mayas fermente initialement des céréales douces avant d'y infuser l'ananas royal.</div>
+      </div>
+      <div class="timeline-node">
+        <div class="node-year">XVIe SIÈCLE</div>
+        <div class="node-title">L'Échange Épicé</div>
+        <div class="node-desc">L'introduction du piloncillo (sucre de canne non raffiné) et de la cannelle d'Asie enrichit définitivement la recette traditionnelle de rue.</div>
+      </div>
+      <div class="timeline-node">
+        <div class="node-year">1950 - 2000</div>
+        <div class="node-title">Le Roi des Marchés</div>
+        <div class="node-desc">Dans les mercados de Mexico et Guadalajara, les « tepacheros » servent la boisson dans des sachets en plastique transparent avec paille et sel pimenté.</div>
+      </div>
+      <div class="timeline-node">
+        <div class="node-year">2021</div>
+        <div class="node-title">Whole Foods & Révolution</div>
+        <div class="node-desc">De La Calle s'installe sur les étagères de Whole Foods aux États-Unis, modernisant la canette en aluminium recyclable sans dénaturer la recette artisanale.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- PAGE: SUBSCRIBE -->
+  <!-- ============================================== -->
+  <div id="page-subscribe" class="page-view">
+    <div style="text-align:center; padding:70px 20px 20px;">
+      <span class="hero-tag">Abonnez-vous & Économisez</span>
+      <h1 style="font-size:3.6rem;">Le Club Tepache</h1>
+      <p style="color:var(--text-muted); font-size:1.1rem; max-width:550px; margin:10px auto;">
+        10% de réduction permanente, livraison gratuite programmée et cadeaux exclusifs. Modifiable et annulable en un clic.
+      </p>
+    </div>
+
+    <div class="subscribe-plans">
+      <div class="plan-card">
+        <h3>L’Initiation</h3>
+        <p style="color:var(--text-muted); margin-bottom:20px;">1 pack de 12 canettes / mois</p>
+        <div class="plan-price">35€ <span>/mois</span></div>
+        <ul class="plan-perks">
+          <li>✓ 1 saveur au choix ou mix</li>
+          <li>✓ 10% d'économie permanente</li>
+          <li>✓ Livraison offerte à domicile</li>
+        </ul>
+        <button class="btn-outline" style="width:100%;" onclick="quickAddPlan('Initiation (12 canettes)', 35)">Choisir l'Initiation</button>
+      </div>
+
+      <div class="plan-card featured">
+        <span class="featured-tag">LE PLUS POPULAIRE</span>
+        <h3>L’Aficionado</h3>
+        <p style="color:var(--text-muted); margin-bottom:20px;">2 packs de 12 (24 canettes) / mois</p>
+        <div class="plan-price">64€ <span>/mois</span></div>
+        <ul class="plan-perks">
+          <li>✓ 2 saveurs panachées</li>
+          <li>✓ 15% d'économie + surprises</li>
+          <li>✓ Accès prioritaire aux nouvelles recettes</li>
+          <li>✓ T-shirt De La Calle offert</li>
+        </ul>
+        <button class="btn-main" style="width:100%;" onclick="quickAddPlan('Aficionado (24 canettes)', 64)">Rejoindre le Club</button>
+      </div>
+
+      <div class="plan-card">
+        <h3>La Fiesta</h3>
+        <p style="color:var(--text-muted); margin-bottom:20px;">4 packs de 12 (48 canettes) / mois</p>
+        <div class="plan-price">119€ <span>/mois</span></div>
+        <ul class="plan-perks">
+          <li>✓ L'ensemble des 7 parfums</li>
+          <li>✓ 20% d'économie maximale</li>
+          <li>✓ Décapsuleur gravé en laiton</li>
+        </ul>
+        <button class="btn-outline" style="width:100%;" onclick="quickAddPlan('La Fiesta (48 canettes)', 119)">Choisir La Fiesta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- PAGE: WHERE TO BUY -->
+  <!-- ============================================== -->
+  <div id="page-locator" class="page-view">
+    <div class="locator-wrap">
+      <span class="hero-tag">Points de Vente</span>
+      <h1 style="font-size:3.5rem;">Trouvez De La Calle Près de Chez Vous</h1>
+      <p style="color:var(--text-muted); margin-top:8px;">Entrez votre code postal ou votre ville pour localiser nos épiceries partenaires.</p>
+
+      <div class="locator-search">
+        <input type="text" id="zipSearch" placeholder="Ex: 75003, Paris, Lyon, 92100..." />
+        <button class="btn-main" onclick="filterStores()">Rechercher</button>
+      </div>
+
+      <div class="store-list" id="storeList">
+        <!-- Rendered with JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- CART DRAWER & OVERLAY -->
+  <!-- ============================================== -->
+  <div class="cart-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Votre Panier</h3>
+      <button onclick="closeCart()" style="font-size:1.5rem;">✕</button>
+    </div>
+    <div class="cart-items-wrap" id="cartItemsList">
+      <!-- Injected Cart items -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-subtotal">
+        <span>Total</span>
+        <span id="cartTotalVal">0.00 €</span>
+      </div>
+      <button class="cart-checkout-btn" onclick="checkoutDemo()">Commander (Démo Simulée)</button>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-box">
+      <div class="modal-close" onclick="closeModal()">✕</div>
+      <div class="modal-visual" id="modalCanVisual"></div>
+      <div class="modal-info">
+        <span class="hero-tag" id="modalTag">Tepache Frais</span>
+        <h2 id="modalTitle">Nom Produit</h2>
+        <div class="modal-tagline" id="modalTagline">Notes aromatiques</div>
+        <p id="modalDesc">Description complète de la recette originale mexicaine.</p>
+        
+        <div class="nutrition-table">
+          <div class="nt-item">
+            <h5 id="modalCal">35</h5>
+            <span>Calories</span>
+          </div>
+          <div class="nt-item">
+            <h5 id="modalSugar">4g</h5>
+            <span>Sucre Turbinado</span>
+          </div>
+          <div class="nt-item">
+            <h5>Vivant</h5>
+            <span>Probiotiques</span>
+          </div>
+        </div>
+
+        <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:1.6rem; font-weight:900;" id="modalPrice">39,00 €</span>
+          <button class="btn-main" id="modalAddBtn">Ajouter au Panier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-msg" id="toast">
+    <span>✓</span> <span id="toastText">Produit ajouté au panier !</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom:16px;">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <span style="color:#fff;">DE LA CALLE</span>
+        </div>
+        <p style="color:#9B948B; font-size:0.95rem; line-height:1.7;">
+          La célébration de la culture mexicaine à travers le tepache certifié biologique. Brassé avec passion, amour et piloncillo pur.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#" onclick="switchPage('home')">Accueil</a></li>
+          <li><a href="#" onclick="switchPage('shop')">Tous les Parfums</a></li>
+          <li><a href="#" onclick="switchPage('story')">Notre Équipe</a></li>
+          <li><a href="#" onclick="switchPage('subscribe')">Abonnement -10%</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Transparence</h4>
+        <ul>
+          <li><a href="#">Ingrédients Certifiés</a></li>
+          <li><a href="#">FAQ & Livraison</a></li>
+          <li><a href="#">Impact Social Oaxaca</a></li>
+          <li><a href="#">Presse & Événements</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="color:#A8A199; font-size:0.85rem; margin-bottom:12px;">Recevez un code de -15% sur votre première commande.</p>
+        <div style="display:flex; gap:8px;">
+          <input type="email" placeholder="votre@email.com" style="padding:10px 14px; border-radius:999px; border:1px solid #333; background:#222; color:#fff; font-size:0.85rem; flex:1;" />
+          <button style="background:var(--terracotta); color:#fff; padding:10px 18px; border-radius:999px; font-weight:700; font-size:0.85rem;" onclick="showToast('Merci pour votre inscription !')">OK</button>
+        </div>
+      </div>
+    </div>
+
     <div class="footer-bottom">
-      <span>© 2025 De La Calle! Co. All rights reserved.</span>
-      <span>Handcrafted with WebGL 3D & Organic Mexican Passion.</span>
+      <span>© 2025 De La Calle Tepache Démo Vitrine. Conçu pour le Web moderne.</span>
+      <span>Fait avec passion pour le tepache traditionnel.</span>
     </div>
   </footer>
 
-  <!-- WebGL Three.js & Application Script -->
+  <!-- ============================================== -->
+  <!-- JAVASCRIPT & THREE.JS LOGIC -->
+  <!-- ============================================== -->
   <script>
-    /* ========================================================
-       1. FLAVOR DEFINITIONS & DYNAMIC CANVAS TEXTURE GENERATOR
-       ======================================================== */
-    const FLAVORS = {
-      pineapple: {
-        id: 'pineapple',
-        name: 'Pineapple Spice',
-        sub: 'Tradicional Canela & Clavo',
-        calories: '40 Calories • Gut Friendly',
-        bodyTop: '#F7BC18',
-        bodyBottom: '#D84A38',
-        accentColor: '#191414',
-        textColor: '#FFFFFF',
-        icon: '🍍',
-        bubbleColor: 0xffd23f
+    /* ===== 1. PRODUCT DATABASE & SVG GENERATOR ===== */
+    const PRODUCTS = [
+      {
+        id: 'strawberry-citrus',
+        name: 'Strawberry Citrus',
+        category: 'fruity',
+        flavorNote: 'Fraise mûrie au soleil & citron vert pressé',
+        desc: 'Une harmonie pétillante de jus de fraises fraîches du Michoacán équilibrée par la vivacité du citron vert mexicain et la profondeur du piloncillo brut.',
+        color: '#E63956',
+        colorLight: '#FFE3E8',
+        colorDark: '#8A0F26',
+        calories: 35,
+        sugar: '4g',
+        price: 38.00,
+        badge: 'Best-Seller'
       },
-      mangochili: {
-        id: 'mangochili',
+      {
+        id: 'mandarin-refresco',
+        name: 'Mandarin Refresco',
+        category: 'citrus',
+        flavorNote: 'Zestes de mandarine & agrumes juteux',
+        desc: 'Inspiré des sodas artisanaux servis sur les trottoirs de Guadalajara, avec une vague d\'agrumes juteux et une amertume rafraîchissante.',
+        color: '#F97316',
+        colorLight: '#FFEDD5',
+        colorDark: '#9A3412',
+        calories: 38,
+        sugar: '4g',
+        price: 38.00,
+        badge: 'Coup de Cœur'
+      },
+      {
+        id: 'spiced-pineapple',
+        name: 'Spiced Pineapple',
+        category: 'traditional',
+        flavorNote: 'Ananas biologique, cannelle & clou de girofle',
+        desc: 'La recette originelle aztèque. Écorces d’ananas rôties infusées lentement avec de la cannelle de Ceylan et du clou de girofle doux.',
+        color: '#F7C948',
+        colorLight: '#FFFBEB',
+        colorDark: '#A16207',
+        calories: 40,
+        sugar: '5g',
+        price: 38.00,
+        badge: 'Recette Originale'
+      },
+      {
+        id: 'mango-chili',
         name: 'Mango Chili',
-        sub: 'Ripe Mango & Smoky Habanero',
-        calories: '42 Calories • Prebiotic Goodness',
-        bodyTop: '#FF7034',
-        bodyBottom: '#B73225',
-        accentColor: '#FFD23F',
-        textColor: '#FFFFFF',
-        icon: '🥭',
-        bubbleColor: 0xff6b35
+        category: 'spicy',
+        flavorNote: 'Mangue Ataúlfo fondante & pointe de piment piquín',
+        desc: 'L\'expérience quintessencielle du street-food mexicain : la douceur du coulis de mangue alliée à une chaleur fumée et subtile en finale.',
+        color: '#FF8A00',
+        colorLight: '#FFF7ED',
+        colorDark: '#C2410C',
+        calories: 35,
+        sugar: '4g',
+        price: 38.00,
+        badge: 'Épicé Doux'
       },
-      cactus: {
-        id: 'cactus',
+      {
+        id: 'prickly-pear',
         name: 'Prickly Pear',
-        sub: 'Nopal Cactus Bloom & Lime',
-        calories: '35 Calories • Ultra Refreshing',
-        bodyTop: '#3B8B67',
-        bodyBottom: '#1B4534',
-        accentColor: '#E60067',
-        textColor: '#FFFFFF',
-        icon: '🌵',
-        bubbleColor: 0x48dbfb
+        category: 'desert',
+        flavorNote: 'Figue de barbarie sauvage & hibiscus',
+        desc: 'Une couleur rubis hypnotisante et un goût délicatement floral extrait des cactus nopal des hauts plateaux de Sonora.',
+        color: '#9D174D',
+        colorLight: '#FCE7F3',
+        colorDark: '#500724',
+        calories: 30,
+        sugar: '3g',
+        price: 38.00,
+        badge: 'Édition Cactus'
       },
-      grapefruit: {
-        id: 'grapefruit',
+      {
+        id: 'tropical-ponche',
+        name: 'Tropical Ponche',
+        category: 'blend',
+        flavorNote: 'Goyave rose, ananas & tamarin acidulé',
+        desc: 'Notre hommage au ponche traditionnel des fêtes de fin d\'année mexicaines. Une explosion de fruits gorgés de soleil.',
+        color: '#0D9488',
+        colorLight: '#CCFBF1',
+        colorDark: '#115E59',
+        calories: 35,
+        sugar: '4g',
+        price: 38.00,
+        badge: 'Festif'
+      },
+      {
+        id: 'grapefruit-lime',
         name: 'Grapefruit Lime',
-        sub: 'Ruby Grapefruit & Flor de Sal',
-        calories: '38 Calories • Crisp & Tart',
-        bodyTop: '#FF416C',
-        bodyBottom: '#7A0538',
-        accentColor: '#FFE7A8',
-        textColor: '#FFFFFF',
-        icon: '🍈',
-        bubbleColor: 0xff9ff3
+        category: 'citrus',
+        flavorNote: 'Pamplemousse rubis & twist de lime sauvage',
+        desc: 'Inspiré du célèbre cocktail Paloma sans une goutte d’alcool. Ultra sec, frais et intensément désaltérant.',
+        color: '#EC4899',
+        colorLight: '#FDF2F8',
+        colorDark: '#9D174D',
+        calories: 32,
+        sugar: '3g',
+        price: 38.00,
+        badge: 'Ultra Frais'
+      },
+      {
+        id: 'variety-pack-classic',
+        name: 'Variety Pack : Les Classiques',
+        category: 'pack',
+        flavorNote: '4 Spiced Pineapple + 4 Strawberry Citrus + 4 Mango Chili',
+        desc: 'Le pack idéal pour explorer l’ADN de De La Calle. 12 canettes comprenant nos trois meilleures ventes historiques.',
+        color: '#D84A38',
+        colorLight: '#FEE2E2',
+        colorDark: '#7F1D1D',
+        calories: 36,
+        sugar: '4g',
+        price: 42.00,
+        badge: 'Pack 12 x 355ml'
+      },
+      {
+        id: 'variety-pack-fiesta',
+        name: 'Variety Pack : Fiesta Exotica',
+        category: 'pack',
+        flavorNote: 'Mix exclusif des 7 saveurs + bonus',
+        desc: 'Recevez toutes les facettes de notre barrique. Idéal pour partager lors d’un dîner tacos ou d’un apéritif en terrasse.',
+        color: '#2E7D5B',
+        colorLight: '#E8F5E9',
+        colorDark: '#1B4332',
+        calories: 35,
+        sugar: '4g',
+        price: 44.00,
+        badge: 'Pack Découverte'
       }
-    };
+    ];
 
-    let currentFlavor = FLAVORS.pineapple;
+    const STORE_LOCATIONS = [
+      { name: "La Grande Épicerie de Paris", address: "38 Rue de Sèvres, 75007 Paris", zip: "75007" },
+      { name: "Supermarché Bio C' Bon Oberkampf", address: "112 Rue Oberkampf, 75011 Paris", zip: "75011" },
+      { name: "Épicerie Mexicaine La Tiendita", address: "18 Rue Saint-Georges, 69005 Lyon", zip: "69005" },
+      { name: "Naturalia République", address: "14 Place de la République, 75010 Paris", zip: "75010" },
+      { name: "Le Marché Sauvage Bio", address: "55 Rue Paradis, 13006 Marseille", zip: "13006" }
+    ];
 
-    // Helper to generate a crisp 2048x1024 procedural can label texture
-    function createCanTexture(flavor) {
+    // Helper: generate consistent De La Calle SVG Can graphic
+    function generateCanSVG(p) {
+      return `
+        <svg viewBox="0 0 160 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bodyGrad_${p.id}" x1="20" y1="20" x2="140" y2="230" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="${p.colorLight}" />
+              <stop offset="35%" stop-color="${p.color}" />
+              <stop offset="100%" stop-color="${p.colorDark}" />
+            </linearGradient>
+            <linearGradient id="silverGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#D4D4D8" />
+              <stop offset="50%" stop-color="#FFFFFF" />
+              <stop offset="100%" stop-color="#A1A1AA" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Top rim & lip -->
+          <ellipse cx="80" cy="22" rx="42" ry="7" fill="url(#silverGrad)"/>
+          <ellipse cx="80" cy="18" rx="36" ry="5" fill="#52525B"/>
+          <ellipse cx="80" cy="17" rx="20" ry="3" fill="#27272A"/>
+
+          <!-- Can main cylinder body -->
+          <path d="M38 22 C38 18 122 18 122 22 L124 218 C124 228 36 228 36 218 Z" fill="url(#bodyGrad_${p.id})"/>
+          
+          <!-- Pattern details on Can (Aztec/Mexican sun ray motif) -->
+          <circle cx="80" cy="120" r="32" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="4 3"/>
+          <path d="M80 65 L84 78 L98 78 L87 86 L91 100 L80 91 L69 100 L73 86 L62 78 L76 78 Z" fill="#FFFFFF" opacity="0.9"/>
+
+          <!-- Brand Typography -->
+          <text x="80" y="122" font-family="'Cabinet Grotesk', sans-serif" font-weight="900" font-size="12" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">DE LA CALLE</text>
+          <text x="80" y="136" font-family="sans-serif" font-weight="800" font-size="7" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">TEPACHE</text>
+          
+          <!-- Flavor banner -->
+          <rect x="42" y="162" width="76" height="15" rx="3" fill="rgba(0,0,0,0.3)"/>
+          <text x="80" y="173" font-family="sans-serif" font-weight="800" font-size="6.5" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">${p.name.toUpperCase()}</text>
+
+          <!-- Bottom rim -->
+          <ellipse cx="80" cy="220" rx="43" ry="8" fill="url(#silverGrad)"/>
+          
+          <!-- Glossy reflection overlay -->
+          <path d="M44 24 L52 24 L50 216 L42 216 Z" fill="rgba(255,255,255,0.22)"/>
+        </svg>
+      `;
+    }
+
+    /* ===== 2. THREE.JS 3D INTERACTIVE CAN ===== */
+    let scene, camera, renderer, canGroup;
+    let currentFlavorIndex = 0;
+    const canColors = [0xE63956, 0xF97316, 0xF7C948, 0xFF8A00, 0x9D174D, 0x0D9488];
+
+    function createCanTexture(colorHex, nameText) {
       const canvas = document.createElement('canvas');
-      canvas.width = 2048;
+      canvas.width = 1024;
       canvas.height = 1024;
       const ctx = canvas.getContext('2d');
 
-      // 1. Background Gradient
-      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, flavor.bodyTop);
-      grad.addColorStop(0.7, flavor.bodyBottom);
-      grad.addColorStop(1, '#110C0B');
+      // Base gradient
+      const grad = ctx.createLinearGradient(0, 0, 1024, 1024);
+      grad.addColorStop(0, '#FFFFFF');
+      grad.addColorStop(0.3, colorHex);
+      grad.addColorStop(1, '#111111');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, 1024, 1024);
 
-      // 2. Mexican Geometric Pattern Overlay (diamonds & zigzags)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-      ctx.lineWidth = 4;
-      const step = 64;
-      for (let x = 0; x < canvas.width; x += step) {
+      // Geometric Aztec inspired motif
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+      ctx.lineWidth = 12;
+      for (let i = 0; i < 10; i++) {
         ctx.beginPath();
-        for (let y = 0; y < canvas.height; y += step) {
-          ctx.moveTo(x, y);
-          ctx.lineTo(x + step / 2, y + step / 2);
-          ctx.lineTo(x, y + step);
-        }
+        ctx.arc(512, 512, 120 + i * 40, 0, Math.PI * 2);
         ctx.stroke();
       }
 
-      // Vertical repeated banners so it looks awesome 360 degrees
-      const repeats = [canvas.width * 0.28, canvas.width * 0.78];
+      // Brand Typography
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '900 68px "Cabinet Grotesk", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('DE LA CALLE !', 512, 380);
 
-      repeats.forEach((centerX) => {
-        // Sunburst badge behind logo
-        ctx.save();
-        ctx.translate(centerX, 470);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
-        for (let i = 0; i < 16; i++) {
-          ctx.rotate((Math.PI * 2) / 16);
-          ctx.beginPath();
-          ctx.moveTo(-15, 0);
-          ctx.lineTo(0, -220);
-          ctx.lineTo(15, 0);
-          ctx.fill();
-        }
-        ctx.restore();
+      ctx.font = '800 36px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#F7C948';
+      ctx.fillText('• AUTHENTIC FERMENTED TEPACHE •', 512, 440);
 
-        // Big Main Brand Banner
-        ctx.fillStyle = '#FAF6EE';
-        ctx.textAlign = 'center';
-        ctx.font = '900 108px "Space Grotesk", sans-serif';
-        ctx.shadowColor = 'rgba(0,0,0,0.5)';
-        ctx.shadowOffsetX = 6;
-        ctx.shadowOffsetY = 6;
-        ctx.fillText('DE LA CALLE!', centerX, 360);
+      // Big Star icon
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '72px sans-serif';
+      ctx.fillText('✦', 512, 530);
 
-        // Subtitle badge
-        ctx.fillStyle = flavor.accentColor;
-        ctx.font = '700 32px "Space Grotesk", sans-serif';
-        ctx.shadowOffsetX = 3;
-        ctx.shadowOffsetY = 3;
-        ctx.fillText('MODERN MEXICAN TEPACHE', centerX, 420);
+      // Flavor Name
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 48px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(nameText.toUpperCase(), 512, 620);
 
-        // Circular Seal
-        ctx.beginPath();
-        ctx.arc(centerX, 550, 85, 0, Math.PI * 2);
-        ctx.fillStyle = '#FAF6EE';
-        ctx.fill();
-        ctx.lineWidth = 6;
-        ctx.strokeStyle = '#191414';
-        ctx.stroke();
-
-        // Icon inside seal
-        ctx.font = '75px sans-serif';
-        ctx.fillText(flavor.icon, centerX, 578);
-
-        // Big Flavor Name
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = '800 76px "Space Grotesk", sans-serif';
-        ctx.shadowOffsetX = 5;
-        ctx.shadowOffsetY = 5;
-        ctx.fillText(flavor.name.toUpperCase(), centerX, 700);
-
-        // Flavor description
-        ctx.font = '500 32px "Plus Jakarta Sans", sans-serif';
-        ctx.fillStyle = '#FFF8E7';
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
-        ctx.fillText(flavor.sub, centerX, 755);
-
-        // Micro stamps: Certified Organic & 12 FL OZ
-        ctx.font = '700 24px "Space Grotesk", sans-serif';
-        ctx.fillStyle = flavor.accentColor;
-        ctx.fillText('★ USDA ORGANIC • FERMENTED LIVE • 12 FL OZ (355ml) ★', centerX, 840);
-      });
+      ctx.font = '600 28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.fillText('355 ML • ORGANIC PINEAPPLE • LIVE CULTURES', 512, 700);
 
       const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      texture.needsUpdate = true;
       return texture;
     }
 
-    /* ========================================================
-       2. THREE.JS 3D SCENE SETUP
-       ======================================================== */
-    const container = document.getElementById('webgl-container');
-    const scene = new THREE.Scene();
+    function init3D() {
+      const container = document.getElementById('canvas3d');
+      if (!container) return;
 
-    // Camera
-    const camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(0, 0.3, 5.2);
+      const width = container.clientWidth || 500;
+      const height = container.clientHeight || 550;
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    container.appendChild(renderer.domElement);
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
+      camera.position.set(0, 0.3, 5.2);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambientLight);
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
 
-    const dirLightKey = new THREE.DirectionalLight(0xfff5ea, 1.8);
-    dirLightKey.position.set(4, 5, 4);
-    dirLightKey.castShadow = true;
-    dirLightKey.shadow.mapSize.width = 1024;
-    dirLightKey.shadow.mapSize.height = 1024;
-    scene.add(dirLightKey);
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+      scene.add(ambientLight);
 
-    const dirLightRim = new THREE.DirectionalLight(0x73c2fb, 1.4);
-    dirLightRim.position.set(-4, 3, -3);
-    scene.add(dirLightRim);
+      const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.4);
+      dirLight.position.set(5, 8, 4);
+      scene.add(dirLight);
 
-    const frontFillLight = new THREE.PointLight(0xffeedd, 1.2, 12);
-    frontFillLight.position.set(0, 1.5, 3.5);
-    scene.add(frontFillLight);
+      const rimLight = new THREE.DirectionalLight(0x70c0ff, 0.9);
+      rimLight.position.set(-6, -2, -4);
+      scene.add(rimLight);
 
-    /* ========================================================
-       3. CONSTRUCTING THE DETAILED 3D SODA CAN
-       ======================================================== */
-    const canGroup = new THREE.Group();
-    scene.add(canGroup);
+      canGroup = new THREE.Group();
+      scene.add(canGroup);
 
-    // Aluminum Material for Rims and Lid
-    const aluminumMaterial = new THREE.MeshStandardMaterial({
-      color: 0xdedede,
-      metalness: 0.92,
-      roughness: 0.22,
-    });
+      buildCanMesh(PRODUCTS[0]);
 
-    // Label Material
-    const labelMaterial = new THREE.MeshStandardMaterial({
-      roughness: 0.38,
-      metalness: 0.12,
-      map: createCanTexture(currentFlavor)
-    });
-
-    // Main Can Body Cylinder
-    const bodyHeight = 2.4;
-    const bodyRadius = 0.85;
-    const canBodyGeo = new THREE.CylinderGeometry(bodyRadius, bodyRadius, bodyHeight, 64, 1, true);
-    const canBodyMesh = new THREE.Mesh(canBodyGeo, labelMaterial);
-    canBodyMesh.castShadow = true;
-    canGroup.add(canBodyMesh);
-
-    // Top Rim Taper
-    const topTaperGeo = new THREE.CylinderGeometry(0.74, bodyRadius, 0.16, 64);
-    const topTaper = new THREE.Mesh(topTaperGeo, aluminumMaterial);
-    topTaper.position.y = bodyHeight / 2 + 0.08;
-    topTaper.castShadow = true;
-    canGroup.add(topTaper);
-
-    // Top Beveled Lip
-    const topLipGeo = new THREE.TorusGeometry(0.75, 0.035, 24, 64);
-    const topLip = new THREE.Mesh(topLipGeo, aluminumMaterial);
-    topLip.rotation.x = Math.PI / 2;
-    topLip.position.y = bodyHeight / 2 + 0.16;
-    topLip.castShadow = true;
-    canGroup.add(topLip);
-
-    // Can Top Lid Inner Recess
-    const topLidGeo = new THREE.CylinderGeometry(0.73, 0.73, 0.03, 64);
-    const topLid = new THREE.Mesh(topLidGeo, aluminumMaterial);
-    topLid.position.y = bodyHeight / 2 + 0.14;
-    canGroup.add(topLid);
-
-    // Tab ring on top
-    const tabGeo = new THREE.BoxGeometry(0.25, 0.02, 0.45);
-    const tabMesh = new THREE.Mesh(tabGeo, aluminumMaterial);
-    tabMesh.position.set(0.12, bodyHeight / 2 + 0.165, -0.05);
-    tabMesh.rotation.y = 0.3;
-    canGroup.add(tabMesh);
-
-    // Bottom Taper
-    const bottomTaperGeo = new THREE.CylinderGeometry(bodyRadius, 0.72, 0.18, 64);
-    const bottomTaper = new THREE.Mesh(bottomTaperGeo, aluminumMaterial);
-    bottomTaper.position.y = -bodyHeight / 2 - 0.09;
-    bottomTaper.castShadow = true;
-    canGroup.add(bottomTaper);
-
-    // Bottom Concave Dome
-    const bottomDomeGeo = new THREE.SphereGeometry(0.68, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
-    const bottomDome = new THREE.Mesh(bottomDomeGeo, aluminumMaterial);
-    bottomDome.rotation.x = Math.PI;
-    bottomDome.position.y = -bodyHeight / 2 - 0.15;
-    canGroup.add(bottomDome);
-
-    // Shadow Catcher Plane under can
-    const shadowPlaneGeo = new THREE.PlaneGeometry(5, 5);
-    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.22 });
-    const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
-    shadowPlane.rotation.x = -Math.PI / 2;
-    shadowPlane.position.y = -1.6;
-    shadowPlane.receiveShadow = true;
-    scene.add(shadowPlane);
-
-    /* ========================================================
-       4. EFFERVESCENT BUBBLES PARTICLE SYSTEM
-       ======================================================== */
-    const bubbleCount = 75;
-    const bubbleGeo = new THREE.SphereGeometry(0.045, 12, 12);
-    const bubbleMaterial = new THREE.MeshPhysicalMaterial({
-      color: currentFlavor.bubbleColor,
-      transmission: 0.85,
-      opacity: 0.9,
-      transparent: true,
-      roughness: 0.1,
-      ior: 1.2
-    });
-
-    const bubblesGroup = new THREE.Group();
-    const bubbleData = [];
-
-    for (let i = 0; i < bubbleCount; i++) {
-      const bubble = new THREE.Mesh(bubbleGeo, bubbleMaterial);
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 1.1 + Math.random() * 0.9;
-      const y = (Math.random() - 0.5) * 3.5;
-      bubble.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-      const scale = 0.4 + Math.random() * 0.9;
-      bubble.scale.set(scale, scale, scale);
-
-      bubblesGroup.add(bubble);
-      bubbleData.push({
-        speedY: 0.012 + Math.random() * 0.02,
-        rotSpeed: (Math.random() - 0.5) * 0.02,
-        baseAngle: angle,
-        baseRadius: radius
-      });
-    }
-    scene.add(bubblesGroup);
-
-    /* ========================================================
-       5. USER INTERACTION: ROTATION, DRAG & TILT
-       ======================================================== */
-    let isDragging = false;
-    let previousPointerPosition = { x: 0, y: 0 };
-    let spinVelocity = 0.005;
-    let targetRotationX = 0;
-    let targetRotationY = 0;
-
-    const domElement = renderer.domElement;
-
-    domElement.addEventListener('pointerdown', (e) => {
-      isDragging = true;
-      previousPointerPosition = { x: e.clientX, y: e.clientY };
-    });
-
-    window.addEventListener('pointermove', (e) => {
-      if (isDragging) {
-        const deltaX = e.clientX - previousPointerPosition.x;
-        const deltaY = e.clientY - previousPointerPosition.y;
-
-        canGroup.rotation.y += deltaX * 0.008;
-        targetRotationX += deltaY * 0.004;
-        targetRotationX = Math.max(-0.4, Math.min(0.4, targetRotationX));
-
-        spinVelocity = deltaX * 0.001;
-        previousPointerPosition = { x: e.clientX, y: e.clientY };
-      }
-    });
-
-    window.addEventListener('pointerup', () => {
-      isDragging = false;
-    });
-
-    // Parallax Tilt with Mouse hover
-    let mouseX = 0;
-    let mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-    });
-
-    /* ========================================================
-       6. DYNAMIC FLAVOR SWITCHING
-       ======================================================== */
-    function setFlavor(flavorKey) {
-      if (!FLAVORS[flavorKey]) return;
-      currentFlavor = FLAVORS[flavorKey];
-
-      // Update 3D label texture
-      if (labelMaterial.map) {
-        labelMaterial.map.dispose();
-      }
-      labelMaterial.map = createCanTexture(currentFlavor);
-      labelMaterial.needsUpdate = true;
-
-      // Update Bubble color
-      bubbleMaterial.color.setHex(currentFlavor.bubbleColor);
-
-      // Update DOM Badges
-      const badgeName = document.getElementById('badge-name');
-      const badgeSub = document.querySelector('.badge-sub');
-      badgeName.textContent = currentFlavor.name;
-      badgeSub.textContent = currentFlavor.calories;
-
-      // Update Pill UI
-      document.querySelectorAll('.flavor-pill').forEach((pill) => {
-        pill.classList.toggle('active', pill.dataset.flavor === flavorKey);
+      // Pill Buttons
+      const pillsWrap = document.getElementById('canPills');
+      pillsWrap.innerHTML = '';
+      PRODUCTS.slice(0, 6).forEach((prod, i) => {
+        const btn = document.createElement('button');
+        btn.className = `pill-btn ${i === 0 ? 'active' : ''}`;
+        btn.style.backgroundColor = prod.color;
+        btn.title = prod.name;
+        btn.onclick = () => selectCanFlavor(i);
+        pillsWrap.appendChild(btn);
       });
 
-      // Subtle dynamic reaction spin
-      spinVelocity = 0.08;
-    }
+      // Mouse Drag Controls
+      let isDragging = false;
+      let prevMousePos = { x: 0, y: 0 };
 
-    window.selectFlavorByName = function(flavorKey) {
-      setFlavor(flavorKey);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    document.querySelectorAll('.flavor-pill').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        setFlavor(btn.dataset.flavor);
-      });
-    });
-
-    /* ========================================================
-       7. CART SYSTEM & CELEBRATION
-       ======================================================== */
-    let cart = [
-      { id: 1, name: 'Pineapple Spice 12-Pack', price: 39, qty: 1, icon: '🍍' },
-      { id: 2, name: 'Mango Chili 12-Pack', price: 39, qty: 1, icon: '🥭' },
-      { id: 3, name: 'Prickly Pear 12-Pack', price: 39, qty: 1, icon: '🌵' }
-    ];
-
-    const cartOverlay = document.getElementById('cart-drawer-overlay');
-    const btnOpenCart = document.getElementById('btn-open-cart');
-    const btnCloseCart = document.getElementById('btn-close-cart');
-    const cartList = document.getElementById('cart-items-list');
-    const cartCounter = document.getElementById('cart-counter');
-    const cartSubtotal = document.getElementById('cart-subtotal');
-    const btnCheckout = document.getElementById('btn-checkout');
-    const btnAddHero = document.getElementById('btn-add-hero');
-
-    function updateCartUI() {
-      cartList.innerHTML = '';
-      let totalCount = 0;
-      let totalAmount = 0;
-
-      cart.forEach((item, index) => {
-        totalCount += item.qty;
-        totalAmount += item.price * item.qty;
-
-        const el = document.createElement('div');
-        el.className = 'cart-item';
-        el.innerHTML = `
-          <div class="cart-item-img">${item.icon}</div>
-          <div class="cart-item-info">
-            <div class="cart-item-title">${item.name}</div>
-            <div class="cart-item-price">$${item.price} x ${item.qty}</div>
-          </div>
-          <button style="background:none;border:none;color:var(--terracotta);font-weight:700;cursor:pointer;font-size:1.1rem;" onclick="removeCartItem(${index})">✕</button>
-        `;
-        cartList.appendChild(el);
+      const canvasElem = renderer.domElement;
+      canvasElem.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevMousePos = { x: e.clientX, y: e.clientY };
       });
 
-      cartCounter.textContent = totalCount;
-      cartSubtotal.textContent = `$${totalAmount.toFixed(2)}`;
-    }
+      window.addEventListener('mouseup', () => { isDragging = false; });
 
-    window.addToCart = function(name, price) {
-      const found = cart.find(i => i.name === name);
-      if (found) {
-        found.qty += 1;
-      } else {
-        cart.push({
-          id: Date.now(),
-          name: name,
-          price: price,
-          qty: 1,
-          icon: currentFlavor.icon
-        });
-      }
-      updateCartUI();
-      openCart();
-    };
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging || !canGroup) return;
+        const deltaX = e.clientX - prevMousePos.x;
+        const deltaY = e.clientY - prevMousePos.y;
+        canGroup.rotation.y += deltaX * 0.01;
+        canGroup.rotation.x += deltaY * 0.005;
+        prevMousePos = { x: e.clientX, y: e.clientY };
+      });
 
-    window.removeCartItem = function(index) {
-      cart.splice(index, 1);
-      updateCartUI();
-    };
-
-    function openCart() {
-      cartOverlay.classList.add('open');
-    }
-
-    function closeCart() {
-      cartOverlay.classList.remove('open');
-    }
-
-    btnOpenCart.addEventListener('click', openCart);
-    btnCloseCart.addEventListener('click', closeCart);
-    cartOverlay.addEventListener('click', (e) => {
-      if (e.target === cartOverlay) closeCart();
-    });
-
-    btnAddHero.addEventListener('click', () => {
-      addToCart(`${currentFlavor.name} 12-Pack`, 39);
-    });
-
-    // Checkout Celebration with Canvas Confetti
-    btnCheckout.addEventListener('click', () => {
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 120,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#FFD23F', '#D84A38', '#E60067', '#2B6149']
-        });
-      }
-      btnCheckout.innerText = '¡VIVA MÉXICO! ORDER PLACED';
-      setTimeout(() => {
-        btnCheckout.innerText = 'Checkout & Celebrate 🎉';
-        closeCart();
-      }, 2000);
-    });
-
-    updateCartUI();
-
-    /* ========================================================
-       8. ANIMATION LOOP & RESIZE HANDLER
-       ======================================================== */
-    let clock = new THREE.Clock();
-
-    function animate() {
-      requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
-
-      // Gentle floating levitation
-      canGroup.position.y = Math.sin(elapsedTime * 1.8) * 0.08;
-
-      // Inertia & Continuous Soft Auto Spin
-      if (!isDragging) {
-        canGroup.rotation.y += spinVelocity;
-        spinVelocity *= 0.94;
-        if (Math.abs(spinVelocity) < 0.002) {
-          canGroup.rotation.y += 0.004; // steady gentle spin
-        }
-      }
-
-      // Smooth Tilt towards cursor
-      canGroup.rotation.x += (targetRotationX + mouseY * 0.15 - canGroup.rotation.x) * 0.06;
-      canGroup.rotation.z = Math.sin(elapsedTime * 1.5) * 0.03 + mouseX * 0.08;
-
-      // Animate Fizzy Bubble Particles
-      bubbleData.forEach((data, i) => {
-        const bubble = bubblesGroup.children[i];
-        bubble.position.y += data.speedY;
-
-        // Circular swirl around can
-        data.baseAngle += data.rotSpeed;
-        bubble.position.x = Math.cos(data.baseAngle) * data.baseRadius;
-        bubble.position.z = Math.sin(data.baseAngle) * data.baseRadius;
-
-        // Reset if reached above
-        if (bubble.position.y > 2.2) {
-          bubble.position.y = -1.6;
-          data.baseRadius = 1.0 + Math.random() * 0.9;
+      // Touch Controls for Mobile
+      canvasElem.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         }
       });
+      window.addEventListener('touchend', () => { isDragging = false; });
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || !canGroup || e.touches.length === 0) return;
+        const deltaX = e.touches[0].clientX - prevMousePos.x;
+        const deltaY = e.touches[0].clientY - prevMousePos.y;
+        canGroup.rotation.y += deltaX * 0.012;
+        canGroup.rotation.x += deltaY * 0.006;
+        prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      });
 
-      renderer.render(scene, camera);
+      // Resize
+      window.addEventListener('resize', onWindowResize);
+
+      animate();
     }
 
-    animate();
+    let cylinderMesh;
+    function buildCanMesh(flavor) {
+      // Clear previous
+      while (canGroup.children.length > 0) {
+        canGroup.remove(canGroup.children[0]);
+      }
 
-    // Responsive Canvas Resizing
-    function handleResize() {
+      // Cylinder can body
+      const bodyGeo = new THREE.CylinderGeometry(0.85, 0.85, 2.3, 48, 1, true);
+      const texture = createCanTexture(flavor.color, flavor.name);
+      const bodyMat = new THREE.MeshStandardMaterial({
+        map: texture,
+        roughness: 0.28,
+        metalness: 0.55
+      });
+      cylinderMesh = new THREE.Mesh(bodyGeo, bodyMat);
+      canGroup.add(cylinderMesh);
+
+      // Silver top & bottom caps
+      const silverMat = new THREE.MeshStandardMaterial({
+        color: 0xE8E8E8,
+        metalness: 0.85,
+        roughness: 0.2
+      });
+
+      const topGeo = new THREE.CylinderGeometry(0.8, 0.85, 0.1, 48);
+      const topCap = new THREE.Mesh(topGeo, silverMat);
+      topCap.position.y = 1.2;
+      canGroup.add(topCap);
+
+      const bottomGeo = new THREE.CylinderGeometry(0.85, 0.78, 0.12, 48);
+      const botCap = new THREE.Mesh(bottomGeo, silverMat);
+      botCap.position.y = -1.2;
+      canGroup.add(botCap);
+
+      // Add pull tab detail
+      const tabGeo = new THREE.BoxGeometry(0.25, 0.02, 0.45);
+      const tab = new THREE.Mesh(tabGeo, silverMat);
+      tab.position.set(0, 1.26, 0.15);
+      canGroup.add(tab);
+
+      // Default tilt
+      canGroup.rotation.x = 0.12;
+      canGroup.rotation.z = -0.08;
+    }
+
+    function selectCanFlavor(index) {
+      currentFlavorIndex = index;
+      const targetFlavor = PRODUCTS[index];
+      buildCanMesh(targetFlavor);
+
+      const pills = document.querySelectorAll('.pill-btn');
+      pills.forEach((p, idx) => {
+        if (idx === index) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('canvas3d');
+      if (!container || !renderer || !camera) return;
       const width = container.clientWidth;
       const height = container.clientHeight;
       camera.aspect = width / height;
@@ -1551,7 +1688,263 @@
       renderer.setSize(width, height);
     }
 
-    window.addEventListener('resize', handleResize);
+    function animate() {
+      requestAnimationFrame(animate);
+      if (canGroup) {
+        canGroup.rotation.y += 0.004; // subtle idle rotation
+      }
+      renderer.render(scene, camera);
+    }
+
+    /* ===== 3. RENDER PRODUCTS INTO DOM ===== */
+    function renderProductCards() {
+      const homeGrid = document.getElementById('homeProductGrid');
+      const shopGrid = document.getElementById('shopFullGrid');
+
+      // Home: First 4
+      homeGrid.innerHTML = PRODUCTS.slice(0, 4).map(p => productCardHTML(p)).join('');
+      // Shop: All items
+      shopGrid.innerHTML = PRODUCTS.map(p => productCardHTML(p)).join('');
+    }
+
+    function productCardHTML(p) {
+      return `
+        <div class="product-card-wrap">
+          <span class="badge-pill">${p.badge}</span>
+          <div class="prod-art" style="background:${p.colorLight}" onclick="openProductModal('${p.id}')">
+            ${generateCanSVG(p)}
+          </div>
+          <div class="prod-details">
+            <h3>${p.name}</h3>
+            <p class="prod-notes">${p.flavorNote}</p>
+            <div class="nutrition-tags">
+              <span class="n-tag">${p.calories} kcal</span>
+              <span class="n-tag">${p.sugar} Sucre Bio</span>
+              <span class="n-tag">Prébiotiques</span>
+            </div>
+          </div>
+          <div class="prod-bottom">
+            <div class="prod-price">${p.price.toFixed(2)} € <small>/ 12 canettes</small></div>
+            <button class="btn-add" onclick="addToCart('${p.id}')">+ Ajouter</button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ===== 4. SHOPPING CART (LOCALSTORAGE) ===== */
+    let cart = [];
+
+    function loadCart() {
+      try {
+        const saved = localStorage.getItem('delacalle_cart');
+        if (saved) cart = JSON.parse(saved);
+      } catch (e) {
+        cart = [];
+      }
+      updateCartUI();
+    }
+
+    function saveCart() {
+      localStorage.setItem('delacalle_cart', JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function addToCart(productId) {
+      const prod = PRODUCTS.find(p => p.id === productId);
+      if (!prod) return;
+
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: prod.id,
+          name: prod.name,
+          price: prod.price,
+          colorLight: prod.colorLight,
+          qty: 1
+        });
+      }
+      saveCart();
+      showToast(`${prod.name} ajouté au panier !`);
+      openCart();
+    }
+
+    function quickAddPlan(planTitle, price) {
+      cart.push({
+        id: 'sub-' + Date.now(),
+        name: `Abonnement ${planTitle}`,
+        price: price,
+        colorLight: '#FFFBEB',
+        qty: 1
+      });
+      saveCart();
+      showToast(`Abonnement ${planTitle} ajouté !`);
+      openCart();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      }
+      saveCart();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cartCount');
+      const totalCount = cart.reduce((sum, i) => sum + i.qty, 0);
+      badge.innerText = totalCount;
+
+      const container = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#999;">Votre panier est vide pour l'instant.<br><br>Découvrez nos parfums fermentés !</div>`;
+      } else {
+        container.innerHTML = cart.map(item => {
+          return `
+            <div class="cart-item-row">
+              <div style="width:50px; height:60px; background:${item.colorLight || '#f2f2f2'}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
+                🥫
+              </div>
+              <div class="cart-item-info">
+                <h4>${item.name}</h4>
+                <span>${(item.price * item.qty).toFixed(2)} €</span>
+                <div class="qty-controls">
+                  <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+                  <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
+                  <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                </div>
+              </div>
+              <button onclick="changeQty('${item.id}', -999)" style="color:#A19B91; font-size:1.1rem;">✕</button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const totalVal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      document.getElementById('cartTotalVal').innerText = totalVal.toFixed(2) + ' €';
+    }
+
+    function openCart() {
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('cartBackdrop').classList.add('open');
+    }
+
+    function closeCart() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('cartBackdrop').classList.remove('open');
+    }
+
+    function checkoutDemo() {
+      if (cart.length === 0) {
+        alert("Votre panier est vide !");
+        return;
+      }
+      const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0).toFixed(2);
+      const conf = confirm(`[DÉMO VITRINE DE LA CALLE]\n\nMontant total : ${total} €\nConfirmez-vous cette commande de test ?`);
+      if (conf) {
+        cart = [];
+        saveCart();
+        closeCart();
+        alert("¡Muchas Gracias ! Commande simulée effectuée avec succès.");
+      }
+    }
+
+    /* ===== 5. PRODUCT DETAIL MODAL ===== */
+    function openProductModal(id) {
+      const prod = PRODUCTS.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById('modalCanVisual').innerHTML = generateCanSVG(prod);
+      document.getElementById('modalTag').innerText = prod.badge;
+      document.getElementById('modalTitle').innerText = prod.name;
+      document.getElementById('modalTagline').innerText = prod.flavorNote;
+      document.getElementById('modalDesc').innerText = prod.desc;
+      document.getElementById('modalCal').innerText = prod.calories;
+      document.getElementById('modalSugar').innerText = prod.sugar;
+      document.getElementById('modalPrice').innerText = prod.price.toFixed(2) + ' €';
+
+      const addBtn = document.getElementById('modalAddBtn');
+      addBtn.onclick = () => {
+        addToCart(prod.id);
+        closeModal();
+      };
+
+      document.getElementById('productModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('productModal').classList.remove('active');
+    }
+
+    /* ===== 6. ROUTER / PAGE SWITCHER ===== */
+    function switchPage(pageKey) {
+      document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active-view'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      const targetPage = document.getElementById(`page-${pageKey}`);
+      if (targetPage) {
+        targetPage.classList.add('active-view');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(btn => 
+        btn.getAttribute('onclick')?.includes(pageKey)
+      );
+      if (activeNav) activeNav.classList.add('active');
+    }
+
+    /* ===== 7. STORE LOCATOR ===== */
+    function renderStores(list) {
+      const container = document.getElementById('storeList');
+      if (list.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Aucun point de vente trouvé pour ce code postal. Essayez 75007 ou Paris.</div>`;
+        return;
+      }
+      container.innerHTML = list.map(s => `
+        <div class="store-card">
+          <div>
+            <h4 style="font-size:1.15rem; margin-bottom:4px;">${s.name}</h4>
+            <p style="color:var(--text-muted); font-size:0.9rem;">${s.address}</p>
+          </div>
+          <span style="background:#FAF3E3; color:#A16207; padding:6px 14px; border-radius:999px; font-size:0.8rem; font-weight:800;">
+            Stock Disponible
+          </span>
+        </div>
+      `).join('');
+    }
+
+    function filterStores() {
+      const val = document.getElementById('zipSearch').value.trim().toLowerCase();
+      if (!val) {
+        renderStores(STORE_LOCATIONS);
+        return;
+      }
+      const filtered = STORE_LOCATIONS.filter(s => 
+        s.zip.includes(val) || s.address.toLowerCase().includes(val) || s.name.toLowerCase().includes(val)
+      );
+      renderStores(filtered);
+    }
+
+    /* ===== 8. TOAST SYSTEM ===== */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastText').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    /* ===== INITIALIZATION ===== */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderProductCards();
+      renderStores(STORE_LOCATIONS);
+      loadCart();
+      init3D();
+    });
   </script>
 </body>
 </html>
