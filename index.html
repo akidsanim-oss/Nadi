@@ -1,1950 +1,829 @@
-<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>De La Calle – Tepache Mexicain Authentique | Démo Vitrine</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <style>
-    /* ===== RESET & DESIGN SYSTEM ===== */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --bg: #FFFDF8;
-      --card-bg: #FFFFFF;
-      --text: #1E1B18;
-      --text-muted: #645E59;
-      --yellow: #F7C948;
-      --mango: #FF8A00;
-      --terracotta: #D84A38;
-      --strawberry: #E63956;
-      --cactus: #2E7D5B;
-      --mandarin: #F97316;
-      --prickly: #9D174D;
-      --grapefruit: #EC4899;
-      --dark-card: #181512;
-      --border: #EFE8DA;
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
-      --shadow-md: 0 12px 30px rgba(0,0,0,0.08);
-      --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AZIMUT — Grande 44M & Fly 70 · Collection Signature</title>
+<meta name="description" content="Découvrez la Grande 44M et le Fly 70, deux flagships Azimut. Films officiels Vimeo, galeries photos et visites privées.">
 
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      overflow-x: hidden;
-    }
+<!-- ═══ POLICES ═══ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 
-    h1, h2, h3, h4, .brand-font {
-      font-family: 'Cabinet Grotesk', sans-serif;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
+<!-- ═══ TAILWIND ═══ -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: { ink:'#0A0E14', ink2:'#0D1420', ivory:'#F2EFE9', gold:'#C8A96A' },
+      fontFamily: {
+        sans: ['Manrope','sans-serif'],
+        display: ['"Cormorant Garamond"','serif']
+      }
     }
+  }
+}
+</script>
 
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      outline: none;
-      background: none;
-    }
+<style>
+/* ═══════════════ BASE ═══════════════ */
+:root{ --gold:#C8A96A; --ink:#0A0E14; --ivory:#F2EFE9; }
+html{ scroll-behavior:auto; }
+body{ background:var(--ink); color:var(--ivory); overflow-x:hidden; }
+::selection{ background:var(--gold); color:var(--ink); }
+::-webkit-scrollbar{ width:4px; }
+::-webkit-scrollbar-track{ background:var(--ink); }
+::-webkit-scrollbar-thumb{ background:rgba(200,169,106,.5); }
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
 
-    /* ===== ANNOUNCEMENT BAR ===== */
-    .announcement {
-      background: #000;
-      color: #fff;
-      font-size: 0.8rem;
-      text-align: center;
-      padding: 8px 16px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      position: relative;
-      z-index: 110;
-    }
-    .announcement span { color: var(--yellow); }
+/* ═══════════════ TYPO ═══════════════ */
+.eyebrow{ font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:var(--gold); font-weight:500; }
+.stroke-text{ -webkit-text-stroke:1px rgba(242,239,233,.14); color:transparent; }
+.reveal-line{ display:block; overflow:hidden; }
+.reveal-inner{ display:block; will-change:transform; }
+.w-wrap{ display:inline-block; overflow:hidden; vertical-align:bottom; }
+.w-inner{ display:inline-block; will-change:transform; }
 
-    /* ===== HEADER ===== */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 253, 248, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 40px;
-    }
+/* ═══════════════ GRAIN CINÉMA ═══════════════ */
+.grain{ position:fixed; inset:-120px; z-index:260; pointer-events:none; opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite; }
+@keyframes grain{ 0%,100%{transform:translate(0,0)} 10%{transform:translate(-5%,-8%)} 30%{transform:translate(3%,-6%)} 50%{transform:translate(-7%,4%)} 70%{transform:translate(6%,7%)} 90%{transform:translate(-4%,3%)} }
 
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-    .brand-logo svg { width: 34px; height: 34px; fill: var(--terracotta); }
-    .brand-logo span {
-      font-size: 1.8rem;
-      font-family: 'Cabinet Grotesk', sans-serif;
-      font-weight: 900;
-      color: var(--terracotta);
-      letter-spacing: -0.04em;
-    }
+/* ═══════════════ CURSEUR ═══════════════ */
+.cursor-el{ position:fixed; top:0; left:0; pointer-events:none; z-index:300; }
+#cursorDot{ width:6px; height:6px; border-radius:50%; background:var(--gold); }
+#cursorRing{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(242,239,233,.35);
+  display:flex; align-items:center; justify-content:center;
+  transition:width .35s cubic-bezier(.77,0,.18,1), height .35s cubic-bezier(.77,0,.18,1), background .35s, border-color .35s; }
+#cursorRing.is-hover{ width:64px; height:64px; border-color:rgba(200,169,106,.9); }
+#cursorRing.is-label{ width:88px; height:88px; background:var(--gold); border-color:var(--gold); }
+#cursorLabel{ font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:var(--ink); opacity:0; transition:opacity .3s; font-weight:600; }
+#cursorRing.is-label #cursorLabel{ opacity:1; }
+@media (hover:none), (pointer:coarse){ .cursor-el{ display:none !important; } }
 
-    nav.nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-    nav.nav-links button {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      transition: color 0.2s;
-      position: relative;
-    }
-    nav.nav-links button:hover, nav.nav-links button.active {
-      color: var(--terracotta);
-    }
-    nav.nav-links button.active::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--terracotta);
-    }
+/* ═══════════════ PRÉLOADER ═══════════════ */
+#preloader{ clip-path:inset(0 0 0 0); }
+.pl-mask{ display:inline-block; overflow:hidden; }
+.pl-letter{ display:inline-block; will-change:transform; }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+/* ═══════════════ NAVIGATION ═══════════════ */
+#nav{ transition:transform .6s cubic-bezier(.77,0,.18,1), background .5s, backdrop-filter .5s; }
+#nav.nav-solid{ background:rgba(10,14,20,.72); backdrop-filter:blur(14px); border-bottom:1px solid rgba(242,239,233,.07); }
+#nav.nav-hidden{ transform:translateY(-100%); }
+.nav-link{ position:relative; }
+.nav-link::after{ content:''; position:absolute; left:0; bottom:-6px; height:1px; width:100%; background:var(--gold);
+  transform:scaleX(0); transform-origin:right; transition:transform .5s cubic-bezier(.77,0,.18,1); }
+.nav-link:hover::after{ transform:scaleX(1); transform-origin:left; }
 
-    .cart-btn-nav {
-      position: relative;
-      background: var(--text);
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .cart-btn-nav:hover { background: var(--terracotta); transform: scale(1.02); }
-    .cart-badge {
-      background: var(--yellow);
-      color: #000;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 999px;
-    }
+#mobileMenu{ opacity:0; visibility:hidden; transition:opacity .5s, visibility .5s; }
+#mobileMenu.is-open{ opacity:1; visibility:visible; }
+#mobileMenu a{ transform:translateY(24px); opacity:0; transition:transform .6s cubic-bezier(.22,1,.36,1), opacity .6s; }
+#mobileMenu.is-open a{ transform:translateY(0); opacity:1; }
+#mobileMenu.is-open a:nth-child(1){transition-delay:.08s} #mobileMenu.is-open a:nth-child(2){transition-delay:.16s}
+#mobileMenu.is-open a:nth-child(3){transition-delay:.24s} #mobileMenu.is-open a:nth-child(4){transition-delay:.32s}
 
-    /* ===== FLOATING SOCIALS ===== */
-    .floating-socials {
-      position: fixed;
-      right: 18px;
-      bottom: 24px;
-      z-index: 95;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .floating-socials a {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #fff;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-      text-decoration: none;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .floating-socials a:hover {
-      transform: translateY(-4px) scale(1.08);
-      background: var(--yellow);
-    }
+/* ═══════════════ BOUTONS ═══════════════ */
+.btn{ position:relative; isolation:isolate; display:inline-flex; align-items:center; gap:.8rem;
+  padding:1.05rem 2.1rem; border:1px solid rgba(242,239,233,.28);
+  font-size:11px; letter-spacing:.3em; text-transform:uppercase; font-weight:500;
+  transition:color .5s, border-color .5s; overflow:hidden; }
+.btn::before{ content:''; position:absolute; inset:0; z-index:-1; background:var(--gold);
+  transform:scaleY(0); transform-origin:bottom; transition:transform .55s cubic-bezier(.77,0,.18,1); }
+.btn:hover{ color:var(--ink); border-color:var(--gold); }
+.btn:hover::before{ transform:scaleY(1); }
+.btn-solid{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
+.btn-solid::before{ background:var(--ivory); }
 
-    /* ===== PAGES CONTAINER ===== */
-    .page-view { display: none; }
-    .page-view.active-view { display: block; }
+/* ═══════════════ HERO / VIMEO COVER ═══════════════ */
+#heroVideo iframe{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:max(100vw,177.78vh); height:max(100vh,56.25vw); border:0; pointer-events:none; }
+.scroll-line{ display:inline-block; width:1px; height:56px; background:linear-gradient(var(--gold),transparent);
+  animation:scrollLine 2.2s cubic-bezier(.77,0,.18,1) infinite; transform-origin:top; }
+@keyframes scrollLine{ 0%{transform:scaleY(0);transform-origin:top} 45%{transform:scaleY(1);transform-origin:top} 55%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
 
-    /* ===== HERO SECTION ===== */
-    .hero-container {
-      position: relative;
-      background: radial-gradient(circle at 75% 40%, rgba(247, 201, 72, 0.3) 0%, rgba(255, 253, 248, 0) 70%),
-                  radial-gradient(circle at 20% 80%, rgba(216, 74, 56, 0.15) 0%, rgba(255, 253, 248, 0) 60%);
-      padding: 40px 60px 80px;
-      min-height: 86vh;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      align-items: center;
-      gap: 40px;
-      overflow: hidden;
-    }
+/* ═══════════════ MARQUEE ═══════════════ */
+.marquee{ overflow:hidden; white-space:nowrap; }
+.marquee-track{ display:inline-flex; align-items:center; gap:3.5rem; width:max-content; padding-right:3.5rem; animation:marquee 30s linear infinite; }
+.marquee:hover .marquee-track{ animation-play-state:paused; }
+@keyframes marquee{ to{ transform:translateX(-50%); } }
 
-    .hero-content {
-      max-width: 620px;
-      z-index: 2;
-    }
-    .hero-tag {
-      display: inline-block;
-      background: #FCEFD5;
-      color: #8C4B00;
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      padding: 6px 14px;
-      border-radius: 999px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-    .hero-title {
-      font-size: 4.8rem;
-      line-height: 0.95;
-      margin-bottom: 24px;
-      color: var(--text);
-    }
-    .hero-title span { color: var(--terracotta); }
-    .hero-subtitle {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-      margin-bottom: 36px;
-      font-weight: 500;
-    }
-    .hero-cta-group {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .btn-main {
-      background: var(--terracotta);
-      color: #fff;
-      font-weight: 800;
-      padding: 16px 36px;
-      border-radius: 999px;
-      font-size: 1rem;
-      letter-spacing: 0.05em;
-      transition: all 0.2s;
-      box-shadow: 0 10px 25px rgba(216, 74, 56, 0.3);
-    }
-    .btn-main:hover {
-      background: #b83c2c;
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(216, 74, 56, 0.4);
-    }
-    .btn-outline {
-      border: 2px solid var(--text);
-      color: var(--text);
-      font-weight: 800;
-      padding: 14px 32px;
-      border-radius: 999px;
-      font-size: 1rem;
-      transition: all 0.2s;
-    }
-    .btn-outline:hover {
-      background: var(--text);
-      color: #fff;
-    }
+/* ═══════════════ VIDÉOS ═══════════════ */
+.video-frame{ position:relative; aspect-ratio:16/9; overflow:hidden; background:#05070B; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.play-btn{ position:relative; width:92px; height:92px; border-radius:9999px;
+  border:1px solid rgba(200,169,106,.65); background:rgba(10,14,20,.35); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center; transition:background .4s, transform .4s; }
+.play-btn::before{ content:''; position:absolute; inset:-1px; border-radius:inherit;
+  border:1px solid rgba(200,169,106,.5); animation:pulse 2.4s ease-out infinite; }
+@keyframes pulse{ 0%{transform:scale(1);opacity:.9} 100%{transform:scale(1.55);opacity:0} }
+.play-btn svg{ transition:fill .4s; }
+.play-btn:hover{ background:var(--gold); }
+.play-btn:hover svg{ fill:var(--ink); }
 
-    .hero-stats {
-      display: flex;
-      gap: 36px;
-      margin-top: 48px;
-      padding-top: 32px;
-      border-top: 2px solid var(--border);
-    }
-    .stat-item h3 { font-size: 2rem; color: var(--text); margin-bottom: 2px; }
-    .stat-item p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+/* ═══════════════ LIGHTBOX ═══════════════ */
+#lightbox{ opacity:0; visibility:hidden; transition:opacity .5s, visibility .5s; }
+#lightbox.is-open{ opacity:1; visibility:visible; }
+#lightbox .lb-panel{ transform:scale(.95) translateY(16px); transition:transform .6s cubic-bezier(.22,1,.36,1); }
+#lightbox.is-open .lb-panel{ transform:scale(1) translateY(0); }
 
-    /* 3D CAN VIEWPORT */
-    .hero-3d-wrap {
-      position: relative;
-      height: 580px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #canvas3d {
-      width: 100%;
-      height: 100%;
-      outline: none;
-      cursor: grab;
-    }
-    #canvas3d:active { cursor: grabbing; }
-
-    .flavor-selector-pills {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 8px;
-      border-radius: 999px;
-      box-shadow: var(--shadow-md);
-      z-index: 5;
-    }
-    .pill-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      transition: transform 0.2s;
-      position: relative;
-    }
-    .pill-btn:hover, .pill-btn.active {
-      transform: scale(1.25);
-      border-color: #000;
-    }
-
-    .interactive-hint {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0,0,0,0.65);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 999px;
-      pointer-events: none;
-    }
-
-    /* ===== WHAT IS TEPACHE ===== */
-    .section-tepache {
-      padding: 100px 40px;
-      background: #191614;
-      color: #FFF;
-      position: relative;
-      overflow: hidden;
-    }
-    .tepache-grid {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    .tepache-badge {
-      color: var(--yellow);
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      font-size: 0.85rem;
-      margin-bottom: 16px;
-      display: inline-block;
-    }
-    .tepache-title {
-      font-size: 3.6rem;
-      line-height: 1.05;
-      margin-bottom: 28px;
-    }
-    .tepache-desc {
-      font-size: 1.15rem;
-      color: #B5AEA5;
-      margin-bottom: 36px;
-      line-height: 1.7;
-    }
-    .tepache-highlights {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-    .th-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 24px;
-      border-radius: var(--radius-md);
-    }
-    .th-card h4 {
-      font-size: 1.3rem;
-      margin-bottom: 8px;
-      color: var(--yellow);
-    }
-    .th-card p {
-      font-size: 0.9rem;
-      color: #A39B92;
-    }
-
-    .tepache-visual {
-      position: relative;
-      display: flex;
-      justify-content: center;
-    }
-    .tepache-circle {
-      width: 380px;
-      height: 380px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #F7C948 0%, #D84A38 100%);
-      opacity: 0.85;
-      filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 80px rgba(247, 201, 72, 0.4);
-    }
-    .tepache-circle-inner {
-      width: 80%;
-      height: 80%;
-      border: 2px dashed rgba(255,255,255,0.4);
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #fff;
-    }
-    .tepache-circle-inner span {
-      font-size: 3.5rem;
-      font-family: 'Cabinet Grotesk', sans-serif;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    /* ===== FLAVOR SHOWCASE / BEST SELLERS ===== */
-    .section-flavors {
-      padding: 90px 40px;
-      max-width: 1320px;
-      margin: 0 auto;
-    }
-    .section-head {
-      text-align: center;
-      max-width: 650px;
-      margin: 0 auto 50px;
-    }
-    .section-head h2 { font-size: 3.2rem; margin-bottom: 12px; }
-    .section-head p { color: var(--text-muted); font-size: 1.1rem; }
-
-    .flavors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 30px;
-    }
-
-    .product-card-wrap {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-    .product-card-wrap:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-lg);
-      border-color: rgba(0,0,0,0.15);
-    }
-
-    .prod-art {
-      height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-md);
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .prod-art svg {
-      width: 120px;
-      height: 180px;
-      filter: drop-shadow(0 15px 15px rgba(0,0,0,0.15));
-      transition: transform 0.3s;
-    }
-    .product-card-wrap:hover .prod-art svg {
-      transform: scale(1.08) rotate(2deg);
-    }
-
-    .badge-pill {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      background: #000;
-      color: #fff;
-    }
-
-    .prod-details h3 { font-size: 1.4rem; margin-bottom: 6px; }
-    .prod-notes { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; min-height: 40px; }
-    
-    .nutrition-tags {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .n-tag {
-      background: #F5F2EC;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      color: #4A443E;
-    }
-
-    .prod-bottom {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-    .prod-price { font-size: 1.35rem; font-weight: 900; font-family: 'Cabinet Grotesk', sans-serif; }
-    .prod-price small { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-
-    .btn-add {
-      background: var(--text);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-add:hover {
-      background: var(--terracotta);
-      transform: scale(1.04);
-    }
-
-    /* ===== MODAL DETAIL PRODUIT ===== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(6px);
-      z-index: 200;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: #fff;
-      width: 100%;
-      max-width: 840px;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes popIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .modal-close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #F3EEE7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      cursor: pointer;
-      z-index: 5;
-    }
-    .modal-visual {
-      background: #FAF6EE;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
-    .modal-visual svg { width: 170px; height: 260px; }
-    .modal-info {
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-    }
-    .modal-info h2 { font-size: 2.2rem; margin-bottom: 8px; }
-    .modal-info .modal-tagline { color: var(--terracotta); font-weight: 700; margin-bottom: 16px; }
-    .modal-info p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; }
-    .nutrition-table {
-      background: #FAF7F2;
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 24px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      text-align: center;
-      gap: 10px;
-    }
-    .nt-item h5 { font-size: 1.1rem; color: var(--text); }
-    .nt-item span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-
-    /* ===== CART DRAWER ===== */
-    .cart-drawer {
-      position: fixed;
-      top: 0;
-      right: -440px;
-      width: 420px;
-      max-width: 90vw;
-      height: 100vh;
-      background: #fff;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.2);
-      z-index: 250;
-      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-    }
-    .cart-drawer.open { right: 0; }
-    .cart-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-      z-index: 240;
-      display: none;
-    }
-    .cart-backdrop.open { display: block; }
-
-    .cart-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .cart-header h3 { font-size: 1.5rem; }
-    .cart-items-wrap {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .cart-item-row {
-      display: grid;
-      grid-template-columns: 55px 1fr auto;
-      gap: 16px;
-      align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .cart-item-info h4 { font-size: 1rem; margin-bottom: 4px; }
-    .cart-item-info span { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-    .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #F3EEE7;
-      padding: 4px 8px;
-      border-radius: 999px;
-      margin-top: 6px;
-      width: fit-content;
-    }
-    .qty-btn { font-weight: bold; width: 20px; height: 20px; }
-    .cart-footer {
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      background: #FAF7F2;
-    }
-    .cart-subtotal {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-    .cart-checkout-btn {
-      width: 100%;
-      background: var(--terracotta);
-      color: #fff;
-      padding: 16px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 1rem;
-      transition: background 0.2s;
-    }
-    .cart-checkout-btn:hover { background: #ba3d2e; }
-
-    /* ===== PAGE: OUR STORY ===== */
-    .story-hero {
-      padding: 90px 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-    .story-text h2 { font-size: 3.5rem; line-height: 1; margin-bottom: 24px; color: var(--terracotta); }
-    .story-text p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
-    .founders-card {
-      background: #FAF4E8;
-      border: 2px dashed #E2CEB0;
-      border-radius: var(--radius-lg);
-      padding: 36px;
-      text-align: center;
-    }
-    .founders-badge {
-      display: inline-block;
-      background: #000;
-      color: #fff;
-      font-weight: 800;
-      font-size: 0.8rem;
-      padding: 6px 14px;
-      border-radius: 999px;
-      margin-bottom: 16px;
-    }
-
-    /* ===== PAGE: HISTORY ===== */
-    .history-timeline {
-      max-width: 900px;
-      margin: 60px auto 100px;
-      padding: 0 20px;
-      position: relative;
-    }
-    .history-timeline::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      background: var(--border);
-    }
-    .timeline-node {
-      position: relative;
-      margin-bottom: 60px;
-      width: 50%;
-      padding: 0 36px;
-    }
-    .timeline-node:nth-child(odd) { left: 0; text-align: right; }
-    .timeline-node:nth-child(even) { left: 50%; text-align: left; }
-    .timeline-node::after {
-      content: '';
-      position: absolute;
-      top: 10px;
-      width: 16px;
-      height: 16px;
-      background: var(--terracotta);
-      border: 3px solid #fff;
-      border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(216, 74, 56, 0.2);
-    }
-    .timeline-node:nth-child(odd)::after { right: -8px; }
-    .timeline-node:nth-child(even)::after { left: -8px; }
-    .node-year { font-size: 1.4rem; font-weight: 900; color: var(--terracotta); margin-bottom: 6px; }
-    .node-title { font-size: 1.2rem; margin-bottom: 8px; }
-    .node-desc { font-size: 0.95rem; color: var(--text-muted); }
-
-    /* ===== PAGE: SUBSCRIBE ===== */
-    .subscribe-plans {
-      max-width: 1200px;
-      margin: 40px auto 100px;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-    }
-    .plan-card {
-      background: #fff;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 36px 28px;
-      text-align: center;
-      position: relative;
-      transition: all 0.3s;
-    }
-    .plan-card.featured {
-      border-color: var(--terracotta);
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-8px);
-    }
-    .featured-tag {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--terracotta);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 4px 14px;
-      border-radius: 999px;
-    }
-    .plan-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
-    .plan-price { font-size: 2.8rem; font-weight: 900; color: var(--text); margin-bottom: 20px; }
-    .plan-price span { font-size: 1rem; color: var(--text-muted); font-weight: 600; }
-    .plan-perks { list-style: none; margin-bottom: 30px; display: flex; flex-direction: column; gap: 12px; }
-    .plan-perks li { font-size: 0.95rem; color: var(--text-muted); }
-
-    /* ===== PAGE: WHERE TO BUY ===== */
-    .locator-wrap {
-      max-width: 800px;
-      margin: 40px auto 80px;
-      padding: 0 20px;
-      text-align: center;
-    }
-    .locator-search {
-      display: flex;
-      gap: 12px;
-      max-width: 500px;
-      margin: 24px auto 40px;
-    }
-    .locator-search input {
-      flex: 1;
-      padding: 14px 20px;
-      border: 2px solid var(--border);
-      border-radius: 999px;
-      font-size: 1rem;
-      outline: none;
-    }
-    .locator-search input:focus { border-color: var(--terracotta); }
-    .store-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      text-align: left;
-    }
-    .store-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: #110F0D;
-      color: #fff;
-      padding: 80px 40px 40px;
-    }
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1.5fr;
-      gap: 40px;
-      padding-bottom: 60px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .footer-col h4 { font-size: 1.1rem; margin-bottom: 18px; color: var(--yellow); }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col a { color: #A8A199; font-size: 0.9rem; text-decoration: none; transition: color 0.2s; }
-    .footer-col a:hover { color: #fff; }
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 30px auto 0;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: #6C665F;
-    }
-
-    /* TOAST ALERT */
-    .toast-msg {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #000;
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      z-index: 300;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .toast-msg.show { transform: translateX(-50%) translateY(0); }
-
-    @media (max-width: 900px) {
-      .hero-container { grid-template-columns: 1fr; padding: 30px 20px; }
-      .hero-title { font-size: 3.2rem; }
-      .tepache-grid { grid-template-columns: 1fr; gap: 40px; }
-      .story-hero { grid-template-columns: 1fr; }
-      .subscribe-plans { grid-template-columns: 1fr; }
-      .footer-inner { grid-template-columns: 1fr; }
-      .modal-box { grid-template-columns: 1fr; }
-      header { padding: 14px 20px; }
-      nav.nav-links { display: none; }
-    }
-  </style>
+/* ═══════════════ DIVERS ═══════════════ */
+.hairline{ height:1px; background:linear-gradient(90deg,transparent,rgba(200,169,106,.45),transparent); }
+.spec{ display:flex; justify-content:space-between; align-items:baseline; gap:1.5rem;
+  padding:1.15rem 0; border-top:1px solid rgba(242,239,233,.12); }
+.spec:last-child{ border-bottom:1px solid rgba(242,239,233,.12); }
+.gal-card img{ will-change:transform; }
+[data-parallax] img{ will-change:transform; }
+</style>
 </head>
-<body>
 
-  <!-- Announcement Bar -->
-  <div class="announcement">
-    🇲🇽 TEPACHE TRADITIONNEL FERMENTÉ • <span>LIVRAISON GRATUITE DÈS 4 PACKS</span> • SANTÉ INTESTINALE NATURELLE
+<body class="bg-ink text-ivory font-sans antialiased">
+
+<!-- ═══ GRAIN ═══ -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ═══ CURSEUR PERSONNALISÉ ═══ -->
+<div id="cursorDot" class="cursor-el" aria-hidden="true"></div>
+<div id="cursorRing" class="cursor-el" aria-hidden="true"><span id="cursorLabel"></span></div>
+
+<!-- ═══ PRÉLOADER ═══ -->
+<div id="preloader" class="fixed inset-0 z-[200] bg-ink flex flex-col items-center justify-center">
+  <div class="flex font-display font-light text-[clamp(3rem,11vw,8.5rem)] leading-none tracking-[0.08em]">
+    <span class="pl-mask"><span class="pl-letter">A</span></span>
+    <span class="pl-mask"><span class="pl-letter">Z</span></span>
+    <span class="pl-mask"><span class="pl-letter">I</span></span>
+    <span class="pl-mask"><span class="pl-letter">M</span></span>
+    <span class="pl-mask"><span class="pl-letter">U</span></span>
+    <span class="pl-mask"><span class="pl-letter text-gold italic">T</span></span>
   </div>
+  <p class="pl-fade eyebrow mt-8">Collection Signature — 2025</p>
+  <div class="pl-fade absolute bottom-8 right-8 md:bottom-12 md:right-12 font-display text-5xl md:text-7xl text-gold/80 font-light">
+    <span id="plCount">0</span><span class="text-2xl md:text-3xl align-top">%</span>
+  </div>
+  <div class="pl-fade absolute bottom-10 left-8 md:left-12 text-[10px] tracking-[0.45em] text-ivory/40 uppercase">Chargement de l'expérience</div>
+</div>
 
-  <!-- Header -->
-  <header>
-    <div class="brand-logo" onclick="switchPage('home')">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-      <span>DE LA CALLE</span>
-    </div>
-
-    <nav class="nav-links">
-      <li><button class="nav-item active" onclick="switchPage('home')">Accueil</button></li>
-      <li><button class="nav-item" onclick="switchPage('shop')">Boutique</button></li>
-      <li><button class="nav-item" onclick="switchPage('story')">Notre Histoire</button></li>
-      <li><button class="nav-item" onclick="switchPage('history')">Tradition</button></li>
-      <li><button class="nav-item" onclick="switchPage('subscribe')">Abonnement -10%</button></li>
-      <li><button class="nav-item" onclick="switchPage('locator')">Où Trouver</button></li>
+<!-- ═══ NAVIGATION ═══ -->
+<header id="nav" class="fixed top-0 inset-x-0 z-[100]">
+  <div class="flex items-center justify-between px-6 md:px-12 py-5 md:py-6">
+    <a href="#hero" class="font-display text-2xl md:text-3xl tracking-[0.12em] font-light" data-cursor="Haut">AZIMUT<span class="text-gold text-sm align-super">®</span></a>
+    <nav class="hidden md:flex items-center gap-10 text-[11px] tracking-[0.32em] uppercase text-ivory/80">
+      <a href="#grande" class="nav-link hover:text-ivory">Grande 44M</a>
+      <a href="#fly" class="nav-link hover:text-ivory">Fly 70</a>
+      <a href="#galerie" class="nav-link hover:text-ivory">Galerie</a>
+      <a href="#contact" class="nav-link hover:text-ivory">Contact</a>
     </nav>
-
-    <div class="header-actions">
-      <button class="cart-btn-nav" onclick="openCart()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        Panier <span class="cart-badge" id="cartCount">0</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Floating Social Sidebar -->
-  <div class="floating-socials">
-    <a href="#" title="Instagram">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-    </a>
-    <a href="#" title="WhatsApp">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-    </a>
+    <a href="#contact" class="btn magnetic hidden md:inline-flex !py-3 !px-6"><span>Visite privée</span></a>
+    <button id="menuBtn" class="md:hidden text-[11px] tracking-[0.35em] uppercase border border-white/25 px-5 py-3">Menu</button>
   </div>
+</header>
 
-  <!-- ============================================== -->
-  <!-- PAGE: HOME -->
-  <!-- ============================================== -->
-  <div id="page-home" class="page-view active-view">
-    <!-- Hero Section -->
-    <section class="hero-container">
-      <div class="hero-content">
-        <span class="hero-tag">Boisson Fermentée Ancestrale Mexicaine</span>
-        <h1 class="hero-title">Le goût frais <span>de la rue</span> dans une canette.</h1>
-        <p class="hero-subtitle">Élaboré à partir d’écorces d’ananas certifiées bio, d’épices chaudes et de sucre turbinado. Faible en sucre, riche en prébiotiques vivants.</p>
-        
-        <div class="hero-cta-group">
-          <button class="btn-main" onclick="switchPage('shop')">Découvrir les Parfums</button>
-          <button class="btn-outline" onclick="switchPage('story')">L'Histoire de Rafa & Alex</button>
-        </div>
+<!-- ═══ MENU MOBILE ═══ -->
+<div id="mobileMenu" class="fixed inset-0 z-[95] bg-ink/[0.98] backdrop-blur-xl flex flex-col justify-center px-10 gap-8">
+  <a href="#grande" class="font-display text-5xl font-light">Grande <em class="italic text-gold">44M</em></a>
+  <a href="#fly" class="font-display text-5xl font-light">Fly <em class="italic text-gold">70</em></a>
+  <a href="#galerie" class="font-display text-5xl font-light">Galerie</a>
+  <a href="#contact" class="font-display text-5xl font-light">Contact</a>
+</div>
 
-        <div class="hero-stats">
-          <div class="stat-item">
-            <h3>&lt; 40 kcal</h3>
-            <p>Par Canette</p>
-          </div>
-          <div class="stat-item">
-            <h3>Bio & Cru</h3>
-            <p>Ananas Fermenté</p>
-          </div>
-          <div class="stat-item">
-            <h3>Prébiotiques</h3>
-            <p>Pour le Microbiome</p>
-          </div>
-        </div>
-      </div>
+<main>
 
-      <!-- 3D Can Experience -->
-      <div class="hero-3d-wrap">
-        <div class="interactive-hint">✦ Glisser pour tourner la canette 3D</div>
-        <div id="canvas3d"></div>
-        <div class="flavor-selector-pills" id="canPills"></div>
-      </div>
-    </section>
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero" class="relative h-svh overflow-hidden">
+  <!-- Toile animée (placeholder cinématique derrière la vidéo) -->
+  <canvas id="ocean" class="absolute inset-0 w-full h-full" aria-hidden="true"></canvas>
+  <!-- VIDÉO VIMEO DE FOND — injectée par JS (ID configurable dans le script) -->
+  <div id="heroVideo" class="absolute inset-0 overflow-hidden" aria-hidden="true"></div>
+  <!-- Voiles cinématiques -->
+  <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/25 to-ink pointer-events-none"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at center, transparent 40%, rgba(10,14,20,.55) 100%)"></div>
 
-    <!-- What is Tepache -->
-    <section class="section-tepache">
-      <div class="tepache-grid">
-        <div>
-          <span class="tepache-badge">HÉRITAGE AZTÈQUE</span>
-          <h2 class="tepache-title">Qu'est-ce que le Tepache ?</h2>
-          <p class="tepache-desc">Né il y a des siècles dans les vallées du Mexique central, le tepache est un breuvage fermenté naturellement et rafraîchissant. Préparé avec des écorces d'ananas mûries sous le soleil, de la cannelle douce et du piloncillo pur.</p>
-          
-          <div class="tepache-highlights">
-            <div class="th-card">
-              <h4>Fermentation Spontanée</h4>
-              <p>Fermenté en petits lots pour préserver un équilibre parfait de bulles vivantes et d'arômes d'agrumes.</p>
-            </div>
-            <div class="th-card">
-              <h4>Énergie Légère</h4>
-              <p>Moins de 4g de sucre de canne brut, sans édulcorants artificiels ni arômes synthétiques.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="tepache-visual">
-          <div class="tepache-circle">
-            <div class="tepache-circle-inner">
-              <span>100%</span>
-              <p style="font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Authenticité Mexicaine</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Best Sellers Showcase -->
-    <section class="section-flavors">
-      <div class="section-head">
-        <h2>Parfums Phares</h2>
-        <p>Inspirés des étals bigarrés des marchés traditionnels de Mexico.</p>
-      </div>
-
-      <div class="flavors-grid" id="homeProductGrid">
-        <!-- Injected via JavaScript -->
-      </div>
-    </section>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- PAGE: SHOP -->
-  <!-- ============================================== -->
-  <div id="page-shop" class="page-view">
-    <div style="background:#FAF6EE; padding:60px 40px; text-align:center; border-bottom:1px solid var(--border);">
-      <h1 style="font-size:3.5rem; margin-bottom:12px;">La Taquería Liquide</h1>
-      <p style="color:var(--text-muted); font-size:1.15rem; max-width:600px; margin:0 auto;">
-        Commandez nos 7 saveurs emblématiques ou optez pour nos Packs Découverte en packs de 12 canettes.
+  <div class="relative z-10 h-full flex flex-col justify-end pb-24 md:pb-28 px-6 md:px-12">
+    <p class="eyebrow mb-6 reveal-line"><span class="reveal-inner">Azimut Yachts — Collection Signature</span></p>
+    <h1 class="font-display font-light leading-[0.95] text-[clamp(3.4rem,11vw,10rem)]">
+      <span class="reveal-line"><span class="reveal-inner">La mer,</span></span>
+      <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">pour royaume.</em></span></span>
+    </h1>
+    <div id="heroMeta" class="mt-10 md:mt-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <p class="max-w-md text-ivory/70 font-light leading-relaxed text-sm md:text-base">
+        Grande 44M &amp; Fly 70 — deux flagships, une même obsession :
+        transformer l'horizon en demeure.
       </p>
-    </div>
-
-    <section class="section-flavors">
-      <div class="flavors-grid" id="shopFullGrid"></div>
-    </section>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- PAGE: OUR STORY -->
-  <!-- ============================================== -->
-  <div id="page-story" class="page-view">
-    <div class="story-hero">
-      <div class="story-text">
-        <span class="hero-tag">Les Fondateurs</span>
-        <h2>Rafa & Alex</h2>
-        <p>Rafael Silva a grandi à Mexico, berceau d'une gastronomie de rue vibrante. Sa grand-mère préparait le tepache dans de grandes jarres en terre cuite dans la cour familiale.</p>
-        <p>Après avoir rencontré Alex Celis, passionné d'agriculture durable et de fermentation, l'évidence s'est imposée : réinventer cette tradition millénaire tout en respectant scrupuleusement les petits producteurs de fruits mexicains.</p>
-      </div>
-      <div class="founders-card">
-        <span class="founders-badge">NOTRE MISSION</span>
-        <h3 style="font-size:2rem; margin-bottom:16px;">Célébrer la Culture de Rue Mexicaine</h3>
-        <p style="color:var(--text-muted); line-height:1.7;">
-          Chaque canette de De La Calle soutient directement les coopératives fruitières de Veracruz et Oaxaca et perpétue un savoir-faire artisanal vieux de plusieurs millénaires.
-        </p>
+      <div class="flex items-center gap-10">
+        <span class="hidden lg:block text-[10px] tracking-[0.35em] text-ivory/45 uppercase">43.5528° N — 7.0174° E · Cannes</span>
+        <span class="flex items-center gap-4"><span class="text-[10px] tracking-[0.4em] text-ivory/60 uppercase">Défiler</span><span class="scroll-line"></span></span>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ============================================== -->
-  <!-- PAGE: HISTORY -->
-  <!-- ============================================== -->
-  <div id="page-history" class="page-view">
-    <div style="text-align:center; padding:70px 20px 20px;">
-      <span class="hero-tag">De l'Ancien au Moderne</span>
-      <h1 style="font-size:3.6rem;">Histoire du Tepache</h1>
-    </div>
+<!-- ═══════════════ MARQUEE ═══════════════ -->
+<div class="marquee border-y border-white/10 py-5 md:py-7 bg-ink relative z-10" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">GRANDE 44M</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">FLY 70</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">DEPUIS 1969</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">MADE IN ITALY</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">GRANDE 44M</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">FLY 70</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">DEPUIS 1969</span><span class="text-gold text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">MADE IN ITALY</span><span class="text-gold text-xs">◆</span>
+  </div>
+</div>
 
-    <div class="history-timeline">
-      <div class="timeline-node">
-        <div class="node-year">700 AV. J.-C.</div>
-        <div class="node-title">Origines Nahuatl</div>
-        <div class="node-desc">Le mot vient du nahuatl « tepiātl » (boisson de maïs). Les Aztèques et Mayas fermente initialement des céréales douces avant d'y infuser l'ananas royal.</div>
-      </div>
-      <div class="timeline-node">
-        <div class="node-year">XVIe SIÈCLE</div>
-        <div class="node-title">L'Échange Épicé</div>
-        <div class="node-desc">L'introduction du piloncillo (sucre de canne non raffiné) et de la cannelle d'Asie enrichit définitivement la recette traditionnelle de rue.</div>
-      </div>
-      <div class="timeline-node">
-        <div class="node-year">1950 - 2000</div>
-        <div class="node-title">Le Roi des Marchés</div>
-        <div class="node-desc">Dans les mercados de Mexico et Guadalajara, les « tepacheros » servent la boisson dans des sachets en plastique transparent avec paille et sel pimenté.</div>
-      </div>
-      <div class="timeline-node">
-        <div class="node-year">2021</div>
-        <div class="node-title">Whole Foods & Révolution</div>
-        <div class="node-desc">De La Calle s'installe sur les étagères de Whole Foods aux États-Unis, modernisant la canette en aluminium recyclable sans dénaturer la recette artisanale.</div>
-      </div>
+<!-- ═══════════════ MANIFESTO ═══════════════ -->
+<section class="px-6 md:px-12 py-28 md:py-44 max-w-6xl mx-auto">
+  <p class="eyebrow mb-10" data-fade>Le manifeste</p>
+  <p data-split class="font-display font-light text-[clamp(1.8rem,4.2vw,3.4rem)] leading-[1.25] text-ivory/90">
+    Depuis 1969, Azimut transforme l'horizon en demeure. Chaque coque est une promesse — celle d'une élégance italienne qui ne se remarque pas, elle s'impose.
+  </p>
+  <div class="hairline mt-16 md:mt-24" data-fade></div>
+</section>
+
+<!-- ═══════════════ GRANDE 44M ═══════════════ -->
+<section id="grande" class="relative pb-28 md:pb-40">
+  <div class="px-6 md:px-12 flex items-end justify-between gap-8 mb-10 md:mb-16" data-reveal>
+    <div>
+      <p class="eyebrow mb-5 reveal-line"><span class="reveal-inner">01 — Collection Grande</span></p>
+      <h2 class="font-display font-light leading-[0.9] text-[clamp(3.2rem,9vw,8.5rem)]">
+        <span class="reveal-line"><span class="reveal-inner">GRANDE</span></span>
+        <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">44M</em></span></span>
+      </h2>
     </div>
+    <span class="hidden md:block font-display font-light leading-none text-[clamp(6rem,14vw,12rem)] stroke-text select-none" aria-hidden="true">01</span>
   </div>
 
-  <!-- ============================================== -->
-  <!-- PAGE: SUBSCRIBE -->
-  <!-- ============================================== -->
-  <div id="page-subscribe" class="page-view">
-    <div style="text-align:center; padding:70px 20px 20px;">
-      <span class="hero-tag">Abonnez-vous & Économisez</span>
-      <h1 style="font-size:3.6rem;">Le Club Tepache</h1>
-      <p style="color:var(--text-muted); font-size:1.1rem; max-width:550px; margin:10px auto;">
-        10% de réduction permanente, livraison gratuite programmée et cadeaux exclusifs. Modifiable et annulable en un clic.
+  <!-- PHOTO PLACEHOLDER : remplacer par le visuel définitif Grande 44M -->
+  <div class="relative h-[58vh] md:h-[82vh] overflow-hidden" data-parallax>
+    <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=2000&auto=format&fit=crop" alt="Azimut Grande 44M vue aérienne en navigation" class="w-full h-full object-cover scale-[1.18]">
+    <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/30"></div>
+    <p class="absolute bottom-6 left-6 md:bottom-10 md:left-12 text-[10px] tracking-[0.35em] uppercase text-ivory/70">Grande 44M — Mer Méditerranée</p>
+  </div>
+
+  <div class="px-6 md:px-12 grid md:grid-cols-2 gap-14 md:gap-20 mt-16 md:mt-24 max-w-[1400px] mx-auto">
+    <div data-fade>
+      <h3 class="font-display font-light text-3xl md:text-4xl leading-snug mb-8">Le superyacht aux <em class="italic text-gold">quatre ponts</em>, sculpté par la lumière.</h3>
+      <p class="text-ivory/65 font-light leading-relaxed mb-6">
+        Premier superyacht de la Collection Signature, la Grande 44M déploie quatre ponts baignés de clarté.
+        Sa terrasse panoramique, ses volumes ouverts sur la mer et sa superstructure allégée en fibre de carbone
+        redéfinissent l'art de vivre à bord.
       </p>
+      <p class="text-ivory/65 font-light leading-relaxed mb-10">
+        Signée Alberto Mancini pour l'extérieur et m2atelier pour les intérieurs, elle incarne
+        la vision la plus aboutie du chantier : une villa contemporaine posée sur l'eau.
+      </p>
+      <a href="#contact" class="btn magnetic"><span>Configurer ce modèle</span><span aria-hidden="true">→</span></a>
     </div>
-
-    <div class="subscribe-plans">
-      <div class="plan-card">
-        <h3>L’Initiation</h3>
-        <p style="color:var(--text-muted); margin-bottom:20px;">1 pack de 12 canettes / mois</p>
-        <div class="plan-price">35€ <span>/mois</span></div>
-        <ul class="plan-perks">
-          <li>✓ 1 saveur au choix ou mix</li>
-          <li>✓ 10% d'économie permanente</li>
-          <li>✓ Livraison offerte à domicile</li>
-        </ul>
-        <button class="btn-outline" style="width:100%;" onclick="quickAddPlan('Initiation (12 canettes)', 35)">Choisir l'Initiation</button>
-      </div>
-
-      <div class="plan-card featured">
-        <span class="featured-tag">LE PLUS POPULAIRE</span>
-        <h3>L’Aficionado</h3>
-        <p style="color:var(--text-muted); margin-bottom:20px;">2 packs de 12 (24 canettes) / mois</p>
-        <div class="plan-price">64€ <span>/mois</span></div>
-        <ul class="plan-perks">
-          <li>✓ 2 saveurs panachées</li>
-          <li>✓ 15% d'économie + surprises</li>
-          <li>✓ Accès prioritaire aux nouvelles recettes</li>
-          <li>✓ T-shirt De La Calle offert</li>
-        </ul>
-        <button class="btn-main" style="width:100%;" onclick="quickAddPlan('Aficionado (24 canettes)', 64)">Rejoindre le Club</button>
-      </div>
-
-      <div class="plan-card">
-        <h3>La Fiesta</h3>
-        <p style="color:var(--text-muted); margin-bottom:20px;">4 packs de 12 (48 canettes) / mois</p>
-        <div class="plan-price">119€ <span>/mois</span></div>
-        <ul class="plan-perks">
-          <li>✓ L'ensemble des 7 parfums</li>
-          <li>✓ 20% d'économie maximale</li>
-          <li>✓ Décapsuleur gravé en laiton</li>
-        </ul>
-        <button class="btn-outline" style="width:100%;" onclick="quickAddPlan('La Fiesta (48 canettes)', 119)">Choisir La Fiesta</button>
-      </div>
+    <div data-fade>
+      <p class="eyebrow mb-6">Spécifications</p>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Longueur hors tout</span><span class="font-display text-2xl md:text-3xl font-light">44,21 m</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Largeur</span><span class="font-display text-2xl md:text-3xl font-light">8,65 m</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Motorisation</span><span class="font-display text-2xl md:text-3xl font-light">2 × MTU 2 400 mHP</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse maximale</span><span class="font-display text-2xl md:text-3xl font-light">22 nœuds</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse de croisière</span><span class="font-display text-2xl md:text-3xl font-light">17 nœuds</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Cabines</span><span class="font-display text-2xl md:text-3xl font-light">5 + équipage</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Design extérieur</span><span class="font-display text-2xl md:text-3xl font-light">A. Mancini</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Design intérieur</span><span class="font-display text-2xl md:text-3xl font-light">m2atelier</span></div>
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- PAGE: WHERE TO BUY -->
-  <!-- ============================================== -->
-  <div id="page-locator" class="page-view">
-    <div class="locator-wrap">
-      <span class="hero-tag">Points de Vente</span>
-      <h1 style="font-size:3.5rem;">Trouvez De La Calle Près de Chez Vous</h1>
-      <p style="color:var(--text-muted); margin-top:8px;">Entrez votre code postal ou votre ville pour localiser nos épiceries partenaires.</p>
-
-      <div class="locator-search">
-        <input type="text" id="zipSearch" placeholder="Ex: 75003, Paris, Lyon, 92100..." />
-        <button class="btn-main" onclick="filterStores()">Rechercher</button>
+  <!-- MODULE VIDÉO VIMEO — GRANDE 44M (façade cliquable, iframe injectée à la demande) -->
+  <div class="px-6 md:px-12 mt-20 md:mt-28 max-w-[1400px] mx-auto" data-fade>
+    <div class="video-facade video-frame group cursor-pointer border border-white/10" data-vimeo-key="grande44m" data-cursor="Lire" role="button" tabindex="0" aria-label="Lire le film officiel Grande 44M">
+      <!-- PHOTO PLACEHOLDER : poster vidéo Grande 44M -->
+      <img src="https://images.unsplash.com/photo-1605281317010-fe5ffe798166?q=80&w=2000&auto=format&fit=crop" alt="Film officiel — Azimut Grande 44M" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105">
+      <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-ink/40"></div>
+      <span class="absolute top-5 left-5 md:top-7 md:left-7 eyebrow">Film officiel — Vimeo</span>
+      <span class="absolute bottom-5 right-5 md:bottom-7 md:right-7 text-[10px] tracking-[0.3em] text-ivory/70 border border-white/15 bg-ink/50 backdrop-blur px-3 py-1.5">02:47</span>
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <span class="play-btn magnetic pointer-events-auto">
+          <svg width="22" height="26" viewBox="0 0 22 26" fill="#F2EFE9" aria-hidden="true"><path d="M0 0 L22 13 L0 26 Z"/></svg>
+        </span>
       </div>
+    </div>
+    <p class="mt-4 text-[10px] tracking-[0.3em] uppercase text-ivory/40">Lecture hébergée sur Vimeo — remplacez l'ID dans la configuration du script pour la version définitive.</p>
+  </div>
+</section>
 
-      <div class="store-list" id="storeList">
-        <!-- Rendered with JS -->
-      </div>
+<!-- ═══════════════ FLY 70 ═══════════════ -->
+<section id="fly" class="relative pb-28 md:pb-40 pt-10">
+  <div class="px-6 md:px-12 flex items-end justify-between gap-8 mb-10 md:mb-16" data-reveal>
+    <span class="hidden md:block font-display font-light leading-none text-[clamp(6rem,14vw,12rem)] stroke-text select-none order-1" aria-hidden="true">02</span>
+    <div class="md:text-right">
+      <p class="eyebrow mb-5 reveal-line"><span class="reveal-inner">02 — Collection Flybridge</span></p>
+      <h2 class="font-display font-light leading-[0.9] text-[clamp(3.2rem,9vw,8.5rem)]">
+        <span class="reveal-line"><span class="reveal-inner">FLY</span></span>
+        <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">70</em></span></span>
+      </h2>
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- CART DRAWER & OVERLAY -->
-  <!-- ============================================== -->
-  <div class="cart-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
-  <div class="cart-drawer" id="cartDrawer">
-    <div class="cart-header">
-      <h3>Votre Panier</h3>
-      <button onclick="closeCart()" style="font-size:1.5rem;">✕</button>
+  <!-- PHOTO PLACEHOLDER : remplacer par le visuel définitif Fly 70 -->
+  <div class="relative h-[58vh] md:h-[82vh] overflow-hidden" data-parallax>
+    <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?q=80&w=2000&auto=format&fit=crop" alt="Azimut Fly 70 au mouillage dans une baie turquoise" class="w-full h-full object-cover scale-[1.18]">
+    <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/30"></div>
+    <p class="absolute bottom-6 right-6 md:bottom-10 md:right-12 text-[10px] tracking-[0.35em] uppercase text-ivory/70">Fly 70 — Côte d'Azur</p>
+  </div>
+
+  <div class="px-6 md:px-12 grid md:grid-cols-2 gap-14 md:gap-20 mt-16 md:mt-24 max-w-[1400px] mx-auto">
+    <div class="md:order-2" data-fade>
+      <h3 class="font-display font-light text-3xl md:text-4xl leading-snug mb-8">Le flybridge <em class="italic text-gold">réinventé</em>, la mer en ligne de mire.</h3>
+      <p class="text-ivory/65 font-light leading-relaxed mb-6">
+        Nouveau fleuron de la gamme Flybridge, le Fly 70 conjugue lignes sculpturales signées
+        Alberto Mancini et espaces d'une générosité rare pour un yacht de 21 mètres.
+      </p>
+      <p class="text-ivory/65 font-light leading-relaxed mb-10">
+        Pont principal baigné de lumière, quatre cabines dont une suite propriétaire pleine largeur,
+        performances affirmées : il est pensé comme une villa contemporaine posée sur l'eau.
+      </p>
+      <a href="#contact" class="btn magnetic"><span>Configurer ce modèle</span><span aria-hidden="true">→</span></a>
     </div>
-    <div class="cart-items-wrap" id="cartItemsList">
-      <!-- Injected Cart items -->
-    </div>
-    <div class="cart-footer">
-      <div class="cart-subtotal">
-        <span>Total</span>
-        <span id="cartTotalVal">0.00 €</span>
-      </div>
-      <button class="cart-checkout-btn" onclick="checkoutDemo()">Commander (Démo Simulée)</button>
+    <div class="md:order-1" data-fade>
+      <p class="eyebrow mb-6">Spécifications</p>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Longueur hors tout</span><span class="font-display text-2xl md:text-3xl font-light">21,37 m</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Largeur</span><span class="font-display text-2xl md:text-3xl font-light">5,32 m</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Motorisation</span><span class="font-display text-2xl md:text-3xl font-light">2 × MAN V12 1 550 mHP</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse maximale</span><span class="font-display text-2xl md:text-3xl font-light">31 nœuds</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse de croisière</span><span class="font-display text-2xl md:text-3xl font-light">26 nœuds</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Cabines</span><span class="font-display text-2xl md:text-3xl font-light">4</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Design extérieur</span><span class="font-display text-2xl md:text-3xl font-light">A. Mancini</span></div>
+      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Construction</span><span class="font-display text-2xl md:text-3xl font-light">Carbone &amp; GRP</span></div>
     </div>
   </div>
 
-  <!-- PRODUCT DETAIL MODAL -->
-  <div class="modal-overlay" id="productModal">
-    <div class="modal-box">
-      <div class="modal-close" onclick="closeModal()">✕</div>
-      <div class="modal-visual" id="modalCanVisual"></div>
-      <div class="modal-info">
-        <span class="hero-tag" id="modalTag">Tepache Frais</span>
-        <h2 id="modalTitle">Nom Produit</h2>
-        <div class="modal-tagline" id="modalTagline">Notes aromatiques</div>
-        <p id="modalDesc">Description complète de la recette originale mexicaine.</p>
-        
-        <div class="nutrition-table">
-          <div class="nt-item">
-            <h5 id="modalCal">35</h5>
-            <span>Calories</span>
-          </div>
-          <div class="nt-item">
-            <h5 id="modalSugar">4g</h5>
-            <span>Sucre Turbinado</span>
-          </div>
-          <div class="nt-item">
-            <h5>Vivant</h5>
-            <span>Probiotiques</span>
-          </div>
-        </div>
-
-        <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between;">
-          <span style="font-size:1.6rem; font-weight:900;" id="modalPrice">39,00 €</span>
-          <button class="btn-main" id="modalAddBtn">Ajouter au Panier</button>
-        </div>
+  <!-- MODULE VIDÉO VIMEO — FLY 70 -->
+  <div class="px-6 md:px-12 mt-20 md:mt-28 max-w-[1400px] mx-auto" data-fade>
+    <div class="video-facade video-frame group cursor-pointer border border-white/10" data-vimeo-key="fly70" data-cursor="Lire" role="button" tabindex="0" aria-label="Lire le film officiel Fly 70">
+      <!-- PHOTO PLACEHOLDER : poster vidéo Fly 70 -->
+      <img src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?q=80&w=2000&auto=format&fit=crop" alt="Film officiel — Azimut Fly 70" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105">
+      <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-ink/40"></div>
+      <span class="absolute top-5 left-5 md:top-7 md:left-7 eyebrow">Film officiel — Vimeo</span>
+      <span class="absolute bottom-5 right-5 md:bottom-7 md:right-7 text-[10px] tracking-[0.3em] text-ivory/70 border border-white/15 bg-ink/50 backdrop-blur px-3 py-1.5">03:12</span>
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <span class="play-btn magnetic pointer-events-auto">
+          <svg width="22" height="26" viewBox="0 0 22 26" fill="#F2EFE9" aria-hidden="true"><path d="M0 0 L22 13 L0 26 Z"/></svg>
+        </span>
       </div>
     </div>
+    <p class="mt-4 text-[10px] tracking-[0.3em] uppercase text-ivory/40">Lecture hébergée sur Vimeo — remplacez l'ID dans la configuration du script pour la version définitive.</p>
   </div>
+</section>
 
-  <!-- TOAST NOTIFICATION -->
-  <div class="toast-msg" id="toast">
-    <span>✓</span> <span id="toastText">Produit ajouté au panier !</span>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-col">
-        <div class="brand-logo" style="margin-bottom:16px;">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          <span style="color:#fff;">DE LA CALLE</span>
-        </div>
-        <p style="color:#9B948B; font-size:0.95rem; line-height:1.7;">
-          La célébration de la culture mexicaine à travers le tepache certifié biologique. Brassé avec passion, amour et piloncillo pur.
-        </p>
+<!-- ═══════════════ GALERIE VIDÉO ═══════════════ -->
+<section id="galerie" class="px-6 md:px-12 py-28 md:py-40 border-t border-white/10">
+  <div class="max-w-[1400px] mx-auto">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-20" data-reveal>
+      <div>
+        <p class="eyebrow mb-5 reveal-line"><span class="reveal-inner">03 — Galerie</span></p>
+        <h2 class="font-display font-light leading-[0.95] text-[clamp(2.8rem,7vw,6.5rem)]">
+          <span class="reveal-line"><span class="reveal-inner">Films &amp; <em class="italic text-gold">visites</em></span></span>
+        </h2>
       </div>
-
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a href="#" onclick="switchPage('home')">Accueil</a></li>
-          <li><a href="#" onclick="switchPage('shop')">Tous les Parfums</a></li>
-          <li><a href="#" onclick="switchPage('story')">Notre Équipe</a></li>
-          <li><a href="#" onclick="switchPage('subscribe')">Abonnement -10%</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Transparence</h4>
-        <ul>
-          <li><a href="#">Ingrédients Certifiés</a></li>
-          <li><a href="#">FAQ & Livraison</a></li>
-          <li><a href="#">Impact Social Oaxaca</a></li>
-          <li><a href="#">Presse & Événements</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Newsletter</h4>
-        <p style="color:#A8A199; font-size:0.85rem; margin-bottom:12px;">Recevez un code de -15% sur votre première commande.</p>
-        <div style="display:flex; gap:8px;">
-          <input type="email" placeholder="votre@email.com" style="padding:10px 14px; border-radius:999px; border:1px solid #333; background:#222; color:#fff; font-size:0.85rem; flex:1;" />
-          <button style="background:var(--terracotta); color:#fff; padding:10px 18px; border-radius:999px; font-weight:700; font-size:0.85rem;" onclick="showToast('Merci pour votre inscription !')">OK</button>
-        </div>
-      </div>
+      <p class="max-w-sm text-ivory/55 font-light text-sm leading-relaxed" data-fade>Quatre extraits hébergés sur Vimeo. Cliquez pour ouvrir le lecteur plein écran.</p>
     </div>
 
-    <div class="footer-bottom">
-      <span>© 2025 De La Calle Tepache Démo Vitrine. Conçu pour le Web moderne.</span>
-      <span>Fait avec passion pour le tepache traditionnel.</span>
-    </div>
-  </footer>
-
-  <!-- ============================================== -->
-  <!-- JAVASCRIPT & THREE.JS LOGIC -->
-  <!-- ============================================== -->
-  <script>
-    /* ===== 1. PRODUCT DATABASE & SVG GENERATOR ===== */
-    const PRODUCTS = [
-      {
-        id: 'strawberry-citrus',
-        name: 'Strawberry Citrus',
-        category: 'fruity',
-        flavorNote: 'Fraise mûrie au soleil & citron vert pressé',
-        desc: 'Une harmonie pétillante de jus de fraises fraîches du Michoacán équilibrée par la vivacité du citron vert mexicain et la profondeur du piloncillo brut.',
-        color: '#E63956',
-        colorLight: '#FFE3E8',
-        colorDark: '#8A0F26',
-        calories: 35,
-        sugar: '4g',
-        price: 38.00,
-        badge: 'Best-Seller'
-      },
-      {
-        id: 'mandarin-refresco',
-        name: 'Mandarin Refresco',
-        category: 'citrus',
-        flavorNote: 'Zestes de mandarine & agrumes juteux',
-        desc: 'Inspiré des sodas artisanaux servis sur les trottoirs de Guadalajara, avec une vague d\'agrumes juteux et une amertume rafraîchissante.',
-        color: '#F97316',
-        colorLight: '#FFEDD5',
-        colorDark: '#9A3412',
-        calories: 38,
-        sugar: '4g',
-        price: 38.00,
-        badge: 'Coup de Cœur'
-      },
-      {
-        id: 'spiced-pineapple',
-        name: 'Spiced Pineapple',
-        category: 'traditional',
-        flavorNote: 'Ananas biologique, cannelle & clou de girofle',
-        desc: 'La recette originelle aztèque. Écorces d’ananas rôties infusées lentement avec de la cannelle de Ceylan et du clou de girofle doux.',
-        color: '#F7C948',
-        colorLight: '#FFFBEB',
-        colorDark: '#A16207',
-        calories: 40,
-        sugar: '5g',
-        price: 38.00,
-        badge: 'Recette Originale'
-      },
-      {
-        id: 'mango-chili',
-        name: 'Mango Chili',
-        category: 'spicy',
-        flavorNote: 'Mangue Ataúlfo fondante & pointe de piment piquín',
-        desc: 'L\'expérience quintessencielle du street-food mexicain : la douceur du coulis de mangue alliée à une chaleur fumée et subtile en finale.',
-        color: '#FF8A00',
-        colorLight: '#FFF7ED',
-        colorDark: '#C2410C',
-        calories: 35,
-        sugar: '4g',
-        price: 38.00,
-        badge: 'Épicé Doux'
-      },
-      {
-        id: 'prickly-pear',
-        name: 'Prickly Pear',
-        category: 'desert',
-        flavorNote: 'Figue de barbarie sauvage & hibiscus',
-        desc: 'Une couleur rubis hypnotisante et un goût délicatement floral extrait des cactus nopal des hauts plateaux de Sonora.',
-        color: '#9D174D',
-        colorLight: '#FCE7F3',
-        colorDark: '#500724',
-        calories: 30,
-        sugar: '3g',
-        price: 38.00,
-        badge: 'Édition Cactus'
-      },
-      {
-        id: 'tropical-ponche',
-        name: 'Tropical Ponche',
-        category: 'blend',
-        flavorNote: 'Goyave rose, ananas & tamarin acidulé',
-        desc: 'Notre hommage au ponche traditionnel des fêtes de fin d\'année mexicaines. Une explosion de fruits gorgés de soleil.',
-        color: '#0D9488',
-        colorLight: '#CCFBF1',
-        colorDark: '#115E59',
-        calories: 35,
-        sugar: '4g',
-        price: 38.00,
-        badge: 'Festif'
-      },
-      {
-        id: 'grapefruit-lime',
-        name: 'Grapefruit Lime',
-        category: 'citrus',
-        flavorNote: 'Pamplemousse rubis & twist de lime sauvage',
-        desc: 'Inspiré du célèbre cocktail Paloma sans une goutte d’alcool. Ultra sec, frais et intensément désaltérant.',
-        color: '#EC4899',
-        colorLight: '#FDF2F8',
-        colorDark: '#9D174D',
-        calories: 32,
-        sugar: '3g',
-        price: 38.00,
-        badge: 'Ultra Frais'
-      },
-      {
-        id: 'variety-pack-classic',
-        name: 'Variety Pack : Les Classiques',
-        category: 'pack',
-        flavorNote: '4 Spiced Pineapple + 4 Strawberry Citrus + 4 Mango Chili',
-        desc: 'Le pack idéal pour explorer l’ADN de De La Calle. 12 canettes comprenant nos trois meilleures ventes historiques.',
-        color: '#D84A38',
-        colorLight: '#FEE2E2',
-        colorDark: '#7F1D1D',
-        calories: 36,
-        sugar: '4g',
-        price: 42.00,
-        badge: 'Pack 12 x 355ml'
-      },
-      {
-        id: 'variety-pack-fiesta',
-        name: 'Variety Pack : Fiesta Exotica',
-        category: 'pack',
-        flavorNote: 'Mix exclusif des 7 saveurs + bonus',
-        desc: 'Recevez toutes les facettes de notre barrique. Idéal pour partager lors d’un dîner tacos ou d’un apéritif en terrasse.',
-        color: '#2E7D5B',
-        colorLight: '#E8F5E9',
-        colorDark: '#1B4332',
-        calories: 35,
-        sugar: '4g',
-        price: 44.00,
-        badge: 'Pack Découverte'
-      }
-    ];
-
-    const STORE_LOCATIONS = [
-      { name: "La Grande Épicerie de Paris", address: "38 Rue de Sèvres, 75007 Paris", zip: "75007" },
-      { name: "Supermarché Bio C' Bon Oberkampf", address: "112 Rue Oberkampf, 75011 Paris", zip: "75011" },
-      { name: "Épicerie Mexicaine La Tiendita", address: "18 Rue Saint-Georges, 69005 Lyon", zip: "69005" },
-      { name: "Naturalia République", address: "14 Place de la République, 75010 Paris", zip: "75010" },
-      { name: "Le Marché Sauvage Bio", address: "55 Rue Paradis, 13006 Marseille", zip: "13006" }
-    ];
-
-    // Helper: generate consistent De La Calle SVG Can graphic
-    function generateCanSVG(p) {
-      return `
-        <svg viewBox="0 0 160 250" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="bodyGrad_${p.id}" x1="20" y1="20" x2="140" y2="230" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="${p.colorLight}" />
-              <stop offset="35%" stop-color="${p.color}" />
-              <stop offset="100%" stop-color="${p.colorDark}" />
-            </linearGradient>
-            <linearGradient id="silverGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#D4D4D8" />
-              <stop offset="50%" stop-color="#FFFFFF" />
-              <stop offset="100%" stop-color="#A1A1AA" />
-            </linearGradient>
-          </defs>
-          
-          <!-- Top rim & lip -->
-          <ellipse cx="80" cy="22" rx="42" ry="7" fill="url(#silverGrad)"/>
-          <ellipse cx="80" cy="18" rx="36" ry="5" fill="#52525B"/>
-          <ellipse cx="80" cy="17" rx="20" ry="3" fill="#27272A"/>
-
-          <!-- Can main cylinder body -->
-          <path d="M38 22 C38 18 122 18 122 22 L124 218 C124 228 36 228 36 218 Z" fill="url(#bodyGrad_${p.id})"/>
-          
-          <!-- Pattern details on Can (Aztec/Mexican sun ray motif) -->
-          <circle cx="80" cy="120" r="32" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="4 3"/>
-          <path d="M80 65 L84 78 L98 78 L87 86 L91 100 L80 91 L69 100 L73 86 L62 78 L76 78 Z" fill="#FFFFFF" opacity="0.9"/>
-
-          <!-- Brand Typography -->
-          <text x="80" y="122" font-family="'Cabinet Grotesk', sans-serif" font-weight="900" font-size="12" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">DE LA CALLE</text>
-          <text x="80" y="136" font-family="sans-serif" font-weight="800" font-size="7" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">TEPACHE</text>
-          
-          <!-- Flavor banner -->
-          <rect x="42" y="162" width="76" height="15" rx="3" fill="rgba(0,0,0,0.3)"/>
-          <text x="80" y="173" font-family="sans-serif" font-weight="800" font-size="6.5" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">${p.name.toUpperCase()}</text>
-
-          <!-- Bottom rim -->
-          <ellipse cx="80" cy="220" rx="43" ry="8" fill="url(#silverGrad)"/>
-          
-          <!-- Glossy reflection overlay -->
-          <path d="M44 24 L52 24 L50 216 L42 216 Z" fill="rgba(255,255,255,0.22)"/>
-        </svg>
-      `;
-    }
-
-    /* ===== 2. THREE.JS 3D INTERACTIVE CAN ===== */
-    let scene, camera, renderer, canGroup;
-    let currentFlavorIndex = 0;
-    const canColors = [0xE63956, 0xF97316, 0xF7C948, 0xFF8A00, 0x9D174D, 0x0D9488];
-
-    function createCanTexture(colorHex, nameText) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 1024;
-      const ctx = canvas.getContext('2d');
-
-      // Base gradient
-      const grad = ctx.createLinearGradient(0, 0, 1024, 1024);
-      grad.addColorStop(0, '#FFFFFF');
-      grad.addColorStop(0.3, colorHex);
-      grad.addColorStop(1, '#111111');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 1024, 1024);
-
-      // Geometric Aztec inspired motif
-      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-      ctx.lineWidth = 12;
-      for (let i = 0; i < 10; i++) {
-        ctx.beginPath();
-        ctx.arc(512, 512, 120 + i * 40, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      // Brand Typography
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '900 68px "Cabinet Grotesk", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('DE LA CALLE !', 512, 380);
-
-      ctx.font = '800 36px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = '#F7C948';
-      ctx.fillText('• AUTHENTIC FERMENTED TEPACHE •', 512, 440);
-
-      // Big Star icon
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '72px sans-serif';
-      ctx.fillText('✦', 512, 530);
-
-      // Flavor Name
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '800 48px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(nameText.toUpperCase(), 512, 620);
-
-      ctx.font = '600 28px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.8)';
-      ctx.fillText('355 ML • ORGANIC PINEAPPLE • LIVE CULTURES', 512, 700);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      return texture;
-    }
-
-    function init3D() {
-      const container = document.getElementById('canvas3d');
-      if (!container) return;
-
-      const width = container.clientWidth || 500;
-      const height = container.clientHeight || 550;
-
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
-      camera.position.set(0, 0.3, 5.2);
-
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.shadowMap.enabled = true;
-      container.appendChild(renderer.domElement);
-
-      // Lights
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-      scene.add(ambientLight);
-
-      const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.4);
-      dirLight.position.set(5, 8, 4);
-      scene.add(dirLight);
-
-      const rimLight = new THREE.DirectionalLight(0x70c0ff, 0.9);
-      rimLight.position.set(-6, -2, -4);
-      scene.add(rimLight);
-
-      canGroup = new THREE.Group();
-      scene.add(canGroup);
-
-      buildCanMesh(PRODUCTS[0]);
-
-      // Pill Buttons
-      const pillsWrap = document.getElementById('canPills');
-      pillsWrap.innerHTML = '';
-      PRODUCTS.slice(0, 6).forEach((prod, i) => {
-        const btn = document.createElement('button');
-        btn.className = `pill-btn ${i === 0 ? 'active' : ''}`;
-        btn.style.backgroundColor = prod.color;
-        btn.title = prod.name;
-        btn.onclick = () => selectCanFlavor(i);
-        pillsWrap.appendChild(btn);
-      });
-
-      // Mouse Drag Controls
-      let isDragging = false;
-      let prevMousePos = { x: 0, y: 0 };
-
-      const canvasElem = renderer.domElement;
-      canvasElem.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        prevMousePos = { x: e.clientX, y: e.clientY };
-      });
-
-      window.addEventListener('mouseup', () => { isDragging = false; });
-
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging || !canGroup) return;
-        const deltaX = e.clientX - prevMousePos.x;
-        const deltaY = e.clientY - prevMousePos.y;
-        canGroup.rotation.y += deltaX * 0.01;
-        canGroup.rotation.x += deltaY * 0.005;
-        prevMousePos = { x: e.clientX, y: e.clientY };
-      });
-
-      // Touch Controls for Mobile
-      canvasElem.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-          isDragging = true;
-          prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }
-      });
-      window.addEventListener('touchend', () => { isDragging = false; });
-      window.addEventListener('touchmove', (e) => {
-        if (!isDragging || !canGroup || e.touches.length === 0) return;
-        const deltaX = e.touches[0].clientX - prevMousePos.x;
-        const deltaY = e.touches[0].clientY - prevMousePos.y;
-        canGroup.rotation.y += deltaX * 0.012;
-        canGroup.rotation.x += deltaY * 0.006;
-        prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      });
-
-      // Resize
-      window.addEventListener('resize', onWindowResize);
-
-      animate();
-    }
-
-    let cylinderMesh;
-    function buildCanMesh(flavor) {
-      // Clear previous
-      while (canGroup.children.length > 0) {
-        canGroup.remove(canGroup.children[0]);
-      }
-
-      // Cylinder can body
-      const bodyGeo = new THREE.CylinderGeometry(0.85, 0.85, 2.3, 48, 1, true);
-      const texture = createCanTexture(flavor.color, flavor.name);
-      const bodyMat = new THREE.MeshStandardMaterial({
-        map: texture,
-        roughness: 0.28,
-        metalness: 0.55
-      });
-      cylinderMesh = new THREE.Mesh(bodyGeo, bodyMat);
-      canGroup.add(cylinderMesh);
-
-      // Silver top & bottom caps
-      const silverMat = new THREE.MeshStandardMaterial({
-        color: 0xE8E8E8,
-        metalness: 0.85,
-        roughness: 0.2
-      });
-
-      const topGeo = new THREE.CylinderGeometry(0.8, 0.85, 0.1, 48);
-      const topCap = new THREE.Mesh(topGeo, silverMat);
-      topCap.position.y = 1.2;
-      canGroup.add(topCap);
-
-      const bottomGeo = new THREE.CylinderGeometry(0.85, 0.78, 0.12, 48);
-      const botCap = new THREE.Mesh(bottomGeo, silverMat);
-      botCap.position.y = -1.2;
-      canGroup.add(botCap);
-
-      // Add pull tab detail
-      const tabGeo = new THREE.BoxGeometry(0.25, 0.02, 0.45);
-      const tab = new THREE.Mesh(tabGeo, silverMat);
-      tab.position.set(0, 1.26, 0.15);
-      canGroup.add(tab);
-
-      // Default tilt
-      canGroup.rotation.x = 0.12;
-      canGroup.rotation.z = -0.08;
-    }
-
-    function selectCanFlavor(index) {
-      currentFlavorIndex = index;
-      const targetFlavor = PRODUCTS[index];
-      buildCanMesh(targetFlavor);
-
-      const pills = document.querySelectorAll('.pill-btn');
-      pills.forEach((p, idx) => {
-        if (idx === index) p.classList.add('active');
-        else p.classList.remove('active');
-      });
-    }
-
-    function onWindowResize() {
-      const container = document.getElementById('canvas3d');
-      if (!container || !renderer || !camera) return;
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-      if (canGroup) {
-        canGroup.rotation.y += 0.004; // subtle idle rotation
-      }
-      renderer.render(scene, camera);
-    }
-
-    /* ===== 3. RENDER PRODUCTS INTO DOM ===== */
-    function renderProductCards() {
-      const homeGrid = document.getElementById('homeProductGrid');
-      const shopGrid = document.getElementById('shopFullGrid');
-
-      // Home: First 4
-      homeGrid.innerHTML = PRODUCTS.slice(0, 4).map(p => productCardHTML(p)).join('');
-      // Shop: All items
-      shopGrid.innerHTML = PRODUCTS.map(p => productCardHTML(p)).join('');
-    }
-
-    function productCardHTML(p) {
-      return `
-        <div class="product-card-wrap">
-          <span class="badge-pill">${p.badge}</span>
-          <div class="prod-art" style="background:${p.colorLight}" onclick="openProductModal('${p.id}')">
-            ${generateCanSVG(p)}
-          </div>
-          <div class="prod-details">
-            <h3>${p.name}</h3>
-            <p class="prod-notes">${p.flavorNote}</p>
-            <div class="nutrition-tags">
-              <span class="n-tag">${p.calories} kcal</span>
-              <span class="n-tag">${p.sugar} Sucre Bio</span>
-              <span class="n-tag">Prébiotiques</span>
-            </div>
-          </div>
-          <div class="prod-bottom">
-            <div class="prod-price">${p.price.toFixed(2)} € <small>/ 12 canettes</small></div>
-            <button class="btn-add" onclick="addToCart('${p.id}')">+ Ajouter</button>
-          </div>
-        </div>
-      `;
-    }
-
-    /* ===== 4. SHOPPING CART (LOCALSTORAGE) ===== */
-    let cart = [];
-
-    function loadCart() {
-      try {
-        const saved = localStorage.getItem('delacalle_cart');
-        if (saved) cart = JSON.parse(saved);
-      } catch (e) {
-        cart = [];
-      }
-      updateCartUI();
-    }
-
-    function saveCart() {
-      localStorage.setItem('delacalle_cart', JSON.stringify(cart));
-      updateCartUI();
-    }
-
-    function addToCart(productId) {
-      const prod = PRODUCTS.find(p => p.id === productId);
-      if (!prod) return;
-
-      const existing = cart.find(item => item.id === productId);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({
-          id: prod.id,
-          name: prod.name,
-          price: prod.price,
-          colorLight: prod.colorLight,
-          qty: 1
-        });
-      }
-      saveCart();
-      showToast(`${prod.name} ajouté au panier !`);
-      openCart();
-    }
-
-    function quickAddPlan(planTitle, price) {
-      cart.push({
-        id: 'sub-' + Date.now(),
-        name: `Abonnement ${planTitle}`,
-        price: price,
-        colorLight: '#FFFBEB',
-        qty: 1
-      });
-      saveCart();
-      showToast(`Abonnement ${planTitle} ajouté !`);
-      openCart();
-    }
-
-    function changeQty(id, delta) {
-      const item = cart.find(i => i.id === id);
-      if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0) {
-        cart = cart.filter(i => i.id !== id);
-      }
-      saveCart();
-    }
-
-    function updateCartUI() {
-      const badge = document.getElementById('cartCount');
-      const totalCount = cart.reduce((sum, i) => sum + i.qty, 0);
-      badge.innerText = totalCount;
-
-      const container = document.getElementById('cartItemsList');
-      if (cart.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#999;">Votre panier est vide pour l'instant.<br><br>Découvrez nos parfums fermentés !</div>`;
-      } else {
-        container.innerHTML = cart.map(item => {
-          return `
-            <div class="cart-item-row">
-              <div style="width:50px; height:60px; background:${item.colorLight || '#f2f2f2'}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-                🥫
-              </div>
-              <div class="cart-item-info">
-                <h4>${item.name}</h4>
-                <span>${(item.price * item.qty).toFixed(2)} €</span>
-                <div class="qty-controls">
-                  <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
-                  <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
-                  <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
-                </div>
-              </div>
-              <button onclick="changeQty('${item.id}', -999)" style="color:#A19B91; font-size:1.1rem;">✕</button>
-            </div>
-          `;
-        }).join('');
-      }
-
-      const totalVal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      document.getElementById('cartTotalVal').innerText = totalVal.toFixed(2) + ' €';
-    }
-
-    function openCart() {
-      document.getElementById('cartDrawer').classList.add('open');
-      document.getElementById('cartBackdrop').classList.add('open');
-    }
-
-    function closeCart() {
-      document.getElementById('cartDrawer').classList.remove('open');
-      document.getElementById('cartBackdrop').classList.remove('open');
-    }
-
-    function checkoutDemo() {
-      if (cart.length === 0) {
-        alert("Votre panier est vide !");
-        return;
-      }
-      const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0).toFixed(2);
-      const conf = confirm(`[DÉMO VITRINE DE LA CALLE]\n\nMontant total : ${total} €\nConfirmez-vous cette commande de test ?`);
-      if (conf) {
-        cart = [];
-        saveCart();
-        closeCart();
-        alert("¡Muchas Gracias ! Commande simulée effectuée avec succès.");
-      }
-    }
-
-    /* ===== 5. PRODUCT DETAIL MODAL ===== */
-    function openProductModal(id) {
-      const prod = PRODUCTS.find(p => p.id === id);
-      if (!prod) return;
-
-      document.getElementById('modalCanVisual').innerHTML = generateCanSVG(prod);
-      document.getElementById('modalTag').innerText = prod.badge;
-      document.getElementById('modalTitle').innerText = prod.name;
-      document.getElementById('modalTagline').innerText = prod.flavorNote;
-      document.getElementById('modalDesc').innerText = prod.desc;
-      document.getElementById('modalCal').innerText = prod.calories;
-      document.getElementById('modalSugar').innerText = prod.sugar;
-      document.getElementById('modalPrice').innerText = prod.price.toFixed(2) + ' €';
-
-      const addBtn = document.getElementById('modalAddBtn');
-      addBtn.onclick = () => {
-        addToCart(prod.id);
-        closeModal();
-      };
-
-      document.getElementById('productModal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('productModal').classList.remove('active');
-    }
-
-    /* ===== 6. ROUTER / PAGE SWITCHER ===== */
-    function switchPage(pageKey) {
-      document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active-view'));
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-
-      const targetPage = document.getElementById(`page-${pageKey}`);
-      if (targetPage) {
-        targetPage.classList.add('active-view');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(btn => 
-        btn.getAttribute('onclick')?.includes(pageKey)
-      );
-      if (activeNav) activeNav.classList.add('active');
-    }
-
-    /* ===== 7. STORE LOCATOR ===== */
-    function renderStores(list) {
-      const container = document.getElementById('storeList');
-      if (list.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Aucun point de vente trouvé pour ce code postal. Essayez 75007 ou Paris.</div>`;
-        return;
-      }
-      container.innerHTML = list.map(s => `
-        <div class="store-card">
-          <div>
-            <h4 style="font-size:1.15rem; margin-bottom:4px;">${s.name}</h4>
-            <p style="color:var(--text-muted); font-size:0.9rem;">${s.address}</p>
-          </div>
-          <span style="background:#FAF3E3; color:#A16207; padding:6px 14px; border-radius:999px; font-size:0.8rem; font-weight:800;">
-            Stock Disponible
+    <div class="grid md:grid-cols-2 gap-8 md:gap-10">
+      <!-- CARTE 1 — PHOTO PLACEHOLDER -->
+      <article class="gal-card group cursor-pointer" data-gallery-index="0" data-cursor="Lire" data-fade>
+        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
+          <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1400&auto=format&fit=crop" alt="Grande 44M — le film" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
+          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
+          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">02:47</span>
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
           </span>
         </div>
-      `).join('');
-    }
+        <div class="flex items-start justify-between mt-5 gap-4">
+          <h3 class="font-display font-light text-2xl md:text-3xl">Grande 44M — Le film</h3>
+          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+        </div>
+        <p class="text-sm text-ivory/50 mt-1 font-light">Visite complète du superyacht, pont par pont.</p>
+      </article>
 
-    function filterStores() {
-      const val = document.getElementById('zipSearch').value.trim().toLowerCase();
-      if (!val) {
-        renderStores(STORE_LOCATIONS);
-        return;
-      }
-      const filtered = STORE_LOCATIONS.filter(s => 
-        s.zip.includes(val) || s.address.toLowerCase().includes(val) || s.name.toLowerCase().includes(val)
-      );
-      renderStores(filtered);
-    }
+      <!-- CARTE 2 — PHOTO PLACEHOLDER -->
+      <article class="gal-card group cursor-pointer" data-gallery-index="1" data-cursor="Lire" data-fade>
+        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
+          <img src="https://images.unsplash.com/photo-1605281317010-fe5ffe798166?q=80&w=1400&auto=format&fit=crop" alt="Fly 70 — essai en mer" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
+          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
+          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">03:12</span>
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
+          </span>
+        </div>
+        <div class="flex items-start justify-between mt-5 gap-4">
+          <h3 class="font-display font-light text-2xl md:text-3xl">Fly 70 — Essai en mer</h3>
+          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+        </div>
+        <p class="text-sm text-ivory/50 mt-1 font-light">Premières navigations au large de Savone.</p>
+      </article>
 
-    /* ===== 8. TOAST SYSTEM ===== */
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastText').innerText = msg;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2600);
-    }
+      <!-- CARTE 3 — PHOTO PLACEHOLDER -->
+      <article class="gal-card group cursor-pointer" data-gallery-index="2" data-cursor="Lire" data-fade>
+        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
+          <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1400&auto=format&fit=crop" alt="Design — Alberto Mancini" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
+          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
+          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">01:58</span>
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
+          </span>
+        </div>
+        <div class="flex items-start justify-between mt-5 gap-4">
+          <h3 class="font-display font-light text-2xl md:text-3xl">Design — Alberto Mancini</h3>
+          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+        </div>
+        <p class="text-sm text-ivory/50 mt-1 font-light">L'œil du designer sur les deux flagships.</p>
+      </article>
 
-    /* ===== INITIALIZATION ===== */
-    window.addEventListener('DOMContentLoaded', () => {
-      renderProductCards();
-      renderStores(STORE_LOCATIONS);
-      loadCart();
-      init3D();
+      <!-- CARTE 4 — PHOTO PLACEHOLDER -->
+      <article class="gal-card group cursor-pointer" data-gallery-index="3" data-cursor="Lire" data-fade>
+        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
+          <img src="https://images.unsplash.com/photo-1439405326854-014607f694d7?q=80&w=1400&auto=format&fit=crop" alt="Savoir-faire — les chantiers" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
+          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
+          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">04:05</span>
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
+          </span>
+        </div>
+        <div class="flex items-start justify-between mt-5 gap-4">
+          <h3 class="font-display font-light text-2xl md:text-3xl">Savoir-faire — Les chantiers</h3>
+          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+        </div>
+        <p class="text-sm text-ivory/50 mt-1 font-light">Immersion au cœur de la production italienne.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CHIFFRES ═══════════════ -->
+<section id="stats" class="border-t border-white/10 px-6 md:px-12 py-24 md:py-36">
+  <div class="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-y-14 gap-x-8 text-center">
+    <div data-fade>
+      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="55">0</span><span class="text-gold">+</span></p>
+      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Années d'héritage</p>
+    </div>
+    <div data-fade>
+      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="70">0</span><span class="text-gold">+</span></p>
+      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Pays desservis</p>
+    </div>
+    <div data-fade>
+      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="6">0</span></p>
+      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Chantiers navals</p>
+    </div>
+    <div data-fade>
+      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="3000">0</span><span class="text-gold">+</span></p>
+      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Yachts livrés</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MARQUEE 2 ═══════════════ -->
+<div class="marquee border-y border-white/10 py-5 md:py-7" aria-hidden="true">
+  <div class="marquee-track" style="animation-duration:24s">
+    <span class="font-display font-light text-2xl md:text-4xl text-gold italic">Prenez la mer</span><span class="text-ivory/40 text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">Visite privée sur rendez-vous</span><span class="text-ivory/40 text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-gold italic">Prenez la mer</span><span class="text-ivory/40 text-xs">◆</span>
+    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">Visite privée sur rendez-vous</span><span class="text-ivory/40 text-xs">◆</span>
+  </div>
+</div>
+
+<!-- ═══════════════ CONTACT / FOOTER ═══════════════ -->
+<section id="contact" class="relative px-6 md:px-12 pt-28 md:pt-44 pb-14 overflow-hidden">
+  <div class="max-w-[1400px] mx-auto">
+    <p class="eyebrow mb-8" data-fade>04 — Contact</p>
+    <h2 class="font-display font-light leading-[0.95] text-[clamp(3rem,9.5vw,9rem)]" data-reveal>
+      <span class="reveal-line"><span class="reveal-inner">Prenez</span></span>
+      <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">la mer.</em></span></span>
+    </h2>
+    <p class="mt-8 max-w-lg text-ivory/60 font-light leading-relaxed" data-fade>
+      Nos conseillers organisent votre visite privée de la Grande 44M ou du Fly 70,
+      à quai comme en navigation. Réponse sous 24 heures.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-5" data-fade>
+      <a href="mailto:concierge@collection-azimut.fr?subject=Visite%20priv%C3%A9e%20%E2%80%94%20Grande%2044M%20%26%20Fly%2070" class="btn btn-solid magnetic"><span>Demander une visite privée</span><span aria-hidden="true">→</span></a>
+      <a href="#" class="btn magnetic"><span>Brochure PDF</span></a>
+    </div>
+
+    <div class="hairline mt-20 md:mt-28"></div>
+
+    <div class="grid md:grid-cols-4 gap-10 mt-14 text-sm">
+      <div>
+        <p class="font-display text-2xl mb-4">AZIMUT<span class="text-gold text-xs align-super">®</span></p>
+        <p class="text-ivory/50 font-light leading-relaxed">L'excellence italienne en navigation depuis 1969.</p>
+      </div>
+      <div>
+        <p class="text-[10px] tracking-[0.35em] uppercase text-gold mb-4">Naviguer</p>
+        <ul class="space-y-2 text-ivory/60 font-light">
+          <li><a href="#grande" class="hover:text-gold transition">Grande 44M</a></li>
+          <li><a href="#fly" class="hover:text-gold transition">Fly 70</a></li>
+          <li><a href="#galerie" class="hover:text-gold transition">Galerie</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-[10px] tracking-[0.35em] uppercase text-gold mb-4">Bureau</p>
+        <p class="text-ivory/60 font-light leading-relaxed">Port Canto<br>06400 Cannes, France<br>+33 4 93 00 00 00</p>
+      </div>
+      <div>
+        <p class="text-[10px] tracking-[0.35em] uppercase text-gold mb-4">Conciergerie</p>
+        <p class="text-ivory/60 font-light leading-relaxed break-all">concierge@collection-azimut.fr<br><span class="text-ivory/35 text-xs">Coordonnées de démonstration</span></p>
+      </div>
+    </div>
+
+    <p class="mt-16 text-[10px] tracking-[0.25em] uppercase text-ivory/30 leading-relaxed">
+      © 2025 Collection Signature — Site concept. Azimut®, Grande 44M et Fly 70 sont des marques d'Azimut Yachts S.p.A.
+      Photos &amp; vidéos : espaces réservés en attente d'intégration finale.
+    </p>
+  </div>
+
+  <!-- Filigrane -->
+  <div class="pointer-events-none select-none absolute -bottom-8 left-1/2 -translate-x-1/2 font-display font-light text-[22vw] leading-none stroke-text opacity-60 whitespace-nowrap" aria-hidden="true">AZIMUT</div>
+</section>
+
+</main>
+
+<!-- ═══════════════ LIGHTBOX VIDÉO ═══════════════ -->
+<div id="lightbox" class="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true" aria-label="Lecteur vidéo">
+  <div class="absolute inset-0 bg-ink/95 backdrop-blur-md" data-lb-close></div>
+  <div class="lb-panel relative w-full max-w-5xl">
+    <div class="video-frame border border-white/15 shadow-2xl shadow-black/60">
+      <iframe id="lbFrame" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Lecteur vidéo Vimeo"></iframe>
+    </div>
+    <button data-lb-close class="mt-5 mx-auto flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-ivory/70 hover:text-gold transition" aria-label="Fermer le lecteur">
+      Fermer
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1 L11 11 M11 1 L1 11"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ LIBRAIRIES ═══ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   CONFIGURATION DES VIDÉOS VIMEO
+   ────────────────────────────────────────────────────────────────────
+   Remplacez les identifiants ci-dessous par les IDs RÉELS de vos vidéos.
+   L'ID se lit dans l'URL Vimeo : https://vimeo.com/XXXXXXXXX
+
+   • hero       → vidéo d'ambiance plein écran (auto, muette, en boucle)
+   • grande44m  → film officiel GRANDE 44M
+   • fly70      → film officiel FLY 70
+   • galerie    → les 4 vidéos de la galerie (ordre des cartes)
+
+   ID utilisé par défaut : 76979871 (vidéo de démonstration officielle
+   Vimeo, publique et intégrable) — le site fonctionne immédiatement.
+   ════════════════════════════════════════════════════════════════════ */
+const VIMEO = {
+  hero:      '76979871',
+  grande44m: '76979871',
+  fly70:     '76979871',
+  galerie:  ['76979871','76979871','76979871','76979871']
+};
+
+const bgUrl    = id => `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&background=1&autopause=0&playsinline=1&controls=0&dnt=1`;
+const embedUrl = id => `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&color=c8a96a&dnt=1`;
+
+gsap.registerPlugin(ScrollTrigger);
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ═══════════ DÉFILEMENT FLUIDE (LENIS) ═══════════ */
+let lenis = null;
+if (!reduced) {
+  lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+const scrollToTarget = (el) => {
+  if (lenis) lenis.scrollTo(el, { duration: 1.6 });
+  else el.scrollIntoView({ behavior: 'smooth' });
+};
+
+/* ═══════════ CURSEUR PERSONNALISÉ ═══════════ */
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+const cursorLabel = document.getElementById('cursorLabel');
+let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+});
+gsap.ticker.add(() => {
+  rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+  ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+});
+function bindCursor(scope = document) {
+  scope.querySelectorAll('a, button, [data-cursor]').forEach(el => {
+    if (el.dataset.cbound) return; el.dataset.cbound = '1';
+    el.addEventListener('mouseenter', () => {
+      if (el.dataset.cursor) { cursorLabel.textContent = el.dataset.cursor; ring.classList.add('is-label'); }
+      else ring.classList.add('is-hover');
     });
-  </script>
+    el.addEventListener('mouseleave', () => { ring.classList.remove('is-label','is-hover'); cursorLabel.textContent=''; });
+  });
+}
+bindCursor();
+
+/* ═══════════ BOUTONS MAGNÉTIQUES ═══════════ */
+document.querySelectorAll('.magnetic').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    gsap.to(el, { x:(e.clientX - r.left - r.width/2)*0.3, y:(e.clientY - r.top - r.height/2)*0.3, duration:0.4, ease:'power2.out' });
+  });
+  el.addEventListener('mouseleave', () => gsap.to(el, { x:0, y:0, duration:0.7, ease:'elastic.out(1,0.4)' }));
+});
+
+/* ═══════════ TOILE ANIMÉE (placeholder cinématique du hero) ═══════════ */
+(function ocean(){
+  const cv = document.getElementById('ocean'); if(!cv) return;
+  const ctx = cv.getContext('2d'); let W, H, t = 0;
+  const rs = () => { W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight; };
+  rs(); window.addEventListener('resize', rs);
+  (function loop(){
+    t += 0.008;
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#0A0E14'); g.addColorStop(0.6,'#0C1622'); g.addColorStop(1,'#0A0E14');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    const rg = ctx.createRadialGradient(W*0.7,H*0.32,0,W*0.7,H*0.32,W*0.55);
+    rg.addColorStop(0,'rgba(200,169,106,0.10)'); rg.addColorStop(1,'rgba(200,169,106,0)');
+    ctx.fillStyle = rg; ctx.fillRect(0,0,W,H);
+    for (let i=0;i<4;i++){
+      ctx.beginPath();
+      const base = H*(0.55+i*0.1), amp = 18+i*9, sp = t*(0.6+i*0.22);
+      for (let x=0;x<=W;x+=8){
+        const y = base + Math.sin(x*0.004+sp+i*1.7)*amp + Math.sin(x*0.011-sp)*amp*0.4;
+        x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle = `rgba(200,169,106,${0.05+i*0.02})`; ctx.lineWidth = 1; ctx.stroke();
+    }
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ═══════════ VIDÉO VIMEO DE FOND (hero) ═══════════ */
+function injectHeroVideo(){
+  const holder = document.getElementById('heroVideo');
+  if (!holder || holder.dataset.done) return; holder.dataset.done = '1';
+  const f = document.createElement('iframe');
+  f.src = bgUrl(VIMEO.hero);
+  f.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
+  f.setAttribute('aria-hidden','true'); f.tabIndex = -1; f.title = 'Vidéo d’ambiance Azimut';
+  holder.appendChild(f);
+}
+
+/* ═══════════ FAÇADES VIDÉO (clic → lecteur Vimeo) ═══════════ */
+document.querySelectorAll('.video-facade').forEach(facade => {
+  const play = () => {
+    if (facade.dataset.playing) return; facade.dataset.playing = '1';
+    const id = VIMEO[facade.dataset.vimeoKey];
+    const f = document.createElement('iframe');
+    f.src = embedUrl(id);
+    f.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
+    f.allowFullscreen = true; f.title = 'Film officiel — Vimeo';
+    facade.innerHTML = ''; facade.appendChild(f);
+    facade.removeAttribute('data-cursor'); facade.style.cursor = 'default';
+    ring.classList.remove('is-label','is-hover');
+  };
+  facade.addEventListener('click', play);
+  facade.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+});
+
+/* ═══════════ LIGHTBOX GALERIE ═══════════ */
+const lb = document.getElementById('lightbox');
+const lbFrame = document.getElementById('lbFrame');
+function openLB(id){
+  lbFrame.src = embedUrl(id);
+  lb.classList.add('is-open');
+  if (lenis) lenis.stop();
+}
+function closeLB(){
+  lb.classList.remove('is-open');
+  setTimeout(() => { lbFrame.src = ''; }, 450);
+  if (lenis) lenis.start();
+}
+document.querySelectorAll('[data-gallery-index]').forEach(card => {
+  card.addEventListener('click', () => openLB(VIMEO.galerie[+card.dataset.galleryIndex]));
+});
+document.querySelectorAll('[data-lb-close]').forEach(b => b.addEventListener('click', closeLB));
+window.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+
+/* ═══════════ MENU MOBILE ═══════════ */
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+function closeMenu(){
+  if (!menuOpen) return; menuOpen = false;
+  mobileMenu.classList.remove('is-open'); menuBtn.textContent = 'Menu';
+  if (lenis) lenis.start();
+}
+menuBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.classList.toggle('is-open', menuOpen);
+  menuBtn.textContent = menuOpen ? 'Fermer' : 'Menu';
+  if (lenis) menuOpen ? lenis.stop() : lenis.start();
+});
+
+/* ═══════════ ANCRES FLUIDES ═══════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    e.preventDefault();
+    if (href.length > 1) {
+      const t = document.querySelector(href);
+      if (t) { closeMenu(); setTimeout(() => scrollToTarget(t), menuOpen ? 300 : 0); }
+    }
+  });
+});
+
+/* ═══════════ NAVIGATION : fond + masquage au scroll ═══════════ */
+const nav = document.getElementById('nav');
+let lastY = 0;
+function onScrollY(y){
+  nav.classList.toggle('nav-solid', y > 60);
+  if (y > 350 && y > lastY + 4) nav.classList.add('nav-hidden');
+  else if (y < lastY - 4) nav.classList.remove('nav-hidden');
+  lastY = y;
+}
+if (lenis) lenis.on('scroll', ({scroll}) => onScrollY(scroll));
+else window.addEventListener('scroll', () => onScrollY(scrollY));
+
+/* ═══════════ ANIMATIONS D'APPARITION ═══════════ */
+if (!reduced) {
+  gsap.set('.reveal-inner', { yPercent: 120 });
+
+  // Titres par lignes masquées
+  document.querySelectorAll('[data-reveal]').forEach(group => {
+    gsap.to(group.querySelectorAll('.reveal-inner'), {
+      yPercent: 0, duration: 1.25, ease: 'power4.out', stagger: 0.1,
+      scrollTrigger: { trigger: group, start: 'top 82%', once: true }
+    });
+  });
+
+  // Manifesto : découpage mot à mot
+  document.querySelectorAll('[data-split]').forEach(el => {
+    const words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map(w => `<span class="w-wrap"><span class="w-inner">${w}</span></span>`).join(' ');
+    gsap.set(el.querySelectorAll('.w-inner'), { yPercent: 115 });
+    gsap.to(el.querySelectorAll('.w-inner'), {
+      yPercent: 0, duration: 1, ease: 'power4.out', stagger: 0.028,
+      scrollTrigger: { trigger: el, start: 'top 80%', once: true }
+    });
+  });
+
+  // Fondu + montée
+  document.querySelectorAll('[data-fade]').forEach(el => {
+    gsap.from(el, { opacity: 0, y: 44, duration: 1.1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+  });
+
+  // Parallaxe des images plein écran
+  document.querySelectorAll('[data-parallax]').forEach(wrap => {
+    const img = wrap.querySelector('img');
+    gsap.fromTo(img, { yPercent: -9 }, { yPercent: 9, ease: 'none',
+      scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+}
+
+/* ═══════════ COMPTEURS ═══════════ */
+document.querySelectorAll('[data-count]').forEach(el => {
+  const target = +el.dataset.count;
+  const render = v => el.textContent = Math.round(v).toLocaleString('fr-FR');
+  if (reduced) { render(target); return; }
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      const obj = { v: 0 };
+      gsap.to(obj, { v: target, duration: 2.2, ease: 'power2.out', onUpdate: () => render(obj.v) });
+    }
+  });
+});
+
+/* ═══════════ PRÉLOADER & ENTRÉE DU HERO ═══════════ */
+const plCount = document.getElementById('plCount');
+if (reduced) {
+  gsap.set('#preloader', { display: 'none' });
+  gsap.set('.reveal-inner', { yPercent: 0 });
+  injectHeroVideo();
+} else {
+  gsap.set('.pl-letter', { yPercent: 120 });
+  const counter = { v: 0 };
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl.to('.pl-letter', { yPercent: 0, duration: 1.05, stagger: 0.07 }, 0.25)
+    .to(counter, { v: 100, duration: 1.9, ease: 'power2.inOut',
+        onUpdate: () => plCount.textContent = Math.round(counter.v) }, 0.25)
+    .to('.pl-fade', { opacity: 0, duration: 0.4, ease: 'power2.out' }, '-=0.35')
+    .to('#preloader', { clipPath: 'inset(0 0 100% 0)', duration: 1.15, ease: 'power4.inOut' })
+    .set('#preloader', { display: 'none' })
+    .add(injectHeroVideo, '-=1.0')
+    .to('#hero .reveal-inner', { yPercent: 0, duration: 1.35, stagger: 0.12, ease: 'power4.out' }, '-=0.75')
+    .from('#heroMeta', { opacity: 0, y: 26, duration: 0.9, ease: 'power3.out' }, '-=0.85')
+    .from('#nav', { y: -40, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.9');
+}
+
+window.addEventListener('load', () => ScrollTrigger.refresh());
+</script>
 </body>
 </html>
