@@ -1,829 +1,1068 @@
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AZIMUT — Grande 44M & Fly 70 · Collection Signature</title>
-<meta name="description" content="Découvrez la Grande 44M et le Fly 70, deux flagships Azimut. Films officiels Vimeo, galeries photos et visites privées.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoLease Pro - Vehicle Leasing Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#dbe4ff',200:'#bac8ff',300:'#91a7ff',400:'#748ffc',500:'#5c7cfa',600:'#4c6ef5',700:'#4263eb',800:'#3b5bdb',900:'#364fc7' },
+                        accent: { 50:'#fff9db',100:'#fff3bf',200:'#ffec99',300:'#ffd43b',400:'#fcc419',500:'#fab005',600:'#f59f00',700:'#f08c00',800:'#e67700',900:'#d9730d' },
+                        dark: { 800:'#1a1a2e',900:'#16213e',950:'#0f0f23' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; }
+        
+        .gradient-hero {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 40%, #16213e 100%);
+        }
+        
+        .gradient-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(92, 124, 250, 0.5);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(92, 124, 250, 0.15), 0 0 40px rgba(92, 124, 250, 0.1);
+        }
+        
+        .price-glow {
+            text-shadow: 0 0 20px rgba(250, 176, 5, 0.3);
+        }
+        
+        .slider-track {
+            background: linear-gradient(90deg, #4c6ef5, #fab005);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #4c6ef5, #fab005);
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 0 3px rgba(92,124,250,0.3);
+            transition: all 0.2s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            box-shadow: 0 2px 15px rgba(0,0,0,0.4), 0 0 0 5px rgba(92,124,250,0.4);
+            transform: scale(1.1);
+        }
+        
+        .vehicle-img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px 16px 0 0;
+        }
+        
+        .vehicle-img-container img {
+            transition: transform 0.6s ease, filter 0.4s ease;
+        }
+        
+        .glass-card:hover .vehicle-img-container img {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+        
+        .vehicle-img-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(15,15,35,0.6), transparent);
+            pointer-events: none;
+        }
+        
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .float-anim { animation: float 4s ease-in-out infinite; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-up { animation: slideUp 0.6s ease-out forwards; }
+        
+        .filter-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .filter-select:focus {
+            border-color: #5c7cfa;
+            box-shadow: 0 0 0 3px rgba(92,124,250,0.3);
+            outline: none;
+        }
+        
+        .filter-select option {
+            background: #1a1a2e;
+            color: white;
+        }
+        
+        .type-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .type-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .type-btn:hover::before { left: 100%; }
+        
+        .modal-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-<!-- ═══ POLICES ═══ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+        
+        .tab-indicator {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .comparison-table tr:hover td {
+            background: rgba(92, 124, 250, 0.08);
+        }
 
-<!-- ═══ TAILWIND ═══ -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: { ink:'#0A0E14', ink2:'#0D1420', ivory:'#F2EFE9', gold:'#C8A96A' },
-      fontFamily: {
-        sans: ['Manrope','sans-serif'],
-        display: ['"Cormorant Garamond"','serif']
-      }
-    }
-  }
-}
-</script>
+        .feature-icon {
+            background: linear-gradient(135deg, rgba(92,124,250,0.2), rgba(250,176,5,0.2));
+        }
 
-<style>
-/* ═══════════════ BASE ═══════════════ */
-:root{ --gold:#C8A96A; --ink:#0A0E14; --ivory:#F2EFE9; }
-html{ scroll-behavior:auto; }
-body{ background:var(--ink); color:var(--ivory); overflow-x:hidden; }
-::selection{ background:var(--gold); color:var(--ink); }
-::-webkit-scrollbar{ width:4px; }
-::-webkit-scrollbar-track{ background:var(--ink); }
-::-webkit-scrollbar-thumb{ background:rgba(200,169,106,.5); }
-html.lenis, html.lenis body{ height:auto; }
-.lenis.lenis-smooth{ scroll-behavior:auto !important; }
-
-/* ═══════════════ TYPO ═══════════════ */
-.eyebrow{ font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:var(--gold); font-weight:500; }
-.stroke-text{ -webkit-text-stroke:1px rgba(242,239,233,.14); color:transparent; }
-.reveal-line{ display:block; overflow:hidden; }
-.reveal-inner{ display:block; will-change:transform; }
-.w-wrap{ display:inline-block; overflow:hidden; vertical-align:bottom; }
-.w-inner{ display:inline-block; will-change:transform; }
-
-/* ═══════════════ GRAIN CINÉMA ═══════════════ */
-.grain{ position:fixed; inset:-120px; z-index:260; pointer-events:none; opacity:.055;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 8s steps(10) infinite; }
-@keyframes grain{ 0%,100%{transform:translate(0,0)} 10%{transform:translate(-5%,-8%)} 30%{transform:translate(3%,-6%)} 50%{transform:translate(-7%,4%)} 70%{transform:translate(6%,7%)} 90%{transform:translate(-4%,3%)} }
-
-/* ═══════════════ CURSEUR ═══════════════ */
-.cursor-el{ position:fixed; top:0; left:0; pointer-events:none; z-index:300; }
-#cursorDot{ width:6px; height:6px; border-radius:50%; background:var(--gold); }
-#cursorRing{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(242,239,233,.35);
-  display:flex; align-items:center; justify-content:center;
-  transition:width .35s cubic-bezier(.77,0,.18,1), height .35s cubic-bezier(.77,0,.18,1), background .35s, border-color .35s; }
-#cursorRing.is-hover{ width:64px; height:64px; border-color:rgba(200,169,106,.9); }
-#cursorRing.is-label{ width:88px; height:88px; background:var(--gold); border-color:var(--gold); }
-#cursorLabel{ font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:var(--ink); opacity:0; transition:opacity .3s; font-weight:600; }
-#cursorRing.is-label #cursorLabel{ opacity:1; }
-@media (hover:none), (pointer:coarse){ .cursor-el{ display:none !important; } }
-
-/* ═══════════════ PRÉLOADER ═══════════════ */
-#preloader{ clip-path:inset(0 0 0 0); }
-.pl-mask{ display:inline-block; overflow:hidden; }
-.pl-letter{ display:inline-block; will-change:transform; }
-
-/* ═══════════════ NAVIGATION ═══════════════ */
-#nav{ transition:transform .6s cubic-bezier(.77,0,.18,1), background .5s, backdrop-filter .5s; }
-#nav.nav-solid{ background:rgba(10,14,20,.72); backdrop-filter:blur(14px); border-bottom:1px solid rgba(242,239,233,.07); }
-#nav.nav-hidden{ transform:translateY(-100%); }
-.nav-link{ position:relative; }
-.nav-link::after{ content:''; position:absolute; left:0; bottom:-6px; height:1px; width:100%; background:var(--gold);
-  transform:scaleX(0); transform-origin:right; transition:transform .5s cubic-bezier(.77,0,.18,1); }
-.nav-link:hover::after{ transform:scaleX(1); transform-origin:left; }
-
-#mobileMenu{ opacity:0; visibility:hidden; transition:opacity .5s, visibility .5s; }
-#mobileMenu.is-open{ opacity:1; visibility:visible; }
-#mobileMenu a{ transform:translateY(24px); opacity:0; transition:transform .6s cubic-bezier(.22,1,.36,1), opacity .6s; }
-#mobileMenu.is-open a{ transform:translateY(0); opacity:1; }
-#mobileMenu.is-open a:nth-child(1){transition-delay:.08s} #mobileMenu.is-open a:nth-child(2){transition-delay:.16s}
-#mobileMenu.is-open a:nth-child(3){transition-delay:.24s} #mobileMenu.is-open a:nth-child(4){transition-delay:.32s}
-
-/* ═══════════════ BOUTONS ═══════════════ */
-.btn{ position:relative; isolation:isolate; display:inline-flex; align-items:center; gap:.8rem;
-  padding:1.05rem 2.1rem; border:1px solid rgba(242,239,233,.28);
-  font-size:11px; letter-spacing:.3em; text-transform:uppercase; font-weight:500;
-  transition:color .5s, border-color .5s; overflow:hidden; }
-.btn::before{ content:''; position:absolute; inset:0; z-index:-1; background:var(--gold);
-  transform:scaleY(0); transform-origin:bottom; transition:transform .55s cubic-bezier(.77,0,.18,1); }
-.btn:hover{ color:var(--ink); border-color:var(--gold); }
-.btn:hover::before{ transform:scaleY(1); }
-.btn-solid{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
-.btn-solid::before{ background:var(--ivory); }
-
-/* ═══════════════ HERO / VIMEO COVER ═══════════════ */
-#heroVideo iframe{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:max(100vw,177.78vh); height:max(100vh,56.25vw); border:0; pointer-events:none; }
-.scroll-line{ display:inline-block; width:1px; height:56px; background:linear-gradient(var(--gold),transparent);
-  animation:scrollLine 2.2s cubic-bezier(.77,0,.18,1) infinite; transform-origin:top; }
-@keyframes scrollLine{ 0%{transform:scaleY(0);transform-origin:top} 45%{transform:scaleY(1);transform-origin:top} 55%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
-
-/* ═══════════════ MARQUEE ═══════════════ */
-.marquee{ overflow:hidden; white-space:nowrap; }
-.marquee-track{ display:inline-flex; align-items:center; gap:3.5rem; width:max-content; padding-right:3.5rem; animation:marquee 30s linear infinite; }
-.marquee:hover .marquee-track{ animation-play-state:paused; }
-@keyframes marquee{ to{ transform:translateX(-50%); } }
-
-/* ═══════════════ VIDÉOS ═══════════════ */
-.video-frame{ position:relative; aspect-ratio:16/9; overflow:hidden; background:#05070B; }
-.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-.play-btn{ position:relative; width:92px; height:92px; border-radius:9999px;
-  border:1px solid rgba(200,169,106,.65); background:rgba(10,14,20,.35); backdrop-filter:blur(8px);
-  display:flex; align-items:center; justify-content:center; transition:background .4s, transform .4s; }
-.play-btn::before{ content:''; position:absolute; inset:-1px; border-radius:inherit;
-  border:1px solid rgba(200,169,106,.5); animation:pulse 2.4s ease-out infinite; }
-@keyframes pulse{ 0%{transform:scale(1);opacity:.9} 100%{transform:scale(1.55);opacity:0} }
-.play-btn svg{ transition:fill .4s; }
-.play-btn:hover{ background:var(--gold); }
-.play-btn:hover svg{ fill:var(--ink); }
-
-/* ═══════════════ LIGHTBOX ═══════════════ */
-#lightbox{ opacity:0; visibility:hidden; transition:opacity .5s, visibility .5s; }
-#lightbox.is-open{ opacity:1; visibility:visible; }
-#lightbox .lb-panel{ transform:scale(.95) translateY(16px); transition:transform .6s cubic-bezier(.22,1,.36,1); }
-#lightbox.is-open .lb-panel{ transform:scale(1) translateY(0); }
-
-/* ═══════════════ DIVERS ═══════════════ */
-.hairline{ height:1px; background:linear-gradient(90deg,transparent,rgba(200,169,106,.45),transparent); }
-.spec{ display:flex; justify-content:space-between; align-items:baseline; gap:1.5rem;
-  padding:1.15rem 0; border-top:1px solid rgba(242,239,233,.12); }
-.spec:last-child{ border-bottom:1px solid rgba(242,239,233,.12); }
-.gal-card img{ will-change:transform; }
-[data-parallax] img{ will-change:transform; }
-</style>
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .count-anim { animation: countUp 0.5s ease-out; }
+    </style>
 </head>
+<body class="bg-dark-950 text-white min-h-screen">
 
-<body class="bg-ink text-ivory font-sans antialiased">
-
-<!-- ═══ GRAIN ═══ -->
-<div class="grain" aria-hidden="true"></div>
-
-<!-- ═══ CURSEUR PERSONNALISÉ ═══ -->
-<div id="cursorDot" class="cursor-el" aria-hidden="true"></div>
-<div id="cursorRing" class="cursor-el" aria-hidden="true"><span id="cursorLabel"></span></div>
-
-<!-- ═══ PRÉLOADER ═══ -->
-<div id="preloader" class="fixed inset-0 z-[200] bg-ink flex flex-col items-center justify-center">
-  <div class="flex font-display font-light text-[clamp(3rem,11vw,8.5rem)] leading-none tracking-[0.08em]">
-    <span class="pl-mask"><span class="pl-letter">A</span></span>
-    <span class="pl-mask"><span class="pl-letter">Z</span></span>
-    <span class="pl-mask"><span class="pl-letter">I</span></span>
-    <span class="pl-mask"><span class="pl-letter">M</span></span>
-    <span class="pl-mask"><span class="pl-letter">U</span></span>
-    <span class="pl-mask"><span class="pl-letter text-gold italic">T</span></span>
-  </div>
-  <p class="pl-fade eyebrow mt-8">Collection Signature — 2025</p>
-  <div class="pl-fade absolute bottom-8 right-8 md:bottom-12 md:right-12 font-display text-5xl md:text-7xl text-gold/80 font-light">
-    <span id="plCount">0</span><span class="text-2xl md:text-3xl align-top">%</span>
-  </div>
-  <div class="pl-fade absolute bottom-10 left-8 md:left-12 text-[10px] tracking-[0.45em] text-ivory/40 uppercase">Chargement de l'expérience</div>
-</div>
-
-<!-- ═══ NAVIGATION ═══ -->
-<header id="nav" class="fixed top-0 inset-x-0 z-[100]">
-  <div class="flex items-center justify-between px-6 md:px-12 py-5 md:py-6">
-    <a href="#hero" class="font-display text-2xl md:text-3xl tracking-[0.12em] font-light" data-cursor="Haut">AZIMUT<span class="text-gold text-sm align-super">®</span></a>
-    <nav class="hidden md:flex items-center gap-10 text-[11px] tracking-[0.32em] uppercase text-ivory/80">
-      <a href="#grande" class="nav-link hover:text-ivory">Grande 44M</a>
-      <a href="#fly" class="nav-link hover:text-ivory">Fly 70</a>
-      <a href="#galerie" class="nav-link hover:text-ivory">Galerie</a>
-      <a href="#contact" class="nav-link hover:text-ivory">Contact</a>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+                        <i class="fas fa-car-side text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight">AutoLease</span>
+                        <span class="text-accent-400 font-light text-sm ml-1">Pro</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Vehicles</a>
+                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Business</a>
+                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Offers</a>
+                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="hidden sm:flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-sm">
+                        <i class="fas fa-phone-alt text-primary-400"></i>
+                        <span>0330 123 4567</span>
+                    </button>
+                    <button class="w-10 h-10 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 flex items-center justify-center hover:shadow-lg hover:shadow-primary-500/25 transition-all">
+                        <i class="fas fa-user text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </nav>
-    <a href="#contact" class="btn magnetic hidden md:inline-flex !py-3 !px-6"><span>Visite privée</span></a>
-    <button id="menuBtn" class="md:hidden text-[11px] tracking-[0.35em] uppercase border border-white/25 px-5 py-3">Menu</button>
-  </div>
-</header>
 
-<!-- ═══ MENU MOBILE ═══ -->
-<div id="mobileMenu" class="fixed inset-0 z-[95] bg-ink/[0.98] backdrop-blur-xl flex flex-col justify-center px-10 gap-8">
-  <a href="#grande" class="font-display text-5xl font-light">Grande <em class="italic text-gold">44M</em></a>
-  <a href="#fly" class="font-display text-5xl font-light">Fly <em class="italic text-gold">70</em></a>
-  <a href="#galerie" class="font-display text-5xl font-light">Galerie</a>
-  <a href="#contact" class="font-display text-5xl font-light">Contact</a>
-</div>
-
-<main>
-
-<!-- ═══════════════ HERO ═══════════════ -->
-<section id="hero" class="relative h-svh overflow-hidden">
-  <!-- Toile animée (placeholder cinématique derrière la vidéo) -->
-  <canvas id="ocean" class="absolute inset-0 w-full h-full" aria-hidden="true"></canvas>
-  <!-- VIDÉO VIMEO DE FOND — injectée par JS (ID configurable dans le script) -->
-  <div id="heroVideo" class="absolute inset-0 overflow-hidden" aria-hidden="true"></div>
-  <!-- Voiles cinématiques -->
-  <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/25 to-ink pointer-events-none"></div>
-  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at center, transparent 40%, rgba(10,14,20,.55) 100%)"></div>
-
-  <div class="relative z-10 h-full flex flex-col justify-end pb-24 md:pb-28 px-6 md:px-12">
-    <p class="eyebrow mb-6 reveal-line"><span class="reveal-inner">Azimut Yachts — Collection Signature</span></p>
-    <h1 class="font-display font-light leading-[0.95] text-[clamp(3.4rem,11vw,10rem)]">
-      <span class="reveal-line"><span class="reveal-inner">La mer,</span></span>
-      <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">pour royaume.</em></span></span>
-    </h1>
-    <div id="heroMeta" class="mt-10 md:mt-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
-      <p class="max-w-md text-ivory/70 font-light leading-relaxed text-sm md:text-base">
-        Grande 44M &amp; Fly 70 — deux flagships, une même obsession :
-        transformer l'horizon en demeure.
-      </p>
-      <div class="flex items-center gap-10">
-        <span class="hidden lg:block text-[10px] tracking-[0.35em] text-ivory/45 uppercase">43.5528° N — 7.0174° E · Cannes</span>
-        <span class="flex items-center gap-4"><span class="text-[10px] tracking-[0.4em] text-ivory/60 uppercase">Défiler</span><span class="scroll-line"></span></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ MARQUEE ═══════════════ -->
-<div class="marquee border-y border-white/10 py-5 md:py-7 bg-ink relative z-10" aria-hidden="true">
-  <div class="marquee-track">
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">GRANDE 44M</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">FLY 70</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">DEPUIS 1969</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">MADE IN ITALY</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">GRANDE 44M</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">FLY 70</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">DEPUIS 1969</span><span class="text-gold text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85 italic">MADE IN ITALY</span><span class="text-gold text-xs">◆</span>
-  </div>
-</div>
-
-<!-- ═══════════════ MANIFESTO ═══════════════ -->
-<section class="px-6 md:px-12 py-28 md:py-44 max-w-6xl mx-auto">
-  <p class="eyebrow mb-10" data-fade>Le manifeste</p>
-  <p data-split class="font-display font-light text-[clamp(1.8rem,4.2vw,3.4rem)] leading-[1.25] text-ivory/90">
-    Depuis 1969, Azimut transforme l'horizon en demeure. Chaque coque est une promesse — celle d'une élégance italienne qui ne se remarque pas, elle s'impose.
-  </p>
-  <div class="hairline mt-16 md:mt-24" data-fade></div>
-</section>
-
-<!-- ═══════════════ GRANDE 44M ═══════════════ -->
-<section id="grande" class="relative pb-28 md:pb-40">
-  <div class="px-6 md:px-12 flex items-end justify-between gap-8 mb-10 md:mb-16" data-reveal>
-    <div>
-      <p class="eyebrow mb-5 reveal-line"><span class="reveal-inner">01 — Collection Grande</span></p>
-      <h2 class="font-display font-light leading-[0.9] text-[clamp(3.2rem,9vw,8.5rem)]">
-        <span class="reveal-line"><span class="reveal-inner">GRANDE</span></span>
-        <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">44M</em></span></span>
-      </h2>
-    </div>
-    <span class="hidden md:block font-display font-light leading-none text-[clamp(6rem,14vw,12rem)] stroke-text select-none" aria-hidden="true">01</span>
-  </div>
-
-  <!-- PHOTO PLACEHOLDER : remplacer par le visuel définitif Grande 44M -->
-  <div class="relative h-[58vh] md:h-[82vh] overflow-hidden" data-parallax>
-    <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=2000&auto=format&fit=crop" alt="Azimut Grande 44M vue aérienne en navigation" class="w-full h-full object-cover scale-[1.18]">
-    <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/30"></div>
-    <p class="absolute bottom-6 left-6 md:bottom-10 md:left-12 text-[10px] tracking-[0.35em] uppercase text-ivory/70">Grande 44M — Mer Méditerranée</p>
-  </div>
-
-  <div class="px-6 md:px-12 grid md:grid-cols-2 gap-14 md:gap-20 mt-16 md:mt-24 max-w-[1400px] mx-auto">
-    <div data-fade>
-      <h3 class="font-display font-light text-3xl md:text-4xl leading-snug mb-8">Le superyacht aux <em class="italic text-gold">quatre ponts</em>, sculpté par la lumière.</h3>
-      <p class="text-ivory/65 font-light leading-relaxed mb-6">
-        Premier superyacht de la Collection Signature, la Grande 44M déploie quatre ponts baignés de clarté.
-        Sa terrasse panoramique, ses volumes ouverts sur la mer et sa superstructure allégée en fibre de carbone
-        redéfinissent l'art de vivre à bord.
-      </p>
-      <p class="text-ivory/65 font-light leading-relaxed mb-10">
-        Signée Alberto Mancini pour l'extérieur et m2atelier pour les intérieurs, elle incarne
-        la vision la plus aboutie du chantier : une villa contemporaine posée sur l'eau.
-      </p>
-      <a href="#contact" class="btn magnetic"><span>Configurer ce modèle</span><span aria-hidden="true">→</span></a>
-    </div>
-    <div data-fade>
-      <p class="eyebrow mb-6">Spécifications</p>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Longueur hors tout</span><span class="font-display text-2xl md:text-3xl font-light">44,21 m</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Largeur</span><span class="font-display text-2xl md:text-3xl font-light">8,65 m</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Motorisation</span><span class="font-display text-2xl md:text-3xl font-light">2 × MTU 2 400 mHP</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse maximale</span><span class="font-display text-2xl md:text-3xl font-light">22 nœuds</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse de croisière</span><span class="font-display text-2xl md:text-3xl font-light">17 nœuds</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Cabines</span><span class="font-display text-2xl md:text-3xl font-light">5 + équipage</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Design extérieur</span><span class="font-display text-2xl md:text-3xl font-light">A. Mancini</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Design intérieur</span><span class="font-display text-2xl md:text-3xl font-light">m2atelier</span></div>
-    </div>
-  </div>
-
-  <!-- MODULE VIDÉO VIMEO — GRANDE 44M (façade cliquable, iframe injectée à la demande) -->
-  <div class="px-6 md:px-12 mt-20 md:mt-28 max-w-[1400px] mx-auto" data-fade>
-    <div class="video-facade video-frame group cursor-pointer border border-white/10" data-vimeo-key="grande44m" data-cursor="Lire" role="button" tabindex="0" aria-label="Lire le film officiel Grande 44M">
-      <!-- PHOTO PLACEHOLDER : poster vidéo Grande 44M -->
-      <img src="https://images.unsplash.com/photo-1605281317010-fe5ffe798166?q=80&w=2000&auto=format&fit=crop" alt="Film officiel — Azimut Grande 44M" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105">
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-ink/40"></div>
-      <span class="absolute top-5 left-5 md:top-7 md:left-7 eyebrow">Film officiel — Vimeo</span>
-      <span class="absolute bottom-5 right-5 md:bottom-7 md:right-7 text-[10px] tracking-[0.3em] text-ivory/70 border border-white/15 bg-ink/50 backdrop-blur px-3 py-1.5">02:47</span>
-      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <span class="play-btn magnetic pointer-events-auto">
-          <svg width="22" height="26" viewBox="0 0 22 26" fill="#F2EFE9" aria-hidden="true"><path d="M0 0 L22 13 L0 26 Z"/></svg>
-        </span>
-      </div>
-    </div>
-    <p class="mt-4 text-[10px] tracking-[0.3em] uppercase text-ivory/40">Lecture hébergée sur Vimeo — remplacez l'ID dans la configuration du script pour la version définitive.</p>
-  </div>
-</section>
-
-<!-- ═══════════════ FLY 70 ═══════════════ -->
-<section id="fly" class="relative pb-28 md:pb-40 pt-10">
-  <div class="px-6 md:px-12 flex items-end justify-between gap-8 mb-10 md:mb-16" data-reveal>
-    <span class="hidden md:block font-display font-light leading-none text-[clamp(6rem,14vw,12rem)] stroke-text select-none order-1" aria-hidden="true">02</span>
-    <div class="md:text-right">
-      <p class="eyebrow mb-5 reveal-line"><span class="reveal-inner">02 — Collection Flybridge</span></p>
-      <h2 class="font-display font-light leading-[0.9] text-[clamp(3.2rem,9vw,8.5rem)]">
-        <span class="reveal-line"><span class="reveal-inner">FLY</span></span>
-        <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">70</em></span></span>
-      </h2>
-    </div>
-  </div>
-
-  <!-- PHOTO PLACEHOLDER : remplacer par le visuel définitif Fly 70 -->
-  <div class="relative h-[58vh] md:h-[82vh] overflow-hidden" data-parallax>
-    <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?q=80&w=2000&auto=format&fit=crop" alt="Azimut Fly 70 au mouillage dans une baie turquoise" class="w-full h-full object-cover scale-[1.18]">
-    <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/30"></div>
-    <p class="absolute bottom-6 right-6 md:bottom-10 md:right-12 text-[10px] tracking-[0.35em] uppercase text-ivory/70">Fly 70 — Côte d'Azur</p>
-  </div>
-
-  <div class="px-6 md:px-12 grid md:grid-cols-2 gap-14 md:gap-20 mt-16 md:mt-24 max-w-[1400px] mx-auto">
-    <div class="md:order-2" data-fade>
-      <h3 class="font-display font-light text-3xl md:text-4xl leading-snug mb-8">Le flybridge <em class="italic text-gold">réinventé</em>, la mer en ligne de mire.</h3>
-      <p class="text-ivory/65 font-light leading-relaxed mb-6">
-        Nouveau fleuron de la gamme Flybridge, le Fly 70 conjugue lignes sculpturales signées
-        Alberto Mancini et espaces d'une générosité rare pour un yacht de 21 mètres.
-      </p>
-      <p class="text-ivory/65 font-light leading-relaxed mb-10">
-        Pont principal baigné de lumière, quatre cabines dont une suite propriétaire pleine largeur,
-        performances affirmées : il est pensé comme une villa contemporaine posée sur l'eau.
-      </p>
-      <a href="#contact" class="btn magnetic"><span>Configurer ce modèle</span><span aria-hidden="true">→</span></a>
-    </div>
-    <div class="md:order-1" data-fade>
-      <p class="eyebrow mb-6">Spécifications</p>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Longueur hors tout</span><span class="font-display text-2xl md:text-3xl font-light">21,37 m</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Largeur</span><span class="font-display text-2xl md:text-3xl font-light">5,32 m</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Motorisation</span><span class="font-display text-2xl md:text-3xl font-light">2 × MAN V12 1 550 mHP</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse maximale</span><span class="font-display text-2xl md:text-3xl font-light">31 nœuds</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Vitesse de croisière</span><span class="font-display text-2xl md:text-3xl font-light">26 nœuds</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Cabines</span><span class="font-display text-2xl md:text-3xl font-light">4</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Design extérieur</span><span class="font-display text-2xl md:text-3xl font-light">A. Mancini</span></div>
-      <div class="spec"><span class="text-[11px] tracking-[0.28em] uppercase text-ivory/50">Construction</span><span class="font-display text-2xl md:text-3xl font-light">Carbone &amp; GRP</span></div>
-    </div>
-  </div>
-
-  <!-- MODULE VIDÉO VIMEO — FLY 70 -->
-  <div class="px-6 md:px-12 mt-20 md:mt-28 max-w-[1400px] mx-auto" data-fade>
-    <div class="video-facade video-frame group cursor-pointer border border-white/10" data-vimeo-key="fly70" data-cursor="Lire" role="button" tabindex="0" aria-label="Lire le film officiel Fly 70">
-      <!-- PHOTO PLACEHOLDER : poster vidéo Fly 70 -->
-      <img src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?q=80&w=2000&auto=format&fit=crop" alt="Film officiel — Azimut Fly 70" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105">
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-ink/40"></div>
-      <span class="absolute top-5 left-5 md:top-7 md:left-7 eyebrow">Film officiel — Vimeo</span>
-      <span class="absolute bottom-5 right-5 md:bottom-7 md:right-7 text-[10px] tracking-[0.3em] text-ivory/70 border border-white/15 bg-ink/50 backdrop-blur px-3 py-1.5">03:12</span>
-      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <span class="play-btn magnetic pointer-events-auto">
-          <svg width="22" height="26" viewBox="0 0 22 26" fill="#F2EFE9" aria-hidden="true"><path d="M0 0 L22 13 L0 26 Z"/></svg>
-        </span>
-      </div>
-    </div>
-    <p class="mt-4 text-[10px] tracking-[0.3em] uppercase text-ivory/40">Lecture hébergée sur Vimeo — remplacez l'ID dans la configuration du script pour la version définitive.</p>
-  </div>
-</section>
-
-<!-- ═══════════════ GALERIE VIDÉO ═══════════════ -->
-<section id="galerie" class="px-6 md:px-12 py-28 md:py-40 border-t border-white/10">
-  <div class="max-w-[1400px] mx-auto">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-20" data-reveal>
-      <div>
-        <p class="eyebrow mb-5 reveal-line"><span class="reveal-inner">03 — Galerie</span></p>
-        <h2 class="font-display font-light leading-[0.95] text-[clamp(2.8rem,7vw,6.5rem)]">
-          <span class="reveal-line"><span class="reveal-inner">Films &amp; <em class="italic text-gold">visites</em></span></span>
-        </h2>
-      </div>
-      <p class="max-w-sm text-ivory/55 font-light text-sm leading-relaxed" data-fade>Quatre extraits hébergés sur Vimeo. Cliquez pour ouvrir le lecteur plein écran.</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-8 md:gap-10">
-      <!-- CARTE 1 — PHOTO PLACEHOLDER -->
-      <article class="gal-card group cursor-pointer" data-gallery-index="0" data-cursor="Lire" data-fade>
-        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
-          <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1400&auto=format&fit=crop" alt="Grande 44M — le film" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
-          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
-          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">02:47</span>
-          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
-            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
-          </span>
+    <!-- Hero Section -->
+    <section class="gradient-hero relative min-h-screen flex items-center overflow-hidden pt-20">
+        <div class="hero-shape w-96 h-96 bg-primary-600 top-20 -left-48"></div>
+        <div class="hero-shape w-80 h-80 bg-accent-600 bottom-20 right-10"></div>
+        <div class="hero-shape w-64 h-64 bg-primary-400 top-1/2 left-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20">
+                        <span class="w-2 h-2 rounded-full bg-green-400 badge-pulse"></span>
+                        <span class="text-sm text-primary-300">2025 Models Now Available</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight">
+                        Drive Your <br>
+                        <span class="font-playfair italic bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400 bg-clip-text text-transparent">Dream Vehicle</span>
+                        <br>For Less
+                    </h1>
+                    
+                    <p class="text-gray-400 text-lg max-w-lg leading-relaxed">
+                        Personal & Business leasing from trusted UK suppliers. 
+                        Compare deals, filter by your budget, and drive away today.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold">50K+</div>
+                                <div class="text-xs text-gray-400">Happy Leasers</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center">
+                                <i class="fas fa-car text-primary-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold">200+</div>
+                                <div class="text-xs text-gray-400">Vehicles</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-xl bg-accent-500/20 flex items-center justify-center">
+                                <i class="fas fa-tag text-accent-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold">0%</div>
+                                <div class="text-xs text-gray-400">Deposit Option</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative float-anim hidden lg:block">
+                    <div class="glass-card rounded-3xl p-6 max-w-lg mx-auto">
+                        <div class="vehicle-img-container rounded-2xl overflow-hidden mb-4 h-52">
+                            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80" alt="Featured Car" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold">BMW 3 Series</h3>
+                                <p class="text-sm text-gray-400">320i M Sport Auto</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-accent-400 price-glow">£299</div>
+                                <div class="text-xs text-gray-400">/month</div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center space-x-3">
+                            <span class="px-3 py-1 rounded-full text-xs bg-primary-500/20 text-primary-300 border border-primary-500/30">Personal</span>
+                            <span class="px-3 py-1 rounded-full text-xs bg-green-500/20 text-green-300 border border-green-500/30">In Stock</span>
+                            <span class="px-3 py-1 rounded-full text-xs bg-white/10 text-gray-300 border border-white/20">Automatic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="flex items-start justify-between mt-5 gap-4">
-          <h3 class="font-display font-light text-2xl md:text-3xl">Grande 44M — Le film</h3>
-          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+    </section>
+
+    <!-- Vehicle Type & Leasing Type Selection -->
+    <section class="relative z-10 -mt-8 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-2xl p-2 sm:p-3 max-w-2xl mx-auto">
+                <div class="grid grid-cols-2 gap-1">
+                    <!-- Vehicle Type -->
+                    <div class="relative">
+                        <div class="tab-indicator absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl transition-all" id="vehicleTabIndicator"></div>
+                        <div class="relative flex rounded-xl overflow-hidden">
+                            <button onclick="setVehicleType('car')" id="carBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-primary-600 text-white font-semibold text-sm sm:text-base">
+                                <i class="fas fa-car"></i>
+                                <span>Cars</span>
+                            </button>
+                            <button onclick="setVehicleType('van')" id="vanBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base">
+                                <i class="fas fa-shuttle-van"></i>
+                                <span>Vans</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Leasing Type -->
+                    <div class="relative">
+                        <div class="tab-indicator absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-accent-600 to-accent-700 rounded-xl transition-all" id="leasingTabIndicator" style="left: 50%"></div>
+                        <div class="relative flex rounded-xl overflow-hidden">
+                            <button onclick="setLeasingType('personal')" id="personalBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-accent-600 text-white font-semibold text-sm sm:text-base">
+                                <i class="fas fa-user"></i>
+                                <span>Personal</span>
+                            </button>
+                            <button onclick="setLeasingType('business')" id="businessBtn" class="type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Business</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p class="text-sm text-ivory/50 mt-1 font-light">Visite complète du superyacht, pont par pont.</p>
-      </article>
+    </section>
 
-      <!-- CARTE 2 — PHOTO PLACEHOLDER -->
-      <article class="gal-card group cursor-pointer" data-gallery-index="1" data-cursor="Lire" data-fade>
-        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
-          <img src="https://images.unsplash.com/photo-1605281317010-fe5ffe798166?q=80&w=1400&auto=format&fit=crop" alt="Fly 70 — essai en mer" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
-          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
-          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">03:12</span>
-          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
-            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
-          </span>
+    <!-- Filters Section -->
+    <section class="py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass rounded-2xl p-4 sm:p-6 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold flex items-center space-x-2">
+                        <i class="fas fa-filter text-primary-400"></i>
+                        <span>Filter Vehicles</span>
+                    </h3>
+                    <button onclick="resetFilters()" class="text-sm text-gray-400 hover:text-white flex items-center space-x-1 transition-colors">
+                        <i class="fas fa-redo-alt text-xs"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Make</label>
+                        <select id="filterMake" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                            <option value="">All Makes</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Mercedes">Mercedes-Benz</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Tesla">Tesla</option>
+                            <option value="Hyundai">Hyundai</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Model</label>
+                        <select id="filterModel" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                            <option value="">All Models</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Body Style</label>
+                        <select id="filterBody" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                            <option value="">All Types</option>
+                            <option value="Saloon">Saloon</option>
+                            <option value="Estate">Estate</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Coupe">Coupe</option>
+                            <option value="Convertible">Convertible</option>
+                            <option value="MPV">MPV</option>
+                            <option value="Van">Van</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Fuel Type</label>
+                        <select id="filterFuel" onchange="applyFilters()" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                            <option value="">All Fuel</option>
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Electric">Electric</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-1 col-span-2">
+                        <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">
+                            Monthly Budget: <span id="budgetValue" class="text-accent-400 font-bold">£500</span>
+                        </label>
+                        <div class="flex items-center space-x-3 pt-2">
+                            <span class="text-xs text-gray-500">£100</span>
+                            <input type="range" id="filterBudget" min="100" max="1500" value="500" step="25" oninput="updateBudget()" onchange="applyFilters()" class="flex-1">
+                            <span class="text-xs text-gray-500">£1500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="flex items-start justify-between mt-5 gap-4">
-          <h3 class="font-display font-light text-2xl md:text-3xl">Fly 70 — Essai en mer</h3>
-          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+    </section>
+
+    <!-- Results Section -->
+    <section class="py-4 pb-16 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold" id="resultsTitle">Cars for Personal Leasing</h2>
+                    <p class="text-sm text-gray-400 mt-1"><span id="resultsCount">0</span> vehicles found matching your criteria</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <select id="sortBy" onchange="applyFilters()" class="filter-select px-4 py-2 rounded-xl text-sm">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="name-asc">Name: A-Z</option>
+                        <option value="name-desc">Name: Z-A</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Vehicle Grid -->
+            <div id="vehicleGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Populated by JS -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-20">
+                <div class="w-24 h-24 mx-auto rounded-full bg-gray-800 flex items-center justify-center mb-6">
+                    <i class="fas fa-car-crash text-4xl text-gray-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">No vehicles found</h3>
+                <p class="text-gray-400 mb-6">Try adjusting your filters to see more results</p>
+                <button onclick="resetFilters()" class="px-6 py-3 bg-primary-600 hover:bg-primary-700 rounded-xl font-semibold transition-all">
+                    Reset Filters
+                </button>
+            </div>
         </div>
-        <p class="text-sm text-ivory/50 mt-1 font-light">Premières navigations au large de Savone.</p>
-      </article>
+    </section>
 
-      <!-- CARTE 3 — PHOTO PLACEHOLDER -->
-      <article class="gal-card group cursor-pointer" data-gallery-index="2" data-cursor="Lire" data-fade>
-        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
-          <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1400&auto=format&fit=crop" alt="Design — Alberto Mancini" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
-          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
-          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">01:58</span>
-          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
-            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
-          </span>
+    <!-- Why Choose Us -->
+    <section class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Why Choose AutoLease Pro?</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">We're committed to making vehicle leasing simple, transparent, and stress-free for everyone.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-primary-400"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Fully Insured</h3>
+                    <p class="text-sm text-gray-400">Comprehensive insurance included with every lease</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-money-bill-wave text-2xl text-accent-400"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Fixed Payments</h3>
+                    <p class="text-sm text-gray-400">No hidden fees, transparent pricing every month</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-exchange-alt text-2xl text-green-400"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Flexible Terms</h3>
+                    <p class="text-sm text-gray-400">24 to 60 month contracts, upgrade anytime</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="feature-icon w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-headset text-2xl text-purple-400"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">24/7 Support</h3>
+                    <p class="text-sm text-gray-400">Round-the-clock roadside assistance included</p>
+                </div>
+            </div>
         </div>
-        <div class="flex items-start justify-between mt-5 gap-4">
-          <h3 class="font-display font-light text-2xl md:text-3xl">Design — Alberto Mancini</h3>
-          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
+    </section>
+
+    <!-- Comparison Modal -->
+    <div id="comparisonModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+        <div class="modal-content glass-card rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div class="p-6" id="modalContent">
+                <!-- Populated by JS -->
+            </div>
         </div>
-        <p class="text-sm text-ivory/50 mt-1 font-light">L'œil du designer sur les deux flagships.</p>
-      </article>
+    </div>
 
-      <!-- CARTE 4 — PHOTO PLACEHOLDER -->
-      <article class="gal-card group cursor-pointer" data-gallery-index="3" data-cursor="Lire" data-fade>
-        <div class="relative overflow-hidden aspect-[4/3] border border-white/10">
-          <img src="https://images.unsplash.com/photo-1439405326854-014607f694d7?q=80&w=1400&auto=format&fit=crop" alt="Savoir-faire — les chantiers" class="w-full h-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-105">
-          <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/10 transition duration-700"></div>
-          <span class="absolute bottom-4 right-4 text-[10px] tracking-[0.3em] bg-ink/60 backdrop-blur px-3 py-1.5 border border-white/10">04:05</span>
-          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
-            <span class="w-16 h-16 rounded-full border border-gold/70 bg-ink/40 backdrop-blur flex items-center justify-center"><svg width="14" height="17" viewBox="0 0 22 26" fill="#C8A96A"><path d="M0 0 L22 13 L0 26 Z"/></svg></span>
-          </span>
+    <!-- Enquiry Modal -->
+    <div id="enquiryModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+        <div class="modal-content glass-card rounded-3xl max-w-lg w-full">
+            <div class="p-6 sm:p-8" id="enquiryContent">
+                <!-- Populated by JS -->
+            </div>
         </div>
-        <div class="flex items-start justify-between mt-5 gap-4">
-          <h3 class="font-display font-light text-2xl md:text-3xl">Savoir-faire — Les chantiers</h3>
-          <span class="text-[10px] tracking-[0.3em] text-gold mt-2 uppercase shrink-0">Vimeo</span>
-        </div>
-        <p class="text-sm text-ivory/50 mt-1 font-light">Immersion au cœur de la production italienne.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ CHIFFRES ═══════════════ -->
-<section id="stats" class="border-t border-white/10 px-6 md:px-12 py-24 md:py-36">
-  <div class="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-y-14 gap-x-8 text-center">
-    <div data-fade>
-      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="55">0</span><span class="text-gold">+</span></p>
-      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Années d'héritage</p>
-    </div>
-    <div data-fade>
-      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="70">0</span><span class="text-gold">+</span></p>
-      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Pays desservis</p>
-    </div>
-    <div data-fade>
-      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="6">0</span></p>
-      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Chantiers navals</p>
-    </div>
-    <div data-fade>
-      <p class="font-display font-light text-6xl md:text-7xl"><span data-count="3000">0</span><span class="text-gold">+</span></p>
-      <p class="mt-3 text-[10px] tracking-[0.35em] uppercase text-ivory/50">Yachts livrés</p>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ MARQUEE 2 ═══════════════ -->
-<div class="marquee border-y border-white/10 py-5 md:py-7" aria-hidden="true">
-  <div class="marquee-track" style="animation-duration:24s">
-    <span class="font-display font-light text-2xl md:text-4xl text-gold italic">Prenez la mer</span><span class="text-ivory/40 text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">Visite privée sur rendez-vous</span><span class="text-ivory/40 text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-gold italic">Prenez la mer</span><span class="text-ivory/40 text-xs">◆</span>
-    <span class="font-display font-light text-2xl md:text-4xl text-ivory/85">Visite privée sur rendez-vous</span><span class="text-ivory/40 text-xs">◆</span>
-  </div>
-</div>
-
-<!-- ═══════════════ CONTACT / FOOTER ═══════════════ -->
-<section id="contact" class="relative px-6 md:px-12 pt-28 md:pt-44 pb-14 overflow-hidden">
-  <div class="max-w-[1400px] mx-auto">
-    <p class="eyebrow mb-8" data-fade>04 — Contact</p>
-    <h2 class="font-display font-light leading-[0.95] text-[clamp(3rem,9.5vw,9rem)]" data-reveal>
-      <span class="reveal-line"><span class="reveal-inner">Prenez</span></span>
-      <span class="reveal-line"><span class="reveal-inner"><em class="italic text-gold">la mer.</em></span></span>
-    </h2>
-    <p class="mt-8 max-w-lg text-ivory/60 font-light leading-relaxed" data-fade>
-      Nos conseillers organisent votre visite privée de la Grande 44M ou du Fly 70,
-      à quai comme en navigation. Réponse sous 24 heures.
-    </p>
-    <div class="mt-10 flex flex-wrap gap-5" data-fade>
-      <a href="mailto:concierge@collection-azimut.fr?subject=Visite%20priv%C3%A9e%20%E2%80%94%20Grande%2044M%20%26%20Fly%2070" class="btn btn-solid magnetic"><span>Demander une visite privée</span><span aria-hidden="true">→</span></a>
-      <a href="#" class="btn magnetic"><span>Brochure PDF</span></a>
     </div>
 
-    <div class="hairline mt-20 md:mt-28"></div>
+    <script>
+        // ============ DATA ============
+        const vehicles = [
+            { id:1, make:"BMW", model:"3 Series", body:"Saloon", fuel:"Petrol", price:299, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&q=80", desc:"320i M Sport Auto with premium features", badges:["Popular","Low Mileage"] },
+            { id:2, make:"Audi", model:"A4", body:"Saloon", fuel:"Diesel", price:275, type:"car", leasing:"personal", term:"36", mileage:"10000", image:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=500&q=80", desc:"35 TDI S Line S Tronic automatic", badges:["Best Value"] },
+            { id:3, make:"Mercedes", model:"C-Class", body:"Estate", fuel:"Hybrid", price:389, type:"car", leasing:"business", term:"48", mileage:"12000", image:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=500&q=80", desc:"C 300 de AMG Line Premium Plus", badges:["Hybrid","Premium"] },
+            { id:4, make:"Tesla", model:"Model 3", body:"Saloon", fuel:"Electric", price:349, type:"car", leasing:"personal", term:"36", mileage:"8000", image:"https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=500&q=80", desc:"Long Range AWD with autopilot", badges:["Electric","Zero Tax"] },
+            { id:5, make:"Volkswagen", model:"Golf", body:"Hatchback", fuel:"Petrol", price:199, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=500&q=80", desc:"1.5 TSI 150ps EVO Match Edition", badges:["Economy"] },
+            { id:6, make:"Ford", model:"Transit Custom", body:"Van", fuel:"Diesel", price:249, type:"van", leasing:"business", term:"48", mileage:"10000", image:"https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=500&q=80", desc:"290 L1 H1 2.0 EcoBlue Limited", badges:["Best Seller","L1"] },
+            { id:7, make:"BMW", model:"X3", body:"SUV", fuel:"Diesel", price:429, type:"car", leasing:"business", term:"36", mileage:"12000", image:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", desc:"xDrive20d M Sport Auto", badges:["SUV","M Sport"] },
+            { id:8, make:"Toyota", model:"Yaris", body:"Hatchback", fuel:"Hybrid", price:189, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1621993202322-8c4cf7f7d54a?w=500&q=80", desc:"1.5 VVT-i Hybrid Excel", badges:["Hybrid","ULEV"] },
+            { id:9, make:"Audi", model:"Q5", body:"SUV", fuel:"Petrol", price:399, type:"car", leasing:"business", term:"48", mileage:"10000", image:"https://images.unsplash.com/photo-1606619619849-8c1a3c0a7e70?w=500&q=80", desc:"45 TFSI S Line Quattro S Tronic", badges:["Quattro","Popular"] },
+            { id:10, make:"Hyundai", model:"Tucson", body:"SUV", fuel:"Hybrid", price:299, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1633695028498-78bb3259fa10?w=500&q=80", desc:"1.6 T-GDi Hybrid Ultimate N Line", badges:["New Model"] },
+            { id:11, make:"Mercedes", model:"A-Class", body:"Hatchback", fuel:"Petrol", price:259, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1617531653332-bd46c16f4d68?w=500&q=80", desc:"A 180 AMG Line Executive", badges:["AMG"] },
+            { id:12, make:"Ford", model:"Transit Connect", body:"Van", fuel:"Diesel", price:199, type:"van", leasing:"business", term:"48", mileage:"10000", image:"https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=500&q=80", desc:"L2 1.5 EcoBlue 120ps Limited", badges:["Compact Van"] },
+            { id:13, make:"Volkswagen", model:"Polo", body:"Hatchback", fuel:"Petrol", price:159, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&q=80", desc:"1.0 TSI 95ps R-Line", badges:["R-Line","Best Value"] },
+            { id:14, make:"Tesla", model:"Model Y", body:"SUV", fuel:"Electric", price:449, type:"car", leasing:"business", term:"36", mileage:"10000", image:"https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&q=80", desc:"Long Range AWD 7 seat", badges:["Electric","7 Seater"] },
+            { id:15, make:"BMW", model:"5 Series", body:"Saloon", fuel:"Diesel", price:449, type:"car", leasing:"business", term:"48", mileage:"12000", image:"https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=500&q=80", desc:"520d M Sport Auto with Pro Media", badges:["Business","M Sport"] },
+            { id:16, make:"Toyota", model:"Corolla", body:"Estate", fuel:"Hybrid", price:239, type:"car", leasing:"personal", term:"48", mileage:"8000", image:"https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500&q=80", desc:"1.8 VVT-i Hybrid Excel Touring", badges:["Hybrid","Estate"] },
+        ];
 
-    <div class="grid md:grid-cols-4 gap-10 mt-14 text-sm">
-      <div>
-        <p class="font-display text-2xl mb-4">AZIMUT<span class="text-gold text-xs align-super">®</span></p>
-        <p class="text-ivory/50 font-light leading-relaxed">L'excellence italienne en navigation depuis 1969.</p>
-      </div>
-      <div>
-        <p class="text-[10px] tracking-[0.35em] uppercase text-gold mb-4">Naviguer</p>
-        <ul class="space-y-2 text-ivory/60 font-light">
-          <li><a href="#grande" class="hover:text-gold transition">Grande 44M</a></li>
-          <li><a href="#fly" class="hover:text-gold transition">Fly 70</a></li>
-          <li><a href="#galerie" class="hover:text-gold transition">Galerie</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-[10px] tracking-[0.35em] uppercase text-gold mb-4">Bureau</p>
-        <p class="text-ivory/60 font-light leading-relaxed">Port Canto<br>06400 Cannes, France<br>+33 4 93 00 00 00</p>
-      </div>
-      <div>
-        <p class="text-[10px] tracking-[0.35em] uppercase text-gold mb-4">Conciergerie</p>
-        <p class="text-ivory/60 font-light leading-relaxed break-all">concierge@collection-azimut.fr<br><span class="text-ivory/35 text-xs">Coordonnées de démonstration</span></p>
-      </div>
-    </div>
+        const modelMap = {
+            "BMW":["3 Series","X3","5 Series"],
+            "Audi":["A4","Q5"],
+            "Mercedes":["C-Class","A-Class"],
+            "Volkswagen":["Golf","Polo"],
+            "Ford":["Transit Custom","Transit Connect"],
+            "Toyota":["Yaris","Corolla"],
+            "Tesla":["Model 3","Model Y"],
+            "Hyundai":["Tucson"]
+        };
 
-    <p class="mt-16 text-[10px] tracking-[0.25em] uppercase text-ivory/30 leading-relaxed">
-      © 2025 Collection Signature — Site concept. Azimut®, Grande 44M et Fly 70 sont des marques d'Azimut Yachts S.p.A.
-      Photos &amp; vidéos : espaces réservés en attente d'intégration finale.
-    </p>
-  </div>
+        const fuelIcons = { Petrol:"fa-gas-pump", Diesel:"fa-truck-droplet", Hybrid:"fa-leaf", Electric:"fa-bolt" };
+        const fuelColors = { Petrol:"text-orange-400", Diesel:"text-yellow-600", Hybrid:"text-green-400", Electric:"text-blue-400" };
 
-  <!-- Filigrane -->
-  <div class="pointer-events-none select-none absolute -bottom-8 left-1/2 -translate-x-1/2 font-display font-light text-[22vw] leading-none stroke-text opacity-60 whitespace-nowrap" aria-hidden="true">AZIMUT</div>
-</section>
+        // ============ STATE ============
+        let state = {
+            vehicleType: 'car',
+            leasingType: 'personal',
+            make: '',
+            model: '',
+            body: '',
+            fuel: '',
+            budget: 500,
+            sort: 'price-asc'
+        };
 
-</main>
+        // ============ AUDIO ============
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            if (type === 'click') {
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'modal') {
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+            }
+        }
 
-<!-- ═══════════════ LIGHTBOX VIDÉO ═══════════════ -->
-<div id="lightbox" class="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true" aria-label="Lecteur vidéo">
-  <div class="absolute inset-0 bg-ink/95 backdrop-blur-md" data-lb-close></div>
-  <div class="lb-panel relative w-full max-w-5xl">
-    <div class="video-frame border border-white/15 shadow-2xl shadow-black/60">
-      <iframe id="lbFrame" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Lecteur vidéo Vimeo"></iframe>
-    </div>
-    <button data-lb-close class="mt-5 mx-auto flex items-center gap-3 text-[11px] tracking-[0.35em] uppercase text-ivory/70 hover:text-gold transition" aria-label="Fermer le lecteur">
-      Fermer
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1 L11 11 M11 1 L1 11"/></svg>
-    </button>
-  </div>
-</div>
+        // ============ TABS ============
+        function setVehicleType(type) {
+            playSound('click');
+            state.vehicleType = type;
+            
+            const carBtn = document.getElementById('carBtn');
+            const vanBtn = document.getElementById('vanBtn');
+            const indicator = document.getElementById('vehicleTabIndicator');
+            
+            if (type === 'car') {
+                carBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-primary-600 text-white font-semibold text-sm sm:text-base transition-all';
+                vanBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
+                indicator.style.left = '0';
+            } else {
+                vanBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-primary-600 text-white font-semibold text-sm sm:text-base transition-all';
+                carBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
+                indicator.style.left = '50%';
+            }
+            
+            applyFilters();
+        }
 
-<!-- ═══ LIBRAIRIES ═══ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+        function setLeasingType(type) {
+            playSound('click');
+            state.leasingType = type;
+            
+            const personalBtn = document.getElementById('personalBtn');
+            const businessBtn = document.getElementById('businessBtn');
+            const indicator = document.getElementById('leasingTabIndicator');
+            
+            if (type === 'personal') {
+                personalBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-accent-600 text-white font-semibold text-sm sm:text-base transition-all';
+                businessBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
+                indicator.style.left = '50%';
+                indicator.style.transform = 'none';
+            } else {
+                businessBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 bg-accent-600 text-white font-semibold text-sm sm:text-base transition-all';
+                personalBtn.className = 'type-btn flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl z-10 text-gray-400 hover:text-white transition-all text-sm sm:text-base';
+                indicator.style.left = '0';
+            }
+            
+            applyFilters();
+        }
 
-<script>
-/* ════════════════════════════════════════════════════════════════════
-   CONFIGURATION DES VIDÉOS VIMEO
-   ────────────────────────────────────────────────────────────────────
-   Remplacez les identifiants ci-dessous par les IDs RÉELS de vos vidéos.
-   L'ID se lit dans l'URL Vimeo : https://vimeo.com/XXXXXXXXX
+        // ============ FILTERS ============
+        function updateBudget() {
+            const val = document.getElementById('filterBudget').value;
+            document.getElementById('budgetValue').textContent = '£' + val;
+            state.budget = parseInt(val);
+        }
 
-   • hero       → vidéo d'ambiance plein écran (auto, muette, en boucle)
-   • grande44m  → film officiel GRANDE 44M
-   • fly70      → film officiel FLY 70
-   • galerie    → les 4 vidéos de la galerie (ordre des cartes)
+        function populateModels() {
+            const make = document.getElementById('filterMake').value;
+            const modelSelect = document.getElementById('filterModel');
+            modelSelect.innerHTML = '<option value="">All Models</option>';
+            
+            if (make && modelMap[make]) {
+                modelMap[make].forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    modelSelect.appendChild(opt);
+                });
+            }
+        }
 
-   ID utilisé par défaut : 76979871 (vidéo de démonstration officielle
-   Vimeo, publique et intégrable) — le site fonctionne immédiatement.
-   ════════════════════════════════════════════════════════════════════ */
-const VIMEO = {
-  hero:      '76979871',
-  grande44m: '76979871',
-  fly70:     '76979871',
-  galerie:  ['76979871','76979871','76979871','76979871']
-};
+        function applyFilters() {
+            state.make = document.getElementById('filterMake').value;
+            state.model = document.getElementById('filterModel').value;
+            state.body = document.getElementById('filterBody').value;
+            state.fuel = document.getElementById('filterFuel').value;
+            state.sort = document.getElementById('sortBy').value;
+            
+            renderVehicles();
+        }
 
-const bgUrl    = id => `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&background=1&autopause=0&playsinline=1&controls=0&dnt=1`;
-const embedUrl = id => `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&color=c8a96a&dnt=1`;
+        function resetFilters() {
+            playSound('click');
+            state = { ...state, make:'', model:'', body:'', fuel:'', budget:500 };
+            document.getElementById('filterMake').value = '';
+            document.getElementById('filterModel').value = '';
+            document.getElementById('filterBody').value = '';
+            document.getElementById('filterFuel').value = '';
+            document.getElementById('filterBudget').value = 500;
+            document.getElementById('budgetValue').textContent = '£500';
+            populateModels();
+            renderVehicles();
+        }
 
-gsap.registerPlugin(ScrollTrigger);
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // ============ RENDER ============
+        function getFiltered() {
+            return vehicles.filter(v => {
+                if (v.type !== state.vehicleType) return false;
+                if (v.leasing !== state.leasingType && v.leasing !== 'both') return false;
+                if (state.make && v.make !== state.make) return false;
+                if (state.model && v.model !== state.model) return false;
+                if (state.body && v.body !== state.body) return false;
+                if (state.fuel && v.fuel !== state.fuel) return false;
+                if (v.price > state.budget) return false;
+                return true;
+            });
+        }
 
-/* ═══════════ DÉFILEMENT FLUIDE (LENIS) ═══════════ */
-let lenis = null;
-if (!reduced) {
-  lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add(t => lenis.raf(t * 1000));
-  gsap.ticker.lagSmoothing(0);
-}
-const scrollToTarget = (el) => {
-  if (lenis) lenis.scrollTo(el, { duration: 1.6 });
-  else el.scrollIntoView({ behavior: 'smooth' });
-};
+        function getSorted(list) {
+            const s = state.sort;
+            if (s === 'price-asc') return [...list].sort((a,b) => a.price - b.price);
+            if (s === 'price-desc') return [...list].sort((a,b) => b.price - a.price);
+            if (s === 'name-asc') return [...list].sort((a,b) => a.model.localeCompare(b.model));
+            if (s === 'name-desc') return [...list].sort((a,b) => b.model.localeCompare(a.model));
+            return list;
+        }
 
-/* ═══════════ CURSEUR PERSONNALISÉ ═══════════ */
-const dot = document.getElementById('cursorDot');
-const ring = document.getElementById('cursorRing');
-const cursorLabel = document.getElementById('cursorLabel');
-let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
-window.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-});
-gsap.ticker.add(() => {
-  rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
-  ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-});
-function bindCursor(scope = document) {
-  scope.querySelectorAll('a, button, [data-cursor]').forEach(el => {
-    if (el.dataset.cbound) return; el.dataset.cbound = '1';
-    el.addEventListener('mouseenter', () => {
-      if (el.dataset.cursor) { cursorLabel.textContent = el.dataset.cursor; ring.classList.add('is-label'); }
-      else ring.classList.add('is-hover');
-    });
-    el.addEventListener('mouseleave', () => { ring.classList.remove('is-label','is-hover'); cursorLabel.textContent=''; });
-  });
-}
-bindCursor();
+        function renderVehicles() {
+            const grid = document.getElementById('vehicleGrid');
+            const empty = document.getElementById('emptyState');
+            const count = document.getElementById('resultsCount');
+            const title = document.getElementById('resultsTitle');
+            
+            const typeLabel = state.vehicleType === 'car' ? 'Cars' : 'Vans';
+            const leaseLabel = state.leasingType.charAt(0).toUpperCase() + state.leasingType.slice(1);
+            title.textContent = `${typeLabel} for ${leaseLabel} Leasing`;
+            
+            let filtered = getSorted(getFiltered());
+            count.textContent = filtered.length;
+            
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+            
+            grid.classList.remove('hidden');
+            empty.classList.add('hidden');
+            
+            grid.innerHTML = filtered.map((v, i) => `
+                <div class="glass-card rounded-2xl overflow-hidden slide-up" style="animation-delay: ${i * 0.08}s">
+                    <div class="vehicle-img-container h-44 sm:h-52">
+                        <img src="${v.image}" alt="${v.make} ${v.model}" class="w-full h-full object-cover" loading="lazy"
+                             onerror="this.src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=500&q=80'">
+                        <div class="absolute top-3 left-3 z-10 flex flex-wrap gap-1">
+                            ${v.badges.map(b => `<span class="px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold ${b.includes('Electric')||b.includes('Hybrid')?'bg-green-500/80 text-white':'bg-primary-600/90 text-white'} backdrop-blur-sm">${b}</span>`).join('')}
+                        </div>
+                        <button onclick="toggleCompare(${v.id})" class="compare-btn absolute top-3 right-3 z-10 w-9 h-9 rounded-xl glass flex items-center justify-center hover:bg-white/20 transition-all" id="compare-${v.id}" title="Add to comparison">
+                            <i class="fas fa-balance-scale text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <div class="text-xs text-gray-400">${v.make}</div>
+                                <h3 class="font-bold text-base sm:text-lg leading-tight">${v.model}</h3>
+                                <div class="flex items-center space-x-1 mt-1">
+                                    <i class="fas ${fuelIcons[v.fuel]} text-xs ${fuelColors[v.fuel]}"></i>
+                                    <span class="text-xs text-gray-400">${v.fuel}</span>
+                                    <span class="text-gray-600 mx-1">•</span>
+                                    <i class="fas fa-cog text-xs text-gray-400"></i>
+                                    <span class="text-xs text-gray-400">Auto</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xl sm:text-2xl font-bold text-accent-400 price-glow">£${v.price}</div>
+                                <div class="text-[10px] sm:text-xs text-gray-400">/month inc. VAT</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-[10px] sm:text-xs">
+                            <div class="flex items-center space-x-1.5 text-gray-400">
+                                <i class="fas fa-calendar-alt text-primary-400/70"></i>
+                                <span>${v.term} months</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5 text-gray-400">
+                                <i class="fas fa-road text-primary-400/70"></i>
+                                <span>${v.mileage} mi/yr</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button onclick="openEnquiry(${v.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-sm font-semibold transition-all hover:shadow-lg hover:shadow-primary-500/20 active:scale-95">
+                                Enquire Now
+                            </button>
+                            <button onclick="openModal(${v.id})" class="w-11 h-11 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all active:scale-95" title="View Details">
+                                <i class="fas fa-expand-alt text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-/* ═══════════ BOUTONS MAGNÉTIQUES ═══════════ */
-document.querySelectorAll('.magnetic').forEach(el => {
-  el.addEventListener('mousemove', e => {
-    const r = el.getBoundingClientRect();
-    gsap.to(el, { x:(e.clientX - r.left - r.width/2)*0.3, y:(e.clientY - r.top - r.height/2)*0.3, duration:0.4, ease:'power2.out' });
-  });
-  el.addEventListener('mouseleave', () => gsap.to(el, { x:0, y:0, duration:0.7, ease:'elastic.out(1,0.4)' }));
-});
+        // ============ MODALS ============
+        let compared = [];
 
-/* ═══════════ TOILE ANIMÉE (placeholder cinématique du hero) ═══════════ */
-(function ocean(){
-  const cv = document.getElementById('ocean'); if(!cv) return;
-  const ctx = cv.getContext('2d'); let W, H, t = 0;
-  const rs = () => { W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight; };
-  rs(); window.addEventListener('resize', rs);
-  (function loop(){
-    t += 0.008;
-    const g = ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'#0A0E14'); g.addColorStop(0.6,'#0C1622'); g.addColorStop(1,'#0A0E14');
-    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
-    const rg = ctx.createRadialGradient(W*0.7,H*0.32,0,W*0.7,H*0.32,W*0.55);
-    rg.addColorStop(0,'rgba(200,169,106,0.10)'); rg.addColorStop(1,'rgba(200,169,106,0)');
-    ctx.fillStyle = rg; ctx.fillRect(0,0,W,H);
-    for (let i=0;i<4;i++){
-      ctx.beginPath();
-      const base = H*(0.55+i*0.1), amp = 18+i*9, sp = t*(0.6+i*0.22);
-      for (let x=0;x<=W;x+=8){
-        const y = base + Math.sin(x*0.004+sp+i*1.7)*amp + Math.sin(x*0.011-sp)*amp*0.4;
-        x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-      }
-      ctx.strokeStyle = `rgba(200,169,106,${0.05+i*0.02})`; ctx.lineWidth = 1; ctx.stroke();
-    }
-    requestAnimationFrame(loop);
-  })();
-})();
+        function toggleCompare(id) {
+            playSound('click');
+            const idx = compared.indexOf(id);
+            const btn = document.getElementById(`compare-${id}`);
+            if (idx > -1) {
+                compared.splice(idx, 1);
+                btn.classList.remove('bg-primary-600', 'text-white');
+            } else {
+                if (compared.length >= 3) { alert('Maximum 3 vehicles for comparison'); return; }
+                compared.push(id);
+                btn.classList.add('bg-primary-600', 'text-white');
+            }
+        }
 
-/* ═══════════ VIDÉO VIMEO DE FOND (hero) ═══════════ */
-function injectHeroVideo(){
-  const holder = document.getElementById('heroVideo');
-  if (!holder || holder.dataset.done) return; holder.dataset.done = '1';
-  const f = document.createElement('iframe');
-  f.src = bgUrl(VIMEO.hero);
-  f.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
-  f.setAttribute('aria-hidden','true'); f.tabIndex = -1; f.title = 'Vidéo d’ambiance Azimut';
-  holder.appendChild(f);
-}
+        function openModal(id) {
+            playSound('modal');
+            const v = vehicles.find(x => x.id === id);
+            const modal = document.getElementById('comparisonModal');
+            document.getElementById('modalContent').innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold">${v.make} ${v.model}</h2>
+                        <p class="text-gray-400">${v.desc}</p>
+                    </div>
+                    <button onclick="closeModal('comparisonModal')" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="vehicle-img-container rounded-2xl overflow-hidden mb-6 h-64">
+                    <img src="${v.image}" alt="${v.make} ${v.model}" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <div class="glass rounded-xl p-4 text-center">
+                        <i class="fas fa-pound-sign text-primary-400 text-xl mb-2"></i>
+                        <div class="text-xl font-bold">£${v.price}<span class="text-sm text-gray-400">/mo</span></div>
+                        <div class="text-xs text-gray-400 mt-1">Monthly Payment</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 text-center">
+                        <i class="fas ${fuelIcons[v.fuel]} ${fuelColors[v.fuel]} text-xl mb-2"></i>
+                        <div class="text-xl font-bold">${v.fuel}</div>
+                        <div class="text-xs text-gray-400 mt-1">Fuel Type</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 text-center">
+                        <i class="fas fa-calendar-alt text-accent-400 text-xl mb-2"></i>
+                        <div class="text-xl font-bold">${v.term}</div>
+                        <div class="text-xs text-gray-400 mt-1">Month Term</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 text-center">
+                        <i class="fas fa-road text-green-400 text-xl mb-2"></i>
+                        <div class="text-xl font-bold">${v.mileage}</div>
+                        <div class="text-xs text-gray-400 mt-1">Miles / Year</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-5 mb-6">
+                    <h3 class="font-semibold mb-4 flex items-center space-x-2">
+                        <i class="fas fa-list-check text-primary-400"></i>
+                        <span>What's Included</span>
+                    </h3>
+                    <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Road Tax Included</span></div>
+                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Breakdown Cover</span></div>
+                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Manufacturer Warranty</span></div>
+                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Free Delivery</span></div>
+                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>Registration & Plates</span></div>
+                        <div class="flex items-center space-x-2"><i class="fas fa-check text-green-400 text-xs"></i><span>First MOT Included</span></div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button onclick="closeModal('comparisonModal'); openEnquiry(${v.id})" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 font-semibold transition-all hover:shadow-lg hover:shadow-primary-500/20 active:scale-95">
+                        <i class="fas fa-paper-plane mr-2"></i>Apply Now
+                    </button>
+                    ${compared.length > 1 ? `<button onclick="closeModal('comparisonModal'); showComparison()" class="py-3 px-6 rounded-xl glass hover:bg-white/20 font-semibold transition-all active:scale-95">
+                        <i class="fas fa-balance-scale mr-2"></i>Compare (${compared.length})
+                    </button>` : ''}
+                </div>
+            `;
+            modal.classList.add('active');
+        }
 
-/* ═══════════ FAÇADES VIDÉO (clic → lecteur Vimeo) ═══════════ */
-document.querySelectorAll('.video-facade').forEach(facade => {
-  const play = () => {
-    if (facade.dataset.playing) return; facade.dataset.playing = '1';
-    const id = VIMEO[facade.dataset.vimeoKey];
-    const f = document.createElement('iframe');
-    f.src = embedUrl(id);
-    f.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
-    f.allowFullscreen = true; f.title = 'Film officiel — Vimeo';
-    facade.innerHTML = ''; facade.appendChild(f);
-    facade.removeAttribute('data-cursor'); facade.style.cursor = 'default';
-    ring.classList.remove('is-label','is-hover');
-  };
-  facade.addEventListener('click', play);
-  facade.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
-});
+        function openEnquiry(id) {
+            playSound('modal');
+            const v = vehicles.find(x => x.id === id);
+            const modal = document.getElementById('enquiryModal');
+            document.getElementById('enquiryContent').innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold">Enquire About</h2>
+                        <p class="text-primary-400 font-semibold">${v.make} ${v.model} — £${v.price}/mo</p>
+                    </div>
+                    <button onclick="closeModal('enquiryModal')" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form onsubmit="submitEnquiry(event, ${v.id})" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="text-xs text-gray-400 font-medium">First Name *</label>
+                            <input type="text" required placeholder="John" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs text-gray-400 font-medium">Last Name *</label>
+                            <input type="text" required placeholder="Doe" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium">Email Address *</label>
+                        <input type="email" required placeholder="john@example.com" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium">Phone Number *</label>
+                        <input type="tel" required placeholder="07XXX XXX XXX" class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="text-xs text-gray-400 font-medium">Term (Months)</label>
+                            <select class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                                <option>24</option>
+                                <option selected>36</option>
+                                <option>48</option>
+                                <option>60</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs text-gray-400 font-medium">Annual Miles</label>
+                            <select class="filter-select w-full px-3 py-2.5 rounded-xl text-sm">
+                                <option>5000</option>
+                                <option selected>8000</option>
+                                <option>10000</option>
+                                <option>12000</option>
+                                <option>15000</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-400 font-medium">Additional Notes</label>
+                        <textarea rows="3" placeholder="Any specific requirements..." class="filter-select w-full px-3 py-2.5 rounded-xl text-sm resize-none"></textarea>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                        <input type="checkbox" required id="terms" class="mt-1 accent-primary-600">
+                        <label for="terms" class="text-xs text-gray-400">I agree to the <a href="#" class="text-primary-400 underline">terms & conditions</a> and consent to being contacted about this enquiry.</label>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-accent-600 to-accent-700 hover:from-accent-500 hover:to-accent-600 font-semibold transition-all hover:shadow-lg hover:shadow-accent-500/20 active:scale-95">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Enquiry
+                    </button>
+                </form>
+            `;
+            modal.classList.add('active');
+        }
 
-/* ═══════════ LIGHTBOX GALERIE ═══════════ */
-const lb = document.getElementById('lightbox');
-const lbFrame = document.getElementById('lbFrame');
-function openLB(id){
-  lbFrame.src = embedUrl(id);
-  lb.classList.add('is-open');
-  if (lenis) lenis.stop();
-}
-function closeLB(){
-  lb.classList.remove('is-open');
-  setTimeout(() => { lbFrame.src = ''; }, 450);
-  if (lenis) lenis.start();
-}
-document.querySelectorAll('[data-gallery-index]').forEach(card => {
-  card.addEventListener('click', () => openLB(VIMEO.galerie[+card.dataset.galleryIndex]));
-});
-document.querySelectorAll('[data-lb-close]').forEach(b => b.addEventListener('click', closeLB));
-window.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+        function closeModal(id) {
+            playSound('click');
+            document.getElementById(id).classList.remove('active');
+        }
 
-/* ═══════════ MENU MOBILE ═══════════ */
-const menuBtn = document.getElementById('menuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-let menuOpen = false;
-function closeMenu(){
-  if (!menuOpen) return; menuOpen = false;
-  mobileMenu.classList.remove('is-open'); menuBtn.textContent = 'Menu';
-  if (lenis) lenis.start();
-}
-menuBtn.addEventListener('click', () => {
-  menuOpen = !menuOpen;
-  mobileMenu.classList.toggle('is-open', menuOpen);
-  menuBtn.textContent = menuOpen ? 'Fermer' : 'Menu';
-  if (lenis) menuOpen ? lenis.stop() : lenis.start();
-});
+        function submitEnquiry(e, id) {
+            e.preventDefault();
+            const v = vehicles.find(x => x.id === id);
+            closeModal('enquiryModal');
+            
+            // Success notification
+            const notif = document.createElement('div');
+            notif.className = 'fixed top-24 right-4 z-50 glass-card rounded-xl p-4 flex items-center space-x-3 slide-up';
+            notif.innerHTML = `<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center"><i class="fas fa-check text-green-400"></i></div><div><div class="font-semibold text-sm">Enquiry Submitted!</div><div class="text-xs text-gray-400">We'll contact you about ${v.make} ${v.model} shortly.</div></div>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 4000);
+            playSound('modal');
+        }
 
-/* ═══════════ ANCRES FLUIDES ═══════════ */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const href = a.getAttribute('href');
-    e.preventDefault();
-    if (href.length > 1) {
-      const t = document.querySelector(href);
-      if (t) { closeMenu(); setTimeout(() => scrollToTarget(t), menuOpen ? 300 : 0); }
-    }
-  });
-});
+        function showComparison() {
+            if (compared.length < 2) return;
+            playSound('modal');
+            const vList = compared.map(id => vehicles.find(x => x.id === id));
+            const modal = document.getElementById('comparisonModal');
+            
+            document.getElementById('modalContent').innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Compare Vehicles</h2>
+                    <button onclick="closeModal('comparisonModal')" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center transition-all">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full comparison-table text-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-left p-3 text-gray-400 font-medium text-xs uppercase tracking-wider">Specification</th>
+                                ${vList.map(v => `<th class="p-3 text-center"><div class="text-base font-bold">${v.make} ${v.model}</div><div class="text-xs text-gray-400">${v.body}</div></th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-3 text-gray-400 font-medium">Monthly Price</td>${vList.map(v => `<td class="p-3 text-center font-bold text-accent-400">£${v.price}/mo</td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Fuel Type</td>${vList.map(v => `<td class="p-3 text-center"><i class="fas ${fuelIcons[v.fuel]} ${fuelColors[v.fuel]} mr-1"></i>${v.fuel}</td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Body Style</td>${vList.map(v => `<td class="p-3 text-center">${v.body}</td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Contract Term</td>${vList.map(v => `<td class="p-3 text-center">${v.term} months</td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Annual Mileage</td>${vList.map(v => `<td class="p-3 text-center">${v.mileage} mi</td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Transmission</td>${vList.map(v => `<td class="p-3 text-center">Automatic</td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Leasing Type</td>${vList.map(v => `<td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-xs ${v.leasing==='personal'?'bg-accent-500/20 text-accent-300':'bg-primary-500/20 text-primary-300'}">${v.leasing.charAt(0).toUpperCase()+v.leasing.slice(1)}</span></td>`).join('')}</tr>
+                            <tr><td class="p-3 text-gray-400 font-medium">Description</td>${vList.map(v => `<td class="p-3 text-center text-xs text-gray-400">${v.desc}</td>`).join('')}</tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 flex gap-3 flex-wrap">
+                    ${vList.map(v => `<button onclick="closeModal('comparisonModal'); openEnquiry(${v.id})" class="flex-1 min-w-[140px] py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-sm font-semibold transition-all active:scale-95">Enquire →</button>`).join('')}
+                </div>
+            `;
+            modal.classList.add('active');
+            compared = [];
+            document.querySelectorAll('.compare-btn').forEach(b => b.classList.remove('bg-primary-600','text-white'));
+        }
 
-/* ═══════════ NAVIGATION : fond + masquage au scroll ═══════════ */
-const nav = document.getElementById('nav');
-let lastY = 0;
-function onScrollY(y){
-  nav.classList.toggle('nav-solid', y > 60);
-  if (y > 350 && y > lastY + 4) nav.classList.add('nav-hidden');
-  else if (y < lastY - 4) nav.classList.remove('nav-hidden');
-  lastY = y;
-}
-if (lenis) lenis.on('scroll', ({scroll}) => onScrollY(scroll));
-else window.addEventListener('scroll', () => onScrollY(scrollY));
+        // Close modals on overlay click
+        document.getElementById('comparisonModal').addEventListener('click', (e) => {
+            if (e.target.id === 'comparisonModal') closeModal('comparisonModal');
+        });
+        document.getElementById('enquiryModal').addEventListener('click', (e) => {
+            if (e.target.id === 'enquiryModal') closeModal('enquiryModal');
+        });
 
-/* ═══════════ ANIMATIONS D'APPARITION ═══════════ */
-if (!reduced) {
-  gsap.set('.reveal-inner', { yPercent: 120 });
-
-  // Titres par lignes masquées
-  document.querySelectorAll('[data-reveal]').forEach(group => {
-    gsap.to(group.querySelectorAll('.reveal-inner'), {
-      yPercent: 0, duration: 1.25, ease: 'power4.out', stagger: 0.1,
-      scrollTrigger: { trigger: group, start: 'top 82%', once: true }
-    });
-  });
-
-  // Manifesto : découpage mot à mot
-  document.querySelectorAll('[data-split]').forEach(el => {
-    const words = el.textContent.trim().split(/\s+/);
-    el.innerHTML = words.map(w => `<span class="w-wrap"><span class="w-inner">${w}</span></span>`).join(' ');
-    gsap.set(el.querySelectorAll('.w-inner'), { yPercent: 115 });
-    gsap.to(el.querySelectorAll('.w-inner'), {
-      yPercent: 0, duration: 1, ease: 'power4.out', stagger: 0.028,
-      scrollTrigger: { trigger: el, start: 'top 80%', once: true }
-    });
-  });
-
-  // Fondu + montée
-  document.querySelectorAll('[data-fade]').forEach(el => {
-    gsap.from(el, { opacity: 0, y: 44, duration: 1.1, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-  });
-
-  // Parallaxe des images plein écran
-  document.querySelectorAll('[data-parallax]').forEach(wrap => {
-    const img = wrap.querySelector('img');
-    gsap.fromTo(img, { yPercent: -9 }, { yPercent: 9, ease: 'none',
-      scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: true } });
-  });
-}
-
-/* ═══════════ COMPTEURS ═══════════ */
-document.querySelectorAll('[data-count]').forEach(el => {
-  const target = +el.dataset.count;
-  const render = v => el.textContent = Math.round(v).toLocaleString('fr-FR');
-  if (reduced) { render(target); return; }
-  ScrollTrigger.create({
-    trigger: el, start: 'top 88%', once: true,
-    onEnter: () => {
-      const obj = { v: 0 };
-      gsap.to(obj, { v: target, duration: 2.2, ease: 'power2.out', onUpdate: () => render(obj.v) });
-    }
-  });
-});
-
-/* ═══════════ PRÉLOADER & ENTRÉE DU HERO ═══════════ */
-const plCount = document.getElementById('plCount');
-if (reduced) {
-  gsap.set('#preloader', { display: 'none' });
-  gsap.set('.reveal-inner', { yPercent: 0 });
-  injectHeroVideo();
-} else {
-  gsap.set('.pl-letter', { yPercent: 120 });
-  const counter = { v: 0 };
-  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-  tl.to('.pl-letter', { yPercent: 0, duration: 1.05, stagger: 0.07 }, 0.25)
-    .to(counter, { v: 100, duration: 1.9, ease: 'power2.inOut',
-        onUpdate: () => plCount.textContent = Math.round(counter.v) }, 0.25)
-    .to('.pl-fade', { opacity: 0, duration: 0.4, ease: 'power2.out' }, '-=0.35')
-    .to('#preloader', { clipPath: 'inset(0 0 100% 0)', duration: 1.15, ease: 'power4.inOut' })
-    .set('#preloader', { display: 'none' })
-    .add(injectHeroVideo, '-=1.0')
-    .to('#hero .reveal-inner', { yPercent: 0, duration: 1.35, stagger: 0.12, ease: 'power4.out' }, '-=0.75')
-    .from('#heroMeta', { opacity: 0, y: 26, duration: 0.9, ease: 'power3.out' }, '-=0.85')
-    .from('#nav', { y: -40, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.9');
-}
-
-window.addEventListener('load', () => ScrollTrigger.refresh());
-</script>
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', () => {
+            populateModels();
+            renderVehicles();
+            
+            // Budget slider listener
+            document.getElementById('filterMake').addEventListener('change', () => {
+                populateModels();
+                applyFilters();
+            });
+        });
+    </script>
 </body>
 </html>
