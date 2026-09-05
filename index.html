@@ -1,341 +1,2703 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tableau Produits UX Copy — Preview interactive</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          blue: '#0F3D5C',
-          blueLight: '#1B6091',
-          teal: '#0E7C86',
-          green: '#16A34A',
-          greenDark: '#15803D',
-          gold: '#D4A017',
-          goldLight: '#F5D06F',
-          cream: '#FFF9EE',
-          bg: '#F4F7FA'
-        }
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif']
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DE LA CALLE! | Modern Mexican Tepache | Fermented Soda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Confetti for checkout celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-cream: #FAF6EE;
+      --bg-yellow: #FFD23F;
+      --terracotta: #D84A38;
+      --clay: #B73225;
+      --mex-pink: #E60067;
+      --agave-green: #2B6149;
+      --deep-teal: #004D47;
+      --text-dark: #191414;
+      --text-muted: #665D52;
+      --can-shadow: rgba(25, 20, 20, 0.15);
+      --font-display: 'Alfa Slab One', cursive;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Announcement Bar */
+    .announcement-bar {
+      background: var(--terracotta);
+      color: #FFF;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.6rem 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      overflow: hidden;
+    }
+    .announcement-bar span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Navigation */
+    header {
+      background: rgba(250, 246, 238, 0.95);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 36px;
+      z-index: 99;
+      border-bottom: 2px solid var(--text-dark);
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--terracotta);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0px var(--text-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--terracotta);
+    }
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--terracotta);
+      border-radius: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .btn-cart {
+      background: var(--text-dark);
+      color: #FFF;
+      border: 2px solid var(--text-dark);
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: var(--transition);
+      box-shadow: 2px 2px 0px var(--terracotta);
+    }
+    .btn-cart:hover {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      box-shadow: 2px 2px 0px var(--text-dark);
+      transform: translate(-1px, -1px);
+    }
+
+    .cart-badge {
+      background: var(--bg-yellow);
+      color: var(--text-dark);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .btn-mobile-menu {
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Hero Section with 3D Canvas */
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      padding: 2rem 4rem;
+      background: radial-gradient(circle at 75% 45%, #FFE9B3 0%, var(--bg-cream) 70%);
+      overflow: hidden;
+    }
+
+    .hero-content {
+      z-index: 10;
+      max-width: 620px;
+    }
+
+    .hero-tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-yellow);
+      border: 2px solid var(--text-dark);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      box-shadow: 3px 3px 0px var(--text-dark);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 4.2rem;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+      letter-spacing: -0.01em;
+    }
+    .hero-title span.accent {
+      color: var(--terracotta);
+      display: inline-block;
+      text-shadow: 3px 3px 0px var(--bg-yellow);
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.45;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: #FFF;
+      border: 2px solid var(--text-dark);
+      padding: 0.9rem 2.2rem;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--text-dark);
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .btn-primary:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--text-dark);
+      background: var(--clay);
+    }
+
+    .btn-secondary {
+      background: #FFF;
+      color: var(--text-dark);
+      border: 2px solid var(--text-dark);
+      padding: 0.9rem 2rem;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--text-dark);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-yellow);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--text-dark);
+    }
+
+    .flavor-selector-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .flavor-selector-label {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .flavor-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .flavor-pill {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .flavor-pill .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .flavor-pill:hover, .flavor-pill.active {
+      transform: scale(1.05);
+      border-color: var(--text-dark);
+      box-shadow: 2px 2px 0px var(--text-dark);
+      background: var(--bg-yellow);
+    }
+
+    /* 3D WebGL Canvas Container */
+    .hero-3d-wrap {
+      position: relative;
+      height: 600px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #webgl-container {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    #webgl-container:active {
+      cursor: grabbing;
+    }
+
+    .can-3d-controls-hint {
+      position: absolute;
+      bottom: 20px;
+      right: 30px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--text-dark);
+      border-radius: 20px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      pointer-events: none;
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+    }
+
+    .flavor-floating-badge {
+      position: absolute;
+      top: 15%;
+      left: 5%;
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      box-shadow: 4px 4px 0px var(--text-dark);
+      transform: rotate(-3deg);
+      pointer-events: none;
+      animation: float 4s ease-in-out infinite;
+    }
+    .flavor-floating-badge h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--terracotta);
+      margin-bottom: 0.2rem;
+    }
+    .flavor-floating-badge p {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(-3deg); }
+      50% { transform: translateY(-8px) rotate(-1deg); }
+    }
+
+    /* Retailers Ticker */
+    .retailers-bar {
+      background: var(--deep-teal);
+      color: #FFF;
+      padding: 1.2rem 0;
+      border-top: 2px solid var(--text-dark);
+      border-bottom: 2px solid var(--text-dark);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .retailers-heading {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+    .ticker-wrapper {
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+      user-select: none;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 3rem;
+      animation: scrollTicker 24s linear infinite;
+    }
+    .ticker-item {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      opacity: 0.95;
+    }
+    .ticker-item span.star {
+      color: var(--bg-yellow);
+    }
+    @keyframes scrollTicker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* General Section Styling */
+    section {
+      padding: 5rem 3rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3.5rem auto;
+    }
+    .section-eyebrow {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--terracotta);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      line-height: 1.05;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    /* What is Tepache Explainer */
+    .tepache-explainer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .explainer-card {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      box-shadow: 5px 5px 0px var(--text-dark);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .explainer-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 7px 7px 0px var(--terracotta);
+    }
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-yellow);
+      border: 2px solid var(--text-dark);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .explainer-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+    }
+    .explainer-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Shop Section */
+    .shop-filters {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--text-dark);
+      color: #FFF;
+      box-shadow: 3px 3px 0px var(--terracotta);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 5px 5px 0px var(--text-dark);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 8px 8px 0px var(--terracotta);
+    }
+
+    .product-visual {
+      background: #F2ECE0;
+      height: 240px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px solid var(--text-dark);
+      overflow: hidden;
+    }
+    .product-badge-top {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--bg-yellow);
+      border: 2px solid var(--text-dark);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .product-interactive-preview {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      z-index: 2;
+    }
+    .product-interactive-preview:hover {
+      background: var(--terracotta);
+      color: #FFF;
+      transform: scale(1.1);
+    }
+
+    .can-svg-render {
+      width: 140px;
+      height: 200px;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-card:hover .can-svg-render {
+      transform: scale(1.08) rotate(2deg);
+    }
+
+    .product-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .product-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+      line-height: 1.2;
+    }
+    .product-description {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      flex-grow: 1;
+    }
+    .product-claims {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .claim-tag {
+      background: #F0EAE1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: var(--deep-teal);
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px dashed #D6CEC2;
+      padding-top: 1rem;
+    }
+    .product-price {
+      display: flex;
+      flex-direction: column;
+    }
+    .price-main {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text-dark);
+    }
+    .price-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn-add-cart {
+      background: var(--text-dark);
+      color: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-add-cart:hover {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      transform: scale(1.04);
+    }
+
+    /* Our Story Section */
+    .story-section {
+      background: #F3EBDD;
+      border-top: 2px solid var(--text-dark);
+      border-bottom: 2px solid var(--text-dark);
+      padding: 6rem 3rem;
+      max-width: 100%;
+    }
+    .story-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .story-images {
+      position: relative;
+    }
+    .story-frame {
+      border: 3px solid var(--text-dark);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 8px 8px 0px var(--text-dark);
+      background: var(--bg-yellow);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .story-quote-card {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 16px;
+      padding: 1.2rem 1.6rem;
+      max-width: 280px;
+      box-shadow: 6px 6px 0px var(--terracotta);
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .story-content h2 {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      line-height: 1.1;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .story-content p {
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .founders-signature {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .founder-name {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--deep-teal);
+    }
+    .founder-role {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* History Timeline */
+    .history-timeline {
+      position: relative;
+      max-width: 900px;
+      margin: 4rem auto 0 auto;
+      padding: 2rem 0;
+    }
+    .timeline-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      background: var(--text-dark);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3.5rem;
+      width: 50%;
+      padding: 0 2.5rem;
+    }
+    .timeline-item.left {
+      left: 0;
+      text-align: right;
+    }
+    .timeline-item.right {
+      left: 50%;
+      text-align: left;
+    }
+    .timeline-dot {
+      position: absolute;
+      top: 10px;
+      width: 20px;
+      height: 20px;
+      background: var(--bg-yellow);
+      border: 3px solid var(--text-dark);
+      border-radius: 50%;
+      z-index: 2;
+    }
+    .timeline-item.left .timeline-dot {
+      right: -10px;
+    }
+    .timeline-item.right .timeline-dot {
+      left: -10px;
+    }
+    .timeline-card {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 14px;
+      padding: 1.4rem;
+      box-shadow: 4px 4px 0px var(--text-dark);
+    }
+    .timeline-year {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--terracotta);
+      margin-bottom: 0.3rem;
+    }
+    .timeline-card h4 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+    }
+    .timeline-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Store Locator */
+    .locator-box {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 8px 8px 0px var(--text-dark);
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 3rem;
+    }
+    .locator-search-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .input-zip {
+      flex: 1;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid var(--text-dark);
+      border-radius: 12px;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-zip:focus {
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 2px var(--bg-yellow);
+    }
+    .store-results-list {
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding-right: 0.5rem;
+    }
+    .store-card {
+      border: 1px solid #D6CEC2;
+      border-radius: 10px;
+      padding: 0.9rem;
+      background: #FAF8F5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+    }
+    .store-card:hover {
+      border-color: var(--text-dark);
+      background: #FFF;
+      box-shadow: 2px 2px 0px var(--text-dark);
+    }
+    .store-card h5 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+    .store-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .store-dist {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      color: var(--deep-teal);
+      font-size: 0.85rem;
+    }
+    .mock-map {
+      background: #DFECE5;
+      border: 2px solid var(--text-dark);
+      border-radius: 14px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background-image: radial-gradient(#2B6149 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .map-pin {
+      background: var(--terracotta);
+      color: #FFF;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.8rem;
+      box-shadow: 3px 3px 0px var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Subscription Section */
+    .subs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .sub-tier-card {
+      background: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 6px 6px 0px var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: var(--transition);
+    }
+    .sub-tier-card.featured {
+      background: #FFF9E6;
+      border: 3px solid var(--terracotta);
+      box-shadow: 8px 8px 0px var(--text-dark);
+      transform: scale(1.03);
+    }
+    .sub-featured-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--terracotta);
+      color: #FFF;
+      padding: 0.3rem 1rem;
+      border-radius: 999px;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 2px solid var(--text-dark);
+    }
+    .sub-tier-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .sub-price {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--terracotta);
+      margin-bottom: 0.2rem;
+    }
+    .sub-price span {
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .sub-savings {
+      display: inline-block;
+      background: var(--agave-green);
+      color: #FFF;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .sub-features {
+      list-style: none;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      font-size: 0.9rem;
+      flex-grow: 1;
+    }
+    .sub-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Cart Slide-Out Drawer */
+    .cart-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .cart-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -480px;
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      background: #FFF;
+      border-left: 3px solid var(--text-dark);
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+    }
+    .cart-drawer.open {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 1.5rem;
+      border-bottom: 2px solid var(--text-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-cream);
+    }
+    .cart-header h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .btn-close-cart {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      line-height: 1;
+      color: var(--text-dark);
+    }
+
+    .cart-items-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .cart-empty-message {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      border: 1px solid #D6CEC2;
+      padding: 0.8rem;
+      border-radius: 12px;
+      background: #FAF8F5;
+    }
+    .cart-item-img {
+      width: 60px;
+      height: 60px;
+      background: #EAE3D5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart-item-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.95rem;
+      line-height: 1.2;
+    }
+    .cart-item-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .qty-btn {
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--text-dark);
+      background: #FFF;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.8rem;
+    }
+    .cart-item-price {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1rem;
+      text-align: right;
+    }
+
+    .cart-footer {
+      padding: 1.5rem;
+      border-top: 2px solid var(--text-dark);
+      background: var(--bg-cream);
+    }
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    .btn-checkout {
+      width: 100%;
+      background: var(--terracotta);
+      color: #FFF;
+      border: 2px solid var(--text-dark);
+      border-radius: 999px;
+      padding: 1rem;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--text-dark);
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-checkout:hover {
+      background: var(--clay);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--text-dark);
+    }
+
+    /* Modal for Quick View / 3D Can inspect */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 1100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .product-modal {
+      background: #FFF;
+      border: 3px solid var(--text-dark);
+      border-radius: 24px;
+      max-width: 850px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 10px 10px 0px var(--text-dark);
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .modal-visual {
+      background: #F3EBDD;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      border-right: 2px solid var(--text-dark);
+    }
+    .modal-info {
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--text-dark);
+      color: #FAF6EE;
+      padding: 5rem 3rem 2rem 3rem;
+      border-top: 3px solid var(--terracotta);
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--bg-yellow);
+      margin-bottom: 1rem;
+      display: block;
+      text-decoration: none;
+    }
+    .footer-col h5 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #FFF;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .footer-links a {
+      color: #CFC5B8;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    .footer-links a:hover {
+      color: var(--bg-yellow);
+    }
+    .newsletter-input-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+    .newsletter-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 2px solid #FFF;
+      background: transparent;
+      color: #FFF;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid #332B2B;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: #9A8E80;
+    }
+
+    /* Checkout Simulation Notification */
+    .checkout-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg-yellow);
+      border: 3px solid var(--text-dark);
+      padding: 1.2rem 1.8rem;
+      border-radius: 16px;
+      box-shadow: 6px 6px 0px var(--text-dark);
+      z-index: 2000;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      display: none;
+      align-items: center;
+      gap: 0.8rem;
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { transform: translateY(40px) scale(0.9); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+      .hero-content {
+        max-width: 100%;
+        margin: 0 auto;
+      }
+      .hero-actions, .flavor-pills {
+        justify-content: center;
+      }
+      .tepache-explainer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .story-container {
+        grid-template-columns: 1fr;
+      }
+      .subs-grid {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .locator-box {
+        grid-template-columns: 1fr;
+      }
+      .footer-container {
+        grid-template-columns: 1fr 1fr;
+      }
+      .modal-overlay .product-modal {
+        grid-template-columns: 1fr;
       }
     }
-  }
-}
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #F4F7FA 0%, #E8F0F5 100%); }
-  .tab-active { background: linear-gradient(135deg, #0F3D5C, #1B6091); color: #fff; box-shadow: 0 8px 20px -8px rgba(15,61,92,.5); }
-  .tab-inactive { background: #fff; color: #0F3D5C; border: 1px solid #E1E8ED; }
-  .tab-inactive:hover { background: #F0F7FB; }
-  .row-alt:nth-child(even) { background: #F7FBFD; }
-  .badge-gold { background: linear-gradient(135deg, #D4A017, #F5D06F); color: #4a3400; }
-  .badge-emo { background: linear-gradient(135deg, #FFF3CE, #FFE199); color: #7a5a00; border: 1px solid #E8C568; }
-  .cta-primary { background: linear-gradient(135deg, #16A34A, #15803D); color: #fff; }
-  .cta-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 20px -6px rgba(22,163,74,.5); }
-  .cta-secondary { background: #fff; color: #0F3D5C; border: 1.5px solid #B8CFDD; }
-  .cta-secondary:hover { background: #F0F7FB; border-color: #0F3D5C; }
-  .price-old { text-decoration: line-through; color: #94A3B8; font-size: .85rem; }
-  .scroll-fade::-webkit-scrollbar { height: 10px; width: 10px; }
-  .scroll-fade::-webkit-scrollbar-track { background: #E1E8ED; border-radius: 10px; }
-  .scroll-fade::-webkit-scrollbar-thumb { background: #0F3D5C; border-radius: 10px; }
-  .sticky-col { position: sticky; left: 0; z-index: 5; }
-  .fade-in { animation: fadeIn .35s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
-  .check-item:hover { background: #F0F7FB; }
-  input[type="checkbox"].big { width: 22px; height: 22px; accent-color: #16A34A; cursor: pointer; }
-  .principle-card { transition: all .25s ease; }
-  .principle-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -20px rgba(15,61,92,.3); }
-  .bad { background: #FEF2F2; border-left: 3px solid #EF4444; color: #7F1D1D; }
-  .good { background: #F0FDF4; border-left: 3px solid #16A34A; color: #14532D; }
-</style>
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .btn-mobile-menu {
+        display: block;
+      }
+      .hero-title {
+        font-size: 3rem;
+      }
+      .tepache-explainer-grid {
+        grid-template-columns: 1fr;
+      }
+      .timeline-line {
+        left: 20px;
+      }
+      .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 50px;
+        padding-right: 0;
+        text-align: left !important;
+      }
+      .timeline-item .timeline-dot {
+        left: 10px !important;
+      }
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-<!-- HEADER -->
-<header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-blue to-brand-teal flex items-center justify-center text-white shadow-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h13m-13 6H4a1 1 0 01-1-1V5a1 1 0 011-1h5m0 13V4m0 0h13a1 1 0 011 1v6H9"/>
-        </svg>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span>🍍 AUTHENTIC MEXICAN TEPACHE • PREBIOTIC & ORGANIC</span>
+    <span>⚡ FREE SHIPPING ON ORDERS $40+</span>
+    <span>🇲🇽 FERMENTED STREET TRADITION SINCE 700 BC</span>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header>
+    <a href="#" class="brand-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      DE LA CALLE!
+    </a>
+
+    <ul class="nav-links">
+      <li><a class="nav-link active" onclick="scrollToSection('hero')">Mercado</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('shop')">Shop</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('explainer')">What is Tepache?</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('story')">Our Story</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('history')">History</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('locator')">Find Us</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('subscribe')">Subscribe (-15%)</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="btn-cart" onclick="toggleCartDrawer()">
+        <span>🛒</span>
+        <span>Cart</span>
+        <div class="cart-badge" id="cartCount">0</div>
+      </button>
+      <button class="btn-mobile-menu" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu (toggleable) -->
+  <div id="mobileNavDrawer" style="display:none; position:fixed; top:85px; left:0; width:100%; background:var(--bg-cream); border-bottom:3px solid var(--text-dark); padding:1.5rem; z-index:98; flex-direction:column; gap:1rem; box-shadow:0 10px 20px rgba(0,0,0,0.1);">
+    <a class="nav-link" onclick="scrollToSection('shop'); toggleMobileNav()">Shop Flavors</a>
+    <a class="nav-link" onclick="scrollToSection('explainer'); toggleMobileNav()">What is Tepache?</a>
+    <a class="nav-link" onclick="scrollToSection('story'); toggleMobileNav()">Our Story</a>
+    <a class="nav-link" onclick="scrollToSection('history'); toggleMobileNav()">History 700 BC</a>
+    <a class="nav-link" onclick="scrollToSection('locator'); toggleMobileNav()">Find in Stores</a>
+    <a class="nav-link" onclick="scrollToSection('subscribe'); toggleMobileNav()">Subscribe & Save</a>
+  </div>
+
+  <!-- Main Hero Section with 3D Can Canvas -->
+  <div class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-tagline">
+        <span>🇲🇽</span> Mexico City Heritage • Fermented Goodness
       </div>
+      <h1 class="hero-title">
+        THE SOUL OF THE <span class="accent">STREET.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Certified Organic, crisp Mexican sparkling beverage fermented from fresh pineapples, turbinado sugar, and warm spices. Under 40 calories & loaded with natural prebiotics.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollToSection('shop')">
+          <span>Taste All 7 Flavors</span> ➔
+        </button>
+        <button class="btn-secondary" onclick="openCanModal(selectedFlavorIndex)">
+          <span>Explore 3D Can</span> 🔍
+        </button>
+      </div>
+
+      <!-- Real-time 3D Flavor Switcher Pills -->
+      <div class="flavor-selector-wrap">
+        <span class="flavor-selector-label">Rotate & Switch 3D Can:</span>
+        <div class="flavor-pills" id="heroFlavorPills">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- WebGL Three.js Container -->
+    <div class="hero-3d-wrap">
+      <div id="webgl-container"></div>
+      
+      <div class="flavor-floating-badge" id="activeBadgeCard">
+        <h4 id="activeBadgeName">Spiced Pineapple</h4>
+        <p id="activeBadgeSub">Original Mercado Recipe • 35 Cals</p>
+      </div>
+
+      <div class="can-3d-controls-hint">
+        <span>🔄 Drag to spin 3D Can</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Retailers Ticker -->
+  <div class="retailers-bar">
+    <div class="retailers-heading">Available at thousands of markets nationwide</div>
+    <div class="ticker-wrapper">
+      <div class="ticker-track">
+        <div class="ticker-item">WHOLE FOODS MARKET <span class="star">★</span></div>
+        <div class="ticker-item">SPROUTS FARMERS MARKET <span class="star">★</span></div>
+        <div class="ticker-item">TARGET <span class="star">★</span></div>
+        <div class="ticker-item">EREWHON ORGANIC <span class="star">★</span></div>
+        <div class="ticker-item">KROGER <span class="star">★</span></div>
+        <div class="ticker-item">WEGMANS <span class="star">★</span></div>
+        <div class="ticker-item">TRADER JOE'S <span class="star">★</span></div>
+        <div class="ticker-item">LOCAL TAQUERÍAS <span class="star">★</span></div>
+        <!-- Duplicated for continuous marquee -->
+        <div class="ticker-item">WHOLE FOODS MARKET <span class="star">★</span></div>
+        <div class="ticker-item">SPROUTS FARMERS MARKET <span class="star">★</span></div>
+        <div class="ticker-item">TARGET <span class="star">★</span></div>
+        <div class="ticker-item">EREWHON ORGANIC <span class="star">★</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What is Tepache Explainer Section -->
+  <section id="explainer">
+    <div class="section-header">
+      <span class="section-eyebrow">Centuries of Tradition</span>
+      <h2 class="section-title">WHAT IS TEPACHE?</h2>
+      <p class="section-subtitle">
+        Tepache (teh-PAH-chay) is Mexico’s treasured prebiotic pineapple brew, poured cold on street corners from plastic barrels into iced bags. We brought it modern.
+      </p>
+    </div>
+
+    <div class="tepache-explainer-grid">
+      <div class="explainer-card">
+        <div class="card-icon">🍍</div>
+        <h3>Organic Pineapples</h3>
+        <p>Real whole pineapples fermented with turbinado sugar, canela (cinnamon), and fragrant botanicals.</p>
+      </div>
+      <div class="explainer-card">
+        <div class="card-icon">🦠</div>
+        <h3>Gut-Loving Prebiotics</h3>
+        <p>Naturally fermented to feed healthy microbiota, gently aiding digestion with every fizzy sip.</p>
+      </div>
+      <div class="explainer-card">
+        <div class="card-icon">⚡</div>
+        <h3>Under 40 Calories</h3>
+        <p>No artificial sweeteners, no stevia aftertaste. Just certified organic fruit puree and street wisdom.</p>
+      </div>
+      <div class="explainer-card">
+        <div class="card-icon">🇲🇽</div>
+        <h3>Mercado Craft</h3>
+        <p>Honoring the street-side tepacheros who have sustained Mexican neighborhoods for generations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="shop" style="background:#FFF8F0; max-width:100%; border-top:2px solid var(--text-dark); border-bottom:2px solid var(--text-dark);">
+    <div style="max-width:1300px; margin:0 auto;">
+      <div class="section-header">
+        <span class="section-eyebrow">La Tiendita</span>
+        <h2 class="section-title">EXPLORE THE LINEUP</h2>
+        <p class="section-subtitle">7 authentic single flavors & 2 curated party variety packs. 12 cans per case.</p>
+      </div>
+
+      <div class="shop-filters">
+        <button class="filter-btn active" onclick="filterShop('all', this)">All Drinks</button>
+        <button class="filter-btn" onclick="filterShop('singles', this)">Single Flavors (7)</button>
+        <button class="filter-btn" onclick="filterShop('packs', this)">Variety Packs (2)</button>
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story Section -->
+  <div class="story-section" id="story">
+    <div class="story-container">
+      <div class="story-images">
+        <div class="story-frame">
+          <div style="font-size:5rem;">🍍🇲🇽✨</div>
+          <div class="story-quote-card">
+            "We spent years capturing the warmth of our grandmother's fermented tepache recipes."
+            <div style="margin-top:0.5rem; color:var(--terracotta); font-size:0.75rem;">— RAFA & ALEX, FOUNDERS</div>
+          </div>
+        </div>
+      </div>
+      <div class="story-content">
+        <span class="section-eyebrow">Roots & Authenticity</span>
+        <h2>CRAFTED BY RAFA & ALEX</h2>
+        <p>
+          Rafael Martin Del Campo grew up in Mexico City, watching street vendors ladle refreshing, spiced tepache from wooden barrels on sunny afternoons. Paired with food scientist and beverage veteran Alex Matthews, they set out to preserve Mexico's most iconic beverage.
+        </p>
+        <p>
+          De La Calle celebrates street culture, colorful markets, and traditional fermentation, bringing healthy, joyful, low-sugar refreshments to kitchen tables worldwide without compromising on heritage.
+        </p>
+        <div class="founders-signature">
+          <div>
+            <div class="founder-name">Rafael Martin Del Campo</div>
+            <div class="founder-role">Co-Founder & R&D Master</div>
+          </div>
+          <div>
+            <div class="founder-name">Alex Matthews</div>
+            <div class="founder-role">Co-Founder & Creative Director</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Timeline -->
+  <section id="history">
+    <div class="section-header">
+      <span class="section-eyebrow">From Pre-Columbian Times to Today</span>
+      <h2 class="section-title">THE TIMELINE OF TEPACHE</h2>
+      <p class="section-subtitle">A sacred fermentation journey spanning centuries.</p>
+    </div>
+
+    <div class="history-timeline">
+      <div class="timeline-line"></div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-year">700 BC</div>
+          <h4>The Nahua & Mayan Roots</h4>
+          <p>The name Tepache originates from the Nahuatl word <em>tepiatl</em> ("drink made with corn"). Indigenous cultures fermented sacred grain brews for ritual feasts.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-year">1500s</div>
+          <h4>Pineapple Revolution</h4>
+          <p>Pineapple skin fermentation replaced corn as Caribbean fruits spread through central Mexico, seasoned with cinnamon bark, star anise, and piloncillo.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-year">1950s</div>
+          <h4>Golden Age of Street Mercados</h4>
+          <p>Neighborhood Tepacherías become social cornerstones in Mexico City and Guadalajara, served with chili powder rims in tied plastic bags with straws.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-year">2021</div>
+          <h4>De La Calle Launches Nationwide</h4>
+          <p>Rafa and Alex bottle authentic canned Tepache, launching across Whole Foods Market and natural grocers across the United States.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Store Locator Section -->
+  <section id="locator">
+    <div class="section-header">
+      <span class="section-eyebrow">Local Taquerías & Grocers</span>
+      <h2 class="section-title">FIND US IN YOUR HOOD</h2>
+      <p class="section-subtitle">Enter your zip code to discover ice-cold De La Calle near you.</p>
+    </div>
+
+    <div class="locator-box">
+      <div class="locator-search-form">
+        <div class="input-group">
+          <input type="text" id="zipSearchInput" class="input-zip" placeholder="Enter ZIP (e.g. 90291, 10001, 78701)" value="90291">
+          <button class="btn-primary" onclick="searchStores()" style="padding:0.8rem 1.4rem;">Search</button>
+        </div>
+        <div class="store-results-list" id="storeResults">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="mock-map">
+        <div class="map-pin">📍 Whole Foods Market (0.4 mi)</div>
+        <div style="font-size:0.75rem; color:var(--deep-teal); font-weight:700; margin-top:0.8rem;">
+          🗺️ Interactive Store Map • Stocking All 7 Flavors
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscribe & Save Section -->
+  <section id="subscribe" style="background:#FFF; max-width:100%; border-top:2px solid var(--text-dark);">
+    <div style="max-width:1200px; margin:0 auto;">
+      <div class="section-header">
+        <span class="section-eyebrow">Club De La Calle</span>
+        <h2 class="section-title">SUBSCRIBE & SAVE UP TO 15%</h2>
+        <p class="section-subtitle">Never run dry. Swap flavors, adjust cadence, or pause anytime in one click.</p>
+      </div>
+
+      <div class="subs-grid">
+        <div class="sub-tier-card">
+          <h3>El Solito</h3>
+          <div class="sub-price">$34 <span>/ 12-pack</span></div>
+          <div class="sub-savings">Save 10% Every Month</div>
+          <ul class="sub-features">
+            <li>✔ 1 Case (12 cans) shipped monthly</li>
+            <li>✔ Pick any single flavor</li>
+            <li>✔ Free US shipping</li>
+            <li>✔ Pause or cancel anytime</li>
+          </ul>
+          <button class="btn-secondary" onclick="addSubscriptionToCart('El Solito 12-Pack', 34)">Subscribe Now</button>
+        </div>
+
+        <div class="sub-tier-card featured">
+          <div class="sub-featured-badge">MOST POPULAR</div>
+          <h3>La Familia</h3>
+          <div class="sub-price">$62 <span>/ 24-pack</span></div>
+          <div class="sub-savings">Save 15% + Free Perks</div>
+          <ul class="sub-features">
+            <li>✔ 2 Cases (24 cans) delivered every 4 weeks</li>
+            <li>✔ Mix & Match up to 2 variety packs</li>
+            <li>✔ Free priority refrigerated delivery</li>
+            <li>✔ Free enamel pin & Mercado tote bag</li>
+          </ul>
+          <button class="btn-primary" onclick="addSubscriptionToCart('La Familia 24-Pack', 62)">Subscribe Now</button>
+        </div>
+
+        <div class="sub-tier-card">
+          <h3>Fiesta Pro</h3>
+          <div class="sub-price">$115 <span>/ 48-pack</span></div>
+          <div class="sub-savings">Save 20% Office & Events</div>
+          <ul class="sub-features">
+            <li>✔ 4 Cases (48 cans) delivered bi-weekly/monthly</li>
+            <li>✔ Full flavor spectrum unlocked</li>
+            <li>✔ Dedicated account manager</li>
+            <li>✔ Complimentary cocktail syrup kit</li>
+          </ul>
+          <button class="btn-secondary" onclick="addSubscriptionToCart('Fiesta Pro 48-Pack', 115)">Subscribe Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide-Out Functional Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cartOverlay" onclick="toggleCartDrawer()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3><span>🛒</span> YOUR CART</h3>
+      <button class="btn-close-cart" onclick="toggleCartDrawer()">×</button>
+    </div>
+
+    <div class="cart-items-container" id="cartItemsList">
+      <!-- Items dynamically injected -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>SUBTOTAL</span>
+        <span id="cartSubtotalPrice">$0.00</span>
+      </div>
+      <button class="btn-checkout" onclick="triggerCheckout()">
+        <span>PROCEED TO CHECKOUT</span> ➔
+      </button>
+      <div style="text-align:center; font-size:0.75rem; color:var(--text-muted); margin-top:0.6rem;">
+        🔒 Demo Checkout • No real card needed
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick View / 3D Detail Modal -->
+  <div class="modal-overlay" id="productModal" onclick="closeCanModal(event)">
+    <div class="product-modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeCanModal()">×</button>
+      <div class="modal-visual" id="modalVisualBox">
+        <!-- Injected visual SVG/Canvas representation -->
+      </div>
+      <div class="modal-info">
+        <span class="section-eyebrow" id="modalCategory">Certified Organic</span>
+        <h2 id="modalTitle" style="font-family:var(--font-heading); font-size:1.8rem; margin-bottom:0.5rem;">Flavor Name</h2>
+        <p id="modalDesc" style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">Product Description</p>
+        
+        <div style="background:#FAF6EE; padding:1rem; border-radius:12px; border:1px solid #E0D6C3; margin-bottom:1.5rem;">
+          <h5 style="font-family:var(--font-heading); font-size:0.85rem; margin-bottom:0.4rem; text-transform:uppercase;">NUTRITIONAL HIGHLIGHTS</h5>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); text-align:center; gap:0.5rem; font-size:0.85rem;">
+            <div><strong id="modalCals">35</strong><br><span style="font-size:0.7rem; color:var(--text-muted);">CALORIES</span></div>
+            <div><strong>5g</strong><br><span style="font-size:0.7rem; color:var(--text-muted);">SUGAR</span></div>
+            <div><strong>PREBIOTIC</strong><br><span style="font-size:0.7rem; color:var(--text-muted);">FERMENT</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+          <div>
+            <div style="font-family:var(--font-heading); font-size:1.5rem; font-weight:800;" id="modalPrice">$37.99</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Pack of 12 (12 fl oz cans)</div>
+          </div>
+          <button class="btn-primary" id="modalAddBtn">Add 12-Pack</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Toast Notification -->
+  <div class="checkout-toast" id="checkoutToast">
+    <span>🎉</span>
+    <div>
+      <div>ORDER SIMULATED!</div>
+      <div style="font-size:0.75rem; font-weight:500;">Thank you for embracing Mexican Tepache tradition!</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
       <div>
-        <h1 class="text-lg sm:text-xl font-bold text-brand-blue leading-tight">tableau_produits_ux_copy.xlsx</h1>
-        <p class="text-xs text-slate-500">Fichier Excel • 3 onglets • Orienté conversion</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-brand-greenDark bg-green-50 border border-green-200 px-3 py-1.5 rounded-full">
-        <span class="w-2 h-2 bg-brand-green rounded-full animate-pulse"></span> Version finalisée
-      </span>
-      <button class="cta-primary px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-        </svg>
-        Télécharger
-      </button>
-    </div>
-  </div>
-
-  <!-- TABS -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-3">
-    <div class="flex flex-wrap gap-2">
-      <button data-tab="products" class="tab-btn tab-active px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
-        <span class="w-5 h-5 rounded-md bg-white/20 flex items-center justify-center text-xs font-bold">1</span>
-        Tableau Produits
-      </button>
-      <button data-tab="guide" class="tab-btn tab-inactive px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
-        <span class="w-5 h-5 rounded-md bg-brand-blue/10 flex items-center justify-center text-xs font-bold">2</span>
-        Guide UX Copy
-      </button>
-      <button data-tab="checklist" class="tab-btn tab-inactive px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
-        <span class="w-5 h-5 rounded-md bg-brand-blue/10 flex items-center justify-center text-xs font-bold">3</span>
-        Checklist Publication
-      </button>
-    </div>
-  </div>
-</header>
-
-<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-
-<!-- ============= TAB 1 : PRODUCTS ============= -->
-<section id="tab-products" class="tab-content fade-in">
-  <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
-    <div>
-      <h2 class="text-2xl sm:text-3xl font-bold text-brand-blue">Onglet 1 — Tableau Produits</h2>
-      <p class="text-sm text-slate-600 mt-1">10 produits · 11 colonnes optimisées conversion · Volets figés</p>
-    </div>
-    <div class="flex gap-2 text-xs">
-      <span class="px-2.5 py-1 bg-white border border-slate-200 rounded-md text-slate-700 font-medium">🎨 Palette bleu/vert</span>
-      <span class="px-2.5 py-1 bg-white border border-slate-200 rounded-md text-slate-700 font-medium">🏆 Badges dorés</span>
-      <span class="px-2.5 py-1 bg-white border border-slate-200 rounded-md text-slate-700 font-medium">🟢 CTA vert conversion</span>
-    </div>
-  </div>
-
-  <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-    <div class="overflow-x-auto scroll-fade">
-      <table class="min-w-[1400px] w-full text-sm">
-        <thead>
-          <tr class="bg-gradient-to-r from-brand-blue to-brand-blueLight text-white text-xs uppercase tracking-wide">
-            <th class="sticky-col bg-brand-blue px-3 py-3 text-left font-semibold">Réf.</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[180px]">Nom (accroche)</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[220px]">Sous-titre UX</th>
-            <th class="px-3 py-3 text-left font-semibold">Catégorie</th>
-            <th class="px-3 py-3 text-left font-semibold">Prix</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[200px]">Bénéfice clé</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[160px]">Preuve sociale</th>
-            <th class="px-3 py-3 text-left font-semibold">Badge</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[180px]">CTA principal</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[150px]">CTA secondaire</th>
-            <th class="px-3 py-3 text-left font-semibold min-w-[200px]">Réassurance</th>
-          </tr>
-        </thead>
-        <tbody id="products-body" class="text-slate-700"></tbody>
-      </table>
-    </div>
-    <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
-      <span>10 lignes affichées · Volets figés sur l'en-tête et la colonne Réf.</span>
-      <span class="font-medium text-brand-blue">Feuille active : Tableau Produits</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============= TAB 2 : GUIDE ============= -->
-<section id="tab-guide" class="tab-content hidden">
-  <div class="mb-5">
-    <h2 class="text-2xl sm:text-3xl font-bold text-brand-blue">Onglet 2 — Guide UX Copy</h2>
-    <p class="text-sm text-slate-600 mt-1">Les 10 règles d'or du copy commercial, avec exemples ❌ vs ✅</p>
-  </div>
-  <div id="guide-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
-</section>
-
-<!-- ============= TAB 3 : CHECKLIST ============= -->
-<section id="tab-checklist" class="tab-content hidden">
-  <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
-    <div>
-      <h2 class="text-2xl sm:text-3xl font-bold text-brand-blue">Onglet 3 — Checklist Avant Publication</h2>
-      <p class="text-sm text-slate-600 mt-1">12 points de contrôle qualité à valider pour chaque fiche produit</p>
-    </div>
-    <div class="text-right">
-      <div class="text-3xl font-bold text-brand-green" id="check-score">0 / 12</div>
-      <div class="text-xs text-slate-500">Points validés</div>
-    </div>
-  </div>
-
-  <div class="w-full bg-slate-200 rounded-full h-2 mb-6 overflow-hidden">
-    <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-green to-brand-greenDark transition-all duration-500" style="width:0%"></div>
-  </div>
-
-  <div id="checklist-container" class="bg-white rounded-2xl shadow-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden"></div>
-
-  <div class="mt-6 p-5 bg-gradient-to-r from-brand-cream to-white border border-brand-goldLight rounded-2xl flex items-start gap-3">
-    <div class="w-10 h-10 rounded-full badge-gold flex items-center justify-center text-lg flex-shrink-0">💡</div>
-    <div>
-      <h4 class="font-semibold text-brand-blue">Astuce Pro</h4>
-      <p class="text-sm text-slate-700 mt-1">Ne publiez jamais une fiche produit sans avoir coché <strong>au minimum 10/12 items</strong>. Un CTA à la 1ʳᵉ personne + une preuve sociale chiffrée augmentent en moyenne le taux de conversion de <strong>+27%</strong>.</p>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer class="max-w-7xl mx-auto px-4 sm:px-6 py-8 text-center text-xs text-slate-500">
-  Aperçu interactif du fichier <strong>tableau_produits_ux_copy.xlsx</strong> — Conçu pour la conversion.
-</footer>
-
-<script>
-// ============ DATA ============
-const products = [
-  { ref:"P001", nom:"Diffuseur Zen™", sub:"Transformez votre salon en havre de paix en 30 secondes", cat:"Bien-être", price:"49€", old:"79€", benefit:"Endormez-vous 2× plus vite grâce à 6 huiles apaisantes", social:"⭐ 4.9/5 · 2 847 avis", badge:"BEST-SELLER", cta:"Je respire mieux →", cta2:"Voir la démo", reassure:"✓ Livraison 48h · Retour 30j offert" },
-  { ref:"P002", nom:"Coussin Lombaire ErgoFit", sub:"Dites adieu aux douleurs de dos, même après 8h assis", cat:"Ergonomie", price:"39€", old:"59€", benefit:"Soulagement immédiat validé par 87% des kinés", social:"👥 12 000+ acheteurs", badge:"TENDANCE", cta:"Je soulage mon dos →", cta2:"Comparer", reassure:"✓ Garantie 2 ans · Essai 60j" },
-  { ref:"P003", nom:"Lampe Aurora Sunrise", sub:"Réveillez-vous naturellement, sans stress ni alarme", cat:"Sommeil", price:"89€", old:"129€", benefit:"Simulation solaire progressive sur 30 min", social:"⭐ 4.8/5 · 1 240 avis", badge:"COUP DE ❤️", cta:"J'améliore mes matins →", cta2:"Voir les couleurs", reassure:"✓ Économe en énergie · SAV FR" },
-  { ref:"P004", nom:"Gourde ThermoPure 750", sub:"Eau glacée 24h, café chaud 12h — où que vous soyez", cat:"Hydratation", price:"29€", old:"45€", benefit:"Double paroi inox — zéro plastique, 100% pure", social:"🌍 Adoptée par 50 000 sportifs", badge:"ÉCO", cta:"Je m'hydrate mieux →", cta2:"Choisir ma couleur", reassure:"✓ Sans BPA · Garantie à vie" },
-  { ref:"P005", nom:"Casque FocusPro X", sub:"Concentrez-vous à 100%, même dans un open-space bruyant", cat:"Audio", price:"149€", old:"199€", benefit:"Réduction de bruit active -35 dB", social:"⭐ 4.7/5 · 3 500 avis", badge:"NOUVEAU", cta:"Je m'isole du bruit →", cta2:"Écouter un extrait", reassure:"✓ Autonomie 40h · Test 30j" },
-  { ref:"P006", nom:"Sérum GlowVit C", sub:"Une peau lumineuse dès le 7ᵉ jour, garantie", cat:"Beauté", price:"34€", old:"49€", benefit:"Vitamine C stabilisée 15% + acide hyaluronique", social:"💚 94% de peaux plus lumineuses", badge:"BEST-SELLER", cta:"Je révèle mon éclat →", cta2:"Voir la routine", reassure:"✓ Vegan · Fabriqué en France" },
-  { ref:"P007", nom:"Sac Nomad Weekender", sub:"3 jours d'aventure dans un seul sac, mains libres", cat:"Voyage", price:"79€", old:"119€", benefit:"12 poches intelligentes + compartiment laptop 16\"", social:"✈️ 8 000+ globe-trotters conquis", badge:"TENDANCE", cta:"Je prépare mon voyage →", cta2:"Voir capacités", reassure:"✓ Waterproof · Garantie 5 ans" },
-  { ref:"P008", nom:"Yoga Mat AlignPro", sub:"Chaque posture parfaite, sans jamais glisser", cat:"Sport", price:"59€", old:"89€", benefit:"Marqueurs d'alignement + adhérence pro", social:"🧘 Recommandé par 200 profs", badge:"COUP DE ❤️", cta:"Je démarre ma séance →", cta2:"Voir le guide", reassure:"✓ Antibactérien · Sac inclus" },
-  { ref:"P009", nom:"Chargeur MagFlow 3-en-1", sub:"Iphone, Watch, AirPods : tout rechargé en une nuit", cat:"Tech", price:"69€", old:"99€", benefit:"MagSafe 15W + Qi certifié Apple", social:"⭐ 4.9/5 · 1 890 avis", badge:"NOUVEAU", cta:"Je désencombre mon bureau →", cta2:"Compatibilités", reassure:"✓ Certifié MFi · SAV réactif" },
-  { ref:"P010", nom:"Théière Infusia Glass", sub:"Un thé parfait à chaque tasse, sans effort", cat:"Cuisine", price:"39€", old:"55€", benefit:"Infuseur amovible + verre borosilicate résistant", social:"🍃 Élue produit de l'année 2024", badge:"ÉDITION LIMITÉE", cta:"Je m'offre ce moment →", cta2:"Découvrir les thés", reassure:"✓ Passe au lave-vaisselle" }
-];
-
-const principles = [
-  { n:1, titre:"L'accroche vend le bénéfice, pas le produit", desc:"Le client n'achète pas un objet, il achète une transformation.", bad:"Diffuseur d'huiles essentielles 300ml", good:"Transformez votre salon en havre de paix en 30 secondes" },
-  { n:2, titre:"L'ancrage de prix multiplie la valeur perçue", desc:"Un prix barré à côté du prix actuel révèle immédiatement l'économie.", bad:"49€", good:"49€ ~~79€~~ (-38%)" },
-  { n:3, titre:"La preuve sociale doit être chiffrée", desc:"Les chiffres précis inspirent 3× plus confiance que le vague.", bad:"Beaucoup de clients satisfaits", good:"⭐ 4.9/5 · 2 847 avis vérifiés" },
-  { n:4, titre:"Le CTA parle à la 1ʳᵉ personne", desc:"« Je » engage le client dans l'action, « Ajouter » ne fait que décrire.", bad:"Ajouter au panier", good:"Je respire mieux →" },
-  { n:5, titre:"Le badge émotionnel crée l'urgence", desc:"BEST-SELLER, TENDANCE, ÉDITION LIMITÉE : ils déclenchent le FOMO.", bad:"Disponible", good:"🔥 BEST-SELLER · Stock limité" },
-  { n:6, titre:"Le ton est enthousiaste, jamais agressif", desc:"On invite, on n'oblige pas. Le point d'exclamation reste rare.", bad:"ACHETEZ MAINTENANT !!! DERNIÈRE CHANCE !!!", good:"Ce moment vous attend — offrez-le-vous 💚" },
-  { n:7, titre:"La réassurance lève les 3 dernières objections", desc:"Livraison, retour, garantie : les objections tuent le panier.", bad:"Livraison possible", good:"✓ Livraison 48h · Retour 30j · Garantie 2 ans" },
-  { n:8, titre:"Chaque copy est scannable en 3 secondes", desc:"Le client lit en diagonale : structurez avec des puces et des icônes.", bad:"Long paragraphe descriptif sans hiérarchie visuelle...", good:"✓ Bénéfice 1  ✓ Bénéfice 2  ✓ Bénéfice 3" },
-  { n:9, titre:"Le sous-titre promet, le bénéfice prouve", desc:"L'un séduit émotionnellement, l'autre rassure rationnellement.", bad:"Produit de haute qualité", good:"Endormez-vous 2× plus vite grâce à 6 huiles apaisantes" },
-  { n:10, titre:"Un CTA secondaire à basse friction", desc:"Tous les visiteurs ne sont pas prêts à acheter : offrez une porte d'entrée douce.", bad:"[Seul bouton : Acheter]", good:"Je respire mieux → · Voir la démo" }
-];
-
-const checklist = [
-  "L'accroche exprime clairement un bénéfice client (pas une caractéristique)",
-  "Le sous-titre UX contient une promesse concrète et mesurable",
-  "Un prix ancré (barré) est visible pour révéler l'économie réalisée",
-  "Le bénéfice clé répond à la question « Why buy now? »",
-  "Une preuve sociale chiffrée est présente (note, nombre d'avis, %)",
-  "Le badge émotionnel est cohérent avec la réalité produit",
-  "Le CTA principal est formulé à la 1ʳᵉ personne du singulier",
-  "Un CTA secondaire à basse friction est proposé",
-  "La micro-copy de réassurance couvre livraison / retour / garantie",
-  "Le ton reste enthousiaste, jamais agressif ni culpabilisant",
-  "La fiche est scannable en moins de 5 secondes",
-  "Aucune faute d'orthographe, de typo ou d'incohérence de prix"
-];
-
-// ============ RENDER PRODUCTS ============
-const badgeMap = {
-  "BEST-SELLER": "badge-gold",
-  "TENDANCE": "badge-emo",
-  "COUP DE ❤️": "bg-pink-100 text-pink-800 border border-pink-200",
-  "NOUVEAU": "bg-blue-100 text-brand-blue border border-blue-200",
-  "ÉCO": "bg-emerald-100 text-emerald-800 border border-emerald-200",
-  "ÉDITION LIMITÉE": "bg-purple-100 text-purple-800 border border-purple-200"
-};
-
-const pbody = document.getElementById('products-body');
-products.forEach((p, i) => {
-  const bClass = badgeMap[p.badge] || 'badge-gold';
-  const rowBg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50';
-  pbody.insertAdjacentHTML('beforeend', `
-    <tr class="${rowBg} hover:bg-blue-50/50 transition-colors border-b border-slate-100">
-      <td class="sticky-col ${rowBg} px-3 py-3 font-mono text-xs font-semibold text-brand-blue">${p.ref}</td>
-      <td class="px-3 py-3 font-semibold text-brand-blue">${p.nom}</td>
-      <td class="px-3 py-3 text-slate-600 italic">${p.sub}</td>
-      <td class="px-3 py-3"><span class="inline-block px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-700">${p.cat}</span></td>
-      <td class="px-3 py-3">
-        <div class="font-bold text-brand-blue">${p.price}</div>
-        <div class="price-old">${p.old}</div>
-      </td>
-      <td class="px-3 py-3 text-slate-700 text-xs leading-relaxed">${p.benefit}</td>
-      <td class="px-3 py-3 text-xs font-medium text-slate-700">${p.social}</td>
-      <td class="px-3 py-3"><span class="inline-block px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wide ${bClass}">${p.badge}</span></td>
-      <td class="px-3 py-3"><button class="cta-primary px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap">${p.cta}</button></td>
-      <td class="px-3 py-3"><button class="cta-secondary px-3 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap">${p.cta2}</button></td>
-      <td class="px-3 py-3 text-xs text-brand-greenDark font-medium">${p.reassure}</td>
-    </tr>
-  `);
-});
-
-// ============ RENDER GUIDE ============
-const gGrid = document.getElementById('guide-grid');
-principles.forEach(p => {
-  gGrid.insertAdjacentHTML('beforeend', `
-    <div class="principle-card bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-      <div class="flex items-start gap-3 mb-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-blue to-brand-teal text-white flex items-center justify-center font-bold flex-shrink-0">${p.n}</div>
-        <div>
-          <h3 class="font-bold text-brand-blue leading-tight">${p.titre}</h3>
-          <p class="text-xs text-slate-600 mt-1">${p.desc}</p>
+        <a href="#" class="footer-logo">DE LA CALLE!</a>
+        <p style="font-size:0.9rem; color:#CFC5B8; margin-bottom:1.5rem; max-width:300px;">
+          Authentic Prebiotic Tepache. Fermented in Mexico with wild pineapples, pure turbinado, and botanical spices.
+        </p>
+        <div style="font-size:1.2rem; display:flex; gap:1rem;">
+          <span>🇲🇽</span><span>🍍</span><span>🌶️</span><span>✨</span>
         </div>
       </div>
-      <div class="space-y-2 mt-4">
-        <div class="bad px-3 py-2 rounded-lg text-xs">
-          <span class="font-bold mr-1">❌</span> ${p.bad}
-        </div>
-        <div class="good px-3 py-2 rounded-lg text-xs">
-          <span class="font-bold mr-1">✅</span> ${p.good}
-        </div>
+
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <ul class="footer-links">
+          <li><a onclick="scrollToSection('shop')">Single Cans (7 Flavors)</a></li>
+          <li><a onclick="scrollToSection('shop')">Fiesta Variety Packs</a></li>
+          <li><a onclick="scrollToSection('subscribe')">Subscription Club</a></li>
+          <li><a onclick="scrollToSection('locator')">Find in Retail</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Heritage</h5>
+        <ul class="footer-links">
+          <li><a onclick="scrollToSection('story')">Our Founders Rafa & Alex</a></li>
+          <li><a onclick="scrollToSection('history')">700 BC Nahua Timeline</a></li>
+          <li><a onclick="scrollToSection('explainer')">What is Tepache?</a></li>
+          <li><a href="#press">Press & Mercado Stories</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Join La Familia</h5>
+        <p style="font-size:0.85rem; color:#CFC5B8;">Sign up for secret flavor drops, taco pairings, and 10% off your first 12-pack.</p>
+        <form class="newsletter-input-group" onsubmit="event.preventDefault(); alert('Bienvenido! You are subscribed to De La Calle news.');">
+          <input type="email" required placeholder="your.email@mercadomail.com" class="newsletter-input">
+          <button type="submit" class="btn-primary" style="padding:0.6rem 1.2rem; font-size:0.85rem;">Join</button>
+        </form>
       </div>
     </div>
-  `);
-});
 
-// ============ RENDER CHECKLIST ============
-const cContainer = document.getElementById('checklist-container');
-checklist.forEach((item, i) => {
-  cContainer.insertAdjacentHTML('beforeend', `
-    <label class="check-item flex items-center gap-4 px-5 py-4 cursor-pointer transition-colors">
-      <input type="checkbox" class="big check-input" data-idx="${i}">
-      <span class="w-8 h-8 rounded-full bg-brand-bg border border-slate-200 flex items-center justify-center text-xs font-bold text-brand-blue flex-shrink-0">${(i+1).toString().padStart(2,'0')}</span>
-      <span class="text-sm text-slate-800 font-medium flex-1">${item}</span>
-    </label>
-  `);
-});
+    <div class="footer-bottom">
+      <div>© 2025 De La Calle, Inc. All rights reserved. Craft demonstration inspired by authentic Tepache.</div>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#" style="color:#9A8E80; text-decoration:none;">Privacy Policy</a>
+        <a href="#" style="color:#9A8E80; text-decoration:none;">Terms of Service</a>
+        <a href="#" style="color:#9A8E80; text-decoration:none;">Contact Us</a>
+      </div>
+    </div>
+  </footer>
 
-const scoreEl = document.getElementById('check-score');
-const barEl = document.getElementById('progress-bar');
-document.querySelectorAll('.check-input').forEach(cb => {
-  cb.addEventListener('change', () => {
-    const total = document.querySelectorAll('.check-input:checked').length;
-    scoreEl.textContent = `${total} / 12`;
-    barEl.style.width = (total/12*100) + '%';
-    scoreEl.classList.toggle('text-brand-green', total >= 10);
-    scoreEl.classList.toggle('text-brand-gold', total < 10 && total >= 6);
-    scoreEl.classList.toggle('text-slate-400', total < 6);
-  });
-});
+  <!-- Core JavaScript: Three.js 3D Engine, SVG Generators & Store State -->
+  <script>
+    /* ==========================================================
+       1. DATA DEFINITIONS (7 FLAVORS + 2 VARIETY PACKS)
+       ========================================================== */
+    const FLAVORS = [
+      {
+        id: 'spiced-pineapple',
+        name: 'Spiced Pineapple',
+        tagline: 'The Original Mercado Classic',
+        desc: 'Traditional recipe brewed with whole pineapple rind, organic turbinado sugar, Mexican canela (cinnamon), and a dash of black pepper and clove.',
+        calories: 35,
+        type: 'singles',
+        colorHex: '#FFB800',
+        secondaryColor: '#004D47',
+        accentColor: '#D84A38',
+        price: 37.99,
+        badge: 'Bestseller'
+      },
+      {
+        id: 'strawberry-citrus',
+        name: 'Strawberry Citrus',
+        tagline: 'Fresca y Limón',
+        desc: 'Sun-ripened Mexican strawberries infused with tart key lime and sweet Meyer lemon puree over fermented pineapple fizziness.',
+        calories: 38,
+        type: 'singles',
+        colorHex: '#E60067',
+        secondaryColor: '#FFD23F',
+        accentColor: '#2B6149',
+        price: 37.99,
+        badge: 'Fan Favorite'
+      },
+      {
+        id: 'mandarin-refresco',
+        name: 'Mandarin Refresco',
+        tagline: 'Crisp Citrus Fiesta',
+        desc: 'Zesty Mexican mandarins and Valencia orange peel bursting with sunlit brightness and gentle effervescence.',
+        calories: 35,
+        type: 'singles',
+        colorHex: '#FF6B1A',
+        secondaryColor: '#0A2540',
+        accentColor: '#FFD23F',
+        price: 37.99,
+        badge: 'Award Winner'
+      },
+      {
+        id: 'mango-chili',
+        name: 'Mango Chili',
+        tagline: 'Sweet Mango with Piquín Kick',
+        desc: 'Ripe Ataulfo mango nectar spiked with a mild kick of red chili piquín pepper and sea salt.',
+        calories: 40,
+        type: 'singles',
+        colorHex: '#FF9E00',
+        secondaryColor: '#B73225',
+        accentColor: '#FAF6EE',
+        price: 37.99,
+        badge: 'Bold Taste'
+      },
+      {
+        id: 'prickly-pear',
+        name: 'Prickly Pear',
+        tagline: 'Tuna Silvestre Cactus Fruit',
+        desc: 'Vibrant desert cactus fruit (tuna) offering luscious watermelon-berry notes and rich pink antioxidants.',
+        calories: 36,
+        type: 'singles',
+        colorHex: '#B80D57',
+        secondaryColor: '#2B6149',
+        accentColor: '#FFD23F',
+        price: 37.99,
+        badge: 'Desert Gold'
+      },
+      {
+        id: 'tropical-ponche',
+        name: 'Tropical Ponche',
+        tagline: 'Guava, Passion Fruit & Tamarind',
+        desc: 'Inspired by traditional warm Mexican holiday punch, served chilled with pink guava, tangy tamarind, and passion fruit.',
+        calories: 38,
+        type: 'singles',
+        colorHex: '#F25C54',
+        secondaryColor: '#1F7A8C',
+        accentColor: '#FFE066',
+        price: 37.99,
+        badge: 'Seasonal Punch'
+      },
+      {
+        id: 'grapefruit-lime',
+        name: 'Grapefruit Lime',
+        tagline: 'Paloma-Inspired Crispness',
+        desc: 'Pink ruby grapefruit zest, fragrant lime juice, and botanical herbs for the ultimate cocktail mixer or alcohol-free cooler.',
+        calories: 30,
+        type: 'singles',
+        colorHex: '#F48498',
+        secondaryColor: '#2B6149',
+        accentColor: '#FFF',
+        price: 37.99,
+        badge: 'Ultra Crisp'
+      },
+      {
+        id: 'clasico-variety-pack',
+        name: 'El Clásico Variety Pack',
+        tagline: '12-Pack (4 Flavors × 3 Cans)',
+        desc: 'The best of all worlds: 3 Spiced Pineapple, 3 Mango Chili, 3 Strawberry Citrus, and 3 Mandarin Refresco.',
+        calories: 37,
+        type: 'packs',
+        colorHex: '#004D47',
+        secondaryColor: '#FFD23F',
+        accentColor: '#E60067',
+        price: 39.99,
+        badge: '#1 Seller'
+      },
+      {
+        id: 'fiesta-fuego-pack',
+        name: 'Fiesta Fuego Pack',
+        tagline: 'Tropical & Spicy Mix',
+        desc: 'Adventure in a box: 4 Mango Chili, 4 Tropical Ponche, and 4 Prickly Pear cactus fruit.',
+        calories: 38,
+        type: 'packs',
+        colorHex: '#B73225',
+        secondaryColor: '#FF9E00',
+        accentColor: '#FAF6EE',
+        price: 39.99,
+        badge: 'Spicy / Exotic'
+      }
+    ];
 
-// ============ TABS ============
-const tabs = document.querySelectorAll('.tab-btn');
-const contents = document.querySelectorAll('.tab-content');
-tabs.forEach(t => {
-  t.addEventListener('click', () => {
-    tabs.forEach(x => { x.classList.remove('tab-active'); x.classList.add('tab-inactive'); });
-    t.classList.add('tab-active'); t.classList.remove('tab-inactive');
-    const target = t.dataset.tab;
-    contents.forEach(c => c.classList.add('hidden'));
-    const activeC = document.getElementById('tab-' + target);
-    activeC.classList.remove('hidden');
-    activeC.classList.remove('fade-in');
-    void activeC.offsetWidth;
-    activeC.classList.add('fade-in');
-  });
-});
-</script>
+    let selectedFlavorIndex = 0;
 
+    /* ==========================================================
+       2. PROCEDURAL SVG CAN GENERATOR (Crisp, Consistent)
+       ========================================================== */
+    function generateCanSVG(flavor, width = 140, height = 200) {
+      const c1 = flavor.colorHex;
+      const c2 = flavor.secondaryColor;
+      const accent = flavor.accentColor;
+      const name = flavor.name.toUpperCase();
+      const isPack = flavor.type === 'packs';
+
+      return `
+      <svg width="${width}" height="${height}" viewBox="0 0 140 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="canRim" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#CCCCCC"/>
+            <stop offset="35%" stop-color="#FFFFFF"/>
+            <stop offset="70%" stop-color="#AAAAAA"/>
+            <stop offset="100%" stop-color="#888888"/>
+          </linearGradient>
+          <linearGradient id="metalSpecular" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+            <stop offset="25%" stop-color="#FFFFFF" stop-opacity="0.0"/>
+            <stop offset="85%" stop-color="#000000" stop-opacity="0.25"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Can Top Lid & Rim -->
+        <ellipse cx="70" cy="16" rx="46" ry="7" fill="url(#canRim)" stroke="#333" stroke-width="1.2"/>
+        <ellipse cx="70" cy="14" rx="40" ry="5" fill="#D3D3D3"/>
+        <!-- Pull Tab -->
+        <rect x="65" y="11" width="10" height="6" rx="2" fill="#EAEAEA" stroke="#444" stroke-width="0.8"/>
+        <circle cx="70" cy="13" r="1.5" fill="#555"/>
+
+        <!-- Can Body Main -->
+        <path d="M24 16 L24 180 C24 191 35 194 70 194 C105 194 116 191 116 180 L116 16 Z" fill="${c1}" stroke="#191414" stroke-width="2"/>
+
+        <!-- Dynamic Mexican Motif / Pattern on Can -->
+        <rect x="25" y="40" width="90" height="110" fill="${c2}" opacity="0.9"/>
+        <circle cx="70" cy="95" r="32" fill="${accent}" stroke="#191414" stroke-width="1.5"/>
+
+        <!-- Sunburst Radiance / Star -->
+        <g stroke="${c1}" stroke-width="1.5" stroke-linecap="round">
+          <line x1="70" y1="67" x2="70" y2="72" />
+          <line x1="70" y1="118" x2="70" y2="123" />
+          <line x1="42" y1="95" x2="47" y2="95" />
+          <line x1="93" y1="95" x2="98" y2="95" />
+          <line x1="50" y1="75" x2="54" y2="79" />
+          <line x1="86" y1="111" x2="90" y2="115" />
+          <line x1="50" y1="115" x2="54" y2="111" />
+          <line x1="86" y1="79" x2="90" y2="75" />
+        </g>
+
+        <!-- Can Brand Typography -->
+        <text x="70" y="34" font-family="'Alfa Slab One', sans-serif" font-size="7.5" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">DE LA CALLE!</text>
+        <text x="70" y="90" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="8" fill="#191414" text-anchor="middle">TEPACHE</text>
+        <text x="70" y="103" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="6" fill="#191414" text-anchor="middle">${flavor.calories} CALS</text>
+
+        <!-- Lower Flavor Band -->
+        <rect x="25" y="142" width="90" height="28" fill="${c1}"/>
+        <text x="70" y="156" font-family="'Space Grotesk', sans-serif" font-weight="800" font-size="7" fill="#FFFFFF" text-anchor="middle">
+          ${name.length > 15 ? name.substring(0, 13) + '..' : name}
+        </text>
+        <text x="70" y="165" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="4.8" fill="#FFEAA7" text-anchor="middle">
+          ${isPack ? 'VARIETY 12-PACK' : 'PREBIOTIC SPARKLING'}
+        </text>
+
+        <!-- Cylindrical specular lighting overlay -->
+        <path d="M24 16 L24 180 C24 191 35 194 70 194 C105 194 116 191 116 180 L116 16 Z" fill="url(#metalSpecular)" pointer-events="none"/>
+        
+        <!-- Bottom Chime / Can Base Rim -->
+        <path d="M30 180 C30 187 40 192 70 192 C100 192 110 187 110 180" fill="none" stroke="url(#canRim)" stroke-width="2.5"/>
+      </svg>
+      `;
+    }
+
+    /* ==========================================================
+       3. THREE.JS 3D INTERACTIVE CAN IMPLEMENTATION
+       ========================================================== */
+    let scene, camera, renderer, canGroup, canMesh;
+    let labelCanvas, labelCtx, labelTexture;
+    let iceCubes = [];
+    let isDragging = false;
+    let prevMouseX = 0;
+    let prevMouseY = 0;
+    let targetRotationY = 0;
+    let targetRotationX = 0;
+
+    function initThreeJS() {
+      const container = document.getElementById('webgl-container');
+      const width = container.clientWidth || 500;
+      const height = container.clientHeight || 550;
+
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+      camera.position.set(0, 0.4, 4.2);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.1;
+      container.appendChild(renderer.domElement);
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0xfff6ea, 1.4);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      dirLight.position.set(4, 6, 5);
+      dirLight.castShadow = true;
+      scene.add(dirLight);
+
+      const rimLight = new THREE.DirectionalLight(0xffd23f, 1.2);
+      rimLight.position.set(-4, -2, -3);
+      scene.add(rimLight);
+
+      const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      fillLight.position.set(0, -3, 3);
+      scene.add(fillLight);
+
+      canGroup = new THREE.Group();
+      scene.add(canGroup);
+
+      // Create Dynamic Canvas Texture for Can Body Label
+      labelCanvas = document.createElement('canvas');
+      labelCanvas.width = 1024;
+      labelCanvas.height = 512;
+      labelCtx = labelCanvas.getContext('2d');
+      updateCanTexture(FLAVORS[0]);
+
+      labelTexture = new THREE.CanvasTexture(labelCanvas);
+      labelTexture.wrapS = THREE.RepeatWrapping;
+      labelTexture.repeat.set(1, 1);
+
+      // Can Body Cylinder
+      const canGeo = new THREE.CylinderGeometry(0.72, 0.72, 2.2, 48);
+      const canMat = new THREE.MeshStandardMaterial({
+        map: labelTexture,
+        metalness: 0.28,
+        roughness: 0.35,
+      });
+      canMesh = new THREE.Mesh(canGeo, canMat);
+      canMesh.castShadow = true;
+      canMesh.receiveShadow = true;
+      canGroup.add(canMesh);
+
+      // Can Top Bevel & Lid (Metallic aluminum)
+      const metalMaterial = new THREE.MeshStandardMaterial({
+        color: 0xcccccc,
+        metalness: 0.9,
+        roughness: 0.22,
+      });
+
+      const lidGeo = new THREE.CylinderGeometry(0.68, 0.72, 0.08, 48);
+      const lidMesh = new THREE.Mesh(lidGeo, metalMaterial);
+      lidMesh.position.y = 1.14;
+      canGroup.add(lidMesh);
+
+      // Can Top Rim Ring
+      const rimGeo = new THREE.TorusGeometry(0.67, 0.03, 16, 48);
+      rimGeo.rotateX(Math.PI / 2);
+      const rimMesh = new THREE.Mesh(rimGeo, metalMaterial);
+      rimMesh.position.y = 1.18;
+      canGroup.add(rimMesh);
+
+      // Pull Tab Representation
+      const tabGeo = new THREE.BoxGeometry(0.24, 0.02, 0.42);
+      const tabMesh = new THREE.Mesh(tabGeo, metalMaterial);
+      tabMesh.position.set(0, 1.19, -0.15);
+      canGroup.add(tabMesh);
+
+      // Can Bottom Bevel
+      const bottomGeo = new THREE.CylinderGeometry(0.72, 0.65, 0.12, 48);
+      const bottomMesh = new THREE.Mesh(bottomGeo, metalMaterial);
+      bottomMesh.position.y = -1.14;
+      canGroup.add(bottomMesh);
+
+      // Floating Translucent Prebiotic Ice Cubes around Can
+      const iceGeo = new THREE.BoxGeometry(0.28, 0.28, 0.28);
+      const iceMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transmission: 0.85,
+        opacity: 1,
+        transparent: true,
+        roughness: 0.1,
+        ior: 1.33
+      });
+
+      for (let i = 0; i < 6; i++) {
+        const ice = new THREE.Mesh(iceGeo, iceMat);
+        const angle = (i / 6) * Math.PI * 2;
+        const radius = 1.3 + Math.random() * 0.4;
+        ice.position.set(
+          Math.cos(angle) * radius,
+          (Math.random() - 0.5) * 1.8,
+          Math.sin(angle) * radius - 0.4
+        );
+        ice.rotation.set(Math.random()*3, Math.random()*3, 0);
+        ice.userData = {
+          speedY: 0.003 + Math.random() * 0.004,
+          rotX: 0.005,
+          rotY: 0.008,
+          baseY: ice.position.y
+        };
+        scene.add(ice);
+        iceCubes.push(ice);
+      }
+
+      // Add gentle tilt to can
+      canGroup.rotation.z = 0.08;
+      canGroup.rotation.x = 0.12;
+
+      // Mouse Drag & Touch Interactions
+      container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - prevMouseX;
+        const deltaY = e.clientY - prevMouseY;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+
+        targetRotationY += deltaX * 0.012;
+        targetRotationX += deltaY * 0.006;
+      });
+
+      // Mobile Touch
+      container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          prevMouseX = e.touches[0].clientX;
+          prevMouseY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => { isDragging = false; });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - prevMouseX;
+        const deltaY = e.touches[0].clientY - prevMouseY;
+        prevMouseX = e.touches[0].clientX;
+        prevMouseY = e.touches[0].clientY;
+
+        targetRotationY += deltaX * 0.014;
+        targetRotationX += deltaY * 0.008;
+      }, { passive: true });
+
+      // Window Resize Listener
+      window.addEventListener('resize', onWindowResize);
+
+      animate();
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('webgl-container');
+      if (!container || !renderer) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    /* Draws high-res Mexican Street Label on Can Surface */
+    function updateCanTexture(flavor) {
+      if (!labelCtx) return;
+
+      const w = labelCanvas.width;
+      const h = labelCanvas.height;
+
+      // Primary Can Body Background
+      labelCtx.fillStyle = flavor.colorHex;
+      labelCtx.fillRect(0, 0, w, h);
+
+      // Repeatable Mexican Folk Band
+      labelCtx.fillStyle = flavor.secondaryColor;
+      labelCtx.fillRect(0, 80, w, 280);
+
+      // Subtle Diamond Grid pattern
+      labelCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      labelCtx.lineWidth = 3;
+      for (let x = 0; x < w; x += 40) {
+        labelCtx.beginPath();
+        labelCtx.moveTo(x, 80);
+        labelCtx.lineTo(x + 40, 360);
+        labelCtx.stroke();
+
+        labelCtx.beginPath();
+        labelCtx.moveTo(x + 40, 80);
+        labelCtx.lineTo(x, 360);
+        labelCtx.stroke();
+      }
+
+      // Draw Main Center Emblem (Dual-sided for 360° spin)
+      const centerOffsets = [w * 0.25, w * 0.75];
+
+      centerOffsets.forEach(cx => {
+        // Starburst Aura
+        labelCtx.save();
+        labelCtx.translate(cx, 220);
+
+        labelCtx.fillStyle = flavor.accentColor;
+        labelCtx.beginPath();
+        labelCtx.arc(0, 0, 95, 0, Math.PI * 2);
+        labelCtx.fill();
+        labelCtx.lineWidth = 4;
+        labelCtx.strokeStyle = '#191414';
+        labelCtx.stroke();
+
+        // Decorative sunburst rays
+        labelCtx.fillStyle = flavor.colorHex;
+        for (let i = 0; i < 12; i++) {
+          labelCtx.rotate(Math.PI / 6);
+          labelCtx.fillRect(-5, -88, 10, 18);
+        }
+        labelCtx.restore();
+
+        // De La Calle Brand Header
+        labelCtx.fillStyle = '#FFFFFF';
+        labelCtx.font = '900 32px "Alfa Slab One", sans-serif';
+        labelCtx.textAlign = 'center';
+        labelCtx.shadowColor = '#191414';
+        labelCtx.shadowBlur = 4;
+        labelCtx.fillText('DE LA CALLE!', cx, 58);
+        labelCtx.shadowBlur = 0;
+
+        // "TEPACHE" Bold Banner
+        labelCtx.fillStyle = '#191414';
+        labelCtx.font = '900 34px "Space Grotesk", sans-serif';
+        labelCtx.textAlign = 'center';
+        labelCtx.fillText('TEPACHE', cx, 205);
+
+        // Prebiotic Nutrition text
+        labelCtx.fillStyle = flavor.secondaryColor;
+        labelCtx.font = '800 16px "Plus Jakarta Sans", sans-serif';
+        labelCtx.fillText(`${flavor.calories} CALS • PREBIOTIC`, cx, 235);
+        labelCtx.fillText('ORGANIC PINEAPPLE', cx, 255);
+
+        // Flavor Name Lower Ribbon
+        labelCtx.fillStyle = flavor.colorHex;
+        labelCtx.fillRect(cx - 180, 385, 360, 70);
+        labelCtx.lineWidth = 3;
+        labelCtx.strokeStyle = '#191414';
+        labelCtx.strokeRect(cx - 180, 385, 360, 70);
+
+        labelCtx.fillStyle = '#FFFFFF';
+        labelCtx.font = '800 24px "Space Grotesk", sans-serif';
+        labelCtx.fillText(flavor.name.toUpperCase(), cx, 428);
+      });
+
+      if (labelTexture) labelTexture.needsUpdate = true;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Auto rotation + User drag inertia easing
+      if (!isDragging) {
+        targetRotationY += 0.005; // Gentle constant spin
+      }
+
+      canGroup.rotation.y += (targetRotationY - canGroup.rotation.y) * 0.1;
+      canGroup.rotation.x += (targetRotationX - canGroup.rotation.x) * 0.1;
+
+      // Bobbing floating effect
+      canGroup.position.y = Math.sin(Date.now() * 0.0018) * 0.06;
+
+      // Ice cube floating animation
+      iceCubes.forEach(cube => {
+        cube.rotation.x += cube.userData.rotX;
+        cube.rotation.y += cube.userData.rotY;
+        cube.position.y = cube.userData.baseY + Math.sin(Date.now() * cube.userData.speedY) * 0.15;
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    /* Switch active 3D Can in Hero */
+    function setHeroFlavor(index) {
+      selectedFlavorIndex = index;
+      const flavor = FLAVORS[index];
+
+      // Update texture & floating badge
+      updateCanTexture(flavor);
+
+      document.getElementById('activeBadgeName').innerText = flavor.name;
+      document.getElementById('activeBadgeSub').innerText = `${flavor.tagline} • ${flavor.calories} Cals`;
+
+      // Update pills UI
+      const pills = document.querySelectorAll('.flavor-pill');
+      pills.forEach((p, idx) => {
+        if (idx === index) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+    }
+
+    /* ==========================================================
+       4. STORE FRONT & CART STATE (localStorage support)
+       ========================================================== */
+    let cart = [];
+
+    function initCart() {
+      const saved = localStorage.getItem('delacalle_cart');
+      if (saved) {
+        try { cart = JSON.parse(saved); } catch(e) { cart = []; }
+      }
+      renderCartUI();
+    }
+
+    function saveCart() {
+      localStorage.setItem('delacalle_cart', JSON.stringify(cart));
+      renderCartUI();
+    }
+
+    function addToCart(flavorId, title, price, customDesc = '12-Pack (12 fl oz cans)') {
+      const existing = cart.find(item => item.id === flavorId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: flavorId,
+          title: title,
+          price: price,
+          desc: customDesc,
+          qty: 1
+        });
+      }
+      saveCart();
+      toggleCartDrawer(true);
+    }
+
+    function updateCartQty(index, delta) {
+      if (cart[index]) {
+        cart[index].qty += delta;
+        if (cart[index].qty <= 0) {
+          cart.splice(index, 1);
+        }
+      }
+      saveCart();
+    }
+
+    function renderCartUI() {
+      const cartCountEl = document.getElementById('cartCount');
+      const cartListEl = document.getElementById('cartItemsList');
+      const subtotalEl = document.getElementById('cartSubtotalPrice');
+
+      const totalItems = cart.reduce((acc, curr) => acc + curr.qty, 0);
+      const subtotal = cart.reduce((acc, curr) => acc + (curr.price * curr.qty), 0);
+
+      cartCountEl.innerText = totalItems;
+      subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+
+      if (cart.length === 0) {
+        cartListEl.innerHTML = `
+          <div class="cart-empty-message">
+            <div style="font-size:3rem; margin-bottom:1rem;">🛒🍍</div>
+            <h4>Your cart is empty</h4>
+            <p style="font-size:0.85rem; margin-top:0.5rem;">Add a 12-pack of refreshing prebiotic Tepache to get the fiesta started!</p>
+          </div>
+        `;
+        return;
+      }
+
+      cartListEl.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <div class="cart-item-img">🍍</div>
+          <div>
+            <div class="cart-item-title">${item.title}</div>
+            <div class="cart-item-meta">${item.desc}</div>
+            <div class="cart-item-qty">
+              <button class="qty-btn" onclick="updateCartQty(${idx}, -1)">-</button>
+              <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
+              <button class="qty-btn" onclick="updateCartQty(${idx}, 1)">+</button>
+            </div>
+          </div>
+          <div class="cart-item-price">
+            $${(item.price * item.qty).toFixed(2)}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCartDrawer(forceOpen = false) {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('cartOverlay');
+      if (forceOpen) {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+      } else {
+        drawer.classList.toggle('open');
+        overlay.classList.toggle('open');
+      }
+    }
+
+    function triggerCheckout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty! Add delicious Tepache before checking out.");
+        return;
+      }
+
+      // Celebrate with confetti!
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Clear cart
+      cart = [];
+      saveCart();
+      toggleCartDrawer(false);
+
+      // Show Toast Notification
+      const toast = document.getElementById('checkoutToast');
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 5000);
+    }
+
+    function addSubscriptionToCart(tierName, price) {
+      addToCart(`sub-${tierName.toLowerCase().replace(/\s+/g, '-')}`, tierName, price, 'Monthly Subscription (15% off included)');
+    }
+
+    /* ==========================================================
+       5. SHOP RENDERING & FILTERING
+       ========================================================== */
+    function renderShopGrid(filter = 'all') {
+      const grid = document.getElementById('productsGrid');
+      const filtered = FLAVORS.filter(f => filter === 'all' || f.type === filter);
+
+      grid.innerHTML = filtered.map((f, i) => {
+        const svgCan = generateCanSVG(f, 130, 180);
+        return `
+          <div class="product-card">
+            <div class="product-visual">
+              <div class="product-badge-top">${f.badge}</div>
+              <div class="product-interactive-preview" title="View 3D Can Details" onclick="openCanModalById('${f.id}')">
+                👁️
+              </div>
+              <div class="can-svg-render">${svgCan}</div>
+            </div>
+            <div class="product-body">
+              <h3 class="product-title">${f.name}</h3>
+              <p class="product-description">${f.desc}</p>
+              
+              <div class="product-claims">
+                <span class="claim-tag">Prebiotic</span>
+                <span class="claim-tag">Organic</span>
+                <span class="claim-tag">${f.calories} Cals</span>
+              </div>
+
+              <div class="product-footer">
+                <div class="product-price">
+                  <span class="price-main">$${f.price.toFixed(2)}</span>
+                  <span class="price-sub">12 Cans / Pack</span>
+                </div>
+                <button class="btn-add-cart" onclick="addToCart('${f.id}', '${f.name}', ${f.price})">
+                  <span>+</span> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterShop(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderShopGrid(type);
+    }
+
+    /* ==========================================================
+       6. QUICK VIEW / 3D DETAIL MODAL
+       ========================================================== */
+    function openCanModal(index) {
+      const flavor = FLAVORS[index];
+      if (!flavor) return;
+
+      document.getElementById('modalTitle').innerText = flavor.name;
+      document.getElementById('modalDesc').innerText = flavor.desc;
+      document.getElementById('modalCals').innerText = flavor.calories;
+      document.getElementById('modalPrice').innerText = `$${flavor.price.toFixed(2)}`;
+      document.getElementById('modalCategory').innerText = flavor.type === 'packs' ? 'Curated Variety Pack' : 'Certified Organic • Prebiotic';
+      
+      const visualBox = document.getElementById('modalVisualBox');
+      visualBox.innerHTML = generateCanSVG(flavor, 180, 260);
+
+      const addBtn = document.getElementById('modalAddBtn');
+      addBtn.onclick = () => {
+        addToCart(flavor.id, flavor.name, flavor.price);
+        closeCanModal();
+      };
+
+      document.getElementById('productModal').classList.add('open');
+    }
+
+    function openCanModalById(id) {
+      const idx = FLAVORS.findIndex(f => f.id === id);
+      if (idx !== -1) openCanModal(idx);
+    }
+
+    function closeCanModal(e) {
+      document.getElementById('productModal').classList.remove('open');
+    }
+
+    /* ==========================================================
+       7. STORE LOCATOR (MOCK INTERACTIVE ZIP SEARCH)
+       ========================================================== */
+    const STORES_DB = [
+      { name: "Whole Foods Market - Abbot Kinney", address: "225 Lincoln Blvd, Venice, CA", distance: "0.4 mi", stock: "All 7 Flavors" },
+      { name: "Erewhon Market", address: "585 Venice Blvd, Venice, CA", distance: "0.8 mi", stock: "Singles & Variety Packs" },
+      { name: "Sprouts Farmers Market", address: "1302 S Sepulveda Blvd, Los Angeles, CA", distance: "2.1 mi", stock: "Spiced Pineapple, Mango Chili" },
+      { name: "Taquería El Primo (On Draft)", address: "842 Ocean Front Walk, Venice, CA", distance: "1.2 mi", stock: "Street Can Service" }
+    ];
+
+    function searchStores() {
+      const zip = document.getElementById('zipSearchInput').value.trim();
+      const resultsContainer = document.getElementById('storeResults');
+      
+      resultsContainer.innerHTML = `
+        <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.4rem;">
+          Showing 4 verified Tepache spots near <strong>${zip || '90291'}</strong>:
+        </div>
+      ` + STORES_DB.map(s => `
+        <div class="store-card">
+          <div>
+            <h5>${s.name}</h5>
+            <p>${s.address}</p>
+            <span style="font-size:0.7rem; color:var(--agave-green); font-weight:700;">In Stock: ${s.stock}</span>
+          </div>
+          <div class="store-dist">${s.distance}</div>
+        </div>
+      `).join('');
+    }
+
+    /* ==========================================================
+       8. UTILITIES (SMOOTH SCROLL, HERO PILLS INIT)
+       ========================================================== */
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        const offset = 80;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = el.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    function toggleMobileNav() {
+      const menu = document.getElementById('mobileNavDrawer');
+      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function initHeroFlavorPills() {
+      const container = document.getElementById('heroFlavorPills');
+      container.innerHTML = FLAVORS.map((f, i) => `
+        <button class="flavor-pill ${i === 0 ? 'active' : ''}" onclick="setHeroFlavor(${i})">
+          <span class="dot" style="background:${f.colorHex}; border:1px solid #000;"></span>
+          ${f.name}
+        </button>
+      `).join('');
+    }
+
+    /* Page Bootstrapper */
+    window.addEventListener('DOMContentLoaded', () => {
+      initThreeJS();
+      initHeroFlavorPills();
+      renderShopGrid('all');
+      initCart();
+      searchStores();
+    });
+  </script>
 </body>
 </html>
