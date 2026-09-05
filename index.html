@@ -1,1080 +1,1233 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURELIUS PRIME | Sovereign Financial Intelligence</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@500;600;700;800&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        serif: ['"Cinzel"', 'serif'],
-                    },
-                    colors: {
-                        gold: {
-                            50: '#FAF8F0',
-                            100: '#F3EED9',
-                            200: '#E7DCB2',
-                            300: '#D9C686',
-                            400: '#C8AD57',
-                            500: '#B89736',
-                            600: '#9B7C28',
-                            700: '#79601E',
-                            800: '#5A4617',
-                        },
-                        obsidian: {
-                            950: '#050608',
-                            900: '#0A0C10',
-                            850: '#0F1217',
-                            800: '#151921',
-                            700: '#1E232E',
-                            600: '#2A3140'
-                        }
-                    },
-                    boxShadow: {
-                        'luxury': '0 20px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(184, 151, 54, 0.1)',
-                        'glow': '0 0 35px rgba(200, 173, 87, 0.25)',
-                        'inner-gold': 'inset 0 1px 1px 0 rgba(255, 245, 210, 0.25)',
-                    }
-                }
-            }
-        }
-    </script>
-
+    <title>The Tea Story — Brew-tea-ful 3D Experience</title>
     <style>
-        /* Ambient subtle gradient glow */
-        .ambient-radial {
-            background: radial-gradient(circle at 50% 0%, rgba(184, 151, 54, 0.12) 0%, rgba(10, 12, 16, 0) 70%);
+        :root {
+            --bg: #110d0a;
+            --bg-warm: #1a1410;
+            --cream: #f7ebe1;
+            --cream-dim: #c7b8a9;
+            --tea-gold: #dcae53;
+            --tea-amber: #b07c2a;
+            --green-fresh: #5d8a66;
+            --green-deep: #2c4431;
+            --rose: #cf8b83;
+            --accent: #e5b85c;
+            --text: #f7ebe1;
+            --text-dim: #a69585;
+            --glass: rgba(26, 20, 16, 0.65);
+            --border: rgba(220, 174, 83, 0.2);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .luxury-border {
-            border: 1px solid rgba(217, 198, 134, 0.18);
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .luxury-card {
-            background: linear-gradient(135deg, rgba(21, 25, 33, 0.75) 0%, rgba(10, 12, 16, 0.85) 100%);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+
+        @font-face {
+            font-family: 'Display';
+            src: url('https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtUA.woff2') format('woff2');
+            font-weight: 600;
+            font-display: swap;
         }
-        .luxury-card:hover {
-            border-color: rgba(200, 173, 87, 0.35);
+
+        @font-face {
+            font-family: 'Body';
+            src: url('https://fonts.gstatic.com/s/inter/v19/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2') format('woff2');
+            font-weight: 400;
+            font-display: swap;
         }
-        /* Glass Input */
-        .glass-input {
-            background: rgba(15, 18, 23, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Body', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 3D Canvas Container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, #1c1510 0%, #0c0907 100%);
+        }
+
+        #canvas-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 10% 20%, rgba(220, 174, 83, 0.05) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(93, 138, 102, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* UI Overlays & Content Wrapper */
+        .scene-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        /* Navigation Bar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
             backdrop-filter: blur(12px);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(17, 13, 10, 0.4);
         }
-        .glass-input:focus {
-            border-color: #C8AD57;
-            box-shadow: 0 0 15px rgba(200, 173, 87, 0.2);
-            outline: none;
+
+        .logo {
+            font-family: 'Display', serif;
+            font-size: 1.5rem;
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        /* Custom scrollbars */
-        ::-webkit-scrollbar {
+
+        .logo span {
+            color: var(--tea-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cream-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--tea-gold);
+        }
+
+        /* Common Section Layout */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 6rem 10%;
+        }
+
+        /* Hero Section */
+        .hero {
+            justify-content: flex-start;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(220, 174, 83, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--tea-gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .badge-dot {
             width: 6px;
+            height: 6px;
+            background: var(--tea-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--tea-gold);
+            animation: pulse 2s infinite;
         }
-        ::-webkit-scrollbar-track {
-            background: #0A0C10;
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1E232E;
-            border-radius: 3px;
+
+        .hero h1 {
+            font-family: 'Display', serif;
+            font-size: clamp(2.8rem, 6vw, 4.8rem);
+            line-height: 1.1;
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #B89736;
+
+        .hero h1 .accent {
+            color: var(--tea-gold);
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--tea-gold) 0%, var(--tea-amber) 100%);
+            color: var(--bg);
+            box-shadow: 0 10px 30px -10px rgba(220, 174, 83, 0.4);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px -5px rgba(220, 174, 83, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--cream);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Brand Values / Essence Section */
+        .essence {
+            justify-content: flex-end;
+        }
+
+        .essence-content {
+            max-width: 550px;
+            background: var(--glass);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--cream);
+            line-height: 1.2;
+        }
+
+        .section-header h2 span {
+            color: var(--tea-gold);
+            font-style: italic;
+        }
+
+        .value-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .value-item {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .value-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: rgba(220, 174, 83, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--tea-gold);
+        }
+
+        .value-text h3 {
+            font-family: 'Display', serif;
+            font-size: 1.25rem;
+            color: var(--cream);
+            margin-bottom: 0.35rem;
+        }
+
+        .value-text p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Products Interactive Showcase Section */
+        .showcase {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .showcase .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .product-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            z-index: 10;
+        }
+
+        .product-card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(220, 174, 83, 0.1), transparent 60%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .product-card.active {
+            border-color: var(--tea-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card.active::before {
+            opacity: 1;
+        }
+
+        .product-card h3 {
+            font-family: 'Display', serif;
+            font-size: 1.5rem;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card p {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .flavor-notes {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .note-tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--cream-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .active[data-blend="chamomile"] { border-color: var(--tea-gold); }
+        .active[data-blend="matcha"] { border-color: var(--green-fresh); }
+        .active[data-blend="oolong"] { border-color: var(--rose); }
+
+        /* Dynamic Color Tags for active states */
+        .product-card.active[data-blend="chamomile"] .note-tag { background: rgba(220, 174, 83, 0.15); color: var(--tea-gold); }
+        .product-card.active[data-blend="matcha"] .note-tag { background: rgba(93, 138, 102, 0.15); color: var(--green-fresh); }
+        .product-card.active[data-blend="oolong"] .note-tag { background: rgba(207, 139, 131, 0.15); color: var(--rose); }
+
+        /* Steeping Ritual Section */
+        .ritual {
+            justify-content: flex-start;
+        }
+
+        .ritual-container {
+            max-width: 600px;
+            background: var(--glass);
+            padding: 3.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .ritual-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            font-family: 'Display', serif;
+            font-size: 1.5rem;
+            color: var(--tea-gold);
+            font-style: italic;
+            opacity: 0.8;
+            width: 30px;
+        }
+
+        .step-detail h4 {
+            font-family: 'Display', serif;
+            font-size: 1.15rem;
+            color: var(--cream);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-detail p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Interactive Breathing / Steep Timer Widget */
+        .timer-widget {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .timer-circle-container {
+            position: relative;
+            width: 56px;
+            height: 56px;
+        }
+
+        .timer-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .timer-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 3;
+        }
+
+        .timer-progress {
+            fill: none;
+            stroke: var(--tea-gold);
+            stroke-width: 3;
+            stroke-dasharray: 100;
+            stroke-dasharray: 157;
+            stroke-dashoffset: 157;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .timer-btn {
+            background: none;
+            border: none;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--tea-gold);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .timer-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .timer-info h5 {
+            font-size: 0.95rem;
+            color: var(--cream);
+            margin-bottom: 0.15rem;
+        }
+
+        .timer-info p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* 3D Visual Cues / Scene Instructions Overlay */
+        .scene-hints {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .hint-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(17, 13, 10, 0.6);
+            padding: 0.4rem 0.8rem;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            section {
+                padding: 6rem 5%;
+                min-height: auto;
+                margin-bottom: 4rem;
+            }
+
+            .hero {
+                text-align: center;
+                justify-content: center;
+                min-height: 100vh;
+            }
+
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .essence {
+                justify-content: center;
+            }
+
+            .product-selector {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .ritual {
+                justify-content: center;
+            }
         }
     </style>
 </head>
-<body class="bg-obsidian-950 text-slate-300 font-sans antialiased overflow-x-hidden selection:bg-gold-500/20 selection:text-gold-200">
+<body>
 
-    <!-- Ambient Mesh Glow Background -->
-    <div class="fixed inset-0 pointer-events-none z-0 ambient-radial"></div>
-    <div class="fixed top-1/4 -right-48 w-96 h-96 bg-gold-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-    <div class="fixed bottom-10 -left-48 w-96 h-96 bg-blue-900/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <!-- 3D Canvas rendering target -->
+    <div id="canvas-container"></div>
 
     <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/[0.06] bg-obsidian-950/80 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <!-- Brand Logo -->
-            <a href="#" class="flex items-center space-x-3.5 group">
-                <div class="w-10 h-10 rounded-lg border border-gold-400/30 flex items-center justify-center bg-gradient-to-br from-obsidian-800 to-obsidian-900 shadow-glow">
-                    <span class="font-serif text-lg font-bold text-gold-300 tracking-wider">Æ</span>
-                </div>
-                <div>
-                    <span class="font-serif tracking-[0.25em] text-sm text-white font-semibold group-hover:text-gold-300 transition-colors uppercase">AURELIUS</span>
-                    <span class="block text-[9px] font-sans tracking-[0.35em] text-gold-400/80 font-medium">PRIME CAPITAL</span>
-                </div>
-            </a>
-
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center space-x-8 text-xs tracking-wider uppercase font-medium">
-                <a href="#dashboard" class="text-slate-400 hover:text-gold-300 transition-colors">Executive Terminal</a>
-                <a href="#test-users" class="text-slate-400 hover:text-gold-300 transition-colors flex items-center space-x-1.5">
-                    <span>Test Accounts</span>
-                    <span class="bg-gold-400/10 text-gold-400 text-[10px] px-1.5 py-0.5 rounded border border-gold-400/20">3 Live</span>
-                </a>
-                <a href="#security" class="text-slate-400 hover:text-gold-300 transition-colors">Sovereign Protocol</a>
-                <a href="#login-portal" class="text-slate-400 hover:text-gold-300 transition-colors">Client Portal</a>
-            </nav>
-
-            <!-- Quick Action Button -->
-            <div class="flex items-center space-x-3">
-                <button onclick="scrollToSection('login-portal')" class="hidden sm:inline-flex items-center space-x-2 text-xs font-semibold px-4 py-2.5 rounded-lg border border-gold-400/40 text-gold-300 hover:bg-gold-400/10 transition-all shadow-inner-gold">
-                    <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
-                    <span>Secure Access</span>
-                </button>
-                <button onclick="scrollToSection('dashboard')" class="bg-gradient-to-r from-gold-500 to-gold-400 text-obsidian-950 px-5 py-2.5 rounded-lg font-semibold text-xs tracking-wide uppercase hover:shadow-glow hover:brightness-110 transition-all duration-200">
-                    Launch Terminal
-                </button>
-            </div>
-        </div>
+    <header>
+        <a href="#" class="logo">
+            <span>The</span> Tea Story
+        </a>
+        <ul class="nav-links">
+            <li><a href="#essence">Essence</a></li>
+            <li><a href="#blends">The Blends</a></li>
+            <li><a href="#ritual">The Steep</a></li>
+        </ul>
     </header>
 
-    <main class="relative z-10 pt-28">
-        
+    <!-- Main Content Wrapper -->
+    <div class="scene-wrapper">
+
         <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-6 pt-12 pb-20 text-center relative">
-            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border border-gold-400/25 bg-gold-500/5 text-gold-300 text-xs font-medium mb-6">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="tracking-widest uppercase text-[10px]">Tier-1 Sovereign Custody System</span>
-                <span class="text-gold-500/50">|</span>
-                <span class="text-slate-400">v4.8 Institutional Release</span>
-            </div>
-
-            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white max-w-4xl mx-auto leading-[1.1]">
-                Command Capital with <span class="bg-gradient-to-r from-gold-200 via-gold-400 to-amber-200 bg-clip-text text-transparent">Absolute Precision.</span>
-            </h1>
-
-            <p class="mt-6 text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                Institutional-grade algorithmic wealth management, multi-jurisdiction custody telemetry, and autonomous liquidity deployment for family offices and sovereign funds.
-            </p>
-
-            <div class="mt-8 flex flex-wrap justify-center gap-4">
-                <button onclick="scrollToSection('test-users')" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-500 text-obsidian-950 font-bold text-xs uppercase tracking-widest shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center space-x-2">
-                    <i data-lucide="users" class="w-4 h-4"></i>
-                    <span>Select Test Persona</span>
-                </button>
-                <button onclick="scrollToSection('login-portal')" class="px-7 py-3.5 rounded-xl border border-white/10 hover:border-gold-400/40 bg-obsidian-900/60 backdrop-blur-md text-white font-medium text-xs uppercase tracking-widest transition-all flex items-center space-x-2">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-gold-400"></i>
-                    <span>Client Authorization</span>
-                </button>
-            </div>
-
-            <!-- Instant Feature Badges -->
-            <div class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto pt-6 border-t border-white/[0.05]">
-                <div class="text-left px-4 py-2 border-l border-gold-400/20">
-                    <div class="text-white font-serif font-bold text-xl">$14.2B+</div>
-                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Custodied Assets</div>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    <span>Experience Pure Harmony</span>
                 </div>
-                <div class="text-left px-4 py-2 border-l border-gold-400/20">
-                    <div class="text-emerald-400 font-serif font-bold text-xl">3.82</div>
-                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Sharpe Ratio Alpha</div>
-                </div>
-                <div class="text-left px-4 py-2 border-l border-gold-400/20">
-                    <div class="text-white font-serif font-bold text-xl">&lt; 0.42ms</div>
-                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Execution Latency</div>
-                </div>
-                <div class="text-left px-4 py-2 border-l border-gold-400/20">
-                    <div class="text-gold-300 font-serif font-bold text-xl">SOC2 Type II</div>
-                    <div class="text-xs text-slate-500 tracking-wider uppercase mt-0.5">Cryptographic HSM</div>
+                <h1>A <span class="accent">brew-tea-ful</span> story in every cup.</h1>
+                <p>Artisanal loose leaf blends cultivated in rich volcanic soils and handpicked at high altitudes, crafted to elevate your daily ritual.</p>
+                <div class="cta-group">
+                    <a href="#blends" class="btn btn-primary">Explore Our Blends</a>
+                    <a href="#ritual" class="btn btn-secondary">Begin The Ritual</a>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: TEST USERS SHOWCASE (Interactive Switcher) -->
-        <section id="test-users" class="max-w-7xl mx-auto px-6 py-16">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-white/[0.08]">
-                <div>
-                    <div class="flex items-center space-x-2 text-gold-400 text-xs font-semibold tracking-wider uppercase mb-1">
-                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-                        <span>Zero Friction Sandbox</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-serif text-white font-bold">Authorized Test Personas</h2>
-                    <p class="text-slate-400 text-xs sm:text-sm mt-1">Select a pre-configured profile to dynamically adapt live terminal telemetry and permissions.</p>
+        <!-- Brand Values Section -->
+        <section class="essence" id="essence">
+            <div class="essence-content">
+                <div class="section-header">
+                    <div class="badge">Our Essence</div>
+                    <h2>Harvested with <span>mindfulness</span>.</h2>
                 </div>
-                <div class="mt-4 md:mt-0 flex items-center space-x-2 text-xs text-slate-400">
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span>Sandbox Sandbox Mode Active</span>
-                </div>
-            </div>
-
-            <!-- 3 Persona Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- User 1: Sovereign Wealth / Executive -->
-                <div onclick="selectUser('elizabeth')" id="card-elizabeth" class="persona-card luxury-card rounded-2xl p-6 cursor-pointer border-2 transition-all duration-300 relative group overflow-hidden border-gold-400 shadow-glow">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-gold-400/10 rounded-bl-full pointer-events-none transition-opacity"></div>
-                    <div class="flex items-start justify-between">
-                        <div class="w-14 h-14 rounded-full border border-gold-400/40 p-0.5 relative">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Elizabeth Vance" class="w-full h-full object-cover rounded-full">
-                            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-obsidian-950 rounded-full"></span>
+                <div class="value-grid">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                         </div>
-                        <span id="badge-elizabeth" class="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded bg-gold-400 text-obsidian-950 flex items-center space-x-1">
-                            <i data-lucide="check" class="w-3 h-3"></i>
-                            <span>Active Persona</span>
-                        </span>
-                    </div>
-
-                    <div class="mt-5">
-                        <h3 class="text-white font-serif text-lg font-bold">Lady Elizabeth Vance</h3>
-                        <p class="text-gold-400/90 text-xs font-medium">Principal & Managing Partner</p>
-                        <p class="text-slate-400 text-xs mt-2 line-clamp-2">Sovereign Tier Access with $8.4B mandate authorization, multi-signature custody, and board oversight.</p>
-                    </div>
-
-                    <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                        <div>
-                            <span class="text-slate-500 block text-[10px] uppercase">Mandate</span>
-                            <span class="text-white font-mono font-medium">$8,450,200,000</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-slate-500 block text-[10px] uppercase">Clearance</span>
-                            <span class="text-gold-300 font-medium">Tier-0 Sovereign</span>
+                        <div class="value-text">
+                            <h3>Volcanic Single-Origin</h3>
+                            <p>Sourced from high-altitude estates situated on volcanic terrain, resulting in uniquely complex nutrient-dense mineral notes.</p>
                         </div>
                     </div>
-
-                    <div class="mt-4 flex items-center justify-between">
-                        <button class="w-full py-2.5 rounded-lg bg-gold-400/15 border border-gold-400/30 text-gold-300 hover:bg-gold-400 hover:text-obsidian-950 font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center space-x-2">
-                            <span>Simulate Elizabeth</span>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- User 2: Chief Risk Officer -->
-                <div onclick="selectUser('aris')" id="card-aris" class="persona-card luxury-card rounded-2xl p-6 cursor-pointer border border-white/10 transition-all duration-300 relative group overflow-hidden hover:border-gold-400/40">
-                    <div class="flex items-start justify-between">
-                        <div class="w-14 h-14 rounded-full border border-slate-700 p-0.5 relative">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Dr. Aris Thorne" class="w-full h-full object-cover rounded-full">
-                            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-obsidian-950 rounded-full"></span>
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
                         </div>
-                        <span id="badge-aris" class="hidden text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded bg-gold-400 text-obsidian-950 flex items-center space-x-1">
-                            <i data-lucide="check" class="w-3 h-3"></i>
-                            <span>Active Persona</span>
-                        </span>
-                    </div>
-
-                    <div class="mt-5">
-                        <h3 class="text-white font-serif text-lg font-bold">Dr. Aris Thorne</h3>
-                        <p class="text-blue-400 text-xs font-medium">Head of Quantitative Risk</p>
-                        <p class="text-slate-400 text-xs mt-2 line-clamp-2">Stress-testing models, Monte Carlo variance oversight, and systemic liquidity risk management.</p>
-                    </div>
-
-                    <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                        <div>
-                            <span class="text-slate-500 block text-[10px] uppercase">Supervised Alpha</span>
-                            <span class="text-white font-mono font-medium">$3,120,000,000</span>
+                        <div class="value-text">
+                            <h3>Zero Artificial Trace</h3>
+                            <p>Every handpicked leaf undergoes natural shade drying and traditional rolling without artificial aromas or preservatives.</p>
                         </div>
-                        <div class="text-right">
-                            <span class="text-slate-500 block text-[10px] uppercase">Clearance</span>
-                            <span class="text-blue-300 font-medium">Tier-1 Risk Control</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 flex items-center justify-between">
-                        <button class="w-full py-2.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 group-hover:border-gold-400/30 group-hover:text-gold-300 font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center space-x-2">
-                            <span>Simulate Aris</span>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- User 3: Lead Algo Trader / Quantitative Analyst -->
-                <div onclick="selectUser('kaelen')" id="card-kaelen" class="persona-card luxury-card rounded-2xl p-6 cursor-pointer border border-white/10 transition-all duration-300 relative group overflow-hidden hover:border-gold-400/40">
-                    <div class="flex items-start justify-between">
-                        <div class="w-14 h-14 rounded-full border border-slate-700 p-0.5 relative">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Kaelen Chen" class="w-full h-full object-cover rounded-full">
-                            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-obsidian-950 rounded-full"></span>
-                        </div>
-                        <span id="badge-kaelen" class="hidden text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded bg-gold-400 text-obsidian-950 flex items-center space-x-1">
-                            <i data-lucide="check" class="w-3 h-3"></i>
-                            <span>Active Persona</span>
-                        </span>
-                    </div>
-
-                    <div class="mt-5">
-                        <h3 class="text-white font-serif text-lg font-bold">Kaelen Chen</h3>
-                        <p class="text-purple-400 text-xs font-medium">Principal Execution Strategist</p>
-                        <p class="text-slate-400 text-xs mt-2 line-clamp-2">High-frequency order-routing routing algorithms, dark pool arbitrage, and low-latency API node execution.</p>
-                    </div>
-
-                    <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                        <div>
-                            <span class="text-slate-500 block text-[10px] uppercase">Daily Flow</span>
-                            <span class="text-white font-mono font-medium">$420,800,000</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-slate-500 block text-[10px] uppercase">Clearance</span>
-                            <span class="text-purple-300 font-medium">Tier-1 Quant Engine</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 flex items-center justify-between">
-                        <button class="w-full py-2.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 group-hover:border-gold-400/30 group-hover:text-gold-300 font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center space-x-2">
-                            <span>Simulate Kaelen</span>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: EXECUTIVE DASHBOARD -->
-        <section id="dashboard" class="max-w-7xl mx-auto px-6 py-12 scroll-mt-20">
-            <!-- Terminal Frame Wrapper -->
-            <div class="rounded-3xl border border-white/10 bg-obsidian-900/90 shadow-luxury overflow-hidden backdrop-blur-2xl">
-                <!-- Window Titlebar -->
-                <div class="px-6 py-4 border-b border-white/[0.07] bg-obsidian-850/80 flex flex-wrap items-center justify-between gap-4">
-                    <div class="flex items-center space-x-4">
-                        <div class="flex space-x-2">
-                            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                        </div>
-                        <div class="h-4 w-px bg-white/10"></div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-mono text-slate-400">SESSION:</span>
-                            <span id="active-session-label" class="text-xs font-mono font-semibold text-gold-300 bg-gold-400/10 px-2 py-0.5 rounded border border-gold-400/20">ELIZABETH_VANCE // MANAGING_PARTNER</span>
-                        </div>
-                    </div>
-
-                    <!-- Timeframe Toggles -->
-                    <div class="flex items-center space-x-1 bg-obsidian-950 p-1 rounded-xl border border-white/10 text-xs font-medium">
-                        <button onclick="updateChartTimeframe('1D', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">1D</button>
-                        <button onclick="updateChartTimeframe('1W', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">1W</button>
-                        <button onclick="updateChartTimeframe('1M', this)" class="tf-btn px-3 py-1 rounded-lg bg-gold-400 text-obsidian-950 font-bold">1M</button>
-                        <button onclick="updateChartTimeframe('1Y', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">1Y</button>
-                        <button onclick="updateChartTimeframe('ALL', this)" class="tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">MAX</button>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span class="text-xs font-mono text-emerald-400 tracking-wider">SECURE FEED // SYNCED</span>
-                    </div>
-                </div>
-
-                <!-- Dashboard Content Area -->
-                <div class="p-6 sm:p-8 space-y-8">
-
-                    <!-- Top Telemetry Row -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                        <!-- Stat Card 1 -->
-                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
-                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
-                                <span id="stat-1-title">Net Liquidity Mandate</span>
-                                <i data-lucide="wallet" class="w-4 h-4 text-gold-400"></i>
-                            </div>
-                            <div class="mt-3 flex items-baseline space-x-2">
-                                <span id="stat-1-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">$8,450,210,400</span>
-                            </div>
-                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-emerald-400">
-                                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-                                <span id="stat-1-diff" class="+4.2% MoM">+3.84% (+$312.4M)</span>
-                                <span class="text-slate-500 font-sans ml-1 text-[11px]">vs S&P benchmark</span>
-                            </div>
-                        </div>
-
-                        <!-- Stat Card 2 -->
-                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
-                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
-                                <span id="stat-2-title">Dynamic Sharpe Index</span>
-                                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
-                            </div>
-                            <div class="mt-3 flex items-baseline space-x-2">
-                                <span id="stat-2-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">3.91 α</span>
-                            </div>
-                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-emerald-400">
-                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
-                                <span id="stat-2-diff">99.98% Confidence</span>
-                                <span class="text-slate-500 font-sans ml-1 text-[11px]">VAR 1.1%</span>
-                            </div>
-                        </div>
-
-                        <!-- Stat Card 3 -->
-                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
-                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
-                                <span id="stat-3-title">Staked Institutional Yield</span>
-                                <i data-lucide="percent" class="w-4 h-4 text-amber-400"></i>
-                            </div>
-                            <div class="mt-3 flex items-baseline space-x-2">
-                                <span id="stat-3-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">14.88%</span>
-                            </div>
-                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-gold-300">
-                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                <span id="stat-3-diff">Compound APY</span>
-                                <span class="text-slate-500 font-sans ml-1 text-[11px]">Treasury + Arb</span>
-                            </div>
-                        </div>
-
-                        <!-- Stat Card 4 -->
-                        <div class="luxury-card rounded-2xl p-5 relative overflow-hidden">
-                            <div class="flex justify-between items-start text-slate-400 text-xs font-medium uppercase tracking-wider">
-                                <span id="stat-4-title">Active Vault Safeguards</span>
-                                <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i>
-                            </div>
-                            <div class="mt-3 flex items-baseline space-x-2">
-                                <span id="stat-4-val" class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">12 Nodes</span>
-                            </div>
-                            <div class="mt-2 flex items-center space-x-1.5 text-xs text-blue-400">
-                                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                                <span id="stat-4-diff">Multi-Sig Zurich / SG</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Middle Grid: Chart & Allocation -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- Chart Container (2 Cols) -->
-                        <div class="lg:col-span-2 luxury-card rounded-2xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div>
-                                    <h4 class="text-white font-serif font-bold text-base">Portfolio Performance & Yield Curve</h4>
-                                    <p class="text-slate-400 text-xs">Real-time valuation aggregated across Zurich, Singapore, and London custodial vaults</p>
-                                </div>
-                                <div class="flex items-center space-x-3 text-xs">
-                                    <span class="flex items-center space-x-1 text-gold-300">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-gold-400 inline-block"></span>
-                                        <span>Alpha Strategy</span>
-                                    </span>
-                                    <span class="flex items-center space-x-1 text-slate-500">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-slate-600 inline-block"></span>
-                                        <span>Treasury 10Y</span>
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- Canvas Chart -->
-                            <div class="h-72 w-full relative">
-                                <canvas id="performanceChart"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Allocation & Risk Breakdown (1 Col) -->
-                        <div class="luxury-card rounded-2xl p-6 flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <h4 class="text-white font-serif font-bold text-base">Sovereign Allocation</h4>
-                                    <span class="text-[11px] font-mono text-gold-400 bg-gold-400/10 px-2 py-0.5 rounded">OPTIMAL</span>
-                                </div>
-                                <p class="text-slate-400 text-xs mb-4">Dynamically rebalanced every 4 hours via automated convex optimization algorithms.</p>
-                                
-                                <div class="space-y-4 text-xs">
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-slate-300 font-medium">Algorithmic Arbitrage</span>
-                                            <span class="text-white font-mono">42.5%</span>
-                                        </div>
-                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
-                                            <div class="bg-gold-400 h-full rounded-full" style="width: 42.5%"></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-slate-300 font-medium">Physical Bullion & Gold Swaps</span>
-                                            <span class="text-white font-mono">27.0%</span>
-                                        </div>
-                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
-                                            <div class="bg-amber-500 h-full rounded-full" style="width: 27%"></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-slate-300 font-medium">Sovereign Debt (AAA Tier)</span>
-                                            <span class="text-white font-mono">18.5%</span>
-                                        </div>
-                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
-                                            <div class="bg-blue-400 h-full rounded-full" style="width: 18.5%"></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-slate-300 font-medium">Uncorrelated Volatility Swaps</span>
-                                            <span class="text-white font-mono">12.0%</span>
-                                        </div>
-                                        <div class="w-full bg-obsidian-800 h-1.5 rounded-full overflow-hidden">
-                                            <div class="bg-purple-400 h-full rounded-full" style="width: 12%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs">
-                                <span class="text-slate-400">Total Liquid Collateral</span>
-                                <span class="text-emerald-400 font-mono font-semibold">100.0% Verified</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Live Execution Telemetry -->
-                    <div class="luxury-card rounded-2xl p-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.07] mb-4 gap-2">
-                            <div>
-                                <h4 class="text-white font-serif font-bold text-sm">Real-Time Execution Ledger</h4>
-                                <p class="text-slate-400 text-xs">Sub-millisecond cryptographic settlement logs across connected liquidity partners.</p>
-                            </div>
-                            <div class="flex items-center space-x-2 text-xs font-mono text-slate-400">
-                                <span>LEDGER HASH:</span>
-                                <span class="text-gold-300">0x9F4C...B821</span>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs">
-                                <thead>
-                                    <tr class="text-slate-500 uppercase tracking-wider font-semibold border-b border-white/[0.05]">
-                                        <th class="pb-3">Timestamp</th>
-                                        <th class="pb-3">Action</th>
-                                        <th class="pb-3">Instrument</th>
-                                        <th class="pb-3">Volume</th>
-                                        <th class="pb-3">Route / Vault</th>
-                                        <th class="pb-3 text-right">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="execution-table-body" class="divide-y divide-white/[0.03] font-mono">
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
+        <!-- Product Selector / Dynamic 3D Scene Controller -->
+        <section class="showcase" id="blends">
+            <div class="section-header">
+                <div class="badge">Signature Blends</div>
+                <h2>Sip the <span>Extraordinary</span></h2>
             </div>
-        </section>
-
-        <!-- SECTION: LUXURY LOGIN PORTAL -->
-        <section id="login-portal" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-16">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="text-gold-400 text-xs font-semibold tracking-widest uppercase inline-block mb-2">Private Banking & Node Authentication</span>
-                <h2 class="text-3xl sm:text-4xl font-serif text-white font-bold tracking-tight">Aurelius Sovereign Gate</h2>
-                <p class="text-slate-400 text-sm mt-3">High-entropy cryptographic verification. Use the instant auto-fill buttons to test credential handshake without passwords.</p>
-            </div>
-
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
-                
-                <!-- Left Details / Fast Persona Auto-Fill -->
-                <div class="md:col-span-5 luxury-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between border-gold-400/20">
+            <div class="product-selector">
+                <div class="product-card active" data-blend="chamomile">
                     <div>
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-9 h-9 rounded-lg bg-gold-400/10 border border-gold-400/30 flex items-center justify-center text-gold-300">
-                                <i data-lucide="fingerprint" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-white font-serif font-bold text-sm">Sandbox Access Pass</h3>
-                                <p class="text-slate-400 text-xs">1-Click credentials injector</p>
-                            </div>
-                        </div>
-
-                        <p class="text-slate-300 text-xs leading-relaxed mb-6">
-                            Evaluate platform access levels immediately. Click any sandbox persona below to populate the secure input fields instantly:
-                        </p>
-
-                        <!-- Quick Fill Buttons -->
-                        <div class="space-y-3">
-                            <button onclick="autoFillLogin('elizabeth@aurelius.prime', '••••••••••••', 'Managing Partner (Tier-0)')" class="w-full text-left p-3 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 border border-white/10 hover:border-gold-400/40 transition-all flex items-center justify-between group">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 rounded-full bg-gold-400"></div>
-                                    <div>
-                                        <div class="text-white text-xs font-semibold group-hover:text-gold-300">Elizabeth Vance</div>
-                                        <div class="text-[10px] text-slate-500 font-mono">elizabeth@aurelius.prime</div>
-                                    </div>
-                                </div>
-                                <span class="text-[10px] uppercase font-semibold text-gold-400 bg-gold-400/10 px-2 py-0.5 rounded">Auto Fill</span>
-                            </button>
-
-                            <button onclick="autoFillLogin('thorne@aurelius.prime', '••••••••••••', 'Chief Risk Officer (Tier-1)')" class="w-full text-left p-3 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 border border-white/10 hover:border-gold-400/40 transition-all flex items-center justify-between group">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 rounded-full bg-blue-400"></div>
-                                    <div>
-                                        <div class="text-white text-xs font-semibold group-hover:text-blue-300">Dr. Aris Thorne</div>
-                                        <div class="text-[10px] text-slate-500 font-mono">thorne@aurelius.prime</div>
-                                    </div>
-                                </div>
-                                <span class="text-[10px] uppercase font-semibold text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded">Auto Fill</span>
-                            </button>
-
-                            <button onclick="autoFillLogin('kaelen.chen@aurelius.prime', '••••••••••••', 'Principal Execution (Tier-1)')" class="w-full text-left p-3 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 border border-white/10 hover:border-gold-400/40 transition-all flex items-center justify-between group">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 rounded-full bg-purple-400"></div>
-                                    <div>
-                                        <div class="text-white text-xs font-semibold group-hover:text-purple-300">Kaelen Chen</div>
-                                        <div class="text-[10px] text-slate-500 font-mono">kaelen.chen@aurelius.prime</div>
-                                    </div>
-                                </div>
-                                <span class="text-[10px] uppercase font-semibold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">Auto Fill</span>
-                            </button>
-                        </div>
+                        <h3>Golden Chamomile</h3>
+                        <p>Delicate Egyptian chamomile blossoms infused with local honeyed pollen and sweet wild apple skin.</p>
                     </div>
-
-                    <div class="mt-8 pt-4 border-t border-white/[0.08] flex items-center space-x-2 text-slate-500 text-[11px]">
-                        <i data-lucide="shield-alert" class="w-4 h-4 text-gold-400/80"></i>
-                        <span>Zero logs kept. Quantum-resistant cipher handshake.</span>
+                    <div class="flavor-notes">
+                        <span class="note-tag">Calm</span>
+                        <span class="note-tag">Floral</span>
+                        <span class="note-tag">Sweetness</span>
                     </div>
                 </div>
 
-                <!-- Right Form: Actual Login Interface -->
-                <div class="md:col-span-7 luxury-card rounded-2xl p-6 sm:p-8 relative">
-                    <!-- Auth Method Pill Tabs -->
-                    <div class="flex items-center space-x-2 p-1 bg-obsidian-950 rounded-xl border border-white/10 mb-6 text-xs font-semibold">
-                        <button id="tab-pass" onclick="switchLoginTab('password')" class="flex-1 py-2 rounded-lg bg-gold-400 text-obsidian-950 transition-all flex items-center justify-center space-x-1.5 shadow-sm">
-                            <i data-lucide="key" class="w-3.5 h-3.5"></i>
-                            <span>Vault Key</span>
-                        </button>
-                        <button id="tab-hardware" onclick="switchLoginTab('hardware')" class="flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center justify-center space-x-1.5">
-                            <i data-lucide="usb" class="w-3.5 h-3.5"></i>
-                            <span>YubiKey / WebAuthn</span>
-                        </button>
-                        <button id="tab-totp" onclick="switchLoginTab('totp')" class="flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center justify-center space-x-1.5">
-                            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
-                            <span>2FA Seed</span>
-                        </button>
+                <div class="product-card" data-blend="matcha">
+                    <div>
+                        <h3>Emerald Matcha</h3>
+                        <p>Stone-ground premium ceremonial green tea leaves cultivated under shade nets for vibrant depth.</p>
                     </div>
-
-                    <!-- The Form -->
-                    <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1.5">Client Identifier / Sovereign ID</label>
-                            <div class="relative">
-                                <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-                                <input id="login-email" type="email" required value="elizabeth@aurelius.prime" placeholder="partner@fund.com" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-white text-xs font-mono placeholder:text-slate-600">
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between items-center mb-1.5">
-                                <label class="block text-slate-400 text-xs uppercase tracking-wider font-semibold">Cryptographic Passphrase</label>
-                                <a href="javascript:void(0)" onclick="notifyReset()" class="text-[11px] text-gold-400 hover:underline">Emergency Recovery Key?</a>
-                            </div>
-                            <div class="relative">
-                                <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-                                <input id="login-pass" type="password" required value="sovereign-vault-9921" placeholder="Enter high-entropy passphrase" class="glass-input w-full pl-10 pr-10 py-3 rounded-xl text-white text-xs font-mono placeholder:text-slate-600">
-                                <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-3 text-slate-500 hover:text-slate-300">
-                                    <i data-lucide="eye" id="eye-icon" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 2FA Simulated Input -->
-                        <div id="totp-container">
-                            <label class="block text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1.5">Time-Based Hardware OTP (6-Digits)</label>
-                            <div class="relative">
-                                <i data-lucide="smartphone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-                                <input id="login-totp" type="text" maxlength="6" value="849 201" placeholder="123 456" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-white text-xs font-mono tracking-widest placeholder:text-slate-600">
-                            </div>
-                        </div>
-
-                        <!-- Remember Device & Geo-Fencing -->
-                        <div class="flex items-center justify-between pt-1">
-                            <label class="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer">
-                                <input type="checkbox" checked class="rounded border-slate-700 bg-obsidian-900 text-gold-500 focus:ring-gold-400 h-4 w-4">
-                                <span>Bind session to Hardware TPM enclave</span>
-                            </label>
-                            <span class="text-[11px] text-emerald-400 flex items-center space-x-1 font-mono">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                <span>Zurich Geo-Enforce</span>
-                            </span>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button id="auth-submit-btn" type="submit" class="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-500 text-obsidian-950 font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-[0.99] transition-all shadow-glow flex items-center justify-center space-x-2">
-                            <i data-lucide="unlock" class="w-4 h-4"></i>
-                            <span id="btn-text">Authenticate & Access Terminal</span>
-                        </button>
-                    </form>
-
-                    <!-- Feedback Alert / Toast -->
-                    <div id="auth-alert" class="hidden mt-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center space-x-2.5 animate-fadeIn">
-                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-                        <span id="auth-alert-msg">Identity verified via Multi-Sig Zurich relay. Updating dashboard view...</span>
+                    <div class="flavor-notes">
+                        <span class="note-tag">Focus</span>
+                        <span class="note-tag">Umami</span>
+                        <span class="note-tag">Fresh Leaf</span>
                     </div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- SECURITY & ACCREDITATION BANNER -->
-        <section id="security" class="max-w-7xl mx-auto px-6 py-12 border-t border-white/[0.06]">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
-                    <i data-lucide="shield-check" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
-                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">FINMA / SEC Regulated</h5>
-                    <p class="text-slate-500 text-[11px] mt-1">Direct institutional custodianship</p>
-                </div>
-                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
-                    <i data-lucide="cpu" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
-                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">FIPS 140-2 Level 4 HSM</h5>
-                    <p class="text-slate-500 text-[11px] mt-1">Cold enclave signing keys</p>
-                </div>
-                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
-                    <i data-lucide="lock" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
-                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">Zero-Knowledge Audits</h5>
-                    <p class="text-slate-500 text-[11px] mt-1">Continuous mathematical proof</p>
-                </div>
-                <div class="p-4 rounded-xl border border-white/[0.04] bg-obsidian-900/40">
-                    <i data-lucide="globe" class="w-6 h-6 text-gold-400 mx-auto mb-2"></i>
-                    <h5 class="text-white text-xs font-semibold tracking-wider uppercase">Sovereign Jurisdictions</h5>
-                    <p class="text-slate-500 text-[11px] mt-1">Switzerland, Singapore & UK</p>
+                <div class="product-card" data-blend="oolong">
+                    <div>
+                        <h3>Imperial Oolong</h3>
+                        <p>Lightly oxidized hand-rolled leaves releasing notes of wild orchids, cream, and dry pine bark.</p>
+                    </div>
+                    <div class="flavor-notes">
+                        <span class="note-tag">Smooth</span>
+                        <span class="note-tag">Roast</span>
+                        <span class="note-tag">Orchid</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-    </main>
+        <!-- Steeping Ritual Timer -->
+        <section class="ritual" id="ritual">
+            <div class="ritual-container">
+                <div class="section-header">
+                    <div class="badge">The Perfect Brew</div>
+                    <h2>Master the <span>Art of Time</span></h2>
+                </div>
+                <div class="ritual-steps">
+                    <div class="step">
+                        <div class="step-num">01</div>
+                        <div class="step-detail">
+                            <h4>First Rise</h4>
+                            <p>Preheat your porcelain cup with freshly boiled spring water, then gently discard the water to prime the clay.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">02</div>
+                        <div class="step-detail">
+                            <h4>The Awakening</h4>
+                            <p>Gently scatter 3 grams of whole leaves. Pour water at exactly 85°C to allow the complex essential oils to surface.</p>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-white/[0.08] bg-obsidian-950 py-12 mt-12 text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-3">
-                <span class="font-serif tracking-widest text-white text-sm font-bold">AURELIUS PRIME</span>
-                <span>© 2025 Aurelius Prime Global Custody Ltd.</span>
+                <!-- Live Timer Widget interacting with 3D elements -->
+                <div class="timer-widget">
+                    <div class="timer-circle-container">
+                        <svg class="timer-svg" viewBox="0 0 56 56">
+                            <circle class="timer-bg" cx="28" cy="28" r="25"/>
+                            <circle class="timer-progress" cx="28" cy="28" r="25"/>
+                        </svg>
+                        <button class="timer-btn" id="steepTrigger">
+                            <span id="btnIcon">▶</span>
+                        </button>
+                    </div>
+                    <div class="timer-info">
+                        <h5 id="timerState">Initiate Infusion</h5>
+                        <p id="timerDesc">Starts real-time 3D hot-steam activation</p>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center space-x-6 text-slate-400 text-xs">
-                <a href="#test-users" class="hover:text-gold-300 transition-colors">Test Sandbox</a>
-                <a href="#dashboard" class="hover:text-gold-300 transition-colors">Terminal Preview</a>
-                <a href="#login-portal" class="hover:text-gold-300 transition-colors">Client Sign-in</a>
-                <a href="javascript:void(0)" class="hover:text-gold-300 transition-colors">Confidential Disclosures</a>
-            </div>
+        </section>
+
+    </div>
+
+    <!-- Interactive Camera Hints -->
+    <div class="scene-hints">
+        <div class="hint-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(45deg);"><path d="M15 18l-6-6 6-6"/></svg>
+            Scroll to Navigate & Fly Scene
         </div>
-    </footer>
+        <div class="hint-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8V12l3 3"/></svg>
+            Select Blends to Infuse Color
+        </div>
+    </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- Include Three.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
-        // Init Lucide Icons
-        lucide.createIcons();
+        // Setup Three.js Scene, Camera, and Renderer
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        // Add subtle depth mist
+        scene.fog = new THREE.FogExp2(0x110d0a, 0.025);
 
-        // Persona State Data
-        const personas = {
-            elizabeth: {
-                name: "Lady Elizabeth Vance",
-                role: "Managing Partner // Sovereign Tier-0",
-                sessionTag: "ELIZABETH_VANCE // MANAGING_PARTNER",
-                mandate: "$8,450,210,400",
-                mandateTitle: "Net Liquidity Mandate",
-                mandateDiff: "+3.84% (+$312.4M)",
-                sharpe: "3.91 α",
-                sharpeDiff: "99.98% Confidence",
-                yield: "14.88%",
-                nodes: "12 Enclaves",
-                email: "elizabeth@aurelius.prime",
-                chartData: [4200, 4800, 5600, 6400, 7100, 7900, 8450],
-                table: [
-                    { time: "14:28:01.02", act: "ALLOCATE", item: "Zurich Vault Gold Swaps", vol: "+$45,000,000", route: "CH-ZUR-01", status: "SETTLED" },
-                    { time: "14:12:44.19", act: "REBALANCE", item: "US Treasury 3M Bill Index", vol: "-$22,500,000", route: "NY-FED-FEED", status: "SETTLED" },
-                    { time: "13:58:12.78", act: "DIVIDEND", item: "Autonomous Quant Alpha IV", vol: "+$6,140,000", route: "SG-SIN-04", status: "SETTLED" },
-                    { time: "13:30:00.00", act: "MULTI-SIG", item: "Custodial Quorum Signature", vol: "--", route: "GLOBAL-HSM", status: "CONFIRMED" }
-                ]
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1.2, 5.5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        container.appendChild(renderer.domElement);
+
+        // Core Lighting Setup
+        const ambientLight = new THREE.AmbientLight(0xfff5ea, 0.3);
+        scene.add(ambientLight);
+
+        // Warm Key Light (mimics a warm studio light)
+        const keyLight = new THREE.SpotLight(0xffe3b3, 5, 20, Math.PI / 4, 0.5, 1);
+        keyLight.position.set(5, 8, 5);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
+        keyLight.shadow.bias = -0.0001;
+        scene.add(keyLight);
+
+        // Rim Light from back-left (gives separation edge)
+        const rimLight = new THREE.DirectionalLight(0xb07c2a, 3);
+        rimLight.position.set(-6, 2, -4);
+        scene.add(rimLight);
+
+        // Base Soft Bottom Fill
+        const fillLight = new THREE.DirectionalLight(0x5d8a66, 0.5);
+        fillLight.position.set(0, -5, 0);
+        scene.add(fillLight);
+
+        // Create Main Dynamic 3D Objects Group (The Teacup)
+        const teaRig = new THREE.Group();
+        scene.add(teaRig);
+
+        // 1. Procedural Fine-Ceramic Cup Geometry Creation
+        const cupPoints = [];
+        for (let i = 0; i < 20; i++) {
+            const t = i / 19;
+            // Elegant curve for teacup wall
+            const x = 0.8 * Math.sin(t * Math.PI * 0.5) + 0.1 * Math.pow(t, 4);
+            const y = t * 1.2;
+            cupPoints.push(new THREE.Vector2(x, y));
+        }
+
+        const cupGeo = new THREE.LatheGeometry(cupPoints, 48);
+        const ceramicMat = new THREE.MeshStandardMaterial({
+            color: 0xfbf7f2,
+            roughness: 0.05,
+            metalness: 0.1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05,
+            side: THREE.DoubleSide
+        });
+        const cupMesh = new THREE.Mesh(cupGeo, ceramicMat);
+        cupMesh.castShadow = true;
+        cupMesh.receiveShadow = true;
+        cupMesh.position.y = -0.2;
+        teaRig.add(cupMesh);
+
+        // 2. Teacup Saucer / Plate Base
+        const platePoints = [];
+        platePoints.push(new THREE.Vector2(0, 0));
+        platePoints.push(new THREE.Vector2(0.5, 0.02));
+        platePoints.push(new THREE.Vector2(1.2, 0.15));
+        platePoints.push(new THREE.Vector2(1.5, 0.28));
+        platePoints.push(new THREE.Vector2(1.48, 0.28));
+        platePoints.push(new THREE.Vector2(1.15, 0.12));
+        platePoints.push(new THREE.Vector2(0.5, 0.0));
+        platePoints.push(new THREE.Vector2(0, 0));
+
+        const plateGeo = new THREE.LatheGeometry(platePoints, 48);
+        const plateMesh = new THREE.Mesh(plateGeo, ceramicMat);
+        plateMesh.position.y = -0.25;
+        plateMesh.castShadow = true;
+        plateMesh.receiveShadow = true;
+        teaRig.add(plateMesh);
+
+        // 3. Stylized Teacup Ceramic Handle
+        const handlePath = new THREE.CurvePath();
+        const curve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(0.7, 0.8, 0),
+            new THREE.Vector3(1.6, 0.5, 0),
+            new THREE.Vector3(0.6, 0.1, 0)
+        );
+        handlePath.add(curve);
+        const handleGeo = new THREE.TubeGeometry(handlePath, 32, 0.07, 12, false);
+        const handleMesh = new THREE.Mesh(handleGeo, ceramicMat);
+        handleMesh.position.y = -0.1;
+        teaRig.add(handleMesh);
+
+        // 4. Liquid Inside the Cup (Interactive Color-Shifting Mesh)
+        const liquidGeo = new THREE.CylinderGeometry(0.78, 0.4, 0.1, 32);
+        const liquidMat = new THREE.MeshStandardMaterial({
+            color: 0xdcae53, // Default: Golden Chamomile
+            roughness: 0.05,
+            metalness: 0.2,
+            transmission: 0.9, // Gives liquid realism
+            opacity: 0.9,
+            transparent: true,
+            roughness: 0.1
+        });
+        const liquidMesh = new THREE.Mesh(liquidGeo, liquidMat);
+        liquidMesh.position.set(0, 0.85, 0);
+        teaRig.add(liquidMesh);
+
+        // Floating Organic Tea Leaves System
+        const particleCount = 28;
+        const leavesGroup = new THREE.Group();
+        scene.add(leavesGroup);
+
+        // Construct individual elegant stylized leaf meshes
+        const leafShape = new THREE.Shape();
+        leafShape.moveTo(0, 0);
+        leafShape.quadraticCurveTo(0.25, 0.35, 0, 0.7);
+        leafShape.quadraticCurveTo(-0.25, 0.35, 0, 0);
+
+        const extrudeSettings = { depth: 0.01, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.005, bevelThickness: 0.005 };
+        const leafGeo = new THREE.ExtrudeGeometry(leafShape, extrudeSettings);
+        leafGeo.center();
+
+        const leafMaterials = [
+            new THREE.MeshStandardMaterial({ color: 0x5d8a66, roughness: 0.4, side: THREE.DoubleSide }), // matcha tone
+            new THREE.MeshStandardMaterial({ color: 0xb07c2a, roughness: 0.5, side: THREE.DoubleSide }), // roasted oolong tone
+            new THREE.MeshStandardMaterial({ color: 0xe5b85c, roughness: 0.3, side: THREE.DoubleSide })  // golden calendula petal tone
+        ];
+
+        const leafInstances = [];
+
+        for (let i = 0; i < particleCount; i++) {
+            const matIdx = Math.floor(Math.random() * leafMaterials.length);
+            const mesh = new THREE.Mesh(leafGeo, leafMaterials[matIdx]);
+            
+            // Random distribution sphere around the cup
+            const angle = Math.random() * Math.PI * 2;
+            const radius = 1.5 + Math.random() * 2.5;
+            const yPos = -0.5 + Math.random() * 3.5;
+
+            mesh.position.set(Math.cos(angle) * radius, yPos, Math.sin(angle) * radius);
+            mesh.scale.setScalar(0.4 + Math.random() * 0.5);
+            
+            // Random starting rotation to disperse scattering look
+            mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+
+            // Assign unique float offsets for individual procedural animation
+            mesh.userData = {
+                angleSpeed: 0.002 + Math.random() * 0.005,
+                radius: radius,
+                angle: angle,
+                yPivot: yPos,
+                waveOffset: Math.random() * 100,
+                rotXSpeed: 0.005 + Math.random() * 0.01,
+                rotYSpeed: 0.005 + Math.random() * 0.01
+            };
+
+            leavesGroup.add(mesh);
+            leafInstances.push(mesh);
+        }
+
+        // 5. Ambient Micro-particles (Dust and Steam hints)
+        const microGeo = new THREE.BufferGeometry();
+        const microCount = 120;
+        const microPositions = new Float32Array(microCount * 3);
+
+        for (let i = 0; i < microCount * 3; i += 3) {
+            microPositions[i] = (Math.random() - 0.5) * 8;     // X
+            microPositions[i + 1] = (Math.random() - 0.5) * 6 + 1.5; // Y
+            microPositions[i + 2] = (Math.random() - 0.5) * 8;     // Z
+        }
+
+        microGeo.setAttribute('position', new THREE.BufferAttribute(microPositions, 3));
+        const microMat = new THREE.PointsMaterial({
+            color: 0xfff3db,
+            size: 0.025,
+            transparent: true,
+            opacity: 0.4
+        });
+        const microParticles = new THREE.Points(microGeo, microMat);
+        scene.add(microParticles);
+
+        // Interactive Live Steam System (rising directly from Cup)
+        const steamParticlesGeo = new THREE.BufferGeometry();
+        const steamCount = 35;
+        const steamPositions = new Float32Array(steamCount * 3);
+        const steamSpeeds = [];
+
+        for (let i = 0; i < steamCount; i++) {
+            steamPositions[i * 3] = (Math.random() - 0.5) * 0.4;
+            steamPositions[i * 3 + 1] = 0.85 + Math.random() * 2;
+            steamPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.4;
+            steamSpeeds.push({
+                y: 0.01 + Math.random() * 0.015,
+                xOffset: Math.random() * 5,
+                xSpeed: 0.01 + Math.random() * 0.02
+            });
+        }
+
+        steamParticlesGeo.setAttribute('position', new THREE.BufferAttribute(steamPositions, 3));
+        const steamMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.065,
+            transparent: true,
+            opacity: 0.15,
+            blending: THREE.AdditiveBlending
+        });
+        const steamPoints = new THREE.Points(steamParticlesGeo, steamMat);
+        teaRig.add(steamPoints);
+
+
+        // Mouse Parallax Trackers
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetCamY = 1.2;
+        let targetCamX = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.6;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+        });
+
+        // High Performance Scroll Parallax Handling
+        let scrollPercent = 0;
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement;
+            const b = document.body;
+            const st = 'scrollTop';
+            const sh = 'scrollHeight';
+            scrollPercent = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight);
+            
+            // Adjust lighting dynamics and fog density with scroll depth
+            scene.fog.density = 0.025 + scrollPercent * 0.02;
+            keyLight.intensity = 5 - (scrollPercent * 1.5);
+        });
+
+        // 3D Color Customizer Logic (Linked with selection tags)
+        const blendColors = {
+            chamomile: {
+                liquid: 0xdcae53,
+                rim: 0xb07c2a,
+                bgGrad: '#1c1510',
+                steamColor: 0xffffff
             },
-            aris: {
-                name: "Dr. Aris Thorne",
-                role: "Chief Risk Officer // Tier-1 Risk Control",
-                sessionTag: "DR_ARIS_THORNE // RISK_CONTROL_OFFICER",
-                mandate: "$3,120,400,000",
-                mandateTitle: "Supervised Risk Mandate",
-                mandateDiff: "VAR: 0.82% Max Exposure",
-                sharpe: "4.15 α",
-                sharpeDiff: "Stress Test: 99.99%",
-                yield: "11.24%",
-                nodes: "18 Sensors",
-                email: "thorne@aurelius.prime",
-                chartData: [2800, 2900, 2950, 3010, 3080, 3110, 3120],
-                table: [
-                    { time: "14:29:45.33", act: "RISK-ALERT", item: "EUR/CHF Volatility Delta", vol: "0.012 σ", route: "SYS-ENGINE-A", status: "CONTAINED" },
-                    { time: "14:02:11.89", act: "HEDGE", item: "Dynamic S&P Put Matrix", vol: "+$18,400,000", route: "CBOE-DIRECT", status: "SETTLED" },
-                    { time: "13:45:08.12", act: "SIMULATION", item: "Monte Carlo 100K Paths", vol: "PASSED", route: "ZUR-NODE-2", status: "VERIFIED" },
-                    { time: "13:10:42.50", act: "MARGIN-CALL", item: "Prime Broker Collateral Check", vol: "142% Buffer", route: "GLOBAL-RISK", status: "CLEARED" }
-                ]
+            matcha: {
+                liquid: 0x5d8a66,
+                rim: 0x2c4431,
+                bgGrad: '#0d160e',
+                steamColor: 0xe0ffd8
             },
-            kaelen: {
-                name: "Kaelen Chen",
-                role: "Principal Execution Strategist // Tier-1 Quant",
-                sessionTag: "KAELEN_CHEN // QUANT_HIGH_FREQ_DESK",
-                mandate: "$420,800,000",
-                mandateTitle: "Active Intraday Flow",
-                mandateDiff: "Execution Latency: 0.38ms",
-                sharpe: "4.78 α",
-                sharpeDiff: "Fill Ratio: 99.94%",
-                yield: "22.40%",
-                nodes: "6 Fast Nodes",
-                email: "kaelen.chen@aurelius.prime",
-                chartData: [210, 245, 290, 330, 380, 405, 420.8],
-                table: [
-                    { time: "14:31:02.10", act: "SNIPE", item: "Arbitrage Pair FX JPY/USD", vol: "+$12,000,000", route: "TYO-EBS-1", status: "EXECUTED" },
-                    { time: "14:30:58.82", act: "ORDER-ROUTE", item: "Dark Pool Liquidity Batch", vol: "+$34,500,000", route: "LDN-LSE-DARK", status: "FILLED" },
-                    { time: "14:28:10.05", act: "CANCEL", item: "Passive Limit Spread QQQ", vol: "$5,000,000", route: "NASDAQ-DIRECT", status: "CLEARED" },
-                    { time: "14:25:01.44", act: "ROUTE", item: "Latency Arbitrage CME Micro", vol: "+$8,900,000", route: "CHI-CME-01", status: "FILLED" }
-                ]
+            oolong: {
+                liquid: 0xcf8b83,
+                rim: 0x6e3c35,
+                bgGrad: '#1f1311',
+                steamColor: 0xffe2e0
             }
         };
 
-        let currentPersonaKey = 'elizabeth';
-        let chartInstance = null;
+        const cards = document.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Toggle active styles on UI cards
+                cards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
 
-        // Initialize Chart.js with luxury dark theme
-        function initChart() {
-            const ctx = document.getElementById('performanceChart').getContext('2d');
-            const goldGradient = ctx.createLinearGradient(0, 0, 0, 300);
-            goldGradient.addColorStop(0, 'rgba(212, 175, 55, 0.45)');
-            goldGradient.addColorStop(1, 'rgba(212, 175, 55, 0.00)');
+                // Transition colors dynamically inside the 3D WebGL scene
+                const selection = card.getAttribute('data-blend');
+                const targetData = blendColors[selection];
 
-            const data = personas[currentPersonaKey].chartData;
+                // Smoothly tween color values
+                new THREE.Color(targetData.liquid);
+                
+                // Color transition animation using basic Lerp approximation
+                let progress = 0;
+                const originColor = liquidMat.color.clone();
+                const destColor = new THREE.Color(targetData.liquid);
+                
+                const originRim = rimLight.color.clone();
+                const destRim = new THREE.Color(targetData.rim);
 
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan 05', 'Jan 10', 'Jan 15', 'Jan 20', 'Jan 25', 'Jan 30', 'Feb 05'],
-                    datasets: [
-                        {
-                            label: 'Alpha Mandate',
-                            data: data,
-                            borderColor: '#D4AF37',
-                            borderWidth: 2.5,
-                            pointBackgroundColor: '#F3EED9',
-                            pointBorderColor: '#0A0C10',
-                            pointBorderWidth: 2,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            fill: true,
-                            backgroundColor: goldGradient,
-                            tension: 0.38
-                        },
-                        {
-                            label: 'Treasury Benchmark',
-                            data: data.map(v => v * 0.72),
-                            borderColor: 'rgba(255, 255, 255, 0.2)',
-                            borderWidth: 1.5,
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false,
-                            tension: 0.2
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#0F1217',
-                            titleColor: '#D4AF37',
-                            bodyColor: '#FFFFFF',
-                            borderColor: 'rgba(212, 175, 55, 0.3)',
-                            borderWidth: 1,
-                            padding: 12,
-                            displayColors: false,
-                            callbacks: {
-                                label: function(context) {
-                                    return ' Capital: $' + context.raw.toLocaleString() + ' M';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: 'rgba(255, 255, 255, 0.04)' },
-                            ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10 } }
-                        },
-                        y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.04)' },
-                            ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10 } }
-                        }
+                function lerpColor() {
+                    progress += 0.04;
+                    liquidMat.color.lerpColors(originColor, destColor, progress);
+                    rimLight.color.lerpColors(originRim, destRim, progress);
+                    steamMat.color.setHex(targetData.steamColor);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(lerpColor);
                     }
                 }
+                lerpColor();
             });
-        }
-
-        // Render dynamic table rows
-        function renderTable(personaKey) {
-            const tbody = document.getElementById('execution-table-body');
-            tbody.innerHTML = '';
-            const items = personas[personaKey].table;
-
-            items.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-white/[0.02] transition-colors";
-                tr.innerHTML = `
-                    <td class="py-3 text-slate-400">${row.time}</td>
-                    <td class="py-3 font-semibold ${row.act.includes('RISK') ? 'text-amber-400' : 'text-gold-300'}">${row.act}</td>
-                    <td class="py-3 text-white font-sans">${row.item}</td>
-                    <td class="py-3 text-slate-200">${row.vol}</td>
-                    <td class="py-3 text-slate-400">${row.route}</td>
-                    <td class="py-3 text-right">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${row.status === 'CONTAINED' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
-                            ${row.status}
-                        </span>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // Select a Test User from the persona section
-        function selectUser(key) {
-            currentPersonaKey = key;
-            const p = personas[key];
-
-            // Update Card borders and Badges
-            ['elizabeth', 'aris', 'kaelen'].forEach(k => {
-                const card = document.getElementById(`card-${k}`);
-                const badge = document.getElementById(`badge-${k}`);
-                if (k === key) {
-                    card.classList.add('border-gold-400', 'shadow-glow');
-                    card.classList.remove('border-white/10');
-                    badge.classList.remove('hidden');
-                } else {
-                    card.classList.remove('border-gold-400', 'shadow-glow');
-                    card.classList.add('border-white/10');
-                    badge.classList.add('hidden');
-                }
-            });
-
-            // Update Dashboard values
-            document.getElementById('active-session-label').innerText = p.sessionTag;
-            document.getElementById('stat-1-title').innerText = p.mandateTitle;
-            document.getElementById('stat-1-val').innerText = p.mandate;
-            document.getElementById('stat-1-diff').innerText = p.mandateDiff;
-
-            document.getElementById('stat-2-val').innerText = p.sharpe;
-            document.getElementById('stat-2-diff').innerText = p.sharpeDiff;
-
-            document.getElementById('stat-3-val').innerText = p.yield;
-            document.getElementById('stat-4-val').innerText = p.nodes;
-
-            // Update Chart
-            if (chartInstance) {
-                chartInstance.data.datasets[0].data = p.chartData;
-                chartInstance.data.datasets[1].data = p.chartData.map(v => v * 0.72);
-                chartInstance.update();
-            }
-
-            // Update Table
-            renderTable(key);
-
-            // Auto-fill form values in the login box
-            document.getElementById('login-email').value = p.email;
-
-            // Smoothly jump down to glance at the dashboard
-            const dashboardEl = document.getElementById('dashboard');
-            dashboardEl.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Auto fill helper from the login section
-        function autoFillLogin(email, pass, roleLabel) {
-            document.getElementById('login-email').value = email;
-            document.getElementById('login-pass').value = 'authenticated-token-9988';
-            document.getElementById('login-totp').value = Math.floor(100000 + Math.random() * 900000);
-
-            // Trigger visual pulse
-            const alert = document.getElementById('auth-alert');
-            alert.classList.remove('hidden');
-            document.getElementById('auth-alert-msg').innerText = `Credentials mapped for ${roleLabel}. Click 'Authenticate' below.`;
-            
-            lucide.createIcons();
-        }
-
-        // Handle Form Submission
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('auth-submit-btn');
-            const btnText = document.getElementById('btn-text');
-            const alert = document.getElementById('auth-alert');
-
-            // Simulate high-security processing state
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-75');
-            btnText.innerText = "Encrypting Handshake (Zurich Enclave)...";
-
-            setTimeout(() => {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-75');
-                btnText.innerText = "Access Granted // Redirecting";
-                alert.classList.remove('hidden');
-                document.getElementById('auth-alert-msg').innerText = "Cryptographic session confirmed. Launching telemetry...";
-
-                // Map to corresponding persona if matching email
-                const email = document.getElementById('login-email').value.toLowerCase();
-                if (email.includes('thorne')) selectUser('aris');
-                else if (email.includes('chen')) selectUser('kaelen');
-                else selectUser('elizabeth');
-
-                // Scroll to dashboard
-                setTimeout(() => {
-                    document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
-                    btnText.innerText = "Authenticate & Access Terminal";
-                }, 800);
-            }, 1000);
-        }
-
-        // Switch login tabs (Password vs Hardware vs Totp)
-        function switchLoginTab(type) {
-            const tabs = ['pass', 'hardware', 'totp'];
-            tabs.forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                if (t === type || (type === 'password' && t === 'pass')) {
-                    el.className = "flex-1 py-2 rounded-lg bg-gold-400 text-obsidian-950 font-semibold transition-all flex items-center justify-center space-x-1.5 shadow-sm";
-                } else {
-                    el.className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center justify-center space-x-1.5";
-                }
-            });
-
-            if (type === 'hardware') {
-                document.getElementById('login-pass').placeholder = "Insert Hardware Security Key (YubiKey) or tap TouchID";
-            } else {
-                document.getElementById('login-pass').placeholder = "Enter high-entropy passphrase";
-            }
-        }
-
-        // Toggle Password visibility
-        function togglePasswordVisibility() {
-            const input = document.getElementById('login-pass');
-            if (input.type === 'password') {
-                input.type = 'text';
-            } else {
-                input.type = 'password';
-            }
-        }
-
-        // Chart timeframe button toggle
-        function updateChartTimeframe(tf, btn) {
-            document.querySelectorAll('.tf-btn').forEach(b => {
-                b.className = "tf-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors";
-            });
-            btn.className = "tf-btn px-3 py-1 rounded-lg bg-gold-400 text-obsidian-950 font-bold";
-
-            // Add slight randomness to chart on timeframe click to feel alive
-            if (chartInstance) {
-                const base = personas[currentPersonaKey].chartData;
-                const multiplier = tf === '1D' ? 0.98 : tf === '1W' ? 0.95 : tf === '1Y' ? 1.15 : 1.0;
-                chartInstance.data.datasets[0].data = base.map(v => Math.round(v * (multiplier + (Math.random() * 0.05 - 0.02))));
-                chartInstance.update();
-            }
-        }
-
-        function scrollToSection(id) {
-            const el = document.getElementById(id);
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function notifyReset() {
-            alert("Emergency HSM Cold Recovery: Please contact your designated family office sovereign custody liaison in Zurich or Singapore.");
-        }
-
-        // On Mount
-        window.addEventListener('DOMContentLoaded', () => {
-            initChart();
-            renderTable('elizabeth');
         });
+
+        // Interactive Steeping Timer Implementation
+        const steepBtn = document.getElementById('steepTrigger');
+        const btnIcon = document.getElementById('btnIcon');
+        const timerStateText = document.getElementById('timerState');
+        const timerDescText = document.getElementById('timerDesc');
+        const progressStroke = document.querySelector('.timer-progress');
+        
+        let timerActive = false;
+        let timerInterval = null;
+        let originalLiquidOpacity = 0.9;
+        let activeSteamFactor = 1;
+
+        steepBtn.addEventListener('click', () => {
+            if (timerActive) {
+                // Reset State
+                clearInterval(timerInterval);
+                timerActive = false;
+                btnIcon.textContent = "▶";
+                timerStateText.textContent = "Initiate Infusion";
+                timerDescText.textContent = "Starts real-time 3D hot-steam activation";
+                progressStroke.style.strokeDashoffset = 157;
+                activeSteamFactor = 1;
+                liquidMat.opacity = originalLiquidOpacity;
+            } else {
+                // Begin State
+                timerActive = true;
+                btnIcon.textContent = "■";
+                timerStateText.textContent = "Brewing... (10s)";
+                timerDescText.textContent = "Heat currents are opening leaves";
+                
+                let count = 0;
+                const totalDur = 10;
+                activeSteamFactor = 3.5; // Double steam generation output
+
+                // Dynamic Tea infusion visual change
+                liquidMat.opacity = 0.35; // Water begins diluting initially
+
+                timerInterval = setInterval(() => {
+                    count++;
+                    const progress = count / totalDur;
+                    progressStroke.style.strokeDashoffset = 157 - (157 * progress);
+                    
+                    // Slowly increase liquid concentration opacity during infusion
+                    liquidMat.opacity = 0.35 + (0.55 * progress);
+
+                    if (count >= totalDur) {
+                        clearInterval(timerInterval);
+                        btnIcon.textContent = "✓";
+                        timerStateText.textContent = "Perfect Brew Ready";
+                        timerDescText.textContent = "Optimal taste reached. Pour and enjoy.";
+                        activeSteamFactor = 1.5;
+                    } else {
+                        timerStateText.textContent = `Brewing... (${totalDur - count}s)`;
+                    }
+                }, 1000);
+            }
+        });
+
+
+        // Global Clock for smooth rendering frame loops
+        const clock = new THREE.Clock();
+
+        // Main Animation Frame Render Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            // 1. Scene Navigation & Layout Transformation Camera Mapping
+            // As page scrolls down, camera orbits from front view to overhead/zoomed layout views
+            const orbitRadius = 5.5 - scrollPercent * 2.2;
+            const targetCamHeight = 1.2 + Math.sin(scrollPercent * Math.PI * 0.3) * 1.8;
+            const angleOffset = scrollPercent * Math.PI * 0.75;
+
+            // Apply interactive Mouse parallax smoothly
+            const actualCamX = Math.sin(angleOffset) * orbitRadius + mouseX;
+            const actualCamZ = Math.cos(angleOffset) * orbitRadius + (mouseY * 0.5);
+            
+            camera.position.x += (actualCamX - camera.position.x) * 0.08;
+            camera.position.z += (actualCamZ - camera.position.z) * 0.08;
+            camera.position.y += (targetCamHeight - camera.position.y) * 0.08;
+
+            // Continually look at target offset slightly dynamic
+            const lookTarget = new THREE.Vector3(0, 0.4 - scrollPercent * 0.2, 0);
+            camera.lookAt(lookTarget);
+
+            // 2. Teacup Idle Animation
+            teaRig.rotation.y = elapsedTime * 0.05 + scrollPercent * Math.PI * 0.5;
+            // Gentle hovering vertical wave
+            teaRig.position.y = Math.sin(elapsedTime * 0.8) * 0.06;
+
+            // 3. Float Leaf Positions & Orbit Motions
+            leafInstances.forEach(leaf => {
+                const data = leaf.userData;
+                // Modify angle in real-time
+                data.angle += data.angleSpeed;
+                
+                // Orbit path calculation
+                const destX = Math.cos(data.angle) * data.radius;
+                const destZ = Math.sin(data.angle) * data.radius;
+                
+                // Vertical wave oscillation
+                const currentWave = Math.sin(elapsedTime * 0.6 + data.waveOffset) * 0.15;
+                
+                leaf.position.x = destX;
+                leaf.position.z = destZ;
+                leaf.position.y = data.yPivot + currentWave;
+
+                // Subtle spin and tilt rotation
+                leaf.rotation.x += data.rotXSpeed;
+                leaf.rotation.y += data.rotYSpeed;
+            });
+
+            // 4. Steam Particles Rise Logic
+            const posAttr = steamParticlesGeo.attributes.position;
+            for (let i = 0; i < steamCount; i++) {
+                let y = posAttr.getY(i);
+                y += steamSpeeds[i].y * activeSteamFactor;
+                
+                // If it goes too high, reset to top of teacup rim
+                if (y > 2.8) {
+                    y = 0.85;
+                    posAttr.setX(i, (Math.random() - 0.5) * 0.4);
+                    posAttr.setZ(i, (Math.random() - 0.5) * 0.4);
+                } else {
+                    // Drift back and forth in wind path
+                    const speedData = steamSpeeds[i];
+                    posAttr.setX(i, posAttr.getX(i) + Math.sin(elapsedTime * 2 + speedData.xOffset) * 0.002);
+                }
+                posAttr.setY(i, y);
+            }
+            posAttr.needsUpdate = true;
+
+            // 5. Gently drift background stars/micorparticles
+            microParticles.rotation.y = -elapsedTime * 0.008;
+            microParticles.rotation.x = elapsedTime * 0.005;
+
+            renderer.render(scene, camera);
+        }
+
+        // Keep Aspect ratio correctly on resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+
+        // Kickoff Render Loop
+        animate();
     </script>
 </body>
 </html>
