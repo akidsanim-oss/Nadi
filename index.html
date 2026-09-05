@@ -1,507 +1,854 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pro Prompt Pack — Pokémon Card Marketplace</title>
-<style>
-  :root{
-    --bg:#0b0d12;
-    --bg-2:#11141c;
-    --card:#161a24;
-    --card-2:#1c2130;
-    --ink:#eef1f7;
-    --muted:#9aa3b7;
-    --gold:#d4af37;
-    --gold-2:#f3d27a;
-    --holo-1:#ff5ea8;
-    --holo-2:#7c5cff;
-    --holo-3:#4cd7ff;
-    --holo-4:#7cffc4;
-    --danger:#ff6b6b;
-    --ok:#7cffc4;
-    --border:rgba(255,255,255,.08);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  body::before{
-    content:"";position:fixed;inset:0;z-index:-1;
-    background:
-      radial-gradient(1200px 600px at 80% -10%,rgba(124,92,255,.18),transparent 60%),
-      radial-gradient(900px 500px at -10% 20%,rgba(76,215,255,.12),transparent 60%),
-      radial-gradient(700px 500px at 50% 110%,rgba(255,94,168,.10),transparent 60%);
-    pointer-events:none;
-  }
-  .wrap{max-width:1180px;margin:0 auto;padding:40px 22px 80px}
-  /* HERO */
-  .hero{
-    position:relative;padding:56px 34px;border-radius:22px;overflow:hidden;
-    background:linear-gradient(135deg,#161a24 0%,#0f1220 100%);
-    border:1px solid var(--border);
-  }
-  .hero::before{
-    content:"";position:absolute;inset:-2px;z-index:0;
-    background:conic-gradient(from 0deg,var(--holo-1),var(--holo-2),var(--holo-3),var(--holo-4),var(--holo-1));
-    filter:blur(40px);opacity:.35;animation:spin 14s linear infinite;
-  }
-  .hero-inner{position:relative;z-index:1}
-  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2);
-    background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.35);padding:6px 12px;border-radius:999px}
-  h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(34px,5vw,56px);line-height:1.05;margin:18px 0 12px;letter-spacing:-.02em}
-  h1 .grad{background:linear-gradient(90deg,var(--gold-2),#fff 40%,var(--holo-3) 70%,var(--holo-1));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lede{color:var(--muted);max-width:780px;font-size:16.5px}
-  .hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-  .stat{background:rgba(255,255,255,.04);border:1px solid var(--border);padding:10px 14px;border-radius:12px;font-size:13px;color:var(--muted)}
-  .stat b{color:var(--ink);display:block;font-size:16px;margin-bottom:2px}
-  @keyframes spin{to{transform:rotate(360deg)}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Card Studio & Pokémon 8K Promos</title>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --panel-bg: rgba(16, 20, 28, 0.85);
+            --panel-border: rgba(255, 255, 255, 0.1);
+            --gold: #f5c542;
+            --gold-glow: rgba(245, 197, 66, 0.35);
+            --cyan: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --radius: 12px;
+            --poke-fire: #ef4444;
+            --poke-water: #3b82f6;
+            --poke-electric: #eab308;
+            --poke-psychic: #a855f7;
+            --poke-dragon: #10b981;
+        }
 
-  /* RULE */
-  .rule{
-    margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:16px
-  }
-  .rule .box{padding:22px;border-radius:18px;border:1px solid var(--border);background:var(--card)}
-  .rule .bad{border-color:rgba(255,107,107,.35);background:linear-gradient(180deg,rgba(255,107,107,.06),transparent)}
-  .rule .good{border-color:rgba(124,255,196,.35);background:linear-gradient(180deg,rgba(124,255,196,.05),transparent)}
-  .rule h3{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
-  .rule .bad h3{color:var(--danger)}
-  .rule .good h3{color:var(--ok)}
-  .rule ul{list-style:none;color:var(--muted);font-size:14.5px}
-  .rule li{padding:6px 0 6px 22px;position:relative}
-  .rule li::before{content:"";position:absolute;left:0;top:14px;width:12px;height:2px;border-radius:2px}
-  .rule .bad li::before{background:var(--danger)}
-  .rule .good li::before{background:var(--ok)}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-  /* SECTIONS */
-  section{margin-top:54px}
-  h2{font-family:"Playfair Display",Georgia,serif;font-size:clamp(26px,3.4vw,34px);letter-spacing:-.01em;margin-bottom:6px}
-  h2 .num{color:var(--gold);font-variant-numeric:tabular-nums;margin-right:10px}
-  .section-sub{color:var(--muted);margin-bottom:22px;font-size:15px}
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg-dark);
+            color: var(--text-main);
+        }
 
-  /* PROMPT CARDS */
-  .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-  .card{
-    position:relative;border-radius:18px;padding:22px;
-    background:linear-gradient(180deg,var(--card) 0%,var(--card-2) 100%);
-    border:1px solid var(--border);
-    overflow:hidden;transition:transform .3s ease, border-color .3s ease;
-  }
-  .card::after{
-    content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s ease;
-    background:conic-gradient(from var(--angle,0deg),transparent 0 70%,rgba(124,92,255,.25) 80%,rgba(76,215,255,.25) 90%,transparent 100%);
-    mix-blend-mode:screen;
-  }
-  .card:hover{transform:translateY(-3px);border-color:rgba(212,175,55,.4)}
-  .card:hover::after{opacity:1;animation:rot 6s linear infinite}
-  @keyframes rot{to{--angle:360deg}}
-  @property --angle{syntax:"<angle>";initial-value:0deg;inherits:false}
-  .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2);margin-bottom:10px;display:inline-block}
-  .card h3{font-size:18px;margin-bottom:10px}
-  .prompt{
-    position:relative;background:#0a0c14;border:1px solid var(--border);
-    border-radius:12px;padding:14px 50px 14px 14px;font-size:13.5px;color:#cfd6e6;
-    font-family:"JetBrains Mono","Fira Code",ui-monospace,monospace;line-height:1.55;
-    max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word
-  }
-  .prompt b{color:var(--gold-2);font-weight:600}
-  .copy{
-    position:absolute;top:8px;right:8px;background:rgba(255,255,255,.06);
-    border:1px solid var(--border);color:var(--ink);border-radius:8px;
-    padding:6px 10px;font-size:12px;cursor:pointer;transition:.2s
-  }
-  .copy:hover{background:var(--gold);color:#111;border-color:var(--gold)}
-  .copy.done{background:var(--ok);color:#0a0c14;border-color:var(--ok)}
-  .neg{margin-top:10px;font-size:12.5px;color:var(--muted)}
-  .neg code{background:rgba(255,107,107,.1);color:#ffb3b3;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,107,107,.25);font-family:"JetBrains Mono",monospace}
+        #webgl-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-  /* PARAMS */
-  .params{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:18px}
-  .param{padding:18px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
-  .param h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-bottom:8px}
-  .param p{font-size:14px;color:var(--muted)}
-  .param .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .chip{font-size:12px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:#cfd6e6}
+        /* App Header */
+        .brand-header {
+            position: absolute;
+            top: 18px;
+            left: 24px;
+            z-index: 10;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border);
+            padding: 10px 18px;
+            border-radius: 999px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
-  /* QUESTIONS */
-  .questions{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:18px}
-  .q{padding:22px;border-radius:18px;border:1px solid var(--border);
-    background:linear-gradient(180deg,rgba(212,175,55,.05),transparent),var(--card)}
-  .q .num{font-family:"Playfair Display",serif;font-size:44px;line-height:1;color:var(--gold);opacity:.85}
-  .q h4{margin:8px 0 8px;font-size:18px}
-  .q p{color:var(--muted);font-size:14px;margin-bottom:12px}
-  .opts{display:flex;flex-wrap:wrap;gap:6px}
-  .opt{cursor:pointer;font-size:12.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);color:#cfd6e6;background:rgba(255,255,255,.03);transition:.2s}
-  .opt:hover,.opt.on{background:var(--gold);color:#111;border-color:var(--gold)}
+        .brand-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #ec4899, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 0 15px rgba(245,158,11,0.6);
+        }
 
-  /* CTA */
-  .cta{margin-top:40px;padding:28px;border-radius:20px;border:1px solid rgba(212,175,55,.4);
-    background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(124,92,255,.08));
-    display:flex;gap:22px;align-items:center;flex-wrap:wrap}
-  .cta h3{font-family:"Playfair Display",serif;font-size:22px;margin-bottom:4px}
-  .cta p{color:var(--muted);font-size:14px;max-width:640px}
-  .cta .btn{margin-left:auto;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#111;border:none;padding:12px 22px;border-radius:999px;font-weight:600;cursor:pointer;font-size:14px;transition:transform .2s}
-  .cta .btn:hover{transform:translateY(-2px)}
+        .brand-text h1 {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #fff;
+        }
 
-  footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+        .brand-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-  /* Scrollbar */
-  .prompt::-webkit-scrollbar{width:8px;height:8px}
-  .prompt::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:8px}
-  .prompt::-webkit-scrollbar-track{background:transparent}
+        /* Top Right Studio Toolbars */
+        .top-tools {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
 
-  @media(max-width:700px){
-    .rule{grid-template-columns:1fr}
-    .cta .btn{margin-left:0;width:100%}
-  }
-</style>
+        .btn-pill {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-pill:hover, .btn-pill.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        /* Side Inspector Panel */
+        .prompt-panel {
+            position: absolute;
+            top: 76px;
+            right: 24px;
+            bottom: 24px;
+            width: 420px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: -10px 15px 40px rgba(0,0,0,0.6);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .prompt-panel.collapsed {
+            transform: translateX(calc(100% + 40px));
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            padding: 3px;
+            border-radius: 8px;
+            margin: 12px 18px 6px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 7px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .panel-body::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .panel-body::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Prompt Cards */
+        .prompt-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .prompt-card:hover {
+            border-color: rgba(245, 197, 66, 0.4);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 7px;
+            border-radius: 4px;
+        }
+
+        .tag-photo { background: rgba(56, 189, 248, 0.2); color: var(--cyan); }
+        .tag-avatar { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+
+        .prompt-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .prompt-text {
+            font-size: 11px;
+            line-height: 1.45;
+            color: #cbd5e1;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            max-height: 80px;
+            overflow-y: auto;
+            user-select: all;
+        }
+
+        /* Pokémon 8K Promos Section */
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .poke-item {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .poke-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-color: var(--gold);
+        }
+
+        .poke-img-container {
+            width: 100%;
+            height: 120px;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poke-img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            transition: transform 0.3s;
+        }
+
+        .poke-item:hover .poke-img {
+            transform: scale(1.1);
+        }
+
+        .promo-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: white;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .poke-info {
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.03);
+            border-top: 1px solid var(--panel-border);
+        }
+
+        .poke-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .poke-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .btn-view-3d {
+            width: 100%;
+            margin-top: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 6px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .poke-item:hover .btn-view-3d {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+        }
+
+        /* Bottom Controls Floating Bar */
+        .bottom-bar {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border);
+            padding: 8px 14px;
+            border-radius: 999px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .ctrl-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .ctrl-btn:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .ctrl-btn.active {
+            color: #000;
+            background: var(--gold);
+            font-weight: 700;
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .divider {
+            width: 1px;
+            height: 20px;
+            background: var(--panel-border);
+        }
+
+        /* On-canvas Toast */
+        .toast {
+            position: absolute;
+            bottom: 84px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #10b981;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 999px;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 10px 25px rgba(16,185,129,0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 860px) {
+            .prompt-panel {
+                width: calc(100% - 32px);
+                right: 16px;
+                left: 16px;
+                top: auto;
+                bottom: 80px;
+                height: 50vh;
+            }
+            .bottom-bar {
+                width: calc(100% - 32px);
+                justify-content: space-around;
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="hero-inner">
-      <span class="eyebrow">◆ Pro Prompt Pack · v1.0</span>
-      <h1>Vendre des cartes Pokémon <br><span class="grad">comme une boutique premium.</span></h1>
-      <p class="lede">Un pack de prompts “pro” pour générer des photos marketplace, avatars vendeur, bannières pub et cartes custom <b style="color:var(--gold-2)">100% légales</b> — sans jamais imiter de vraies cartes officielles. Prêts à coller dans Midjourney / DALL·E / Stable Diffusion.</p>
-      <div class="hero-stats">
-        <div class="stat"><b>4</b>Catégories</div>
-        <div class="stat"><b>10+</b>Prompts prêts</div>
-        <div class="stat"><b>100%</b>Sans copyright</div>
-        <div class="stat"><b>FR + EN</b>Bilingue</div>
-      </div>
-    </div>
-  </header>
+    <!-- WebGL 3D Canvas Container -->
+    <div id="webgl-canvas"></div>
 
-  <!-- RÈGLE D'OR -->
-  <div class="rule">
-    <div class="box bad">
-      <h3>🚫 À éviter absolument</h3>
-      <ul>
-        <li>Reproduire le logo, le cadre jaune ou le design officiel</li>
-        <li>Utiliser des noms de personnages © (Pikachu, Charizard, etc.) dans le rendu final</li>
-        <li>Générer une “vraie carte” sans mentionner clairement “fan art / custom”</li>
-        <li>Flouter ou masquer la rareté / le set pour tromper l'acheteur</li>
-      </ul>
-    </div>
-    <div class="box good">
-      <h3>✅ Toujours faire</h3>
-      <ul>
-        <li>Photographier vos <b>vraies cartes</b> pour les listings (confiance++)</li>
-        <li>Étiqueter explicitement “CUSTOM / FAN CARD — non officielle”</li>
-        <li>Utiliser des designs <b>originaux</b> avec créatures inventées</li>
-        <li>Garder une cohérence visuelle = identité de boutique pro</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 1) MARKETPLACE -->
-  <section>
-    <h2><span class="num">01</span>Photos marketplace</h2>
-    <p class="section-sub">Pour photographier / mettre en scène <b>vos vraies cartes</b> lors de la revente.</p>
-    <div class="grid">
-
-      <article class="card">
-        <span class="tag">A · Premium studio</span>
-        <h3>La photo “e-commerce parfaite”</h3>
-        <div class="prompt" data-prompt="Ultra realistic product photo of a single trading card in a transparent penny sleeve and rigid toploader, centered, on a matte light gray background, softbox studio lighting, minimal shadow, high sharpness, true-to-life colors, no glare, 85mm lens look, f/8, professional e-commerce photography, 8k detail. Front view, perfectly flat, edges visible.">Ultra realistic product photo of a single trading card in a transparent penny sleeve and rigid toploader, centered, on a matte light gray background, softbox studio lighting, minimal shadow, high sharpness, true-to-life colors, no glare, 85mm lens look, f/8, professional e-commerce photography, 8k detail. <b>Front view, perfectly flat, edges visible.</b></div>
-        <button class="copy">Copier</button>
-        <div class="neg"><b>Negative:</b> <code>blur, glare, reflections, fingers, watermark, text artifacts, bent corners, fake logos, extra cards, distorted frame, low resolution, overexposed, underexposed</code></div>
-      </article>
-
-      <article class="card">
-        <span class="tag">B · Table collectionneur</span>
-        <h3>L'ambiance “setup de passionné”</h3>
-        <div class="prompt" data-prompt="Realistic product photo of a rare trading card in a sleeve, placed on a clean wooden desk, soft natural window light, subtle bokeh background with a closed binder and a grading case out of focus, sharp focus on the card, no glare, authentic textures, marketplace listing photo, high detail.">Realistic product photo of a rare trading card in a sleeve, placed on a clean wooden desk, soft natural window light, subtle bokeh background with a closed binder and a grading case out of focus, sharp focus on the card, no glare, authentic textures, marketplace listing photo, high detail.</div>
-        <button class="copy">Copier</button>
-        <div class="neg"><b>Negative:</b> <code>glare, harsh shadows, clutter, fingerprints, messy desk, low focus</code></div>
-      </article>
-
-      <article class="card">
-        <span class="tag">C · Inspection macro</span>
-        <h3>Prouver l'état de la carte</h3>
-        <div class="prompt" data-prompt="Macro product photo of a collectible trading card showing corners and edges clearly, controlled studio lighting to avoid glare, neutral background, extremely sharp, realistic texture of the sleeve and card surface, condition-focused marketplace photo.">Macro product photo of a collectible trading card showing corners and edges clearly, controlled studio lighting to avoid glare, neutral background, extremely sharp, realistic texture of the sleeve and card surface, condition-focused marketplace photo.</div>
-        <button class="copy">Copier</button>
-        <div class="neg"><b>Negative:</b> <code>blur, glare, cropped edges, shallow DOF on corners, overprocessed</code></div>
-      </article>
-
-      <article class="card">
-        <span class="tag">D · Recto-verso</span>
-        <h3>Transparence totale</h3>
-        <div class="prompt" data-prompt="Split-view marketplace photo, left side front of a sleeved trading card, right side back of the same card, matching studio lighting, matte gray background, sharp focus both sides, no glare, symmetrical composition, professional e-commerce layout.">Split-view marketplace photo, left side front of a sleeved trading card, right side back of the same card, matching studio lighting, matte gray background, sharp focus both sides, no glare, symmetrical composition, professional e-commerce layout.</div>
-        <button class="copy">Copier</button>
-        <div class="neg"><b>Negative:</b> <code>asymmetric lighting, color mismatch, warped perspective</code></div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- 2) AVATARS -->
-  <section>
-    <h2><span class="num">02</span>Avatar &amp; branding vendeur</h2>
-    <p class="section-sub">Votre identité visuelle de boutique — réutilisable sur Vinted, eBay, Cardmarket, Instagram.</p>
-    <div class="grid">
-
-      <article class="card">
-        <span class="tag">A · Logo minimal</span>
-        <h3>Badge premium or &amp; noir</h3>
-        <div class="prompt" data-prompt="Minimal vector logo avatar for an online collectible card store, clean geometric mascot (dragon or fox), flat design, limited color palette (black, white, gold), circular badge, high contrast, modern, professional, no text, no trademark logos.">Minimal vector logo avatar for an online collectible card store, clean geometric mascot (dragon or fox), flat design, limited color palette (black, white, gold), circular badge, high contrast, modern, professional, <b>no text, no trademark logos</b>.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">B · Mascotte collector</span>
-        <h3>Avatar “streetwear geek”</h3>
-        <div class="prompt" data-prompt="Stylized mascot avatar of a card collector, cozy streetwear, holding a generic trading card (no logos), anime-inspired but original character design, clean line art, soft shading, simple background, profile-picture composition, high quality.">Stylized mascot avatar of a card collector, cozy streetwear, holding a generic trading card (no logos), anime-inspired but original character design, clean line art, soft shading, simple background, profile-picture composition, high quality.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">C · Monogramme luxe</span>
-        <h3>Initial + feuille d'or</h3>
-        <div class="prompt" data-prompt="Luxury circular monogram logo for a trading card boutique, single serif initial on matte black background, gold foil texture, subtle emboss effect, minimalist, elegant, premium stationery aesthetic, no trademark symbols, centered composition.">Luxury circular monogram logo for a trading card boutique, single serif initial on matte black background, gold foil texture, subtle emboss effect, minimalist, elegant, premium stationery aesthetic, no trademark symbols, centered composition.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- 3) PUB -->
-  <section>
-    <h2><span class="num">03</span>Visuels pub &amp; bannières</h2>
-    <p class="section-sub">Pour annonces sponsorisées, stories Instagram, bannières boutique.</p>
-    <div class="grid">
-
-      <article class="card">
-        <span class="tag">A · Drops rares</span>
-        <h3>Bannière cinématique</h3>
-        <div class="prompt" data-prompt="High-end promotional banner for a collectible trading card drop, dramatic studio lighting, velvet dark background, spotlight on a generic holographic trading card (no logos, no copyrighted characters), premium gold accents, elegant composition, space for text, cinematic look, sharp, modern e-commerce ad.">High-end promotional banner for a collectible trading card drop, dramatic studio lighting, velvet dark background, spotlight on a generic holographic trading card (no logos, no copyrighted characters), premium gold accents, elegant composition, <b>space for text</b>, cinematic look, sharp, modern e-commerce ad.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">B · Bundle / lot</span>
-        <h3>Flat lay de cartes</h3>
-        <div class="prompt" data-prompt="Professional flat lay photo of a bundle of sleeved trading cards arranged neatly, consistent spacing, neutral background, softbox lighting, no glare, premium marketplace look, high detail, realistic.">Professional flat lay photo of a bundle of sleeved trading cards arranged neatly, consistent spacing, neutral background, softbox lighting, no glare, premium marketplace look, high detail, realistic.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">C · Teaser holographique</span>
-        <h3>Story 9:16</h3>
-        <div class="prompt" data-prompt="Vertical 9:16 story visual, slow reveal of a holographic trading card rising from darkness, prismatic light rays, deep navy background with gold particles, abstract composition, no logos, no copyrighted art, cinematic, premium drop announcement mood.">Vertical 9:16 story visual, slow reveal of a holographic trading card rising from darkness, prismatic light rays, deep navy background with gold particles, abstract composition, no logos, no copyrighted art, cinematic, premium drop announcement mood.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- 4) CUSTOM CARDS -->
-  <section>
-    <h2><span class="num">04</span>Cartes custom / fan cards</h2>
-    <p class="section-sub">Designs 100% originaux — à toujours étiqueter <b>“CUSTOM — NON OFFICIAL”</b>.</p>
-    <div class="grid">
-
-      <article class="card">
-        <span class="tag">A · Fantasy holo</span>
-        <h3>Créature originale épique</h3>
-        <div class="prompt" data-prompt="Original fantasy trading card design, holographic foil effect, ornate border, unique creature illustration (original character), dynamic pose, vibrant colors, readable empty text boxes (no real brand names), professional card layout, 4k, sharp print-ready look.">Original fantasy trading card design, holographic foil effect, ornate border, unique creature illustration (original character), dynamic pose, vibrant colors, <b>readable empty text boxes (no real brand names)</b>, professional card layout, 4k, sharp print-ready look.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">B · Minimal rare</span>
-        <h3>Design épuré premium</h3>
-        <div class="prompt" data-prompt="Minimalist rare trading card design, clean border, subtle holographic gradient, centered original creature icon, premium typography placeholders (no copyrighted names), modern collectible card aesthetic, print-ready, high resolution.">Minimalist rare trading card design, clean border, subtle holographic gradient, centered original creature icon, premium typography placeholders (no copyrighted names), modern collectible card aesthetic, print-ready, high resolution.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">C · Cyberpunk trainer</span>
-        <h3>Carte “trainer” moderne</h3>
-        <div class="prompt" data-prompt="Cyberpunk-style custom trainer trading card, neon pink and teal palette, futuristic character portrait (original design), glossy holographic finish, geometric frame, placeholder stats boxes clearly readable, no copyrighted logos or names, print-ready 4k.">Cyberpunk-style custom trainer trading card, neon pink and teal palette, futuristic character portrait (original design), glossy holographic finish, geometric frame, placeholder stats boxes clearly readable, no copyrighted logos or names, print-ready 4k.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-      <article class="card">
-        <span class="tag">D · Watercolor mythic</span>
-        <h3>Illustration aquarelle</h3>
-        <div class="prompt" data-prompt="Mythic rare custom trading card, soft watercolor illustration of an original fantasy beast, muted pastel palette with gold foil accents, handmade paper texture, elegant serif placeholder text boxes, no copyrighted imagery, gallery-quality print, 4k.">Mythic rare custom trading card, soft watercolor illustration of an original fantasy beast, muted pastel palette with gold foil accents, handmade paper texture, elegant serif placeholder text boxes, no copyrighted imagery, gallery-quality print, 4k.</div>
-        <button class="copy">Copier</button>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- 5) PARAMS -->
-  <section>
-    <h2><span class="num">05</span>Paramètres rapides</h2>
-    <p class="section-sub">Les réglages à toujours activer, quel que soit le prompt.</p>
-    <div class="params">
-      <div class="param">
-        <h4>Ratio</h4>
-        <p>Adapté à chaque usage :</p>
-        <div class="chips">
-          <span class="chip">1:1 · avatar</span>
-          <span class="chip">4:5 · marketplace</span>
-          <span class="chip">3:4 · portrait card</span>
-          <span class="chip">16:9 · bannière</span>
-          <span class="chip">9:16 · story</span>
+    <!-- Header -->
+    <header class="brand-header">
+        <div class="brand-badge">⚡</div>
+        <div class="brand-text">
+            <h1>TCG Studio 3D</h1>
+            <p>Marketplace & Pokémon 8K Promos</p>
         </div>
-      </div>
-      <div class="param">
-        <h4>Style</h4>
-        <p>Mots-clés à injecter systématiquement :</p>
-        <div class="chips">
-          <span class="chip">e-commerce product photo</span>
-          <span class="chip">softbox lighting</span>
-          <span class="chip">no glare</span>
-        </div>
-      </div>
-      <div class="param">
-        <h4>Toujours demander</h4>
-        <p>Formule magique à ajouter à la fin :</p>
-        <div class="chips">
-          <span class="chip">sharp</span>
-          <span class="chip">readable</span>
-          <span class="chip">true-to-life colors</span>
-          <span class="chip">8k detail</span>
-        </div>
-      </div>
-      <div class="param">
-        <h4>Midjourney tips</h4>
-        <p>Ajoutez ces suffixes :</p>
-        <div class="chips">
-          <span class="chip">--ar 4:5</span>
-          <span class="chip">--style raw</span>
-          <span class="chip">--stylize 250</span>
-          <span class="chip">--q 2</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- 6) QUESTIONS -->
-  <section>
-    <h2><span class="num">06</span>Pour un pack 100% sur-mesure</h2>
-    <p class="section-sub">Donnez-moi ces 3 infos (et idéalement un exemple de carte) → je prépare <b>10 prompts adaptés + une liste de negative prompts optimisés</b>.</p>
-    <div class="questions">
-      <div class="q">
-        <div class="num">1</div>
-        <h4>Quelle plateforme ?</h4>
-        <p>Chaque site a ses codes visuels et ses règles.</p>
-        <div class="opts" data-group="platform">
-          <span class="opt">Vinted</span>
-          <span class="opt">eBay</span>
-          <span class="opt">Cardmarket</span>
-          <span class="opt">Leboncoin</span>
-          <span class="opt">Etsy</span>
-          <span class="opt">Shopify (ma boutique)</span>
-          <span class="opt">Instagram</span>
-        </div>
-      </div>
-      <div class="q">
-        <div class="num">2</div>
-        <h4>Que vendez-vous ?</h4>
-        <p>Cela change radicalement les prompts à utiliser.</p>
-        <div class="opts" data-group="type">
-          <span class="opt">Vraies cartes officielles</span>
-          <span class="opt">Cartes custom / fan art</span>
-          <span class="opt">Les deux</span>
-          <span class="opt">Cartes gradées (PSA/BGS)</span>
-        </div>
-      </div>
-      <div class="q">
-        <div class="num">3</div>
-        <h4>Quel style visuel ?</h4>
-        <p>L'ADN graphique de votre boutique.</p>
-        <div class="opts" data-group="style">
-          <span class="opt">🏆 Luxe premium</span>
-          <span class="opt">🎮 Geek fun</span>
-          <span class="opt">◼ Ultra sobre / minimal</span>
-          <span class="opt">🌈 Holographique flashy</span>
-          <span class="opt">🎨 Artisanal / fait main</span>
-        </div>
-      </div>
+    <!-- Top Right Tools -->
+    <div class="top-tools">
+        <button class="btn-pill active" id="btn-toggle-slab">💎 Case: <span id="slab-status">Graded Slab</span></button>
+        <button class="btn-pill active" id="btn-toggle-holo">✨ Holo Prism: <span id="holo-status">ON</span></button>
     </div>
 
-    <div class="cta">
-      <div>
-        <h3>Prêt pour le pack sur-mesure ?</h3>
-        <p>Envoyez-moi vos 3 réponses + le nom (ou une photo) d'une carte que vous vendez souvent. Je reviens avec <b>10 prompts parfaitement calibrés</b> et une <b>negative list optimisée</b> pour votre cas précis.</p>
-      </div>
-      <button class="btn" id="exportBtn">📋 Exporter mes choix</button>
+    <!-- Side Inspector Panel -->
+    <div class="prompt-panel" id="inspector-panel">
+        <div class="panel-header">
+            <div class="panel-title">🛠️ Studio Inspector</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn" data-target="tab-prompts">Prompts Lab</button>
+            <button class="tab-btn active" data-target="tab-pokemon">Pokémon 8K Promos</button>
+        </div>
+
+        <div class="panel-body">
+            
+            <!-- Tab 1: Standard Prompts -->
+            <div id="tab-prompts" class="tab-content">
+                <div class="prompt-card">
+                    <div class="card-top">
+                        <span class="tag tag-photo">Base Frame</span>
+                        <span class="prompt-name">Holo Standard</span>
+                    </div>
+                    <div class="prompt-text">/generate texture base=tcg_holographic style=prism border=silver effect=rainbow_foil</div>
+                </div>
+                <div class="prompt-card">
+                    <div class="card-top">
+                        <span class="tag tag-avatar">Character</span>
+                        <span class="prompt-name">Dark Magician V2</span>
+                    </div>
+                    <div class="prompt-text">/generate artwork subject="dark wizard" environment="cosmic nebula" style=8k_render lighting=dramatic</div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Pokémon 8K Promos -->
+            <div id="tab-pokemon" class="tab-content active">
+                <div class="pokemon-grid" id="pokemon-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </div>
     </div>
-  </section>
 
-  <footer>
-    <div>◆ Pro Prompt Pack · Cards Marketplace Edition · Usage commercial autorisé pour vos propres créations.</div>
-    <div>Toujours étiqueter : <b style="color:var(--gold-2)">“CUSTOM — NON OFFICIAL”</b> sur les fan cards.</div>
-  </footer>
-</div>
+    <!-- Bottom Controls -->
+    <div class="bottom-bar">
+        <button class="ctrl-btn active" id="view-front">🎴 Front View</button>
+        <div class="divider"></div>
+        <button class="ctrl-btn" id="view-angle">📐 3D Angle</button>
+        <div class="divider"></div>
+        <button class="ctrl-btn" id="view-back">🔙 Back View</button>
+    </div>
 
-<script>
-  // Copy buttons
-  document.querySelectorAll('.card').forEach(card=>{
-    const btn = card.querySelector('.copy');
-    const promptEl = card.querySelector('.prompt');
-    if(!btn || !promptEl) return;
-    btn.addEventListener('click', async ()=>{
-      const text = promptEl.getAttribute('data-prompt') || promptEl.innerText;
-      try{
-        await navigator.clipboard.writeText(text.trim());
-      }catch(e){
-        const ta = document.createElement('textarea');
-        ta.value = text.trim(); document.body.appendChild(ta); ta.select();
-        document.execCommand('copy'); ta.remove();
-      }
-      btn.textContent = '✓ Copié';
-      btn.classList.add('done');
-      setTimeout(()=>{btn.textContent='Copier';btn.classList.remove('done')},1600);
-    });
-  });
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Texture Loaded</div>
 
-  // Option toggles (single-select per group)
-  document.querySelectorAll('.opts').forEach(group=>{
-    group.addEventListener('click', e=>{
-      const opt = e.target.closest('.opt');
-      if(!opt) return;
-      group.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));
-      opt.classList.add('on');
-    });
-  });
+    <!-- Scripts -->
+    <script>
+        // --- 1. Pokémon Data & Canvas Texture Generator ---
+        const pokemonData = [
+            { id: 'charizard', name: 'Dracaufeu', type: 'Feu', hp: 330, color1: '#1a0505', color2: '#ef4444', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png' },
+            { id: 'pikachu', name: 'Pikachu', type: 'Électrique', hp: 120, color1: '#1a1a00', color2: '#eab308', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png' },
+            { id: 'mewtwo', name: 'Mewtwo', type: 'Psy', hp: 280, color1: '#15051a', color2: '#a855f7', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png' },
+            { id: 'rayquaza', name: 'Rayquaza', type: 'Dragon', hp: 320, color1: '#051a10', color2: '#10b981', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png' }
+        ];
 
-  // Export choices
-  document.getElementById('exportBtn').addEventListener('click', ()=>{
-    const get = g => {
-      const el = document.querySelector(`.opts[data-group="${g}"] .opt.on`);
-      return el ? el.textContent.trim() : '—';
-    };
-    const summary =
-`🎯 Mes choix pour le pack sur-mesure
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1) Plateforme : ${get('platform')}
-2) Type de vente : ${get('type')}
-3) Style visuel : ${get('style')}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-→ À copier-coller avec un exemple de carte pour recevoir 10 prompts calibrés.`;
-    navigator.clipboard.writeText(summary).then(()=>{
-      const btn = document.getElementById('exportBtn');
-      const old = btn.textContent;
-      btn.textContent = '✓ Résumé copié !';
-      setTimeout(()=>btn.textContent=old,1800);
-    });
-  });
+        // Store the active card material
+        let cardFrontMaterial;
 
-  // Subtle tilt on cards
-  document.querySelectorAll('.card').forEach(card=>{
-    card.addEventListener('mousemove', e=>{
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left)/r.width - .5;
-      const y = (e.clientY - r.top)/r.height - .5;
-      card.style.transform = `translateY(-3px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*4).toFixed(2)}deg)`;
-    });
-    card.addEventListener('mouseleave', ()=>card.style.transform='');
-  });
-</script>
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Generate high-res 2D canvas texture for the 3D card
+        function loadPokemonTexture(poke) {
+            showToast(`Génération 8K : ${poke.name}...`);
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 1433;
+            const ctx = canvas.getContext('2d');
+
+            // Draw Background Gradient
+            const grad = ctx.createLinearGradient(0, 0, 1024, 1433);
+            grad.addColorStop(0, poke.color1);
+            grad.addColorStop(0.5, '#2a2a3a');
+            grad.addColorStop(1, poke.color2);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 1024, 1433);
+
+            // Draw Borders
+            ctx.strokeStyle = '#f5c542'; // Gold border
+            ctx.lineWidth = 36;
+            ctx.strokeRect(18, 18, 988, 1397);
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(40, 40, 944, 1353);
+
+            // Draw Top UI (Name, HP)
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(40, 40, 944, 120);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 64px sans-serif';
+            ctx.fillText(poke.name, 70, 120);
+
+            ctx.fillStyle = '#f5c542';
+            ctx.font = 'bold 54px sans-serif';
+            ctx.fillText(`HP ${poke.hp}`, 740, 115);
+
+            // Draw 8K Promo Badge
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.9)';
+            ctx.beginPath();
+            ctx.roundRect(70, 150, 280, 50, 10);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 28px sans-serif';
+            ctx.fillText('⭐ 8K PROMO ⭐', 95, 185);
+
+            // Bottom Description UI
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.fillRect(40, 1100, 944, 293);
+            ctx.fillStyle = '#f5c542';
+            ctx.font = 'italic 34px serif';
+            ctx.fillText(`Édition Limitée - ${poke.type} Class`, 70, 1160);
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = '30px sans-serif';
+            ctx.fillText("Illustration générée en résolution 8K ultra-détaillée.", 70, 1220);
+            ctx.fillText("Effets holographiques avancés et certification d'authenticité.", 70, 1270);
+
+            // Load and draw the image
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = poke.imgUrl;
+            img.onload = () => {
+                // Add a glow effect behind pokemon
+                ctx.shadowColor = poke.color2;
+                ctx.shadowBlur = 100;
+                ctx.drawImage(img, 112, 220, 800, 800);
+                ctx.shadowBlur = 0; // reset
+
+                // Apply to 3D material
+                const texture = new THREE.CanvasTexture(canvas);
+                texture.anisotropy = 16;
+                cardFrontMaterial.map = texture;
+                cardFrontMaterial.needsUpdate = true;
+                showToast(`${poke.name} chargé avec succès !`);
+            };
+        }
+
+        // --- 2. Build UI Grid ---
+        const grid = document.getElementById('pokemon-grid');
+        pokemonData.forEach(poke => {
+            const el = document.createElement('div');
+            el.className = 'poke-item';
+            el.innerHTML = `
+                <div class="promo-badge">8K PROMO</div>
+                <div class="poke-img-container" style="background: radial-gradient(circle, ${poke.color2}40 0%, transparent 70%)">
+                    <img src="${poke.imgUrl}" class="poke-img" alt="${poke.name}" crossorigin="anonymous">
+                </div>
+                <div class="poke-info">
+                    <div class="poke-name">${poke.name}</div>
+                    <div class="poke-desc">Type: ${poke.type} • HP: ${poke.hp}</div>
+                    <button class="btn-view-3d">Voir en 3D</button>
+                </div>
+            `;
+            el.addEventListener('click', () => loadPokemonTexture(poke));
+            grid.appendChild(el);
+        });
+
+        // --- 3. UI Tab Logic ---
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                e.target.classList.add('active');
+                document.getElementById(e.target.getAttribute('data-target')).classList.add('active');
+            });
+        });
+
+        // --- 4. WebGL / Three.js Setup ---
+        const container = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        // Add a subtle environment fog
+        scene.fog = new THREE.FogExp2(0x0a0c10, 0.05);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 5.5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enablePan = false;
+        controls.minDistance = 3;
+        controls.maxDistance = 10;
+
+        // Group to hold card + slab
+        const cardGroup = new THREE.Group();
+        scene.add(cardGroup);
+
+        // --- Card Mesh ---
+        // Standard TCG ratio ~ 63x88mm
+        const cardGeometry = new THREE.BoxGeometry(2.5, 3.5, 0.02);
+        
+        // Materials
+        cardFrontMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xffffff,
+            roughness: 0.2,
+            metalness: 0.8 // High metalness for holo effect reflection
+        });
+        
+        const cardBackMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x1e3a8a, // Dark blue TCG back
+            roughness: 0.6,
+            metalness: 0.1
+        });
+        
+        const cardEdgeMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
+
+        const materials = [
+            cardEdgeMaterial, cardEdgeMaterial, // Right, Left
+            cardEdgeMaterial, cardEdgeMaterial, // Top, Bottom
+            cardFrontMaterial, // Front
+            cardBackMaterial   // Back
+        ];
+
+        const cardMesh = new THREE.Mesh(cardGeometry, materials);
+        cardGroup.add(cardMesh);
+
+        // --- Graded Slab Mesh ---
+        const slabGeometry = new THREE.BoxGeometry(2.8, 4.2, 0.25);
+        const slabMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 0.1,
+            roughness: 0.05,
+            transmission: 0.95, // Glass effect
+            ior: 1.5,
+            transparent: true,
+            opacity: 1,
+            side: THREE.DoubleSide
+        });
+        const slabMesh = new THREE.Mesh(slabGeometry, slabMaterial);
+        cardGroup.add(slabMesh);
+
+        // --- Lighting (Holo Prism effect) ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(2, 5, 5);
+        scene.add(dirLight);
+
+        // Moving colored lights to simulate holographic foil
+        const holoLight1 = new THREE.PointLight(0xff00ff, 1.5, 10);
+        const holoLight2 = new THREE.PointLight(0x00ffff, 1.5, 10);
+        scene.add(holoLight1);
+        scene.add(holoLight2);
+
+        // --- UI Toggles Logic ---
+        let isSlabActive = true;
+        let isHoloActive = true;
+
+        document.getElementById('btn-toggle-slab').addEventListener('click', (e) => {
+            isSlabActive = !isSlabActive;
+            slabMesh.visible = isSlabActive;
+            e.currentTarget.classList.toggle('active');
+            document.getElementById('slab-status').innerText = isSlabActive ? 'Graded Slab' : 'Raw Card';
+        });
+
+        document.getElementById('btn-toggle-holo').addEventListener('click', (e) => {
+            isHoloActive = !isHoloActive;
+            e.currentTarget.classList.toggle('active');
+            document.getElementById('holo-status').innerText = isHoloActive ? 'ON' : 'OFF';
+            if(!isHoloActive) {
+                holoLight1.intensity = 0;
+                holoLight2.intensity = 0;
+                cardFrontMaterial.metalness = 0.1;
+            } else {
+                holoLight1.intensity = 1.5;
+                holoLight2.intensity = 1.5;
+                cardFrontMaterial.metalness = 0.8;
+            }
+        });
+
+        // Bottom Bar Camera Controls
+        const btnFront = document.getElementById('view-front');
+        const btnAngle = document.getElementById('view-angle');
+        const btnBack = document.getElementById('view-back');
+        const camBtns = [btnFront, btnAngle, btnBack];
+
+        function resetCamBtns() {
+            camBtns.forEach(b => b.classList.remove('active'));
+        }
+
+        btnFront.addEventListener('click', () => {
+            resetCamBtns(); btnFront.classList.add('active');
+            gsapCamera(0, 0, 5.5);
+        });
+        btnAngle.addEventListener('click', () => {
+            resetCamBtns(); btnAngle.classList.add('active');
+            gsapCamera(3, 2, 4);
+        });
+        btnBack.addEventListener('click', () => {
+            resetCamBtns(); btnBack.classList.add('active');
+            gsapCamera(0, 0, -5.5);
+        });
+
+        // Simple camera interpolator
+        function gsapCamera(tx, ty, tz) {
+            const start = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+            const end = { x: tx, y: ty, z: tz };
+            let alpha = 0;
+            const animateCam = () => {
+                alpha += 0.05;
+                if(alpha > 1) alpha = 1;
+                // Ease out cubic
+                const ease = 1 - Math.pow(1 - alpha, 3);
+                camera.position.set(
+                    start.x + (end.x - start.x) * ease,
+                    start.y + (end.y - start.y) * ease,
+                    start.z + (end.z - start.z) * ease
+                );
+                if(alpha < 1) requestAnimationFrame(animateCam);
+            };
+            animateCam();
+        }
+
+        // --- Animation Loop ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Floating animation
+            cardGroup.position.y = Math.sin(time * 1.5) * 0.1;
+
+            // Move holo lights across the card surface
+            if(isHoloActive) {
+                holoLight1.position.set(Math.sin(time * 2) * 2, Math.cos(time * 1.5) * 2, 1.5);
+                holoLight2.position.set(Math.cos(time * 2.5) * 2, Math.sin(time * 1.2) * 2, 1.5);
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize First Card
+        loadPokemonTexture(pokemonData[0]); // Load Charizard by default
+        animate();
+
+    </script>
 </body>
 </html>
