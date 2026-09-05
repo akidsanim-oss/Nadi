@@ -1,1666 +1,507 @@
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoLease Maroc | Location Longue Durée & Prestige au Maroc</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts: Cairo & Amiri -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Prompt Pack — Pokémon Card Marketplace</title>
+<style>
+  :root{
+    --bg:#0b0d12;
+    --bg-2:#11141c;
+    --card:#161a24;
+    --card-2:#1c2130;
+    --ink:#eef1f7;
+    --muted:#9aa3b7;
+    --gold:#d4af37;
+    --gold-2:#f3d27a;
+    --holo-1:#ff5ea8;
+    --holo-2:#7c5cff;
+    --holo-3:#4cd7ff;
+    --holo-4:#7cffc4;
+    --danger:#ff6b6b;
+    --ok:#7cffc4;
+    --border:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(1200px 600px at 80% -10%,rgba(124,92,255,.18),transparent 60%),
+      radial-gradient(900px 500px at -10% 20%,rgba(76,215,255,.12),transparent 60%),
+      radial-gradient(700px 500px at 50% 110%,rgba(255,94,168,.10),transparent 60%);
+    pointer-events:none;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 22px 80px}
+  /* HERO */
+  .hero{
+    position:relative;padding:56px 34px;border-radius:22px;overflow:hidden;
+    background:linear-gradient(135deg,#161a24 0%,#0f1220 100%);
+    border:1px solid var(--border);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:-2px;z-index:0;
+    background:conic-gradient(from 0deg,var(--holo-1),var(--holo-2),var(--holo-3),var(--holo-4),var(--holo-1));
+    filter:blur(40px);opacity:.35;animation:spin 14s linear infinite;
+  }
+  .hero-inner{position:relative;z-index:1}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2);
+    background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.35);padding:6px 12px;border-radius:999px}
+  h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(34px,5vw,56px);line-height:1.05;margin:18px 0 12px;letter-spacing:-.02em}
+  h1 .grad{background:linear-gradient(90deg,var(--gold-2),#fff 40%,var(--holo-3) 70%,var(--holo-1));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--muted);max-width:780px;font-size:16.5px}
+  .hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .stat{background:rgba(255,255,255,.04);border:1px solid var(--border);padding:10px 14px;border-radius:12px;font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);display:block;font-size:16px;margin-bottom:2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'm-red': '#C8102E',
-            'm-red-dark': '#8F0B20',
-            'm-green': '#006233',
-            'm-green-light': '#008746',
-            'm-gold': '#C5A55A',
-            'm-gold-light': '#E5C985',
-            'm-sand': '#F4ECE1',
-            'm-sand-light': '#FAF5EE',
-            'm-terra': '#C75B39',
-            'm-terra-dark': '#A34224',
-            'm-brown': '#33201C',
-            'm-brown-dark': '#231411',
-            'm-cream': '#FCF8F2',
-          },
-          fontFamily: {
-            'cairo': ['Cairo', 'sans-serif'],
-            'amiri': ['Amiri', 'serif'],
-          },
-          boxShadow: {
-            'moroccan': '0 10px 30px -5px rgba(51, 32, 28, 0.12), 0 0 15px rgba(197, 165, 90, 0.2)',
-            'moroccan-lg': '0 20px 40px -10px rgba(51, 32, 28, 0.2), 0 0 25px rgba(197, 165, 90, 0.3)',
-          }
-        }
-      }
-    }
-  </script>
+  /* RULE */
+  .rule{
+    margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:16px
+  }
+  .rule .box{padding:22px;border-radius:18px;border:1px solid var(--border);background:var(--card)}
+  .rule .bad{border-color:rgba(255,107,107,.35);background:linear-gradient(180deg,rgba(255,107,107,.06),transparent)}
+  .rule .good{border-color:rgba(124,255,196,.35);background:linear-gradient(180deg,rgba(124,255,196,.05),transparent)}
+  .rule h3{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .rule .bad h3{color:var(--danger)}
+  .rule .good h3{color:var(--ok)}
+  .rule ul{list-style:none;color:var(--muted);font-size:14.5px}
+  .rule li{padding:6px 0 6px 22px;position:relative}
+  .rule li::before{content:"";position:absolute;left:0;top:14px;width:12px;height:2px;border-radius:2px}
+  .rule .bad li::before{background:var(--danger)}
+  .rule .good li::before{background:var(--ok)}
 
-  <style>
-    * { font-family: 'Cairo', sans-serif; }
-    .font-traditional { font-family: 'Amiri', serif; }
+  /* SECTIONS */
+  section{margin-top:54px}
+  h2{font-family:"Playfair Display",Georgia,serif;font-size:clamp(26px,3.4vw,34px);letter-spacing:-.01em;margin-bottom:6px}
+  h2 .num{color:var(--gold);font-variant-numeric:tabular-nums;margin-right:10px}
+  .section-sub{color:var(--muted);margin-bottom:22px;font-size:15px}
 
-    /* Moroccan Geometric Zellige Background Pattern (SVG inline) */
-    .zellige-pattern {
-      background-color: #33201C;
-      background-image: radial-gradient(rgba(197, 165, 90, 0.18) 1.5px, transparent 1.5px),
-                        radial-gradient(rgba(200, 16, 46, 0.2) 1.5px, #231411 1.5px);
-      background-size: 36px 36px;
-      background-position: 0 0, 18px 18px;
-    }
+  /* PROMPT CARDS */
+  .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .card{
+    position:relative;border-radius:18px;padding:22px;
+    background:linear-gradient(180deg,var(--card) 0%,var(--card-2) 100%);
+    border:1px solid var(--border);
+    overflow:hidden;transition:transform .3s ease, border-color .3s ease;
+  }
+  .card::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s ease;
+    background:conic-gradient(from var(--angle,0deg),transparent 0 70%,rgba(124,92,255,.25) 80%,rgba(76,215,255,.25) 90%,transparent 100%);
+    mix-blend-mode:screen;
+  }
+  .card:hover{transform:translateY(-3px);border-color:rgba(212,175,55,.4)}
+  .card:hover::after{opacity:1;animation:rot 6s linear infinite}
+  @keyframes rot{to{--angle:360deg}}
+  @property --angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+  .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2);margin-bottom:10px;display:inline-block}
+  .card h3{font-size:18px;margin-bottom:10px}
+  .prompt{
+    position:relative;background:#0a0c14;border:1px solid var(--border);
+    border-radius:12px;padding:14px 50px 14px 14px;font-size:13.5px;color:#cfd6e6;
+    font-family:"JetBrains Mono","Fira Code",ui-monospace,monospace;line-height:1.55;
+    max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word
+  }
+  .prompt b{color:var(--gold-2);font-weight:600}
+  .copy{
+    position:absolute;top:8px;right:8px;background:rgba(255,255,255,.06);
+    border:1px solid var(--border);color:var(--ink);border-radius:8px;
+    padding:6px 10px;font-size:12px;cursor:pointer;transition:.2s
+  }
+  .copy:hover{background:var(--gold);color:#111;border-color:var(--gold)}
+  .copy.done{background:var(--ok);color:#0a0c14;border-color:var(--ok)}
+  .neg{margin-top:10px;font-size:12.5px;color:var(--muted)}
+  .neg code{background:rgba(255,107,107,.1);color:#ffb3b3;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,107,107,.25);font-family:"JetBrains Mono",monospace}
 
-    .zellige-light-pattern {
-      background-color: #FCF8F2;
-      background-image: radial-gradient(#C5A55A 1px, transparent 1px),
-                        radial-gradient(#C8102E 1px, #FCF8F2 1px);
-      background-size: 28px 28px;
-      background-position: 0 0, 14px 14px;
-      opacity: 0.05;
-    }
+  /* PARAMS */
+  .params{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:18px}
+  .param{padding:18px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
+  .param h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-bottom:8px}
+  .param p{font-size:14px;color:var(--muted)}
+  .param .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{font-size:12px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:#cfd6e6}
 
-    .moroccan-arch-border {
-      border-top-left-radius: 40px;
-      border-top-right-radius: 40px;
-    }
+  /* QUESTIONS */
+  .questions{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:18px}
+  .q{padding:22px;border-radius:18px;border:1px solid var(--border);
+    background:linear-gradient(180deg,rgba(212,175,55,.05),transparent),var(--card)}
+  .q .num{font-family:"Playfair Display",serif;font-size:44px;line-height:1;color:var(--gold);opacity:.85}
+  .q h4{margin:8px 0 8px;font-size:18px}
+  .q p{color:var(--muted);font-size:14px;margin-bottom:12px}
+  .opts{display:flex;flex-wrap:wrap;gap:6px}
+  .opt{cursor:pointer;font-size:12.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);color:#cfd6e6;background:rgba(255,255,255,.03);transition:.2s}
+  .opt:hover,.opt.on{background:var(--gold);color:#111;border-color:var(--gold)}
 
-    /* Zellige Moorish Border */
-    .moorish-divider {
-      height: 12px;
-      background: repeating-linear-gradient(
-        45deg,
-        #C8102E,
-        #C8102E 12px,
-        #C5A55A 12px,
-        #C5A55A 24px,
-        #006233 24px,
-        #006233 36px,
-        #33201C 36px,
-        #33201C 48px
-      );
-    }
+  /* CTA */
+  .cta{margin-top:40px;padding:28px;border-radius:20px;border:1px solid rgba(212,175,55,.4);
+    background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(124,92,255,.08));
+    display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .cta h3{font-family:"Playfair Display",serif;font-size:22px;margin-bottom:4px}
+  .cta p{color:var(--muted);font-size:14px;max-width:640px}
+  .cta .btn{margin-left:auto;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#111;border:none;padding:12px 22px;border-radius:999px;font-weight:600;cursor:pointer;font-size:14px;transition:transform .2s}
+  .cta .btn:hover{transform:translateY(-2px)}
 
-    .subtle-frieze {
-      height: 4px;
-      background: linear-gradient(90deg, #C8102E, #C5A55A, #006233, #C5A55A, #C8102E);
-    }
+  footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
-    /* Moroccan 8-pointed star cutout badge */
-    .star-8 {
-      position: relative;
-      background: #C5A55A;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .star-8::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: inherit;
-      transform: rotate(45deg);
-      border-radius: 3px;
-    }
+  /* Scrollbar */
+  .prompt::-webkit-scrollbar{width:8px;height:8px}
+  .prompt::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:8px}
+  .prompt::-webkit-scrollbar-track{background:transparent}
 
-    /* Hero Glass & Glow */
-    .hero-glass {
-      background: rgba(35, 20, 17, 0.78);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(197, 165, 90, 0.35);
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 9px; }
-    ::-webkit-scrollbar-track { background: #33201C; }
-    ::-webkit-scrollbar-thumb { background: #C5A55A; border-radius: 4px; border: 2px solid #33201C; }
-    ::-webkit-scrollbar-thumb:hover { background: #C8102E; }
-
-    /* Transitions */
-    .card-transition {
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .card-transition:hover {
-      transform: translateY(-8px);
-    }
-
-    /* Arabesque corner ornament */
-    .arabesque-corner-tl {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      width: 24px;
-      height: 24px;
-      border-top: 2px solid #C5A55A;
-      border-left: 2px solid #C5A55A;
-      pointer-events: none;
-    }
-    .arabesque-corner-br {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      width: 24px;
-      height: 24px;
-      border-bottom: 2px solid #C5A55A;
-      border-right: 2px solid #C5A55A;
-      pointer-events: none;
-    }
-  </style>
+  @media(max-width:700px){
+    .rule{grid-template-columns:1fr}
+    .cta .btn{margin-left:0;width:100%}
+  }
+</style>
 </head>
+<body>
+<div class="wrap">
 
-<body class="bg-m-cream text-m-brown antialiased selection:bg-m-gold selection:text-m-brown-dark min-h-screen flex flex-col justify-between">
-
-  <!-- Top Announcement Bar (Maroc / Contact direct) -->
-  <div class="bg-m-brown-dark text-m-sand py-2 px-4 border-b border-m-gold/30 text-xs">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center gap-4">
-        <span class="flex items-center gap-1.5 text-m-gold">
-          <i class="fas fa-crown text-[11px]"></i>
-          <span class="font-bold tracking-wide uppercase">N°1 de la LLD & Location Prestige au Maroc</span>
-        </span>
-        <span class="hidden md:inline text-white/40">|</span>
-        <span class="hidden md:flex items-center gap-1 text-white/80">
-          <i class="fas fa-map-marker-alt text-m-red"></i>
-          Agences à Casablanca • Rabat • Marrakech • Tanger • Fès • Agadir
-        </span>
-      </div>
-      <div class="flex items-center gap-5 ml-auto">
-        <a href="https://wa.me/212661000000" target="_blank" class="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition">
-          <i class="fab fa-whatsapp text-sm"></i>
-          <span>WhatsApp VIP: +212 661 00 00 00</span>
-        </a>
-        <span class="text-white/30">|</span>
-        <a href="tel:+212522000000" class="flex items-center gap-1.5 hover:text-m-gold transition font-medium">
-          <i class="fas fa-phone-alt text-m-gold text-xs"></i>
-          <span>+212 522 99 88 77</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Moorish Decorative Top Ribbon -->
-  <div class="moorish-divider"></div>
-
-  <!-- Main Navigation -->
-  <header class="sticky top-0 z-50 bg-m-cream/95 backdrop-blur-md border-b border-m-gold/30 shadow-sm transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        
-        <!-- Logo -->
-        <a href="#accueil" class="flex items-center gap-3 group">
-          <div class="w-12 h-12 bg-gradient-to-br from-m-red to-m-brown-dark rounded-xl flex items-center justify-center shadow-lg border border-m-gold transform group-hover:rotate-6 transition duration-300">
-            <!-- Moroccan Seal Icon -->
-            <i class="fas fa-gem text-m-gold text-xl group-hover:scale-110 transition"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-1">
-              <span class="text-2xl font-black text-m-brown tracking-tight">AutoLease</span>
-              <span class="text-2xl font-black text-m-red">MAROC</span>
-            </div>
-            <p class="text-[11px] font-bold text-m-gold uppercase tracking-widest font-traditional">تأجير السيارات الفاخرة بالمغرب</p>
-          </div>
-        </a>
-
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center space-x-7 font-semibold text-sm">
-          <a href="#accueil" class="text-m-brown hover:text-m-red transition">Accueil</a>
-          <a href="#catalogue" class="text-m-brown hover:text-m-red transition">Notre Flotte</a>
-          <a href="#services" class="text-m-brown hover:text-m-red transition">Services Exclusifs</a>
-          <a href="#simulateur" class="text-m-brown hover:text-m-red transition">Simulateur LLD</a>
-          <a href="#pourquoi" class="text-m-brown hover:text-m-red transition">L'Excellence Marocaine</a>
-          <a href="#temoignages" class="text-m-brown hover:text-m-red transition">Avis Clients</a>
-          <a href="#faq" class="text-m-brown hover:text-m-red transition">FAQ</a>
-        </nav>
-
-        <!-- CTA & Language -->
-        <div class="hidden sm:flex items-center gap-4">
-          <button onclick="scrollToSection('simulateur')" class="relative group overflow-hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-m-red to-m-red-dark text-white font-bold text-sm shadow-md hover:shadow-xl transition transform active:scale-95 border border-m-gold/40">
-            <span class="relative z-10 flex items-center gap-2">
-              <i class="fas fa-file-invoice text-m-gold"></i>
-              <span>Devis Express (0 DH Frais)</span>
-            </span>
-          </button>
-        </div>
-
-        <!-- Mobile Menu Toggle -->
-        <button id="mobileMenuBtn" aria-label="Menu" class="lg:hidden text-m-brown hover:text-m-red text-2xl focus:outline-none p-2">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile Dropdown Navigation -->
-    <div id="mobileMenu" class="hidden lg:hidden bg-m-sand-light border-b border-m-gold/30 px-6 py-6 shadow-2xl transition-all">
-      <div class="flex flex-col space-y-4 font-semibold text-m-brown">
-        <a href="#accueil" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Accueil</a>
-        <a href="#catalogue" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Notre Flotte Marocaine</a>
-        <a href="#services" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Services Clé en Main</a>
-        <a href="#simulateur" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Simulateur Tarif Dirhams</a>
-        <a href="#pourquoi" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Pourquoi Nous</a>
-        <a href="#temoignages" class="mobile-nav-link hover:text-m-red py-2 border-b border-m-gold/10">Témoignages</a>
-        <a href="#faq" class="mobile-nav-link hover:text-m-red py-2">F.A.Q</a>
-        <button onclick="scrollToSection('simulateur'); toggleMobileMenu()" class="w-full bg-m-red text-white py-3 rounded-xl font-bold shadow-lg">
-          Demander mon devis immédiat
-        </button>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">◆ Pro Prompt Pack · v1.0</span>
+      <h1>Vendre des cartes Pokémon <br><span class="grad">comme une boutique premium.</span></h1>
+      <p class="lede">Un pack de prompts “pro” pour générer des photos marketplace, avatars vendeur, bannières pub et cartes custom <b style="color:var(--gold-2)">100% légales</b> — sans jamais imiter de vraies cartes officielles. Prêts à coller dans Midjourney / DALL·E / Stable Diffusion.</p>
+      <div class="hero-stats">
+        <div class="stat"><b>4</b>Catégories</div>
+        <div class="stat"><b>10+</b>Prompts prêts</div>
+        <div class="stat"><b>100%</b>Sans copyright</div>
+        <div class="stat"><b>FR + EN</b>Bilingue</div>
       </div>
     </div>
   </header>
 
-  <main>
-    <!-- HERO SECTION avec Carrousel d'Offres Principales -->
-    <section id="accueil" class="relative zellige-pattern text-white overflow-hidden py-12 lg:py-20 border-b border-m-gold/40">
-      
-      <!-- Moroccan Radial Ambient Halos -->
-      <div class="absolute -top-32 -left-32 w-96 h-96 bg-m-red/30 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-m-green/25 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-m-gold/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <!-- Hero Header Badge & Slogan -->
-        <div class="text-center max-w-3xl mx-auto mb-10">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-m-gold/20 border border-m-gold text-m-gold-light text-xs sm:text-sm font-bold uppercase tracking-widest mb-4">
-            <i class="fas fa-star-and-crescent text-m-gold"></i>
-            <span>Excellence & Sérénité sur toutes les routes du Royaume</span>
-          </div>
-          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-4">
-            Roulez en toute liberté de <span class="text-transparent bg-clip-text bg-gradient-to-r from-m-gold to-amber-200">Tanger à Dakhla</span>
-          </h1>
-          <p class="text-m-sand/80 text-base sm:text-lg font-light max-w-2xl mx-auto">
-            Location Longue Durée (LLD) & moyenne durée pour cadres, entreprises et passionnés. Assurance tous risques, entretien complet et livraison VIP partout au Maroc.
-          </p>
-        </div>
-
-        <!-- Interactive Hero Carousel -->
-        <div class="relative rounded-3xl overflow-hidden border-2 border-m-gold/40 shadow-2xl bg-m-brown-dark/90">
-          
-          <!-- Slide Container -->
-          <div id="carouselWrapper" class="relative h-[390px] sm:h-[480px] lg:h-[530px] w-full overflow-hidden">
-            
-            <!-- Slide 1: SUV Luxe Désert Marocain -->
-            <div class="carousel-slide absolute inset-0 opacity-100 transition-opacity duration-700 ease-in-out">
-              <img src="https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Range Rover SUV Désert Maroc" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
-              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
-              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="max-w-xl">
-                  <span class="bg-m-red text-white text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Offre Évasion Atlas & Sahara</span>
-                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Land Rover Defender 110 X-Dynamic</h3>
-                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Le monstre des pistes et du raffinement urbain. Disponible à Marrakech & Ouarzazate.</p>
-                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
-                    <span><i class="fas fa-gas-pump mr-1"></i> Diesel Mild-Hybrid</span>
-                    <span><i class="fas fa-cog mr-1"></i> BVA 8 Rapports</span>
-                    <span><i class="fas fa-shield-alt mr-1"></i> Tout-Terrain Pro</span>
-                  </div>
-                </div>
-                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
-                  <p class="text-xs text-m-sand/70 uppercase">Loyer Privilège</p>
-                  <div class="text-2xl sm:text-3xl font-black text-m-gold">14 900 <span class="text-sm font-semibold text-white">DH/mois</span></div>
-                  <button onclick="prefillAndScroll('Land Rover Defender')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
-                    Réserver ce véhicule
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Slide 2: Voiture Sport Rouge -->
-            <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out pointer-events-none">
-              <img src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Coupé Sport Rouge Casablanca Corniche" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
-              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
-              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="max-w-xl">
-                  <span class="bg-m-gold text-m-brown-dark text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Prestige & Vitesse</span>
-                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Porsche Carrera 911 4S Rouge Carmin</h3>
-                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Sensation pure sur la Corniche d'Ain Diab ou les lacets de l'Atlas marocain.</p>
-                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
-                    <span><i class="fas fa-bolt mr-1"></i> 450 Ch Bi-turbo</span>
-                    <span><i class="fas fa-road mr-1"></i> Échappement Sport</span>
-                    <span><i class="fas fa-check-circle mr-1"></i> Livraison Aéroport VIP</span>
-                  </div>
-                </div>
-                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
-                  <p class="text-xs text-m-sand/70 uppercase">Loyer Prestige LLD</p>
-                  <div class="text-2xl sm:text-3xl font-black text-m-gold">22 500 <span class="text-sm font-semibold text-white">DH/mois</span></div>
-                  <button onclick="prefillAndScroll('Porsche Carrera 911 4S')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
-                    Réserver ce véhicule
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Slide 3: Voiture Électrique Station de Recharge -->
-            <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out pointer-events-none">
-              <img src="https://images.pexels.com/photos/9800030/pexels-photo-9800030.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Voiture Électrique Recharge Maroc" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
-              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
-              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="max-w-xl">
-                  <span class="bg-m-green-light text-white text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Transition Verte Maroc 2030</span>
-                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Audi e-tron GT Quattro 100% Électrique</h3>
-                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Recharge offerte sur le réseau autoroutier Casablanca-Rabat-Tanger.</p>
-                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
-                    <span><i class="fas fa-charging-station mr-1"></i> Autonomie 490 km</span>
-                    <span><i class="fas fa-leaf mr-1"></i> Zéro Vignette Fiscale</span>
-                    <span><i class="fas fa-tachometer-alt mr-1"></i> 0-100 en 3.9s</span>
-                  </div>
-                </div>
-                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
-                  <p class="text-xs text-m-sand/70 uppercase">Loyer Flotte Green</p>
-                  <div class="text-2xl sm:text-3xl font-black text-m-gold">17 800 <span class="text-sm font-semibold text-white">DH/mois</span></div>
-                  <button onclick="prefillAndScroll('Audi e-tron GT Quattro')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
-                    Réserver ce véhicule
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Slide 4: Utilitaire & Flotte Entreprise -->
-            <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out pointer-events-none">
-              <img src="https://images.pexels.com/photos/6157057/pexels-photo-6157057.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Fourgon Utilitaire Entreprise Tanger Med" class="w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-1000">
-              <div class="absolute inset-0 bg-gradient-to-t from-m-brown-dark via-m-brown-dark/40 to-transparent"></div>
-              <div class="absolute bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="max-w-xl">
-                  <span class="bg-m-terra text-white text-xs uppercase px-3 py-1 rounded-md font-bold tracking-wider inline-block mb-2">Offres Entreprises & PME</span>
-                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white">Renault Master Grand Volume & Transit</h3>
-                  <p class="text-m-sand/90 text-sm sm:text-base mt-1 font-light">Optimisez vos transferts logistiques Casablanca Finance City et Tanger Med.</p>
-                  <div class="flex items-center gap-4 mt-3 text-xs sm:text-sm text-m-gold font-semibold">
-                    <span><i class="fas fa-boxes mr-1"></i> Volume 13 m³</span>
-                    <span><i class="fas fa-wrench mr-1"></i> Assistance Poids Lourds</span>
-                    <span><i class="fas fa-coins mr-1"></i> Déductibilité 100% TVA</span>
-                  </div>
-                </div>
-                <div class="bg-m-brown/90 backdrop-blur-md p-4 rounded-2xl border border-m-gold/40 text-right min-w-[200px]">
-                  <p class="text-xs text-m-sand/70 uppercase">Loyer LLD Pro</p>
-                  <div class="text-2xl sm:text-3xl font-black text-m-gold">5 400 <span class="text-sm font-semibold text-white">DH/mois</span></div>
-                  <button onclick="prefillAndScroll('Renault Master Grand Volume')" class="mt-2 w-full py-2 bg-m-red hover:bg-m-red-dark text-white text-xs font-bold rounded-lg transition shadow-md">
-                    Réserver ce véhicule
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Carousel Controls -->
-          <button onclick="prevSlide()" aria-label="Précédent" class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-m-brown-dark/70 hover:bg-m-red text-white flex items-center justify-center border border-m-gold transition z-20">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button onclick="nextSlide()" aria-label="Suivant" class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-m-brown-dark/70 hover:bg-m-red text-white flex items-center justify-center border border-m-gold transition z-20">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-
-          <!-- Carousel Dots -->
-          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-            <button onclick="setSlide(0)" class="carousel-dot w-8 h-2 rounded-full bg-m-gold transition-all duration-300"></button>
-            <button onclick="setSlide(1)" class="carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300"></button>
-            <button onclick="setSlide(2)" class="carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300"></button>
-            <button onclick="setSlide(3)" class="carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300"></button>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SEARCH & QUICK FILTER PANEL (Moroccan Multi-criteria) -->
-    <section class="relative -mt-8 z-30 max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="bg-white rounded-2xl shadow-moroccan-lg border-2 border-m-gold p-6 lg:p-8 relative">
-        <div class="arabesque-corner-tl"></div>
-        <div class="arabesque-corner-br"></div>
-
-        <!-- Search Header Tabs -->
-        <div class="flex flex-wrap items-center justify-between border-b border-m-sand pb-4 mb-6 gap-3">
-          <div class="flex items-center gap-2">
-            <span class="text-m-red text-lg"><i class="fas fa-search-location"></i></span>
-            <h2 class="font-bold text-lg sm:text-xl text-m-brown">Trouvez votre véhicule idéal au Maroc</h2>
-          </div>
-          <!-- Type Tab Selector -->
-          <div class="inline-flex p-1 bg-m-sand rounded-xl text-xs sm:text-sm font-bold">
-            <button id="tabParticulier" onclick="switchClientType('particulier')" class="px-4 py-1.5 rounded-lg bg-m-brown text-white shadow transition">Particulier</button>
-            <button id="tabEntreprise" onclick="switchClientType('entreprise')" class="px-4 py-1.5 rounded-lg text-m-brown hover:text-m-red transition">Entreprise / PME (TVA récup.)</button>
-          </div>
-        </div>
-
-        <!-- Filter Inputs Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          
-          <!-- Category -->
-          <div>
-            <label class="block text-xs font-bold text-m-brown/70 uppercase mb-1.5">Catégorie de véhicule</label>
-            <div class="relative">
-              <select id="filterCategory" onchange="applyVehicleFilters()" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm text-m-brown font-semibold focus:outline-none focus:ring-2 focus:ring-m-red">
-                <option value="all">Tous les véhicules</option>
-                <option value="SUV">SUV & 4x4 Atlas</option>
-                <option value="Berline">Berlines Exécutives</option>
-                <option value="Sport">Sport & Coupé</option>
-                <option value="Electrique">100% Électrique / Hybride</option>
-                <option value="Utilitaire">Utilitaires Pro</option>
-              </select>
-              <i class="fas fa-car absolute right-3 top-3 text-m-gold pointer-events-none"></i>
-            </div>
-          </div>
-
-          <!-- City of Delivery -->
-          <div>
-            <label class="block text-xs font-bold text-m-brown/70 uppercase mb-1.5">Ville de livraison au Maroc</label>
-            <div class="relative">
-              <select id="filterCity" onchange="applyVehicleFilters()" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm text-m-brown font-semibold focus:outline-none focus:ring-2 focus:ring-m-red">
-                <option value="all">Toutes les villes (Livraison gratuite)</option>
-                <option value="Casablanca">Casablanca (Siège Maarif & Anfa)</option>
-                <option value="Rabat">Rabat (Agdal & Hay Riad)</option>
-                <option value="Marrakech">Marrakech (Guéliz & Hivernage)</option>
-                <option value="Tanger">Tanger (Marina & Free Zone)</option>
-                <option value="Fès">Fès & Meknès</option>
-                <option value="Agadir">Agadir & Souss</option>
-              </select>
-              <i class="fas fa-map-pin absolute right-3 top-3 text-m-red pointer-events-none"></i>
-            </div>
-          </div>
-
-          <!-- Budget Max Slider -->
-          <div>
-            <div class="flex justify-between items-center mb-1.5">
-              <label class="block text-xs font-bold text-m-brown/70 uppercase">Budget Max / Mois</label>
-              <span id="budgetValue" class="text-xs font-black text-m-red">30 000 DH</span>
-            </div>
-            <input type="range" id="filterBudget" min="3000" max="30000" step="1000" value="30000" oninput="updateBudgetFilter(this.value)" class="w-full accent-m-red cursor-pointer">
-            <div class="flex justify-between text-[10px] text-m-brown/60 font-semibold mt-1">
-              <span>3 000 DH</span>
-              <span>15 000 DH</span>
-              <span>30 000 DH+</span>
-            </div>
-          </div>
-
-          <!-- Filter Action -->
-          <div class="flex items-end">
-            <button onclick="resetFilters()" class="w-full bg-m-brown hover:bg-m-brown-dark text-m-sand font-bold py-2.5 px-4 rounded-xl text-sm transition flex items-center justify-center gap-2 border border-m-gold/40">
-              <i class="fas fa-redo-alt text-xs text-m-gold"></i>
-              <span>Réinitialiser</span>
-            </button>
-          </div>
-
-        </div>
-
-        <!-- Quick badges -->
-        <div class="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-m-sand text-xs">
-          <span class="text-m-brown/60 font-medium">Recherches rapides :</span>
-          <button onclick="quickFilter('Electrique')" class="px-2.5 py-1 rounded-full bg-m-green/10 text-m-green font-bold hover:bg-m-green hover:text-white transition">Électriques zéro taxe</button>
-          <button onclick="quickFilter('SUV')" class="px-2.5 py-1 rounded-full bg-m-red/10 text-m-red font-bold hover:bg-m-red hover:text-white transition">SUV 4x4 Désert</button>
-          <button onclick="quickFilter('Utilitaire')" class="px-2.5 py-1 rounded-full bg-m-terra/10 text-m-terra font-bold hover:bg-m-terra hover:text-white transition">Utilitaires Tanger/Casa</button>
-          <button onclick="quickFilter('Sport')" class="px-2.5 py-1 rounded-full bg-m-gold/20 text-m-brown font-bold hover:bg-m-gold transition">Coupé & Prestige</button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- HIGHLIGHT FEATURE SERVICES (Moroccan Cards) -->
-    <section id="services" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-14">
-        <span class="text-xs font-bold uppercase tracking-widest text-m-red font-traditional">Services & Engagements Royaux</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-m-brown mt-1">L'Art du Service Automobile au Maroc</h2>
-        <div class="w-20 h-1 bg-m-gold mx-auto my-3"></div>
-        <p class="text-m-brown/75 text-sm sm:text-base">Une formule tout compris où nous nous chargeons de tout : carte grise, vignette fiscale marocaine, révisions constructeur et assistance continue.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <!-- Service Card 1 -->
-        <div class="bg-white rounded-2xl p-7 shadow-moroccan border-t-4 border-m-green card-transition relative overflow-hidden group">
-          <div class="w-14 h-14 bg-m-green/10 rounded-2xl flex items-center justify-center text-m-green text-2xl mb-5 group-hover:bg-m-green group-hover:text-white transition">
-            <i class="fas fa-leaf"></i>
-          </div>
-          <h3 class="text-xl font-bold text-m-brown mb-2">Programme Mobilité Verte Maroc</h3>
-          <p class="text-sm text-m-brown/70 leading-relaxed">Passez à l'électrique en toute confiance. Installation d'une borne de recharge Wallbox à votre domicile ou entreprise à Casablanca, Rabat ou Tanger.</p>
-          <ul class="mt-4 space-y-2 text-xs font-semibold text-m-brown/80">
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> 0% Vignette & Taxes écologiques</li>
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Bornes autoroute Casa-Rabat sans frais</li>
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-green"></i> Remplacement immédiat en cas de panne</li>
-          </ul>
-        </div>
-
-        <!-- Service Card 2 -->
-        <div class="bg-white rounded-2xl p-7 shadow-moroccan border-t-4 border-m-gold card-transition relative overflow-hidden group">
-          <div class="w-14 h-14 bg-m-gold/20 rounded-2xl flex items-center justify-center text-m-brown text-2xl mb-5 group-hover:bg-m-gold transition">
-            <i class="fas fa-bolt"></i>
-          </div>
-          <span class="absolute top-4 right-4 bg-m-red text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Stock Garanti</span>
-          <h3 class="text-xl font-bold text-m-brown mb-2">Disponibilité Immédiate en 48H</h3>
-          <p class="text-sm text-m-brown/70 leading-relaxed">Plus de 150 véhicules en parc immatriculés WW, inspectés et prêts à prendre la route immédiatement pour particuliers et flottes d'affaires.</p>
-          <ul class="mt-4 space-y-2 text-xs font-semibold text-m-brown/80">
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-gold"></i> Livraison au pas de votre porte</li>
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-gold"></i> Check-in VIP aux Aéroports (CMN, RAK, TNG)</li>
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-gold"></i> Contrat digitalisé sans déplacement</li>
-          </ul>
-        </div>
-
-        <!-- Service Card 3 -->
-        <div class="bg-white rounded-2xl p-7 shadow-moroccan border-t-4 border-m-red card-transition relative overflow-hidden group">
-          <div class="w-14 h-14 bg-m-red/10 rounded-2xl flex items-center justify-center text-m-red text-2xl mb-5 group-hover:bg-m-red group-hover:text-white transition">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h3 class="text-xl font-bold text-m-brown mb-2">Assistance Tous Risques 24/7</h3>
-          <p class="text-sm text-m-brown/70 leading-relaxed">Une panne sur le col du Tichka ou un pneu endommagé sur l'autoroute de Tanger ? Notre réseau de dépanneuses intervient en moins de 45 minutes.</p>
-          <ul class="mt-4 space-y-2 text-xs font-semibold text-m-brown/80">
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-red"></i> Véhicule de relais de catégorie égale</li>
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-red"></i> Prise en charge hôtel & rapatriement</li>
-            <li class="flex items-center gap-2"><i class="fas fa-check text-m-red"></i> Ligne directe opérateur bilingue Fr/Ar</li>
-          </ul>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- VEHICLES CATALOG GRID: 12 REAL LEASING OFFERS -->
-    <section id="catalogue" class="py-16 bg-m-sand-light border-y border-m-gold/30">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Header Catalogue -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div>
-            <div class="flex items-center gap-2 text-m-red font-bold text-xs uppercase tracking-widest">
-              <i class="fas fa-car-side"></i>
-              <span>Parc Automobile Neuf & Certifié</span>
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-black text-m-brown mt-1">Nos 12 Offres Vedettes en Dirhams (DH)</h2>
-            <p class="text-m-brown/70 text-sm mt-1">Contrats modulables de 12 à 48 mois avec kilométrage adapté à vos besoins au Maroc.</p>
-          </div>
-          <!-- Filter Count badge -->
-          <div class="flex items-center gap-3">
-            <span id="vehicleCountBadge" class="bg-m-brown text-m-gold px-3 py-1.5 rounded-xl font-bold text-xs shadow-sm">
-              12 Véhicules Disponibles
-            </span>
-          </div>
-        </div>
-
-        <!-- Vehicles Grid Container -->
-        <div id="vehiclesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <!-- The 12 Vehicle Cards will be rendered dynamically by JavaScript with real Pexels photos and Moroccan specs -->
-        </div>
-
-        <!-- No Results Warning (hidden by default) -->
-        <div id="noVehiclesFound" class="hidden text-center py-16 bg-white rounded-2xl border border-m-gold/30 mt-6">
-          <i class="fas fa-car-crash text-5xl text-m-gold mb-3"></i>
-          <h4 class="text-xl font-bold text-m-brown">Aucun véhicule ne correspond à ces critères</h4>
-          <p class="text-sm text-m-brown/70 mt-1">Essayez d'augmenter votre budget mensuel ou sélectionnez toutes les catégories.</p>
-          <button onclick="resetFilters()" class="mt-4 px-5 py-2 bg-m-red text-white text-xs font-bold rounded-lg shadow">
-            Réinitialiser la recherche
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- INTERACTIVE LEASING CALCULATOR / SIMULATEUR LLD -->
-    <section id="simulateur" class="py-20 max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="bg-white rounded-3xl shadow-moroccan-lg border-2 border-m-gold overflow-hidden">
-        
-        <div class="bg-gradient-to-r from-m-brown via-m-brown-dark to-m-red p-6 sm:p-8 text-white relative">
-          <div class="arabesque-corner-tl"></div>
-          <span class="text-m-gold text-xs font-bold uppercase tracking-widest"><i class="fas fa-calculator mr-1"></i> Simulateur Transparent LLD</span>
-          <h3 class="text-2xl sm:text-3xl font-extrabold mt-1">Configurez votre Loyer Mensuel au Dirham près</h3>
-          <p class="text-m-sand/80 text-xs sm:text-sm mt-1">Ajustez la durée, l'apport initial et le forfait kilométrique pour simuler votre mensualité tout compris.</p>
-        </div>
-
-        <div class="p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
-          <!-- Controls (7 cols) -->
-          <div class="lg:col-span-7 space-y-6">
-            
-            <!-- Vehicle Selector for Simulator -->
-            <div>
-              <label class="block text-xs font-bold text-m-brown uppercase mb-2">Véhicule choisi</label>
-              <select id="simCarSelect" onchange="calculateSimulator()" class="w-full bg-m-sand-light border border-m-gold/60 rounded-xl px-4 py-3 text-sm font-bold text-m-brown focus:ring-2 focus:ring-m-red outline-none">
-                <option value="4200" data-name="Peugeot 208 GT Line">Peugeot 208 GT Line - Économique Urbaine</option>
-                <option value="4900" data-name="Dacia Duster 4x4 Prestige">Dacia Duster 4x4 Prestige - Pistes du Sud</option>
-                <option value="6200" data-name="Hyundai Tucson N-Line Hybrid">Hyundai Tucson N-Line Hybrid - Familiale Polyvalente</option>
-                <option value="7800" data-name="Volkswagen Golf 8 R-Line">Volkswagen Golf 8 R-Line - Compacte Sport</option>
-                <option value="9900" data-name="Mercedes-Benz Classe C 220d">Mercedes-Benz Classe C 220d - Berline d'Affaires</option>
-                <option value="12500" data-name="BMW X5 xDrive30d M-Sport">BMW X5 xDrive30d M-Sport - SUV Prestige</option>
-                <option value="14900" data-name="Land Rover Defender 110" selected>Land Rover Defender 110 - Expédition Grand Atlas</option>
-                <option value="17800" data-name="Audi e-tron GT Quattro">Audi e-tron GT Quattro - 100% Électrique</option>
-                <option value="22500" data-name="Porsche Carrera 911 4S">Porsche Carrera 911 4S - Vitesse & Légende</option>
-              </select>
-            </div>
-
-            <!-- Duration Slider -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-m-brown uppercase">Durée du contrat LLD</label>
-                <span id="simDurDisplay" class="text-sm font-black text-m-red">36 Mois</span>
-              </div>
-              <input type="range" id="simDuration" min="12" max="60" step="12" value="36" oninput="calculateSimulator()" class="w-full accent-m-red">
-              <div class="flex justify-between text-[11px] text-m-brown/60 font-semibold mt-1">
-                <span>12 mois</span>
-                <span>24 mois</span>
-                <span>36 mois</span>
-                <span>48 mois</span>
-                <span>60 mois</span>
-              </div>
-            </div>
-
-            <!-- Initial Deposit % -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-m-brown uppercase">Premier loyer majoré (Apport)</label>
-                <span id="simDepositDisplay" class="text-sm font-black text-m-gold">10% (Recommandé)</span>
-              </div>
-              <input type="range" id="simDeposit" min="0" max="30" step="5" value="10" oninput="calculateSimulator()" class="w-full accent-m-gold">
-              <div class="flex justify-between text-[11px] text-m-brown/60 font-semibold mt-1">
-                <span>0% (Sans apport)</span>
-                <span>10%</span>
-                <span>20%</span>
-                <span>30%</span>
-              </div>
-            </div>
-
-            <!-- Kilometrage slider -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-m-brown uppercase">Kilométrage Annuel Inclus</label>
-                <span id="simKmDisplay" class="text-sm font-black text-m-brown">20 000 KM / an</span>
-              </div>
-              <input type="range" id="simKm" min="10000" max="40000" step="5000" value="20000" oninput="calculateSimulator()" class="w-full accent-m-brown">
-              <div class="flex justify-between text-[11px] text-m-brown/60 font-semibold mt-1">
-                <span>10 000 km</span>
-                <span>20 000 km</span>
-                <span>30 000 km</span>
-                <span>40 000 km</span>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Simulator Result Card (5 cols) -->
-          <div class="lg:col-span-5 bg-m-sand-light rounded-2xl p-6 border-2 border-m-gold/50 shadow-inner flex flex-col justify-between h-full">
-            <div>
-              <span class="text-[11px] uppercase tracking-wider font-bold text-m-brown/60">Estimation immédiate TTC</span>
-              <h4 id="simCarResultName" class="text-lg font-black text-m-brown mt-0.5">Land Rover Defender 110</h4>
-              
-              <div class="my-6 bg-white p-4 rounded-xl border border-m-gold/30 text-center shadow-sm">
-                <div class="text-xs font-semibold text-m-brown/70">Loyer Mensuel Estimé :</div>
-                <div class="flex items-baseline justify-center gap-1.5 mt-1">
-                  <span id="simFinalMonthly" class="text-4xl font-black text-m-red">14 155</span>
-                  <span class="text-lg font-bold text-m-brown">DH <span class="text-xs font-normal">/mois</span></span>
-                </div>
-                <p class="text-[10px] text-m-green font-bold mt-1">✓ Entretien constructeur, pneus et vignette inclus</p>
-              </div>
-
-              <!-- Perks Included -->
-              <div class="space-y-2 text-xs text-m-brown/80 font-medium">
-                <div class="flex items-center justify-between">
-                  <span>Assurance tous risques Maroc :</span>
-                  <span class="font-bold text-m-green">Incluse (0 DH franchise)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>Véhicule relais garanti :</span>
-                  <span class="font-bold text-m-green">24h/24 Partout au Royaume</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>Vignette & Taxe à l'essieu :</span>
-                  <span class="font-bold text-m-green">Prise en charge à 100%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-m-sand">
-              <button onclick="openBookingModalWithSimulator()" class="w-full bg-gradient-to-r from-m-red to-m-red-dark hover:from-m-red-dark hover:to-m-brown-dark text-white font-bold py-3 px-4 rounded-xl shadow-lg transition transform active:scale-95 text-sm flex items-center justify-center gap-2">
-                <i class="fas fa-check-circle text-m-gold"></i>
-                <span>Bloquer ce tarif & Recevoir le contrat</span>
-              </button>
-              <p class="text-[10px] text-center text-m-brown/60 mt-2">Engagement sans frais • Réponse sous 2 heures ouvrées</p>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SECTION "POURQUOI NOUS CHOISIR" (Touches marocaines) -->
-    <section id="pourquoi" class="py-20 zellige-pattern text-white relative">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <span class="text-xs font-bold uppercase tracking-widest text-m-gold font-traditional">Hospitalité & Fiabilité Marocaine</span>
-          <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">Pourquoi Confier Votre Mobilité à AutoLease Maroc ?</h2>
-          <div class="w-24 h-1 bg-m-red mx-auto my-3"></div>
-          <p class="text-m-sand/80 text-sm sm:text-base font-light">Depuis plus de 15 ans, nous accompagnons les fleurons de l'économie marocaine, les professions libérales et les résidents exigeants.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
-          <!-- Box 1 -->
-          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
-            <div class="w-16 h-16 bg-gradient-to-br from-m-red to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
-              <i class="fas fa-map-marked-alt text-2xl text-m-gold"></i>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Présence dans 6 Grandes Métropoles</h3>
-            <p class="text-xs text-m-sand/75 leading-relaxed">Agences et ateliers partenaires à Casablanca, Rabat, Marrakech, Tanger Med, Fès et Agadir. Votre véhicule vous attend à la sortie de l'avion.</p>
-          </div>
-
-          <!-- Box 2 -->
-          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
-            <div class="w-16 h-16 bg-gradient-to-br from-m-green to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
-              <i class="fas fa-file-contract text-2xl text-m-gold"></i>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Fiscalité Optimale en DH</h3>
-            <p class="text-xs text-m-sand/75 leading-relaxed">Loyers 100% déductibles pour les SARL et SA marocaines, récupération totale de TVA et aucune immobilisation de capitaux en banque.</p>
-          </div>
-
-          <!-- Box 3 -->
-          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
-            <div class="w-16 h-16 bg-gradient-to-br from-m-gold to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
-              <i class="fas fa-concierge-bell text-2xl text-m-brown-dark"></i>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Conciergerie VIP Dédiée</h3>
-            <p class="text-xs text-m-sand/75 leading-relaxed">Un gestionnaire de compte attitré joignable directement par téléphone et WhatsApp pour vos révisions, transferts et demandes spéciales.</p>
-          </div>
-
-          <!-- Box 4 -->
-          <div class="bg-m-brown-dark/80 backdrop-blur border border-m-gold/30 rounded-2xl p-6 text-center card-transition relative group">
-            <div class="w-16 h-16 bg-gradient-to-br from-m-terra to-m-brown rounded-2xl flex items-center justify-center mx-auto mb-4 border border-m-gold group-hover:scale-110 transition">
-              <i class="fas fa-tools text-2xl text-m-gold"></i>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Entretien Réseau Constructeur</h3>
-            <p class="text-xs text-m-sand/75 leading-relaxed">Seules des pièces d'origine sont utilisées auprès des concessionnaires officiels marocains (SMEIA, CAC, Auto Nejma, Renault Maroc).</p>
-          </div>
-
-        </div>
-
-        <!-- Moroccan Stats Ribbon -->
-        <div class="mt-16 bg-m-brown-dark/95 border-2 border-m-gold/40 rounded-2xl p-8 shadow-2xl">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div class="text-3xl sm:text-4xl font-black text-m-gold">+3 850</div>
-              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Véhicules Livrés au Maroc</div>
-            </div>
-            <div>
-              <div class="text-3xl sm:text-4xl font-black text-m-red">99.4%</div>
-              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Taux de Satisfaction Client</div>
-            </div>
-            <div>
-              <div class="text-3xl sm:text-4xl font-black text-m-green-light">45 Min</div>
-              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Délai Max d'Assistance 24/7</div>
-            </div>
-            <div>
-              <div class="text-3xl sm:text-4xl font-black text-m-gold">100%</div>
-              <div class="text-xs sm:text-sm text-m-sand/80 font-semibold uppercase mt-1">Couverture Territoire National</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CLIENT TESTIMONIALS (Avis Clients Marocains) -->
-    <section id="temoignages" class="py-20 bg-m-cream">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="text-center max-w-3xl mx-auto mb-14">
-          <span class="text-xs font-bold uppercase tracking-widest text-m-red font-traditional">Témoignages & Références</span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-m-brown mt-1">Ce que Disent nos Clients au Maroc</h2>
-          <div class="w-20 h-1 bg-m-gold mx-auto my-3"></div>
-          <p class="text-m-brown/70 text-sm">Entrepreneurs à Casablanca, directeurs à Rabat, hôteliers à Marrakech ou particuliers exigeants.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <!-- Review 1 -->
-          <div class="bg-white p-7 rounded-2xl shadow-moroccan border border-m-gold/30 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-1 text-amber-500 mb-3 text-sm">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-              </div>
-              <p class="text-m-brown/80 text-sm italic leading-relaxed">
-                "Nous avons basculé l'ensemble de notre flotte commerciale (14 véhicules utilitaires et 3 berlines) chez AutoLease Maroc à Casablanca Finance City. La déductibilité fiscale et la réactivité du service client WhatsApp sont remarquables."
-              </p>
-            </div>
-            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-m-sand">
-              <div class="w-12 h-12 rounded-full bg-m-brown text-m-gold font-bold flex items-center justify-center text-base border border-m-gold">
-                YB
-              </div>
-              <div>
-                <h4 class="font-bold text-sm text-m-brown">Youssef Bennani</h4>
-                <p class="text-xs text-m-brown/60">DG Cabinet Consulting • Casablanca</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review 2 -->
-          <div class="bg-white p-7 rounded-2xl shadow-moroccan border border-m-gold/30 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-1 text-amber-500 mb-3 text-sm">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-              </div>
-              <p class="text-m-brown/80 text-sm italic leading-relaxed">
-                "J'ai pris un Porsche Macan en LLD pour mon activité à Marrakech et mes déplacements réguliers à Agadir. La livraison à l'aéroport Menara était impeccable, véhicule étincelant avec le plein. Service digne des plus grands palaces."
-              </p>
-            </div>
-            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-m-sand">
-              <div class="w-12 h-12 rounded-full bg-m-red text-white font-bold flex items-center justify-center text-base border border-m-gold">
-                LE
-              </div>
-              <div>
-                <h4 class="font-bold text-sm text-m-brown">Laila El Amrani</h4>
-                <p class="text-xs text-m-brown/60">Architecte d'Intérieur • Marrakech Guéliz</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review 3 -->
-          <div class="bg-white p-7 rounded-2xl shadow-moroccan border border-m-gold/30 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-1 text-amber-500 mb-3 text-sm">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-              </div>
-              <p class="text-m-brown/80 text-sm italic leading-relaxed">
-                "Installé récemment à Tanger pour un projet industriel à la Tanger Free Zone, j'avais besoin rapidement d'un SUV fiable pour toute la famille. Contrat signé en ligne et livraison du Defender en 48 heures chrono."
-              </p>
-            </div>
-            <div class="flex items-center gap-4 mt-6 pt-4 border-t border-m-sand">
-              <div class="w-12 h-12 rounded-full bg-m-green text-white font-bold flex items-center justify-center text-base border border-m-gold">
-                MT
-              </div>
-              <div>
-                <h4 class="font-bold text-sm text-m-brown">Mehdi Tazi</h4>
-                <p class="text-xs text-m-brown/60">Directeur d'Usine • Tanger Med</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- BRAND PARTNERS / GALERIE DE MARQUES -->
-    <section class="py-12 bg-white border-y border-m-gold/20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-xs font-bold text-m-brown/60 uppercase tracking-widest mb-6 font-traditional">
-          Partenariats Officiels avec les plus Grandes Marques Automobiles au Maroc
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 opacity-70 grayscale hover:grayscale-0 transition duration-300">
-          <span class="text-2xl font-black tracking-widest text-m-brown">MERCEDES-BENZ</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">BMW</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">AUDI</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">PORSCHE</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">LAND ROVER</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">VOLKSWAGEN</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">RENAULT</span>
-          <span class="text-2xl font-black tracking-widest text-m-brown">PEUGEOT</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- FREQUENTLY ASKED QUESTIONS (FAQ) -->
-    <section id="faq" class="py-20 max-w-4xl mx-auto px-4 sm:px-6">
-      
-      <div class="text-center mb-12">
-        <span class="text-xs font-bold uppercase tracking-widest text-m-red font-traditional">Toutes vos Réponses</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-m-brown mt-1">Questions Fréquentes sur la LLD au Maroc</h2>
-        <div class="w-20 h-1 bg-m-gold mx-auto my-3"></div>
-      </div>
-
-      <div class="space-y-4">
-        
-        <!-- FAQ 1 -->
-        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
-          <button onclick="toggleFAQ(1)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
-            <span>Quelles sont les conditions pour souscrire un contrat de LLD au Maroc ?</span>
-            <i id="faqIcon1" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
-          </button>
-          <div id="faqContent1" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
-            Pour les <strong>particuliers marocains ou résidents</strong> : copie de la CNIE ou carte de séjour, permis de conduire marocain ou international en cours de validité, 3 derniers relevés bancaires marocains et un justificatif de domicile. Pour les <strong>entreprises (SARL, SA)</strong> : modèle J récent (moins de 3 mois), statuts, bilan financier N-1 et CIN du gérant.
-          </div>
-        </div>
-
-        <!-- FAQ 2 -->
-        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
-          <button onclick="toggleFAQ(2)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
-            <span>Que comprend exactement le loyer mensuel en Dirhams (DH) ?</span>
-            <i id="faqIcon2" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
-          </button>
-          <div id="faqContent2" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
-            Notre formule "Sérénité Marocaine" inclut : la mise à disposition du véhicule neuf, l'immatriculation et la carte grise, la vignette fiscale annuelle marocaine, l'assurance tous risques avec assistance zéro kilomètre, l'entretien préventif et curatif dans le réseau agréé constructeur, ainsi que le remplacement des pneumatiques et un véhicule de relais en cas de panne ou sinistre.
-          </div>
-        </div>
-
-        <!-- FAQ 3 -->
-        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
-          <button onclick="toggleFAQ(3)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
-            <span>Livrez-vous dans les aéroports du Royaume ?</span>
-            <i id="faqIcon3" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
-          </button>
-          <div id="faqContent3" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
-            Absolument. Nos agents VIP vous accueillent directement aux terminaux de l'Aéroport Mohammed V (Casablanca), Menara (Marrakech), Rabat-Salé, Tanger Ibn Battouta et Agadir Al Massira. Votre véhicule vous est remis propre, clés en main, après un état des lieux rapide sur tablette numérique.
-          </div>
-        </div>
-
-        <!-- FAQ 4 -->
-        <div class="bg-white rounded-2xl border border-m-gold/40 overflow-hidden shadow-sm">
-          <button onclick="toggleFAQ(4)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-m-brown hover:text-m-red transition">
-            <span>Puis-je voyager dans le Sud marocain (Merzouga, Dakhla) avec les 4x4 et SUV ?</span>
-            <i id="faqIcon4" class="fas fa-chevron-down text-m-gold transition-transform duration-200"></i>
-          </button>
-          <div id="faqContent4" class="hidden px-6 pb-5 text-sm text-m-brown/75 leading-relaxed border-t border-m-sand pt-3">
-            Oui, l'ensemble de notre gamme 4x4 et SUV tout-terrain (Defender, Land Cruiser, Duster 4x4) est autorisé et assuré pour la circulation sur les routes et pistes balisées à travers tout le Royaume du Maroc, du Rif jusqu'aux provinces sahariennes.
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- MODAL RESERVATION / DEMANDE DE DEVIS EN DIRHAMS -->
-  <div id="bookingModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-xl w-full border-2 border-m-gold shadow-2xl overflow-hidden relative animate-scaleUp">
-      <div class="arabesque-corner-tl"></div>
-      <div class="arabesque-corner-br"></div>
-
-      <!-- Modal Header -->
-      <div class="bg-gradient-to-r from-m-brown to-m-red p-6 text-white flex justify-between items-start">
-        <div>
-          <span class="text-m-gold text-xs font-bold uppercase tracking-wider"><i class="fas fa-file-signature mr-1"></i> Devis Officiel AutoLease Maroc</span>
-          <h3 id="modalCarTitle" class="text-2xl font-black mt-1">Land Rover Defender 110</h3>
-          <p id="modalCarPrice" class="text-m-gold-light text-sm font-semibold">Loyer de base : 14 900 DH / mois</p>
-        </div>
-        <button onclick="closeBookingModal()" class="text-white/80 hover:text-white text-2xl font-bold p-1">
-          &times;
-        </button>
-      </div>
-
-      <!-- Modal Form Body -->
-      <form id="quoteForm" onsubmit="handleQuoteSubmit(event)" class="p-6 sm:p-8 space-y-4">
-        <input type="hidden" id="modalHiddenCarName">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Nom & Prénom *</label>
-            <input type="text" required placeholder="Ex: Karim Alaoui" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Téléphone Maroc (+212) *</label>
-            <input type="tel" required placeholder="06 61 XX XX XX" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Email Professionnel / Perso *</label>
-            <input type="email" required placeholder="contact@domaine.ma" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Ville de Livraison au Maroc</label>
-            <select id="modalDeliveryCity" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
-              <option value="Casablanca">Casablanca (Livraison offerte)</option>
-              <option value="Rabat">Rabat</option>
-              <option value="Marrakech">Marrakech</option>
-              <option value="Tanger">Tanger</option>
-              <option value="Fès">Fès</option>
-              <option value="Agadir">Agadir</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Type de Contrat</label>
-            <select class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
-              <option>LLD Entreprise (Déductible)</option>
-              <option>LLD Particulier / Profession Libérale</option>
-              <option>Moyenne Durée (3 à 11 mois)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-m-brown uppercase mb-1">Durée souhaitée</label>
-            <select id="modalDuration" class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-m-red outline-none">
-              <option value="36">36 Mois (Formule Recommandée)</option>
-              <option value="48">48 Mois</option>
-              <option value="24">24 Mois</option>
-              <option value="12">12 Mois</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-m-brown uppercase mb-1">Remarques ou demandes spécifiques</label>
-          <textarea rows="2" placeholder="Siège enfant, badge autoroute Jawaz, livraison aéroport..." class="w-full bg-m-sand-light border border-m-gold/50 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-m-red outline-none"></textarea>
-        </div>
-
-        <div class="pt-2">
-          <button type="submit" class="w-full bg-gradient-to-r from-m-red to-m-red-dark hover:from-m-red-dark hover:to-m-brown text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
-            <i class="fas fa-paper-plane text-m-gold"></i>
-            <span>Envoyer ma demande et recevoir la proposition officielle</span>
-          </button>
-        </div>
-      </form>
+  <!-- RÈGLE D'OR -->
+  <div class="rule">
+    <div class="box bad">
+      <h3>🚫 À éviter absolument</h3>
+      <ul>
+        <li>Reproduire le logo, le cadre jaune ou le design officiel</li>
+        <li>Utiliser des noms de personnages © (Pikachu, Charizard, etc.) dans le rendu final</li>
+        <li>Générer une “vraie carte” sans mentionner clairement “fan art / custom”</li>
+        <li>Flouter ou masquer la rareté / le set pour tromper l'acheteur</li>
+      </ul>
+    </div>
+    <div class="box good">
+      <h3>✅ Toujours faire</h3>
+      <ul>
+        <li>Photographier vos <b>vraies cartes</b> pour les listings (confiance++)</li>
+        <li>Étiqueter explicitement “CUSTOM / FAN CARD — non officielle”</li>
+        <li>Utiliser des designs <b>originaux</b> avec créatures inventées</li>
+        <li>Garder une cohérence visuelle = identité de boutique pro</li>
+      </ul>
     </div>
   </div>
 
-  <!-- SUCCESS TOAST NOTIFICATION -->
-  <div id="toastSuccess" class="fixed bottom-6 right-6 z-50 bg-m-brown-dark text-white p-5 rounded-2xl border-2 border-m-gold shadow-2xl flex items-center gap-4 translate-y-32 transition-transform duration-300">
-    <div class="w-10 h-10 bg-m-green rounded-xl flex items-center justify-center text-white text-lg">
-      <i class="fas fa-check"></i>
+  <!-- 1) MARKETPLACE -->
+  <section>
+    <h2><span class="num">01</span>Photos marketplace</h2>
+    <p class="section-sub">Pour photographier / mettre en scène <b>vos vraies cartes</b> lors de la revente.</p>
+    <div class="grid">
+
+      <article class="card">
+        <span class="tag">A · Premium studio</span>
+        <h3>La photo “e-commerce parfaite”</h3>
+        <div class="prompt" data-prompt="Ultra realistic product photo of a single trading card in a transparent penny sleeve and rigid toploader, centered, on a matte light gray background, softbox studio lighting, minimal shadow, high sharpness, true-to-life colors, no glare, 85mm lens look, f/8, professional e-commerce photography, 8k detail. Front view, perfectly flat, edges visible.">Ultra realistic product photo of a single trading card in a transparent penny sleeve and rigid toploader, centered, on a matte light gray background, softbox studio lighting, minimal shadow, high sharpness, true-to-life colors, no glare, 85mm lens look, f/8, professional e-commerce photography, 8k detail. <b>Front view, perfectly flat, edges visible.</b></div>
+        <button class="copy">Copier</button>
+        <div class="neg"><b>Negative:</b> <code>blur, glare, reflections, fingers, watermark, text artifacts, bent corners, fake logos, extra cards, distorted frame, low resolution, overexposed, underexposed</code></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">B · Table collectionneur</span>
+        <h3>L'ambiance “setup de passionné”</h3>
+        <div class="prompt" data-prompt="Realistic product photo of a rare trading card in a sleeve, placed on a clean wooden desk, soft natural window light, subtle bokeh background with a closed binder and a grading case out of focus, sharp focus on the card, no glare, authentic textures, marketplace listing photo, high detail.">Realistic product photo of a rare trading card in a sleeve, placed on a clean wooden desk, soft natural window light, subtle bokeh background with a closed binder and a grading case out of focus, sharp focus on the card, no glare, authentic textures, marketplace listing photo, high detail.</div>
+        <button class="copy">Copier</button>
+        <div class="neg"><b>Negative:</b> <code>glare, harsh shadows, clutter, fingerprints, messy desk, low focus</code></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">C · Inspection macro</span>
+        <h3>Prouver l'état de la carte</h3>
+        <div class="prompt" data-prompt="Macro product photo of a collectible trading card showing corners and edges clearly, controlled studio lighting to avoid glare, neutral background, extremely sharp, realistic texture of the sleeve and card surface, condition-focused marketplace photo.">Macro product photo of a collectible trading card showing corners and edges clearly, controlled studio lighting to avoid glare, neutral background, extremely sharp, realistic texture of the sleeve and card surface, condition-focused marketplace photo.</div>
+        <button class="copy">Copier</button>
+        <div class="neg"><b>Negative:</b> <code>blur, glare, cropped edges, shallow DOF on corners, overprocessed</code></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">D · Recto-verso</span>
+        <h3>Transparence totale</h3>
+        <div class="prompt" data-prompt="Split-view marketplace photo, left side front of a sleeved trading card, right side back of the same card, matching studio lighting, matte gray background, sharp focus both sides, no glare, symmetrical composition, professional e-commerce layout.">Split-view marketplace photo, left side front of a sleeved trading card, right side back of the same card, matching studio lighting, matte gray background, sharp focus both sides, no glare, symmetrical composition, professional e-commerce layout.</div>
+        <button class="copy">Copier</button>
+        <div class="neg"><b>Negative:</b> <code>asymmetric lighting, color mismatch, warped perspective</code></div>
+      </article>
+
     </div>
-    <div>
-      <h4 class="font-bold text-sm text-m-gold">Demande Envoyée avec Succès !</h4>
-      <p class="text-xs text-m-sand/80">Notre conseiller basé à Casablanca vous contactera sous 2 heures.</p>
+  </section>
+
+  <!-- 2) AVATARS -->
+  <section>
+    <h2><span class="num">02</span>Avatar &amp; branding vendeur</h2>
+    <p class="section-sub">Votre identité visuelle de boutique — réutilisable sur Vinted, eBay, Cardmarket, Instagram.</p>
+    <div class="grid">
+
+      <article class="card">
+        <span class="tag">A · Logo minimal</span>
+        <h3>Badge premium or &amp; noir</h3>
+        <div class="prompt" data-prompt="Minimal vector logo avatar for an online collectible card store, clean geometric mascot (dragon or fox), flat design, limited color palette (black, white, gold), circular badge, high contrast, modern, professional, no text, no trademark logos.">Minimal vector logo avatar for an online collectible card store, clean geometric mascot (dragon or fox), flat design, limited color palette (black, white, gold), circular badge, high contrast, modern, professional, <b>no text, no trademark logos</b>.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">B · Mascotte collector</span>
+        <h3>Avatar “streetwear geek”</h3>
+        <div class="prompt" data-prompt="Stylized mascot avatar of a card collector, cozy streetwear, holding a generic trading card (no logos), anime-inspired but original character design, clean line art, soft shading, simple background, profile-picture composition, high quality.">Stylized mascot avatar of a card collector, cozy streetwear, holding a generic trading card (no logos), anime-inspired but original character design, clean line art, soft shading, simple background, profile-picture composition, high quality.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">C · Monogramme luxe</span>
+        <h3>Initial + feuille d'or</h3>
+        <div class="prompt" data-prompt="Luxury circular monogram logo for a trading card boutique, single serif initial on matte black background, gold foil texture, subtle emboss effect, minimalist, elegant, premium stationery aesthetic, no trademark symbols, centered composition.">Luxury circular monogram logo for a trading card boutique, single serif initial on matte black background, gold foil texture, subtle emboss effect, minimalist, elegant, premium stationery aesthetic, no trademark symbols, centered composition.</div>
+        <button class="copy">Copier</button>
+      </article>
+
     </div>
-    <button onclick="hideToast()" class="text-m-sand/50 hover:text-white ml-2 text-sm">&times;</button>
-  </div>
+  </section>
 
-  <!-- MOORISH BOTTOM DIVIDER -->
-  <div class="moorish-divider"></div>
+  <!-- 3) PUB -->
+  <section>
+    <h2><span class="num">03</span>Visuels pub &amp; bannières</h2>
+    <p class="section-sub">Pour annonces sponsorisées, stories Instagram, bannières boutique.</p>
+    <div class="grid">
 
-  <!-- FOOTER AVEC COORDONNÉES MAROCAINES -->
-  <footer class="bg-m-brown-dark text-m-sand pt-16 pb-10 border-t border-m-gold/40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-m-gold/20">
-        
-        <!-- Col 1: Brand Info -->
-        <div class="lg:col-span-2 space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-m-red rounded-xl flex items-center justify-center border border-m-gold">
-              <i class="fas fa-gem text-m-gold"></i>
-            </div>
-            <div>
-              <span class="text-2xl font-black text-white">AutoLease</span>
-              <span class="text-2xl font-black text-m-red">MAROC</span>
-            </div>
-          </div>
-          <p class="text-xs text-m-sand/75 leading-relaxed pr-4">
-            Leader de la Location Longue Durée (LLD) et de la mobilité haut de gamme au Royaume du Maroc. Solutions clés en main pour entreprises, diplomates, expatriés et particuliers exigeants.
-          </p>
-          <div class="flex items-center gap-3 text-m-gold text-lg pt-2">
-            <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-m-red hover:text-white transition"><i class="fab fa-facebook-f text-xs"></i></a>
-            <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-m-red hover:text-white transition"><i class="fab fa-instagram text-xs"></i></a>
-            <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-m-red hover:text-white transition"><i class="fab fa-linkedin-in text-xs"></i></a>
-            <a href="https://wa.me/212661000000" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-m-brown flex items-center justify-center hover:bg-emerald-600 hover:text-white transition"><i class="fab fa-whatsapp text-xs"></i></a>
-          </div>
+      <article class="card">
+        <span class="tag">A · Drops rares</span>
+        <h3>Bannière cinématique</h3>
+        <div class="prompt" data-prompt="High-end promotional banner for a collectible trading card drop, dramatic studio lighting, velvet dark background, spotlight on a generic holographic trading card (no logos, no copyrighted characters), premium gold accents, elegant composition, space for text, cinematic look, sharp, modern e-commerce ad.">High-end promotional banner for a collectible trading card drop, dramatic studio lighting, velvet dark background, spotlight on a generic holographic trading card (no logos, no copyrighted characters), premium gold accents, elegant composition, <b>space for text</b>, cinematic look, sharp, modern e-commerce ad.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">B · Bundle / lot</span>
+        <h3>Flat lay de cartes</h3>
+        <div class="prompt" data-prompt="Professional flat lay photo of a bundle of sleeved trading cards arranged neatly, consistent spacing, neutral background, softbox lighting, no glare, premium marketplace look, high detail, realistic.">Professional flat lay photo of a bundle of sleeved trading cards arranged neatly, consistent spacing, neutral background, softbox lighting, no glare, premium marketplace look, high detail, realistic.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">C · Teaser holographique</span>
+        <h3>Story 9:16</h3>
+        <div class="prompt" data-prompt="Vertical 9:16 story visual, slow reveal of a holographic trading card rising from darkness, prismatic light rays, deep navy background with gold particles, abstract composition, no logos, no copyrighted art, cinematic, premium drop announcement mood.">Vertical 9:16 story visual, slow reveal of a holographic trading card rising from darkness, prismatic light rays, deep navy background with gold particles, abstract composition, no logos, no copyrighted art, cinematic, premium drop announcement mood.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 4) CUSTOM CARDS -->
+  <section>
+    <h2><span class="num">04</span>Cartes custom / fan cards</h2>
+    <p class="section-sub">Designs 100% originaux — à toujours étiqueter <b>“CUSTOM — NON OFFICIAL”</b>.</p>
+    <div class="grid">
+
+      <article class="card">
+        <span class="tag">A · Fantasy holo</span>
+        <h3>Créature originale épique</h3>
+        <div class="prompt" data-prompt="Original fantasy trading card design, holographic foil effect, ornate border, unique creature illustration (original character), dynamic pose, vibrant colors, readable empty text boxes (no real brand names), professional card layout, 4k, sharp print-ready look.">Original fantasy trading card design, holographic foil effect, ornate border, unique creature illustration (original character), dynamic pose, vibrant colors, <b>readable empty text boxes (no real brand names)</b>, professional card layout, 4k, sharp print-ready look.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">B · Minimal rare</span>
+        <h3>Design épuré premium</h3>
+        <div class="prompt" data-prompt="Minimalist rare trading card design, clean border, subtle holographic gradient, centered original creature icon, premium typography placeholders (no copyrighted names), modern collectible card aesthetic, print-ready, high resolution.">Minimalist rare trading card design, clean border, subtle holographic gradient, centered original creature icon, premium typography placeholders (no copyrighted names), modern collectible card aesthetic, print-ready, high resolution.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">C · Cyberpunk trainer</span>
+        <h3>Carte “trainer” moderne</h3>
+        <div class="prompt" data-prompt="Cyberpunk-style custom trainer trading card, neon pink and teal palette, futuristic character portrait (original design), glossy holographic finish, geometric frame, placeholder stats boxes clearly readable, no copyrighted logos or names, print-ready 4k.">Cyberpunk-style custom trainer trading card, neon pink and teal palette, futuristic character portrait (original design), glossy holographic finish, geometric frame, placeholder stats boxes clearly readable, no copyrighted logos or names, print-ready 4k.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+      <article class="card">
+        <span class="tag">D · Watercolor mythic</span>
+        <h3>Illustration aquarelle</h3>
+        <div class="prompt" data-prompt="Mythic rare custom trading card, soft watercolor illustration of an original fantasy beast, muted pastel palette with gold foil accents, handmade paper texture, elegant serif placeholder text boxes, no copyrighted imagery, gallery-quality print, 4k.">Mythic rare custom trading card, soft watercolor illustration of an original fantasy beast, muted pastel palette with gold foil accents, handmade paper texture, elegant serif placeholder text boxes, no copyrighted imagery, gallery-quality print, 4k.</div>
+        <button class="copy">Copier</button>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 5) PARAMS -->
+  <section>
+    <h2><span class="num">05</span>Paramètres rapides</h2>
+    <p class="section-sub">Les réglages à toujours activer, quel que soit le prompt.</p>
+    <div class="params">
+      <div class="param">
+        <h4>Ratio</h4>
+        <p>Adapté à chaque usage :</p>
+        <div class="chips">
+          <span class="chip">1:1 · avatar</span>
+          <span class="chip">4:5 · marketplace</span>
+          <span class="chip">3:4 · portrait card</span>
+          <span class="chip">16:9 · bannière</span>
+          <span class="chip">9:16 · story</span>
         </div>
-
-        <!-- Col 2: Agences Régionales au Maroc -->
-        <div>
-          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-m-red pl-2">Nos Agences</h4>
-          <ul class="space-y-2.5 text-xs text-m-sand/70">
-            <li class="flex items-start gap-2">
-              <i class="fas fa-building text-m-gold mt-0.5"></i>
-              <span><strong>Casablanca :</strong> Bd d'Anfa & CFC</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fas fa-building text-m-gold mt-0.5"></i>
-              <span><strong>Rabat :</strong> Av. Annakhil, Hay Riad</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fas fa-building text-m-gold mt-0.5"></i>
-              <span><strong>Marrakech :</strong> Bd Mohammed VI, Guéliz</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fas fa-building text-m-gold mt-0.5"></i>
-              <span><strong>Tanger :</strong> Free Zone & Corniche</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fas fa-building text-m-gold mt-0.5"></i>
-              <span><strong>Agadir :</strong> Secteur Balnéaire</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Col 3: Liens Rapides -->
-        <div>
-          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-m-gold pl-2">Navigation</h4>
-          <ul class="space-y-2 text-xs text-m-sand/70">
-            <li><a href="#catalogue" class="hover:text-m-gold transition">Flotte Berlines & SUV</a></li>
-            <li><a href="#catalogue" class="hover:text-m-gold transition">Utilitaires & Fourgons</a></li>
-            <li><a href="#services" class="hover:text-m-gold transition">Offre Mobilité Électrique</a></li>
-            <li><a href="#simulateur" class="hover:text-m-gold transition">Calculateur de Mensualité</a></li>
-            <li><a href="#pourquoi" class="hover:text-m-gold transition">Avantages Fiscaux Maroc</a></li>
-            <li><a href="#faq" class="hover:text-m-gold transition">Conditions d'éligibilité</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 4: Contact & Urgences -->
-        <div>
-          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-m-green pl-2">Contact Direct</h4>
-          <ul class="space-y-3 text-xs text-m-sand/80">
-            <li class="flex items-center gap-2.5">
-              <i class="fas fa-phone-alt text-m-red"></i>
-              <span>+212 522 99 88 77</span>
-            </li>
-            <li class="flex items-center gap-2.5">
-              <i class="fab fa-whatsapp text-emerald-400"></i>
-              <span>+212 661 00 00 00</span>
-            </li>
-            <li class="flex items-center gap-2.5">
-              <i class="fas fa-envelope text-m-gold"></i>
-              <span>contact@autolease.ma</span>
-            </li>
-            <li class="flex items-center gap-2.5">
-              <i class="fas fa-headset text-m-gold"></i>
-              <span>Assistance Maroc : 24h/24 & 7j/7</span>
-            </li>
-          </ul>
-        </div>
-
       </div>
-
-      <!-- Copyright & Mentions Légales -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-m-sand/50 gap-4">
-        <p>© 2025 AutoLease Maroc S.A.R.L - RC Casablanca n° 348922 • Tous droits réservés.</p>
-        <div class="flex space-x-6">
-          <a href="#" class="hover:text-m-gold transition">Mentions Légales</a>
-          <a href="#" class="hover:text-m-gold transition">Protection des Données (CNDP)</a>
-          <a href="#" class="hover:text-m-gold transition">Conditions Générales de Location</a>
+      <div class="param">
+        <h4>Style</h4>
+        <p>Mots-clés à injecter systématiquement :</p>
+        <div class="chips">
+          <span class="chip">e-commerce product photo</span>
+          <span class="chip">softbox lighting</span>
+          <span class="chip">no glare</span>
         </div>
       </div>
-
+      <div class="param">
+        <h4>Toujours demander</h4>
+        <p>Formule magique à ajouter à la fin :</p>
+        <div class="chips">
+          <span class="chip">sharp</span>
+          <span class="chip">readable</span>
+          <span class="chip">true-to-life colors</span>
+          <span class="chip">8k detail</span>
+        </div>
+      </div>
+      <div class="param">
+        <h4>Midjourney tips</h4>
+        <p>Ajoutez ces suffixes :</p>
+        <div class="chips">
+          <span class="chip">--ar 4:5</span>
+          <span class="chip">--style raw</span>
+          <span class="chip">--stylize 250</span>
+          <span class="chip">--q 2</span>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- 6) QUESTIONS -->
+  <section>
+    <h2><span class="num">06</span>Pour un pack 100% sur-mesure</h2>
+    <p class="section-sub">Donnez-moi ces 3 infos (et idéalement un exemple de carte) → je prépare <b>10 prompts adaptés + une liste de negative prompts optimisés</b>.</p>
+    <div class="questions">
+      <div class="q">
+        <div class="num">1</div>
+        <h4>Quelle plateforme ?</h4>
+        <p>Chaque site a ses codes visuels et ses règles.</p>
+        <div class="opts" data-group="platform">
+          <span class="opt">Vinted</span>
+          <span class="opt">eBay</span>
+          <span class="opt">Cardmarket</span>
+          <span class="opt">Leboncoin</span>
+          <span class="opt">Etsy</span>
+          <span class="opt">Shopify (ma boutique)</span>
+          <span class="opt">Instagram</span>
+        </div>
+      </div>
+      <div class="q">
+        <div class="num">2</div>
+        <h4>Que vendez-vous ?</h4>
+        <p>Cela change radicalement les prompts à utiliser.</p>
+        <div class="opts" data-group="type">
+          <span class="opt">Vraies cartes officielles</span>
+          <span class="opt">Cartes custom / fan art</span>
+          <span class="opt">Les deux</span>
+          <span class="opt">Cartes gradées (PSA/BGS)</span>
+        </div>
+      </div>
+      <div class="q">
+        <div class="num">3</div>
+        <h4>Quel style visuel ?</h4>
+        <p>L'ADN graphique de votre boutique.</p>
+        <div class="opts" data-group="style">
+          <span class="opt">🏆 Luxe premium</span>
+          <span class="opt">🎮 Geek fun</span>
+          <span class="opt">◼ Ultra sobre / minimal</span>
+          <span class="opt">🌈 Holographique flashy</span>
+          <span class="opt">🎨 Artisanal / fait main</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div>
+        <h3>Prêt pour le pack sur-mesure ?</h3>
+        <p>Envoyez-moi vos 3 réponses + le nom (ou une photo) d'une carte que vous vendez souvent. Je reviens avec <b>10 prompts parfaitement calibrés</b> et une <b>negative list optimisée</b> pour votre cas précis.</p>
+      </div>
+      <button class="btn" id="exportBtn">📋 Exporter mes choix</button>
+    </div>
+  </section>
+
+  <footer>
+    <div>◆ Pro Prompt Pack · Cards Marketplace Edition · Usage commercial autorisé pour vos propres créations.</div>
+    <div>Toujours étiqueter : <b style="color:var(--gold-2)">“CUSTOM — NON OFFICIAL”</b> sur les fan cards.</div>
   </footer>
+</div>
 
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // 12 REAL LEASING OFFERS WITH MOROCCAN DETAILS & CURATED PEXELS CAR IMAGES
-    const vehiclesData = [
-      {
-        id: 1,
-        name: "Land Rover Defender 110 X-Dynamic",
-        category: "SUV",
-        monthlyDH: 14900,
-        image: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel MHEV",
-        trans: "Automatique 8",
-        seats: "5/7 Places",
-        consumption: "8.6 L / 100km",
-        cities: ["Casablanca", "Marrakech", "Tanger", "Agadir"],
-        badge: "Spécial Atlas & Dunes",
-        badgeColor: "bg-m-red"
-      },
-      {
-        id: 2,
-        name: "Porsche Carrera 911 4S Coupé",
-        category: "Sport",
-        monthlyDH: 22500,
-        image: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Essence 450 Ch",
-        trans: "BVA PDK",
-        seats: "2+2 Places",
-        consumption: "10.5 L / 100km",
-        cities: ["Casablanca", "Rabat", "Marrakech"],
-        badge: "Prestige VIP",
-        badgeColor: "bg-m-brown-dark"
-      },
-      {
-        id: 3,
-        name: "Audi e-tron GT Quattro RS",
-        category: "Electrique",
-        monthlyDH: 17800,
-        image: "https://images.pexels.com/photos/9800030/pexels-photo-9800030.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "100% Électrique",
-        trans: "Automatique 2 vit.",
-        seats: "5 Places",
-        consumption: "490 km autonomie",
-        cities: ["Casablanca", "Rabat", "Tanger"],
-        badge: "Zéro Vignette",
-        badgeColor: "bg-m-green"
-      },
-      {
-        id: 4,
-        name: "Mercedes-Benz Classe C 220d AMG Line",
-        category: "Berline",
-        monthlyDH: 9900,
-        image: "https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel 200 Ch",
-        trans: "9G-TRONIC",
-        seats: "5 Places",
-        consumption: "5.2 L / 100km",
-        cities: ["Casablanca", "Rabat", "Fès", "Marrakech"],
-        badge: "Exécutif Affaires",
-        badgeColor: "bg-m-gold text-m-brown-dark"
-      },
-      {
-        id: 5,
-        name: "BMW X5 xDrive30d Pack M",
-        category: "SUV",
-        monthlyDH: 12500,
-        image: "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel 298 Ch",
-        trans: "Steptronic 8",
-        seats: "5 Places",
-        consumption: "7.4 L / 100km",
-        cities: ["Casablanca", "Marrakech", "Rabat", "Tanger"],
-        badge: "Luxe & Confort",
-        badgeColor: "bg-m-brown"
-      },
-      {
-        id: 6,
-        name: "Renault Master Grand Volume L3H2",
-        category: "Utilitaire",
-        monthlyDH: 5400,
-        image: "https://images.pexels.com/photos/6157057/pexels-photo-6157057.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel dCi 150",
-        trans: "Manuelle 6",
-        seats: "3 Places",
-        consumption: "13 m³ Charge",
-        cities: ["Casablanca", "Tanger", "Fès", "Agadir"],
-        badge: "PME & Logistique",
-        badgeColor: "bg-m-terra"
-      },
-      {
-        id: 7,
-        name: "Peugeot 208 GT Line PureTech",
-        category: "Berline",
-        monthlyDH: 4200,
-        image: "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Essence 130 Ch",
-        trans: "EAT8 Automatique",
-        seats: "5 Places",
-        consumption: "5.4 L / 100km",
-        cities: ["Casablanca", "Rabat", "Marrakech", "Fès", "Tanger", "Agadir"],
-        badge: "Citadine Chic",
-        badgeColor: "bg-m-red"
-      },
-      {
-        id: 8,
-        name: "Dacia Duster 4x4 Prestige Diesel",
-        category: "SUV",
-        monthlyDH: 4900,
-        image: "https://images.pexels.com/photos/790176/pexels-photo-790176.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel dCi 115",
-        trans: "Manuelle 6 (4x4)",
-        seats: "5 Places",
-        consumption: "5.5 L / 100km",
-        cities: ["Marrakech", "Agadir", "Fès", "Casablanca"],
-        badge: "Robuste & Économique",
-        badgeColor: "bg-amber-700"
-      },
-      {
-        id: 9,
-        name: "Hyundai Tucson N-Line Hybrid 4WD",
-        category: "SUV",
-        monthlyDH: 6200,
-        image: "https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Full Hybride 230 Ch",
-        trans: "Automatique",
-        seats: "5 Places",
-        consumption: "5.9 L / 100km",
-        cities: ["Casablanca", "Rabat", "Tanger"],
-        badge: "Familiale Idéale",
-        badgeColor: "bg-m-green"
-      },
-      {
-        id: 10,
-        name: "Volkswagen Golf 8 R-Line 2.0 TDI",
-        category: "Berline",
-        monthlyDH: 7800,
-        image: "https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel 150 Ch",
-        trans: "DSG 7",
-        seats: "5 Places",
-        consumption: "4.8 L / 100km",
-        cities: ["Casablanca", "Rabat", "Tanger", "Marrakech"],
-        badge: "Best Seller Maroc",
-        badgeColor: "bg-m-brown-dark"
-      },
-      {
-        id: 11,
-        name: "Peugeot Expert Fourgon BlueHDi",
-        category: "Utilitaire",
-        monthlyDH: 4800,
-        image: "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel 145 Ch",
-        trans: "Manuelle 6",
-        seats: "3 Places",
-        consumption: "6.6 L / 100km",
-        cities: ["Casablanca", "Tanger", "Rabat", "Fès"],
-        badge: "Artisans & Pros",
-        badgeColor: "bg-m-terra"
-      },
-      {
-        id: 12,
-        name: "Toyota Land Cruiser Prado TX-L",
-        category: "SUV",
-        monthlyDH: 15500,
-        image: "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=900",
-        fuel: "Diesel D-4D",
-        trans: "Automatique 6",
-        seats: "7 Places",
-        consumption: "8.9 L / 100km",
-        cities: ["Casablanca", "Marrakech", "Agadir", "Fès"],
-        badge: "Légende du Sahara",
-        badgeColor: "bg-m-gold text-m-brown-dark"
+<script>
+  // Copy buttons
+  document.querySelectorAll('.card').forEach(card=>{
+    const btn = card.querySelector('.copy');
+    const promptEl = card.querySelector('.prompt');
+    if(!btn || !promptEl) return;
+    btn.addEventListener('click', async ()=>{
+      const text = promptEl.getAttribute('data-prompt') || promptEl.innerText;
+      try{
+        await navigator.clipboard.writeText(text.trim());
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text.trim(); document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); ta.remove();
       }
-    ];
-
-    // Carousel State
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.carousel-dot');
-    let carouselInterval;
-
-    function initCarousel() {
-      showSlide(0);
-      startAutoplay();
-    }
-
-    function showSlide(index) {
-      currentSlide = (index + slides.length) % slides.length;
-      slides.forEach((slide, i) => {
-        if (i === currentSlide) {
-          slide.classList.remove('opacity-0', 'pointer-events-none');
-          slide.classList.add('opacity-100');
-        } else {
-          slide.classList.remove('opacity-100');
-          slide.classList.add('opacity-0', 'pointer-events-none');
-        }
-      });
-
-      dots.forEach((dot, i) => {
-        if (i === currentSlide) {
-          dot.className = "carousel-dot w-8 h-2 rounded-full bg-m-gold transition-all duration-300";
-        } else {
-          dot.className = "carousel-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300";
-        }
-      });
-    }
-
-    function nextSlide() {
-      showSlide(currentSlide + 1);
-      resetAutoplay();
-    }
-
-    function prevSlide() {
-      showSlide(currentSlide - 1);
-      resetAutoplay();
-    }
-
-    function setSlide(idx) {
-      showSlide(idx);
-      resetAutoplay();
-    }
-
-    function startAutoplay() {
-      carouselInterval = setInterval(() => {
-        showSlide(currentSlide + 1);
-      }, 5500);
-    }
-
-    function resetAutoplay() {
-      clearInterval(carouselInterval);
-      startAutoplay();
-    }
-
-    // Render Vehicle Grid
-    function renderVehicles(vehicles) {
-      const grid = document.getElementById('vehiclesGrid');
-      const countBadge = document.getElementById('vehicleCountBadge');
-      const noFound = document.getElementById('noVehiclesFound');
-
-      grid.innerHTML = '';
-      countBadge.innerText = `${vehicles.length} Véhicule${vehicles.length > 1 ? 's' : ''} Disponible${vehicles.length > 1 ? 's' : ''}`;
-
-      if (vehicles.length === 0) {
-        noFound.classList.remove('hidden');
-        return;
-      } else {
-        noFound.classList.add('hidden');
-      }
-
-      vehicles.forEach(car => {
-        const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl border border-m-gold/30 overflow-hidden shadow-sm hover:shadow-moroccan card-transition flex flex-col justify-between relative group";
-        
-        card.innerHTML = `
-          <!-- Image and Badges -->
-          <div class="relative h-48 w-full overflow-hidden bg-m-brown/10">
-            <img src="${car.image}" alt="${car.name} location Maroc" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 flex flex-col gap-1">
-              <span class="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md text-white ${car.badgeColor} shadow">
-                ${car.badge}
-              </span>
-            </div>
-            <div class="absolute bottom-2 right-2 bg-m-brown-dark/85 backdrop-blur-sm text-m-gold px-2.5 py-1 rounded-lg text-xs font-bold border border-m-gold/30">
-              ${car.category}
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="p-5 flex-1 flex flex-col justify-between">
-            <div>
-              <h3 class="font-extrabold text-base text-m-brown leading-snug group-hover:text-m-red transition">${car.name}</h3>
-              
-              <!-- Specs Grid -->
-              <div class="grid grid-cols-2 gap-y-2 gap-x-2 my-4 text-[11px] text-m-brown/75 font-semibold bg-m-sand-light/60 p-2.5 rounded-xl border border-m-gold/20">
-                <div class="flex items-center gap-1.5"><i class="fas fa-gas-pump text-m-red"></i> ${car.fuel}</div>
-                <div class="flex items-center gap-1.5"><i class="fas fa-cogs text-m-gold"></i> ${car.trans}</div>
-                <div class="flex items-center gap-1.5"><i class="fas fa-users text-m-brown"></i> ${car.seats}</div>
-                <div class="flex items-center gap-1.5"><i class="fas fa-tachometer-alt text-m-green"></i> ${car.consumption}</div>
-              </div>
-
-              <!-- Available cities tags -->
-              <div class="text-[10px] text-m-brown/60 mb-3 flex items-center flex-wrap gap-1">
-                <i class="fas fa-map-marker-alt text-m-red mr-0.5"></i>
-                ${car.cities.slice(0, 3).join(', ')}${car.cities.length > 3 ? '...' : ''}
-              </div>
-            </div>
-
-            <!-- Price and CTA -->
-            <div class="pt-3 border-t border-m-sand flex items-center justify-between mt-auto">
-              <div>
-                <span class="text-[10px] text-m-brown/60 uppercase block">Loyer Mensuel</span>
-                <div class="text-xl font-black text-m-red leading-tight">
-                  ${car.monthlyDH.toLocaleString('fr-FR')} <span class="text-xs font-bold text-m-brown">DH</span>
-                </div>
-              </div>
-              <button onclick="openBookingModal('${car.name}', ${car.monthlyDH})" class="px-3.5 py-2 rounded-xl bg-m-brown hover:bg-m-red text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                <span>Devis</span>
-                <i class="fas fa-arrow-right text-[10px] text-m-gold"></i>
-              </button>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    // Filtering logic
-    function applyVehicleFilters() {
-      const category = document.getElementById('filterCategory').value;
-      const city = document.getElementById('filterCity').value;
-      const maxBudget = parseInt(document.getElementById('filterBudget').value);
-
-      const filtered = vehiclesData.filter(car => {
-        const matchCategory = (category === 'all' || car.category === category);
-        const matchCity = (city === 'all' || car.cities.includes(city));
-        const matchBudget = (car.monthlyDH <= maxBudget);
-        return matchCategory && matchCity && matchBudget;
-      });
-
-      renderVehicles(filtered);
-    }
-
-    function updateBudgetFilter(val) {
-      document.getElementById('budgetValue').innerText = parseInt(val).toLocaleString('fr-FR') + ' DH';
-      applyVehicleFilters();
-    }
-
-    function quickFilter(catName) {
-      document.getElementById('filterCategory').value = catName;
-      applyVehicleFilters();
-      scrollToSection('catalogue');
-    }
-
-    function resetFilters() {
-      document.getElementById('filterCategory').value = 'all';
-      document.getElementById('filterCity').value = 'all';
-      document.getElementById('filterBudget').value = 30000;
-      document.getElementById('budgetValue').innerText = '30 000 DH';
-      renderVehicles(vehiclesData);
-    }
-
-    function switchClientType(type) {
-      const tabPart = document.getElementById('tabParticulier');
-      const tabEnt = document.getElementById('tabEntreprise');
-      if (type === 'particulier') {
-        tabPart.className = "px-4 py-1.5 rounded-lg bg-m-brown text-white shadow transition";
-        tabEnt.className = "px-4 py-1.5 rounded-lg text-m-brown hover:text-m-red transition";
-      } else {
-        tabEnt.className = "px-4 py-1.5 rounded-lg bg-m-brown text-white shadow transition";
-        tabPart.className = "px-4 py-1.5 rounded-lg text-m-brown hover:text-m-red transition";
-      }
-    }
-
-    // Simulator Interactive Formula
-    function calculateSimulator() {
-      const baseMonthly = parseFloat(document.getElementById('simCarSelect').value);
-      const selectedOption = document.getElementById('simCarSelect').options[document.getElementById('simCarSelect').selectedIndex];
-      const carName = selectedOption.getAttribute('data-name');
-      
-      const duration = parseInt(document.getElementById('simDuration').value);
-      const depositPct = parseInt(document.getElementById('simDeposit').value);
-      const km = parseInt(document.getElementById('simKm').value);
-
-      // Display Labels
-      document.getElementById('simDurDisplay').innerText = `${duration} Mois`;
-      document.getElementById('simDepositDisplay').innerText = `${depositPct}% ${depositPct === 0 ? '(Sans apport)' : ''}`;
-      document.getElementById('simKmDisplay').innerText = `${(km).toLocaleString('fr-FR')} KM / an`;
-      document.getElementById('simCarResultName').innerText = carName;
-
-      // Realistic LLD simulation factor
-      // Longer duration = lower monthly
-      let durationFactor = 1.0;
-      if (duration === 12) durationFactor = 1.30;
-      else if (duration === 24) durationFactor = 1.15;
-      else if (duration === 36) durationFactor = 1.0;
-      else if (duration === 48) durationFactor = 0.90;
-      else if (duration === 60) durationFactor = 0.83;
-
-      // Deposit reduces monthly
-      const depositReduction = (depositPct / 100) * 0.45;
-
-      // Mileage factor
-      const kmFactor = 1 + ((km - 20000) / 20000) * 0.12;
-
-      let calculatedMonthly = baseMonthly * durationFactor * (1 - depositReduction) * kmFactor;
-      calculatedMonthly = Math.round(calculatedMonthly);
-
-      document.getElementById('simFinalMonthly').innerText = calculatedMonthly.toLocaleString('fr-FR');
-    }
-
-    // Booking Modal Interactions
-    function openBookingModal(carName, priceDH) {
-      document.getElementById('modalCarTitle').innerText = carName;
-      document.getElementById('modalHiddenCarName').value = carName;
-      document.getElementById('modalCarPrice').innerText = `Loyer indicatif : ${priceDH.toLocaleString('fr-FR')} DH / mois TTC`;
-      document.getElementById('bookingModal').classList.remove('hidden');
-    }
-
-    function openBookingModalWithSimulator() {
-      const selectedOption = document.getElementById('simCarSelect').options[document.getElementById('simCarSelect').selectedIndex];
-      const carName = selectedOption.getAttribute('data-name');
-      const monthly = document.getElementById('simFinalMonthly').innerText;
-      
-      document.getElementById('modalCarTitle').innerText = carName;
-      document.getElementById('modalHiddenCarName').value = carName;
-      document.getElementById('modalCarPrice').innerText = `Simulation sélectionnée : ${monthly} DH / mois TTC`;
-      document.getElementById('bookingModal').classList.remove('hidden');
-    }
-
-    function closeBookingModal() {
-      document.getElementById('bookingModal').classList.add('hidden');
-    }
-
-    function handleQuoteSubmit(e) {
-      e.preventDefault();
-      closeBookingModal();
-      const toast = document.getElementById('toastSuccess');
-      toast.classList.remove('translate-y-32');
-      setTimeout(() => {
-        hideToast();
-      }, 5000);
-      e.target.reset();
-    }
-
-    function hideToast() {
-      document.getElementById('toastSuccess').classList.add('translate-y-32');
-    }
-
-    function prefillAndScroll(carName) {
-      const match = vehiclesData.find(c => c.name.toLowerCase().includes(carName.toLowerCase()));
-      if (match) {
-        openBookingModal(match.name, match.monthlyDH);
-      } else {
-        openBookingModal(carName, 12000);
-      }
-    }
-
-    // Scroll helper
-    function scrollToSection(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    // Mobile Navigation Toggle
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobileMenu');
-      menu.classList.toggle('hidden');
-    }
-
-    document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
-
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        document.getElementById('mobileMenu').classList.add('hidden');
-      });
+      btn.textContent = '✓ Copié';
+      btn.classList.add('done');
+      setTimeout(()=>{btn.textContent='Copier';btn.classList.remove('done')},1600);
     });
+  });
 
-    // FAQ Accordion
-    function toggleFAQ(index) {
-      const content = document.getElementById(`faqContent${index}`);
-      const icon = document.getElementById(`faqIcon${index}`);
-      const isHidden = content.classList.contains('hidden');
-
-      // Close all first for neat accordion behavior
-      for (let i = 1; i <= 4; i++) {
-        const c = document.getElementById(`faqContent${i}`);
-        const ic = document.getElementById(`faqIcon${i}`);
-        if (c && ic) {
-          c.classList.add('hidden');
-          ic.classList.remove('rotate-180');
-        }
-      }
-
-      if (isHidden) {
-        content.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-      }
-    }
-
-    // Close modal on escape or backdrop click
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeBookingModal();
+  // Option toggles (single-select per group)
+  document.querySelectorAll('.opts').forEach(group=>{
+    group.addEventListener('click', e=>{
+      const opt = e.target.closest('.opt');
+      if(!opt) return;
+      group.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));
+      opt.classList.add('on');
     });
+  });
 
-    document.getElementById('bookingModal').addEventListener('click', (e) => {
-      if (e.target.id === 'bookingModal') closeBookingModal();
+  // Export choices
+  document.getElementById('exportBtn').addEventListener('click', ()=>{
+    const get = g => {
+      const el = document.querySelector(`.opts[data-group="${g}"] .opt.on`);
+      return el ? el.textContent.trim() : '—';
+    };
+    const summary =
+`🎯 Mes choix pour le pack sur-mesure
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) Plateforme : ${get('platform')}
+2) Type de vente : ${get('type')}
+3) Style visuel : ${get('style')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+→ À copier-coller avec un exemple de carte pour recevoir 10 prompts calibrés.`;
+    navigator.clipboard.writeText(summary).then(()=>{
+      const btn = document.getElementById('exportBtn');
+      const old = btn.textContent;
+      btn.textContent = '✓ Résumé copié !';
+      setTimeout(()=>btn.textContent=old,1800);
     });
+  });
 
-    // Initial setup on load
-    window.addEventListener('DOMContentLoaded', () => {
-      initCarousel();
-      renderVehicles(vehiclesData);
-      calculateSimulator();
+  // Subtle tilt on cards
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - .5;
+      const y = (e.clientY - r.top)/r.height - .5;
+      card.style.transform = `translateY(-3px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*4).toFixed(2)}deg)`;
     });
-  </script>
+    card.addEventListener('mouseleave', ()=>card.style.transform='');
+  });
+</script>
 </body>
 </html>
