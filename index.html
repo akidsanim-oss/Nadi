@@ -1,1233 +1,1010 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Tea Story — Brew-tea-ful 3D Experience</title>
-    <style>
-        :root {
-            --bg: #110d0a;
-            --bg-warm: #1a1410;
-            --cream: #f7ebe1;
-            --cream-dim: #c7b8a9;
-            --tea-gold: #dcae53;
-            --tea-amber: #b07c2a;
-            --green-fresh: #5d8a66;
-            --green-deep: #2c4431;
-            --rose: #cf8b83;
-            --accent: #e5b85c;
-            --text: #f7ebe1;
-            --text-dim: #a69585;
-            --glass: rgba(26, 20, 16, 0.65);
-            --border: rgba(220, 174, 83, 0.2);
-            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @font-face {
-            font-family: 'Display';
-            src: url('https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtUA.woff2') format('woff2');
-            font-weight: 600;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: 'Body';
-            src: url('https://fonts.gstatic.com/s/inter/v19/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2') format('woff2');
-            font-weight: 400;
-            font-display: swap;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Body', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* 3D Canvas Container */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            background: radial-gradient(circle at 50% 50%, #1c1510 0%, #0c0907 100%);
-        }
-
-        #canvas-container::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle at 10% 20%, rgba(220, 174, 83, 0.05) 0%, transparent 40%),
-                              radial-gradient(circle at 90% 80%, rgba(93, 138, 102, 0.05) 0%, transparent 40%);
-            pointer-events: none;
-        }
-
-        /* UI Overlays & Content Wrapper */
-        .scene-wrapper {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-        }
-
-        /* Navigation Bar */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            background: rgba(17, 13, 10, 0.4);
-        }
-
-        .logo {
-            font-family: 'Display', serif;
-            font-size: 1.5rem;
-            color: var(--cream);
-            text-decoration: none;
-            font-weight: bold;
-            letter-spacing: -0.01em;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo span {
-            color: var(--tea-gold);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--cream-dim);
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--tea-gold);
-        }
-
-        /* Common Section Layout */
-        section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            padding: 6rem 10%;
-        }
-
-        /* Hero Section */
-        .hero {
-            justify-content: flex-start;
-        }
-
-        .hero-content {
-            max-width: 600px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(220, 174, 83, 0.08);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--tea-gold);
-            margin-bottom: 1.5rem;
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--tea-gold);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--tea-gold);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .hero h1 {
-            font-family: 'Display', serif;
-            font-size: clamp(2.8rem, 6vw, 4.8rem);
-            line-height: 1.1;
-            color: var(--cream);
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-        }
-
-        .hero h1 .accent {
-            color: var(--tea-gold);
-            font-style: italic;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            margin-bottom: 2.5rem;
-            max-width: 500px;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 2rem;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-            text-decoration: none;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--tea-gold) 0%, var(--tea-amber) 100%);
-            color: var(--bg);
-            box-shadow: 0 10px 30px -10px rgba(220, 174, 83, 0.4);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px -5px rgba(220, 174, 83, 0.5);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--cream);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        /* Brand Values / Essence Section */
-        .essence {
-            justify-content: flex-end;
-        }
-
-        .essence-content {
-            max-width: 550px;
-            background: var(--glass);
-            padding: 3rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .section-header {
-            margin-bottom: 2.5rem;
-        }
-
-        .section-header h2 {
-            font-family: 'Display', serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            color: var(--cream);
-            line-height: 1.2;
-        }
-
-        .section-header h2 span {
-            color: var(--tea-gold);
-            font-style: italic;
-        }
-
-        .value-grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .value-item {
-            display: flex;
-            gap: 1.25rem;
-        }
-
-        .value-icon {
-            flex-shrink: 0;
-            width: 48px;
-            height: 48px;
-            background: rgba(220, 174, 83, 0.1);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--tea-gold);
-        }
-
-        .value-text h3 {
-            font-family: 'Display', serif;
-            font-size: 1.25rem;
-            color: var(--cream);
-            margin-bottom: 0.35rem;
-        }
-
-        .value-text p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        /* Products Interactive Showcase Section */
-        .showcase {
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .showcase .section-header {
-            text-align: center;
-            margin-bottom: 3.5rem;
-        }
-
-        .product-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 1000px;
-            z-index: 10;
-        }
-
-        .product-card {
-            background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 20px;
-            padding: 2rem;
-            cursor: pointer;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 250px;
-        }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at top right, rgba(220, 174, 83, 0.1), transparent 60%);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .product-card.active {
-            border-color: var(--tea-gold);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .product-card.active::before {
-            opacity: 1;
-        }
-
-        .product-card h3 {
-            font-family: 'Display', serif;
-            font-size: 1.5rem;
-            color: var(--cream);
-            margin-bottom: 0.5rem;
-        }
-
-        .product-card p {
-            color: var(--text-dim);
-            font-size: 0.88rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-        }
-
-        .flavor-notes {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .note-tag {
-            font-size: 0.7rem;
-            padding: 0.25rem 0.65rem;
-            border-radius: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--cream-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .active[data-blend="chamomile"] { border-color: var(--tea-gold); }
-        .active[data-blend="matcha"] { border-color: var(--green-fresh); }
-        .active[data-blend="oolong"] { border-color: var(--rose); }
-
-        /* Dynamic Color Tags for active states */
-        .product-card.active[data-blend="chamomile"] .note-tag { background: rgba(220, 174, 83, 0.15); color: var(--tea-gold); }
-        .product-card.active[data-blend="matcha"] .note-tag { background: rgba(93, 138, 102, 0.15); color: var(--green-fresh); }
-        .product-card.active[data-blend="oolong"] .note-tag { background: rgba(207, 139, 131, 0.15); color: var(--rose); }
-
-        /* Steeping Ritual Section */
-        .ritual {
-            justify-content: flex-start;
-        }
-
-        .ritual-container {
-            max-width: 600px;
-            background: var(--glass);
-            padding: 3.5rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .ritual-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .step {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .step-num {
-            font-family: 'Display', serif;
-            font-size: 1.5rem;
-            color: var(--tea-gold);
-            font-style: italic;
-            opacity: 0.8;
-            width: 30px;
-        }
-
-        .step-detail h4 {
-            font-family: 'Display', serif;
-            font-size: 1.15rem;
-            color: var(--cream);
-            margin-bottom: 0.25rem;
-        }
-
-        .step-detail p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        /* Interactive Breathing / Steep Timer Widget */
-        .timer-widget {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 1.25rem 1.5rem;
-        }
-
-        .timer-circle-container {
-            position: relative;
-            width: 56px;
-            height: 56px;
-        }
-
-        .timer-svg {
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }
-
-        .timer-bg {
-            fill: none;
-            stroke: rgba(255, 255, 255, 0.08);
-            stroke-width: 3;
-        }
-
-        .timer-progress {
-            fill: none;
-            stroke: var(--tea-gold);
-            stroke-width: 3;
-            stroke-dasharray: 100;
-            stroke-dasharray: 157;
-            stroke-dashoffset: 157;
-            transition: stroke-dashoffset 1s linear;
-        }
-
-        .timer-btn {
-            background: none;
-            border: none;
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--tea-gold);
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: var(--transition);
-        }
-
-        .timer-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .timer-info h5 {
-            font-size: 0.95rem;
-            color: var(--cream);
-            margin-bottom: 0.15rem;
-        }
-
-        .timer-info p {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-        }
-
-        /* 3D Visual Cues / Scene Instructions Overlay */
-        .scene-hints {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 50;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: flex-end;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .hint-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(17, 13, 10, 0.6);
-            padding: 0.4rem 0.8rem;
-            border-radius: 100px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(8px);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 968px) {
-            section {
-                padding: 6rem 5%;
-                min-height: auto;
-                margin-bottom: 4rem;
-            }
-
-            .hero {
-                text-align: center;
-                justify-content: center;
-                min-height: 100vh;
-            }
-
-            .hero-content {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .cta-group {
-                flex-direction: column;
-                width: 100%;
-                gap: 1rem;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .essence {
-                justify-content: center;
-            }
-
-            .product-selector {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .ritual {
-                justify-content: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Tea Story — Steeped in Wonder</title>
+  <meta name="description" content="Artisanal single-origin tea leaves presented in a real-time interactive 3D steeping ritual." />
+
+  <!-- Google Fonts & Three.js CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f0c09;
+      --bg-soft: #17120d;
+      --panel: rgba(26, 21, 16, 0.76);
+      --panel-border: rgba(226, 192, 126, 0.16);
+      --cream: #f7efe4;
+      --gold: #dfb76c;
+      --gold-bright: #ffd47d;
+      --dim: #b8a690;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, .serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    em { font-style: italic; color: var(--gold); }
+
+    /* WebGL Stage */
+    #stage {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+    #stage canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: auto;
+      cursor: grab;
+    }
+    #stage canvas:active { cursor: grabbing; }
+
+    /* Atmospheric Vignette */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 45%, transparent 40%, rgba(15,12,9,0.7) 85%, #0f0c09 100%);
+    }
+
+    /* Content Overlay */
+    .content {
+      position: relative;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .interactive { pointer-events: auto; }
+
+    /* Navigation */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem clamp(1.5rem, 4vw, 3.5rem);
+      background: linear-gradient(180deg, rgba(15,12,9,0.85) 0%, rgba(15,12,9,0) 100%);
+      backdrop-filter: blur(8px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--cream);
+    }
+    .brand-symbol {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+    .brand-title {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .brand-title span {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1.6rem;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s var(--ease);
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, #b8862f 100%);
+      color: #120e0a;
+      box-shadow: 0 8px 24px -8px rgba(223, 183, 108, 0.45);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px -8px rgba(223, 183, 108, 0.6);
+    }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--cream);
+      border-color: var(--panel-border);
+      backdrop-filter: blur(10px);
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold-bright);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 7rem 1.5rem 4rem;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1.1rem;
+      border-radius: 99px;
+      border: 1px solid var(--panel-border);
+      background: rgba(223, 183, 108, 0.08);
+      color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.8rem);
+      line-height: 1.04;
+      max-width: 14ch;
+      color: #fff;
+    }
+    .hero p {
+      max-width: 48ch;
+      margin: 1.2rem 0 2rem;
+      color: var(--dim);
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hint-3d {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.7;
+    }
+    .hint-icon {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--panel-border);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      animation: nudge 2s ease-in-out infinite;
+    }
+    @keyframes nudge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* Floating Steeping Dock */
+    .steep-dock {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--panel-border);
+      border-radius: 99px;
+      padding: 0.4rem 0.5rem 0.4rem 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      transition: all 0.3s var(--ease);
+    }
+    .dock-blend-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.2rem;
+      white-space: nowrap;
+    }
+    .dock-blend-name small {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* Sections */
+    section {
+      padding: clamp(5rem, 9vw, 8rem) clamp(1.2rem, 5vw, 4rem);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .sec-head {
+      text-align: center;
+      max-width: 58ch;
+      margin: 0 auto 3.5rem;
+    }
+    .sec-head h2 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      margin-top: 0.5rem;
+    }
+
+    /* Cards Grid */
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--panel-border);
+      border-radius: 20px;
+      padding: 1.8rem;
+      transition: all 0.35s var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      border-color: rgba(223, 183, 108, 0.45);
+      transform: translateY(-5px);
+      box-shadow: 0 24px 50px -15px rgba(0,0,0,0.7);
+    }
+
+    /* Blend Card */
+    .blend-card {
+      cursor: pointer;
+    }
+    .blend-card.active {
+      border-color: var(--gold);
+      background: rgba(38, 30, 22, 0.85);
+      box-shadow: 0 0 0 1px var(--gold), 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .blend-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.2rem;
+    }
+    .swatch {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 8px 18px rgba(0,0,0,0.4);
+    }
+    .swatch-leaf {
+      font-size: 1.2rem;
+    }
+    .tag {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+    }
+    .blend-card h3 {
+      font-size: 1.5rem;
+      margin: 0.2rem 0 0.5rem;
+    }
+    .blend-card p {
+      font-size: 0.88rem;
+      color: var(--dim);
+      margin-bottom: 1.2rem;
+    }
+    .flavor-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .flavor-pills span {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--panel-border);
+      color: var(--dim);
+    }
+    .blend-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--panel-border);
+    }
+    .price {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.35rem;
+      color: var(--cream);
+    }
+
+    /* Ritual Step */
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      opacity: 0.4;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .step h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.4rem;
+    }
+    .step p {
+      font-size: 0.88rem;
+      color: var(--dim);
+    }
+
+    /* Values */
+    .value-icon {
+      font-size: 1.7rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .value h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.4rem;
+    }
+    .value p {
+      font-size: 0.88rem;
+      color: var(--dim);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4rem 1.5rem 7rem;
+      border-top: 1px solid var(--panel-border);
+      font-size: 0.82rem;
+      color: var(--dim);
+    }
+
+    @media (max-width: 640px) {
+      .steep-dock {
+        width: calc(100% - 2rem);
+        justify-content: space-between;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 3D Canvas rendering target -->
-    <div id="canvas-container"></div>
+  <!-- Three.js Stage -->
+  <div id="stage"></div>
+  <div class="vignette"></div>
 
-    <!-- Navigation Header -->
-    <header>
-        <a href="#" class="logo">
-            <span>The</span> Tea Story
-        </a>
-        <ul class="nav-links">
-            <li><a href="#essence">Essence</a></li>
-            <li><a href="#blends">The Blends</a></li>
-            <li><a href="#ritual">The Steep</a></li>
-        </ul>
+  <!-- Content Layer -->
+  <div class="content">
+
+    <header class="interactive">
+      <a href="#" class="brand">
+        <div class="brand-symbol">🫖</div>
+        <div class="brand-title">
+          The Tea Story
+          <span>Single-Origin Reserve</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <button class="btn btn-primary" onclick="triggerBrewAnimation()">Ritual Steep</button>
+      </div>
     </header>
 
-    <!-- Main Content Wrapper -->
-    <div class="scene-wrapper">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="pill">Harvest 2025 • High Mountain Batches</div>
+      <h1>Steeped in <em>Wonder.</em></h1>
+      <p>Rare, loose-leaf teas from heirloom gardens. Rotated by your touch, infused at prime temperature, brewed to pure serenity.</p>
+      <div class="hero-ctas interactive">
+        <a href="#blends" class="btn btn-primary">Discover Blends</a>
+        <button class="btn btn-ghost" onclick="focusTeapotView()">Inspect Teapot</button>
+      </div>
+      <div class="hint-3d">
+        <span class="hint-icon">↻</span> Drag & Scroll in 3D
+      </div>
+    </section>
 
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <div class="badge">
-                    <span class="badge-dot"></span>
-                    <span>Experience Pure Harmony</span>
-                </div>
-                <h1>A <span class="accent">brew-tea-ful</span> story in every cup.</h1>
-                <p>Artisanal loose leaf blends cultivated in rich volcanic soils and handpicked at high altitudes, crafted to elevate your daily ritual.</p>
-                <div class="cta-group">
-                    <a href="#blends" class="btn btn-primary">Explore Our Blends</a>
-                    <a href="#ritual" class="btn btn-secondary">Begin The Ritual</a>
-                </div>
+    <!-- Curated Blends -->
+    <section id="blends">
+      <div class="sec-head">
+        <span class="pill">Tasting Pavilion</span>
+        <h2>Curated Harvest Blends</h2>
+        <p>Select a harvest to cast its color, character, and aromatic essence directly into the steeping pot.</p>
+      </div>
+
+      <div class="grid grid-3 interactive">
+        
+        <!-- Blend 1 -->
+        <div class="card blend-card active" onclick="selectBlend(0, this)">
+          <div class="blend-header">
+            <div class="swatch" style="background: radial-gradient(circle, #e2b04f 20%, #996e1a 100%);">
+              <span class="swatch-leaf">🍂</span>
             </div>
-        </section>
+            <span class="tag">Yunnan • 1,800m</span>
+          </div>
+          <h3>Golden Sun Oolong</h3>
+          <p>Slow roasted over lychee wood with rich notes of wild honeycomb, dried apricot, and warm amber malt.</p>
+          <div class="flavor-pills">
+            <span>Honeycomb</span>
+            <span>Lychee Bark</span>
+            <span>Malt</span>
+          </div>
+          <div class="blend-card-footer">
+            <span class="price">$34</span>
+            <button class="btn btn-ghost" style="padding:0.4rem 0.9rem; font-size:0.75rem;">Select Pot</button>
+          </div>
+        </div>
 
-        <!-- Brand Values Section -->
-        <section class="essence" id="essence">
-            <div class="essence-content">
-                <div class="section-header">
-                    <div class="badge">Our Essence</div>
-                    <h2>Harvested with <span>mindfulness</span>.</h2>
-                </div>
-                <div class="value-grid">
-                    <div class="value-item">
-                        <div class="value-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        </div>
-                        <div class="value-text">
-                            <h3>Volcanic Single-Origin</h3>
-                            <p>Sourced from high-altitude estates situated on volcanic terrain, resulting in uniquely complex nutrient-dense mineral notes.</p>
-                        </div>
-                    </div>
-                    <div class="value-item">
-                        <div class="value-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                        </div>
-                        <div class="value-text">
-                            <h3>Zero Artificial Trace</h3>
-                            <p>Every handpicked leaf undergoes natural shade drying and traditional rolling without artificial aromas or preservatives.</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Blend 2 -->
+        <div class="card blend-card" onclick="selectBlend(1, this)">
+          <div class="blend-header">
+            <div class="swatch" style="background: radial-gradient(circle, #7fa562 20%, #3a5c20 100%);">
+              <span class="swatch-leaf">🍃</span>
             </div>
-        </section>
+            <span class="tag">Kyoto • Uji Terrace</span>
+          </div>
+          <h3>Emerald Mist Gyokuro</h3>
+          <p>Shade-grown for 21 days beneath bamboo canopies. Luxuriously sweet with oceanic umami and pistachio finish.</p>
+          <div class="flavor-pills">
+            <span>Sweet Umami</span>
+            <span>Pistachio</span>
+            <span>Spring Rain</span>
+          </div>
+          <div class="blend-card-footer">
+            <span class="price">$42</span>
+            <button class="btn btn-ghost" style="padding:0.4rem 0.9rem; font-size:0.75rem;">Select Pot</button>
+          </div>
+        </div>
 
-        <!-- Product Selector / Dynamic 3D Scene Controller -->
-        <section class="showcase" id="blends">
-            <div class="section-header">
-                <div class="badge">Signature Blends</div>
-                <h2>Sip the <span>Extraordinary</span></h2>
+        <!-- Blend 3 -->
+        <div class="card blend-card" onclick="selectBlend(2, this)">
+          <div class="blend-header">
+            <div class="swatch" style="background: radial-gradient(circle, #c45b73 20%, #681f2f 100%);">
+              <span class="swatch-leaf">🌺</span>
             </div>
-            <div class="product-selector">
-                <div class="product-card active" data-blend="chamomile">
-                    <div>
-                        <h3>Golden Chamomile</h3>
-                        <p>Delicate Egyptian chamomile blossoms infused with local honeyed pollen and sweet wild apple skin.</p>
-                    </div>
-                    <div class="flavor-notes">
-                        <span class="note-tag">Calm</span>
-                        <span class="note-tag">Floral</span>
-                        <span class="note-tag">Sweetness</span>
-                    </div>
-                </div>
+            <span class="tag">Nile Valley Reserve</span>
+          </div>
+          <h3>Midnight Velvet Rose</h3>
+          <p>Heirloom black leaves infused with Damascus rose petals, wild bergamot citrus, and deep crimson hibiscus.</p>
+          <div class="flavor-pills">
+            <span>Damask Rose</span>
+            <span>Bergamot</span>
+            <span>Cocoa Nib</span>
+          </div>
+          <div class="blend-card-footer">
+            <span class="price">$38</span>
+            <button class="btn btn-ghost" style="padding:0.4rem 0.9rem; font-size:0.75rem;">Select Pot</button>
+          </div>
+        </div>
 
-                <div class="product-card" data-blend="matcha">
-                    <div>
-                        <h3>Emerald Matcha</h3>
-                        <p>Stone-ground premium ceremonial green tea leaves cultivated under shade nets for vibrant depth.</p>
-                    </div>
-                    <div class="flavor-notes">
-                        <span class="note-tag">Focus</span>
-                        <span class="note-tag">Umami</span>
-                        <span class="note-tag">Fresh Leaf</span>
-                    </div>
-                </div>
+      </div>
+    </section>
 
-                <div class="product-card" data-blend="oolong">
-                    <div>
-                        <h3>Imperial Oolong</h3>
-                        <p>Lightly oxidized hand-rolled leaves releasing notes of wild orchids, cream, and dry pine bark.</p>
-                    </div>
-                    <div class="flavor-notes">
-                        <span class="note-tag">Smooth</span>
-                        <span class="note-tag">Roast</span>
-                        <span class="note-tag">Orchid</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- The Mindful Steeping Ritual -->
+    <section>
+      <div class="sec-head">
+        <span class="pill">The Art of the Leaf</span>
+        <h2>The 3-Step Mindful Ritual</h2>
+        <p>Three disciplined moments transform whole leaves into golden tranquility.</p>
+      </div>
 
-        <!-- Steeping Ritual Timer -->
-        <section class="ritual" id="ritual">
-            <div class="ritual-container">
-                <div class="section-header">
-                    <div class="badge">The Perfect Brew</div>
-                    <h2>Master the <span>Art of Time</span></h2>
-                </div>
-                <div class="ritual-steps">
-                    <div class="step">
-                        <div class="step-num">01</div>
-                        <div class="step-detail">
-                            <h4>First Rise</h4>
-                            <p>Preheat your porcelain cup with freshly boiled spring water, then gently discard the water to prime the clay.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">02</div>
-                        <div class="step-detail">
-                            <h4>The Awakening</h4>
-                            <p>Gently scatter 3 grams of whole leaves. Pour water at exactly 85°C to allow the complex essential oils to surface.</p>
-                        </div>
-                    </div>
-                </div>
+      <div class="grid grid-3">
+        <div class="card step">
+          <div class="step-num">01</div>
+          <h3>Waking the Clay</h3>
+          <p>Pre-warm the hand-turned Yixing vessel with boiling mountain spring water to awaken the clay’s memory and mineral breath.</p>
+        </div>
 
-                <!-- Live Timer Widget interacting with 3D elements -->
-                <div class="timer-widget">
-                    <div class="timer-circle-container">
-                        <svg class="timer-svg" viewBox="0 0 56 56">
-                            <circle class="timer-bg" cx="28" cy="28" r="25"/>
-                            <circle class="timer-progress" cx="28" cy="28" r="25"/>
-                        </svg>
-                        <button class="timer-btn" id="steepTrigger">
-                            <span id="btnIcon">▶</span>
-                        </button>
-                    </div>
-                    <div class="timer-info">
-                        <h5 id="timerState">Initiate Infusion</h5>
-                        <p id="timerDesc">Starts real-time 3D hot-steam activation</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="card step">
+          <div class="step-num">02</div>
+          <h3>Aromatic Unfurling</h3>
+          <p>Introduce whole coiled leaves into the heated chamber. Inhale the dense aromatic vapors before the first drop touches them.</p>
+        </div>
 
+        <div class="card step">
+          <div class="step-num">03</div>
+          <h3>Timed Infusion</h3>
+          <p>Pour water with low turbulence. Steep for precisely 45 seconds to extract shimmering liquor without extracting harsh tannins.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand Values -->
+    <section>
+      <div class="grid grid-3">
+        <div class="card value">
+          <div class="value-icon">🏔️</div>
+          <h3>High Altitude Terroir</h3>
+          <p>Grown exclusively above 1,400 meters where mist, cooling winds, and mineral-dense slopes slow plant growth to concentrate oils.</p>
+        </div>
+
+        <div class="card value">
+          <div class="value-icon">🌱</div>
+          <h3>Direct-Trade Purity</h3>
+          <p>We skip middlemen, partnering directly with multigenerational family estates to guarantee seasonal single-harvest purity.</p>
+        </div>
+
+        <div class="card value">
+          <div class="value-icon">⏳</div>
+          <h3>Slow-Craft Drying</h3>
+          <p>Wilted on raised bamboo racks and charcoal fired with gentle patience, preserving all the active polyphenols and vital sweetness.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Floating Quick-Brew Bar -->
+    <div class="steep-dock interactive">
+      <div class="dock-blend-name">
+        <span id="dockName">Golden Sun Oolong</span>
+        <small id="dockParams">90°C • 45s • 1st Steep</small>
+      </div>
+      <button class="btn btn-primary" id="brewBtn" onclick="triggerBrewAnimation()">
+        <span>Infuse 3D Pot</span> ✨
+      </button>
     </div>
 
-    <!-- Interactive Camera Hints -->
-    <div class="scene-hints">
-        <div class="hint-item">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(45deg);"><path d="M15 18l-6-6 6-6"/></svg>
-            Scroll to Navigate & Fly Scene
-        </div>
-        <div class="hint-item">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8V12l3 3"/></svg>
-            Select Blends to Infuse Color
-        </div>
-    </div>
+    <footer>
+      <p>© 2025 The Tea Story. Hand-harvested, small-batch botanicals. Crafted for contemplative moments.</p>
+    </footer>
 
-    <!-- Include Three.js via CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </div>
 
-    <script>
-        // Setup Three.js Scene, Camera, and Renderer
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        
-        // Add subtle depth mist
-        scene.fog = new THREE.FogExp2(0x110d0a, 0.025);
+  <!-- 3D WebGL Application Logic -->
+  <script>
+    // --- BLENDS DATA ---
+    const BLENDS = [
+      {
+        name: "Golden Sun Oolong",
+        color: 0xe5a338,
+        clayColor: 0x3d2719,
+        leafTint: 0xd68d2b,
+        temp: "90°C",
+        steep: "45s",
+        steamAlpha: 0.45
+      },
+      {
+        name: "Emerald Mist Gyokuro",
+        color: 0x82b85e,
+        clayColor: 0x1e2e21,
+        leafTint: 0x4a7e2b,
+        temp: "65°C",
+        steep: "90s",
+        steamAlpha: 0.35
+      },
+      {
+        name: "Midnight Velvet Rose",
+        color: 0xbe3e5b,
+        clayColor: 0x2b171c,
+        leafTint: 0x982a46,
+        temp: "95°C",
+        steep: "180s",
+        steamAlpha: 0.55
+      }
+    ];
 
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 1.2, 5.5);
+    let currentBlendIndex = 0;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.0;
-        container.appendChild(renderer.domElement);
+    // --- THREE.JS SCENE SETUP ---
+    const stage = document.getElementById('stage');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x0f0c09, 0.05);
 
-        // Core Lighting Setup
-        const ambientLight = new THREE.AmbientLight(0xfff5ea, 0.3);
-        scene.add(ambientLight);
+    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 1.4, 5.2);
 
-        // Warm Key Light (mimics a warm studio light)
-        const keyLight = new THREE.SpotLight(0xffe3b3, 5, 20, Math.PI / 4, 0.5, 1);
-        keyLight.position.set(5, 8, 5);
-        keyLight.castShadow = true;
-        keyLight.shadow.mapSize.width = 2048;
-        keyLight.shadow.mapSize.height = 2048;
-        keyLight.shadow.bias = -0.0001;
-        scene.add(keyLight);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    stage.appendChild(renderer.domElement);
 
-        // Rim Light from back-left (gives separation edge)
-        const rimLight = new THREE.DirectionalLight(0xb07c2a, 3);
-        rimLight.position.set(-6, 2, -4);
-        scene.add(rimLight);
+    // --- LIGHTING ---
+    const ambientLight = new THREE.AmbientLight(0xffeedb, 0.7);
+    scene.add(ambientLight);
 
-        // Base Soft Bottom Fill
-        const fillLight = new THREE.DirectionalLight(0x5d8a66, 0.5);
-        fillLight.position.set(0, -5, 0);
-        scene.add(fillLight);
+    const warmKeyLight = new THREE.SpotLight(0xffdfa8, 3.2, 20, Math.PI / 4, 0.4, 1);
+    warmKeyLight.position.set(4, 5, 4);
+    scene.add(warmKeyLight);
 
-        // Create Main Dynamic 3D Objects Group (The Teacup)
-        const teaRig = new THREE.Group();
-        scene.add(teaRig);
+    const softFill = new THREE.PointLight(0xa5c4e8, 1.2, 12);
+    softFill.position.set(-4, 2, -2);
+    scene.add(softFill);
 
-        // 1. Procedural Fine-Ceramic Cup Geometry Creation
-        const cupPoints = [];
-        for (let i = 0; i < 20; i++) {
-            const t = i / 19;
-            // Elegant curve for teacup wall
-            const x = 0.8 * Math.sin(t * Math.PI * 0.5) + 0.1 * Math.pow(t, 4);
-            const y = t * 1.2;
-            cupPoints.push(new THREE.Vector2(x, y));
+    const rimLight = new THREE.DirectionalLight(0xffb566, 2.0);
+    rimLight.position.set(0, 4, -4);
+    scene.add(rimLight);
+
+    // --- TEAWARE GROUP ---
+    const teaGroup = new THREE.Group();
+    scene.add(teaGroup);
+
+    // Ground reflective plate
+    const saucerGeo = new THREE.CylinderGeometry(2.2, 1.8, 0.08, 64);
+    const saucerMat = new THREE.MeshStandardMaterial({
+      color: 0x181410,
+      roughness: 0.3,
+      metalness: 0.1
+    });
+    const saucer = new THREE.Mesh(saucerGeo, saucerMat);
+    saucer.position.y = -0.7;
+    teaGroup.add(saucer);
+
+    // Inner tray ring
+    const ringGeo = new THREE.TorusGeometry(2.0, 0.02, 16, 64);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xdfb76c, roughness: 0.2, metalness: 0.8 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = -0.66;
+    teaGroup.add(ring);
+
+    // Teapot Materials
+    const teapotMaterial = new THREE.MeshPhysicalMaterial({
+      color: BLENDS[0].clayColor,
+      roughness: 0.35,
+      metalness: 0.05,
+      clearcoat: 0.25,
+      clearcoatRoughness: 0.2
+    });
+
+    const goldAccentMaterial = new THREE.MeshStandardMaterial({
+      color: 0xdfb76c,
+      metalness: 0.9,
+      roughness: 0.2
+    });
+
+    // 1. Teapot Body (Lathe Geometry for authentic bell shape)
+    const potPoints = [];
+    potPoints.push(new THREE.Vector2(0.01, -0.6));
+    potPoints.push(new THREE.Vector2(0.55, -0.6));
+    potPoints.push(new THREE.Vector2(0.85, -0.45));
+    potPoints.push(new THREE.Vector2(1.05, -0.15));
+    potPoints.push(new THREE.Vector2(1.08, 0.15));
+    potPoints.push(new THREE.Vector2(0.85, 0.45));
+    potPoints.push(new THREE.Vector2(0.55, 0.6));
+    potPoints.push(new THREE.Vector2(0.52, 0.65));
+    potPoints.push(new THREE.Vector2(0.01, 0.65));
+
+    const potBodyGeo = new THREE.LatheGeometry(potPoints, 48);
+    const potBody = new THREE.Mesh(potBodyGeo, teapotMaterial);
+    teaGroup.add(potBody);
+
+    // 2. Lid & Knob
+    const lidGeo = new THREE.CylinderGeometry(0.5, 0.54, 0.1, 32);
+    const lid = new THREE.Mesh(lidGeo, teapotMaterial);
+    lid.position.y = 0.68;
+    teaGroup.add(lid);
+
+    const knobGeo = new THREE.SphereGeometry(0.12, 24, 24);
+    const knob = new THREE.Mesh(knobGeo, goldAccentMaterial);
+    knob.position.y = 0.8;
+    teaGroup.add(knob);
+
+    // 3. Spout (Extruded along curve)
+    const spoutCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.7, 0.0, 0),
+      new THREE.Vector3(1.15, 0.25, 0),
+      new THREE.Vector3(1.4, 0.65, 0),
+      new THREE.Vector3(1.45, 0.75, 0)
+    ]);
+    const spoutGeo = new THREE.TubeGeometry(spoutCurve, 32, 0.14, 16, false);
+    const spout = new THREE.Mesh(spoutGeo, teapotMaterial);
+    teaGroup.add(spout);
+
+    // 4. Handle (Graceful loop)
+    const handleCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.7, 0.4, 0),
+      new THREE.Vector3(-1.3, 0.45, 0),
+      new THREE.Vector3(-1.4, -0.1, 0),
+      new THREE.Vector3(-0.85, -0.4, 0)
+    ]);
+    const handleGeo = new THREE.TubeGeometry(handleCurve, 32, 0.1, 16, false);
+    const handle = new THREE.Mesh(handleGeo, teapotMaterial);
+    teaGroup.add(handle);
+
+    // --- STEAM PARTICLES ---
+    const steamCount = 65;
+    const steamGeo = new THREE.BufferGeometry();
+    const steamPositions = new Float32Array(steamCount * 3);
+    const steamVelocities = [];
+
+    for (let i = 0; i < steamCount; i++) {
+      steamPositions[i * 3 + 0] = 1.45 + (Math.random() - 0.5) * 0.1;
+      steamPositions[i * 3 + 1] = 0.75 + Math.random() * 0.8;
+      steamPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+      steamVelocities.push({
+        x: 0.002 + (Math.random() - 0.5) * 0.004,
+        y: 0.012 + Math.random() * 0.01,
+        z: (Math.random() - 0.5) * 0.004,
+        life: Math.random()
+      });
+    }
+
+    steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPositions, 3));
+
+    // Custom round soft steam sprite using canvas
+    const createSteamTexture = () => {
+      const cv = document.createElement('canvas');
+      cv.width = 64; cv.height = 64;
+      const ctx = cv.getContext('2d');
+      const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, 'rgba(255,255,255,0.85)');
+      grad.addColorStop(0.4, 'rgba(230,220,200,0.3)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(cv);
+    };
+
+    const steamMat = new THREE.PointsMaterial({
+      size: 0.45,
+      map: createSteamTexture(),
+      transparent: true,
+      opacity: BLENDS[0].steamAlpha,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const steamPoints = new THREE.Points(steamGeo, steamMat);
+    teaGroup.add(steamPoints);
+
+    // --- FLOATING BOTANICAL LEAF PARTICLES ---
+    const leafCount = 30;
+    const leafGroup = new THREE.Group();
+    const leafGeo = new THREE.SphereGeometry(0.12, 7, 5);
+    leafGeo.scale(1.8, 0.2, 0.6); // flattened leaf form
+
+    const leafMaterial = new THREE.MeshStandardMaterial({
+      color: BLENDS[0].leafTint,
+      roughness: 0.6,
+      metalness: 0.1
+    });
+
+    const leafData = [];
+    for (let i = 0; i < leafCount; i++) {
+      const leafMesh = new THREE.Mesh(leafGeo, leafMaterial);
+      const angle = (i / leafCount) * Math.PI * 2;
+      const radius = 1.6 + Math.random() * 1.5;
+      const y = -0.4 + Math.random() * 2.2;
+
+      leafMesh.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+      leafMesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      leafGroup.add(leafMesh);
+
+      leafData.push({
+        angle,
+        radius,
+        speed: 0.003 + Math.random() * 0.005,
+        rotX: Math.random() * 0.02,
+        rotY: Math.random() * 0.02,
+        yBase: y
+      });
+    }
+    teaGroup.add(leafGroup);
+
+    // --- USER INTERACTION (DRAG & ROTATE) ---
+    let isDragging = false;
+    let prevMouseX = 0;
+    let prevMouseY = 0;
+    let targetRotY = 0.5;
+    let targetRotX = 0.15;
+    let targetDist = 5.2;
+
+    const canvas = renderer.domElement;
+
+    canvas.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - prevMouseX;
+      const deltaY = e.clientY - prevMouseY;
+      targetRotY += deltaX * 0.007;
+      targetRotX = Math.max(-0.25, Math.min(0.65, targetRotX + deltaY * 0.005));
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    });
+
+    window.addEventListener('pointerup', () => isDragging = false);
+
+    // Scroll parallax integration
+    let scrollYProgress = 0;
+    window.addEventListener('scroll', () => {
+      scrollYProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    });
+
+    // --- INTERACTIVE SELECTION & ANIMATIONS ---
+    function selectBlend(index, element) {
+      currentBlendIndex = index;
+      const blend = BLENDS[index];
+
+      // Update card UI
+      document.querySelectorAll('.blend-card').forEach(c => c.classList.remove('active'));
+      if (element) element.classList.add('active');
+
+      // Update Quick-Brew Dock
+      document.getElementById('dockName').textContent = blend.name;
+      document.getElementById('dockParams').textContent = `${blend.temp} • ${blend.steep} • Hand Reserve`;
+
+      // Animate 3D Material Colors
+      animateColorTransition(teapotMaterial.color, blend.clayColor);
+      animateColorTransition(leafMaterial.color, blend.leafTint);
+      steamMat.opacity = blend.steamAlpha;
+
+      // Gentle interactive kick
+      targetRotY += 1.2;
+    }
+
+    function animateColorTransition(sourceColor, targetHex) {
+      const target = new THREE.Color(targetHex);
+      let t = 0;
+      const original = sourceColor.clone();
+      const step = () => {
+        t += 0.05;
+        sourceColor.lerpColors(original, target, t);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      step();
+    }
+
+    let isBrewing = false;
+    function triggerBrewAnimation() {
+      if (isBrewing) return;
+      isBrewing = true;
+      const brewBtn = document.getElementById('brewBtn');
+      brewBtn.innerHTML = '<span>Infusing...</span> ⏳';
+
+      // Intense steam burst and swirl
+      steamMat.size = 0.9;
+      targetRotY += Math.PI * 2;
+
+      // Animate Teapot lid bobbing
+      let bounce = 0;
+      const bounceInterval = setInterval(() => {
+        bounce += 0.4;
+        lid.position.y = 0.68 + Math.sin(bounce) * 0.06;
+        knob.position.y = 0.8 + Math.sin(bounce) * 0.06;
+        if (bounce >= Math.PI * 4) {
+          clearInterval(bounceInterval);
+          lid.position.y = 0.68;
+          knob.position.y = 0.8;
+          steamMat.size = 0.45;
+          brewBtn.innerHTML = '<span>Steeped to Perfection!</span> ✨';
+          setTimeout(() => {
+            brewBtn.innerHTML = '<span>Infuse 3D Pot</span> ✨';
+            isBrewing = false;
+          }, 2400);
         }
+      }, 30);
+    }
 
-        const cupGeo = new THREE.LatheGeometry(cupPoints, 48);
-        const ceramicMat = new THREE.MeshStandardMaterial({
-            color: 0xfbf7f2,
-            roughness: 0.05,
-            metalness: 0.1,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.05,
-            side: THREE.DoubleSide
-        });
-        const cupMesh = new THREE.Mesh(cupGeo, ceramicMat);
-        cupMesh.castShadow = true;
-        cupMesh.receiveShadow = true;
-        cupMesh.position.y = -0.2;
-        teaRig.add(cupMesh);
+    function focusTeapotView() {
+      targetRotX = 0.2;
+      targetRotY = 0.8;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-        // 2. Teacup Saucer / Plate Base
-        const platePoints = [];
-        platePoints.push(new THREE.Vector2(0, 0));
-        platePoints.push(new THREE.Vector2(0.5, 0.02));
-        platePoints.push(new THREE.Vector2(1.2, 0.15));
-        platePoints.push(new THREE.Vector2(1.5, 0.28));
-        platePoints.push(new THREE.Vector2(1.48, 0.28));
-        platePoints.push(new THREE.Vector2(1.15, 0.12));
-        platePoints.push(new THREE.Vector2(0.5, 0.0));
-        platePoints.push(new THREE.Vector2(0, 0));
+    // --- ANIMATION RENDER LOOP ---
+    let clock = new THREE.Clock();
 
-        const plateGeo = new THREE.LatheGeometry(platePoints, 48);
-        const plateMesh = new THREE.Mesh(plateGeo, ceramicMat);
-        plateMesh.position.y = -0.25;
-        plateMesh.castShadow = true;
-        plateMesh.receiveShadow = true;
-        teaRig.add(plateMesh);
+    function renderLoop() {
+      requestAnimationFrame(renderLoop);
+      const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
 
-        // 3. Stylized Teacup Ceramic Handle
-        const handlePath = new THREE.CurvePath();
-        const curve = new THREE.QuadraticBezierCurve3(
-            new THREE.Vector3(0.7, 0.8, 0),
-            new THREE.Vector3(1.6, 0.5, 0),
-            new THREE.Vector3(0.6, 0.1, 0)
-        );
-        handlePath.add(curve);
-        const handleGeo = new THREE.TubeGeometry(handlePath, 32, 0.07, 12, false);
-        const handleMesh = new THREE.Mesh(handleGeo, ceramicMat);
-        handleMesh.position.y = -0.1;
-        teaRig.add(handleMesh);
+      // Smooth camera and rotation damping
+      teaGroup.rotation.y += (targetRotY + scrollYProgress * 1.5 - teaGroup.rotation.y) * 0.05;
+      teaGroup.rotation.x += (targetRotX - teaGroup.rotation.x) * 0.05;
 
-        // 4. Liquid Inside the Cup (Interactive Color-Shifting Mesh)
-        const liquidGeo = new THREE.CylinderGeometry(0.78, 0.4, 0.1, 32);
-        const liquidMat = new THREE.MeshStandardMaterial({
-            color: 0xdcae53, // Default: Golden Chamomile
-            roughness: 0.05,
-            metalness: 0.2,
-            transmission: 0.9, // Gives liquid realism
-            opacity: 0.9,
-            transparent: true,
-            roughness: 0.1
-        });
-        const liquidMesh = new THREE.Mesh(liquidGeo, liquidMat);
-        liquidMesh.position.set(0, 0.85, 0);
-        teaRig.add(liquidMesh);
+      // Ambient pot floating breathing
+      teaGroup.position.y = Math.sin(elapsed * 1.4) * 0.05 - (scrollYProgress * 0.4);
 
-        // Floating Organic Tea Leaves System
-        const particleCount = 28;
-        const leavesGroup = new THREE.Group();
-        scene.add(leavesGroup);
+      // Leaves dynamic orbital motion
+      for (let i = 0; i < leafCount; i++) {
+        const d = leafData[i];
+        d.angle += d.speed;
+        const mesh = leafGroup.children[i];
+        mesh.position.x = Math.cos(d.angle) * d.radius;
+        mesh.position.z = Math.sin(d.angle) * d.radius;
+        mesh.position.y = d.yBase + Math.sin(elapsed * 2 + i) * 0.12;
+        mesh.rotation.x += d.rotX;
+        mesh.rotation.y += d.rotY;
+      }
 
-        // Construct individual elegant stylized leaf meshes
-        const leafShape = new THREE.Shape();
-        leafShape.moveTo(0, 0);
-        leafShape.quadraticCurveTo(0.25, 0.35, 0, 0.7);
-        leafShape.quadraticCurveTo(-0.25, 0.35, 0, 0);
+      // Steam physics update
+      const pos = steamPoints.geometry.attributes.position.array;
+      for (let i = 0; i < steamCount; i++) {
+        const vel = steamVelocities[i];
+        pos[i * 3 + 0] += vel.x + Math.sin(elapsed * 3 + i) * 0.002;
+        pos[i * 3 + 1] += vel.y * (isBrewing ? 1.8 : 1.0);
+        pos[i * 3 + 2] += vel.z;
 
-        const extrudeSettings = { depth: 0.01, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.005, bevelThickness: 0.005 };
-        const leafGeo = new THREE.ExtrudeGeometry(leafShape, extrudeSettings);
-        leafGeo.center();
-
-        const leafMaterials = [
-            new THREE.MeshStandardMaterial({ color: 0x5d8a66, roughness: 0.4, side: THREE.DoubleSide }), // matcha tone
-            new THREE.MeshStandardMaterial({ color: 0xb07c2a, roughness: 0.5, side: THREE.DoubleSide }), // roasted oolong tone
-            new THREE.MeshStandardMaterial({ color: 0xe5b85c, roughness: 0.3, side: THREE.DoubleSide })  // golden calendula petal tone
-        ];
-
-        const leafInstances = [];
-
-        for (let i = 0; i < particleCount; i++) {
-            const matIdx = Math.floor(Math.random() * leafMaterials.length);
-            const mesh = new THREE.Mesh(leafGeo, leafMaterials[matIdx]);
-            
-            // Random distribution sphere around the cup
-            const angle = Math.random() * Math.PI * 2;
-            const radius = 1.5 + Math.random() * 2.5;
-            const yPos = -0.5 + Math.random() * 3.5;
-
-            mesh.position.set(Math.cos(angle) * radius, yPos, Math.sin(angle) * radius);
-            mesh.scale.setScalar(0.4 + Math.random() * 0.5);
-            
-            // Random starting rotation to disperse scattering look
-            mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-
-            // Assign unique float offsets for individual procedural animation
-            mesh.userData = {
-                angleSpeed: 0.002 + Math.random() * 0.005,
-                radius: radius,
-                angle: angle,
-                yPivot: yPos,
-                waveOffset: Math.random() * 100,
-                rotXSpeed: 0.005 + Math.random() * 0.01,
-                rotYSpeed: 0.005 + Math.random() * 0.01
-            };
-
-            leavesGroup.add(mesh);
-            leafInstances.push(mesh);
+        // Reset particle lifecycle
+        if (pos[i * 3 + 1] > 2.0) {
+          pos[i * 3 + 0] = 1.45 + (Math.random() - 0.5) * 0.08;
+          pos[i * 3 + 1] = 0.75;
+          pos[i * 3 + 2] = (Math.random() - 0.5) * 0.08;
         }
+      }
+      steamPoints.geometry.attributes.position.needsUpdate = true;
 
-        // 5. Ambient Micro-particles (Dust and Steam hints)
-        const microGeo = new THREE.BufferGeometry();
-        const microCount = 120;
-        const microPositions = new Float32Array(microCount * 3);
+      renderer.render(scene, camera);
+    }
 
-        for (let i = 0; i < microCount * 3; i += 3) {
-            microPositions[i] = (Math.random() - 0.5) * 8;     // X
-            microPositions[i + 1] = (Math.random() - 0.5) * 6 + 1.5; // Y
-            microPositions[i + 2] = (Math.random() - 0.5) * 8;     // Z
-        }
+    renderLoop();
 
-        microGeo.setAttribute('position', new THREE.BufferAttribute(microPositions, 3));
-        const microMat = new THREE.PointsMaterial({
-            color: 0xfff3db,
-            size: 0.025,
-            transparent: true,
-            opacity: 0.4
-        });
-        const microParticles = new THREE.Points(microGeo, microMat);
-        scene.add(microParticles);
-
-        // Interactive Live Steam System (rising directly from Cup)
-        const steamParticlesGeo = new THREE.BufferGeometry();
-        const steamCount = 35;
-        const steamPositions = new Float32Array(steamCount * 3);
-        const steamSpeeds = [];
-
-        for (let i = 0; i < steamCount; i++) {
-            steamPositions[i * 3] = (Math.random() - 0.5) * 0.4;
-            steamPositions[i * 3 + 1] = 0.85 + Math.random() * 2;
-            steamPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.4;
-            steamSpeeds.push({
-                y: 0.01 + Math.random() * 0.015,
-                xOffset: Math.random() * 5,
-                xSpeed: 0.01 + Math.random() * 0.02
-            });
-        }
-
-        steamParticlesGeo.setAttribute('position', new THREE.BufferAttribute(steamPositions, 3));
-        const steamMat = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 0.065,
-            transparent: true,
-            opacity: 0.15,
-            blending: THREE.AdditiveBlending
-        });
-        const steamPoints = new THREE.Points(steamParticlesGeo, steamMat);
-        teaRig.add(steamPoints);
-
-
-        // Mouse Parallax Trackers
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetCamY = 1.2;
-        let targetCamX = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.6;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
-        });
-
-        // High Performance Scroll Parallax Handling
-        let scrollPercent = 0;
-        window.addEventListener('scroll', () => {
-            const h = document.documentElement;
-            const b = document.body;
-            const st = 'scrollTop';
-            const sh = 'scrollHeight';
-            scrollPercent = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight);
-            
-            // Adjust lighting dynamics and fog density with scroll depth
-            scene.fog.density = 0.025 + scrollPercent * 0.02;
-            keyLight.intensity = 5 - (scrollPercent * 1.5);
-        });
-
-        // 3D Color Customizer Logic (Linked with selection tags)
-        const blendColors = {
-            chamomile: {
-                liquid: 0xdcae53,
-                rim: 0xb07c2a,
-                bgGrad: '#1c1510',
-                steamColor: 0xffffff
-            },
-            matcha: {
-                liquid: 0x5d8a66,
-                rim: 0x2c4431,
-                bgGrad: '#0d160e',
-                steamColor: 0xe0ffd8
-            },
-            oolong: {
-                liquid: 0xcf8b83,
-                rim: 0x6e3c35,
-                bgGrad: '#1f1311',
-                steamColor: 0xffe2e0
-            }
-        };
-
-        const cards = document.querySelectorAll('.product-card');
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Toggle active styles on UI cards
-                cards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-
-                // Transition colors dynamically inside the 3D WebGL scene
-                const selection = card.getAttribute('data-blend');
-                const targetData = blendColors[selection];
-
-                // Smoothly tween color values
-                new THREE.Color(targetData.liquid);
-                
-                // Color transition animation using basic Lerp approximation
-                let progress = 0;
-                const originColor = liquidMat.color.clone();
-                const destColor = new THREE.Color(targetData.liquid);
-                
-                const originRim = rimLight.color.clone();
-                const destRim = new THREE.Color(targetData.rim);
-
-                function lerpColor() {
-                    progress += 0.04;
-                    liquidMat.color.lerpColors(originColor, destColor, progress);
-                    rimLight.color.lerpColors(originRim, destRim, progress);
-                    steamMat.color.setHex(targetData.steamColor);
-
-                    if (progress < 1) {
-                        requestAnimationFrame(lerpColor);
-                    }
-                }
-                lerpColor();
-            });
-        });
-
-        // Interactive Steeping Timer Implementation
-        const steepBtn = document.getElementById('steepTrigger');
-        const btnIcon = document.getElementById('btnIcon');
-        const timerStateText = document.getElementById('timerState');
-        const timerDescText = document.getElementById('timerDesc');
-        const progressStroke = document.querySelector('.timer-progress');
-        
-        let timerActive = false;
-        let timerInterval = null;
-        let originalLiquidOpacity = 0.9;
-        let activeSteamFactor = 1;
-
-        steepBtn.addEventListener('click', () => {
-            if (timerActive) {
-                // Reset State
-                clearInterval(timerInterval);
-                timerActive = false;
-                btnIcon.textContent = "▶";
-                timerStateText.textContent = "Initiate Infusion";
-                timerDescText.textContent = "Starts real-time 3D hot-steam activation";
-                progressStroke.style.strokeDashoffset = 157;
-                activeSteamFactor = 1;
-                liquidMat.opacity = originalLiquidOpacity;
-            } else {
-                // Begin State
-                timerActive = true;
-                btnIcon.textContent = "■";
-                timerStateText.textContent = "Brewing... (10s)";
-                timerDescText.textContent = "Heat currents are opening leaves";
-                
-                let count = 0;
-                const totalDur = 10;
-                activeSteamFactor = 3.5; // Double steam generation output
-
-                // Dynamic Tea infusion visual change
-                liquidMat.opacity = 0.35; // Water begins diluting initially
-
-                timerInterval = setInterval(() => {
-                    count++;
-                    const progress = count / totalDur;
-                    progressStroke.style.strokeDashoffset = 157 - (157 * progress);
-                    
-                    // Slowly increase liquid concentration opacity during infusion
-                    liquidMat.opacity = 0.35 + (0.55 * progress);
-
-                    if (count >= totalDur) {
-                        clearInterval(timerInterval);
-                        btnIcon.textContent = "✓";
-                        timerStateText.textContent = "Perfect Brew Ready";
-                        timerDescText.textContent = "Optimal taste reached. Pour and enjoy.";
-                        activeSteamFactor = 1.5;
-                    } else {
-                        timerStateText.textContent = `Brewing... (${totalDur - count}s)`;
-                    }
-                }, 1000);
-            }
-        });
-
-
-        // Global Clock for smooth rendering frame loops
-        const clock = new THREE.Clock();
-
-        // Main Animation Frame Render Loop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const elapsedTime = clock.getElapsedTime();
-
-            // 1. Scene Navigation & Layout Transformation Camera Mapping
-            // As page scrolls down, camera orbits from front view to overhead/zoomed layout views
-            const orbitRadius = 5.5 - scrollPercent * 2.2;
-            const targetCamHeight = 1.2 + Math.sin(scrollPercent * Math.PI * 0.3) * 1.8;
-            const angleOffset = scrollPercent * Math.PI * 0.75;
-
-            // Apply interactive Mouse parallax smoothly
-            const actualCamX = Math.sin(angleOffset) * orbitRadius + mouseX;
-            const actualCamZ = Math.cos(angleOffset) * orbitRadius + (mouseY * 0.5);
-            
-            camera.position.x += (actualCamX - camera.position.x) * 0.08;
-            camera.position.z += (actualCamZ - camera.position.z) * 0.08;
-            camera.position.y += (targetCamHeight - camera.position.y) * 0.08;
-
-            // Continually look at target offset slightly dynamic
-            const lookTarget = new THREE.Vector3(0, 0.4 - scrollPercent * 0.2, 0);
-            camera.lookAt(lookTarget);
-
-            // 2. Teacup Idle Animation
-            teaRig.rotation.y = elapsedTime * 0.05 + scrollPercent * Math.PI * 0.5;
-            // Gentle hovering vertical wave
-            teaRig.position.y = Math.sin(elapsedTime * 0.8) * 0.06;
-
-            // 3. Float Leaf Positions & Orbit Motions
-            leafInstances.forEach(leaf => {
-                const data = leaf.userData;
-                // Modify angle in real-time
-                data.angle += data.angleSpeed;
-                
-                // Orbit path calculation
-                const destX = Math.cos(data.angle) * data.radius;
-                const destZ = Math.sin(data.angle) * data.radius;
-                
-                // Vertical wave oscillation
-                const currentWave = Math.sin(elapsedTime * 0.6 + data.waveOffset) * 0.15;
-                
-                leaf.position.x = destX;
-                leaf.position.z = destZ;
-                leaf.position.y = data.yPivot + currentWave;
-
-                // Subtle spin and tilt rotation
-                leaf.rotation.x += data.rotXSpeed;
-                leaf.rotation.y += data.rotYSpeed;
-            });
-
-            // 4. Steam Particles Rise Logic
-            const posAttr = steamParticlesGeo.attributes.position;
-            for (let i = 0; i < steamCount; i++) {
-                let y = posAttr.getY(i);
-                y += steamSpeeds[i].y * activeSteamFactor;
-                
-                // If it goes too high, reset to top of teacup rim
-                if (y > 2.8) {
-                    y = 0.85;
-                    posAttr.setX(i, (Math.random() - 0.5) * 0.4);
-                    posAttr.setZ(i, (Math.random() - 0.5) * 0.4);
-                } else {
-                    // Drift back and forth in wind path
-                    const speedData = steamSpeeds[i];
-                    posAttr.setX(i, posAttr.getX(i) + Math.sin(elapsedTime * 2 + speedData.xOffset) * 0.002);
-                }
-                posAttr.setY(i, y);
-            }
-            posAttr.needsUpdate = true;
-
-            // 5. Gently drift background stars/micorparticles
-            microParticles.rotation.y = -elapsedTime * 0.008;
-            microParticles.rotation.x = elapsedTime * 0.005;
-
-            renderer.render(scene, camera);
-        }
-
-        // Keep Aspect ratio correctly on resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        });
-
-        // Kickoff Render Loop
-        animate();
-    </script>
+    // --- RESPONSIVE RESIZE ---
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
 </body>
 </html>
