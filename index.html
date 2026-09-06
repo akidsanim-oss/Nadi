@@ -1,977 +1,656 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon TCG - Nuit Noire : Chaos Ascendant</title>
-    <!-- Three.js, OrbitControls & GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #050308;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: #ffffff;
-        }
-
-        #webgl-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* Overlay UI */
-        .ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px;
-        }
-
-        .interactive {
-            pointer-events: auto;
-        }
-
-        /* Header UI */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            background: linear-gradient(180deg, rgba(10, 5, 15, 0.85) 0%, rgba(10, 5, 15, 0) 100%);
-            padding: 20px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-        }
-
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tcg-badge {
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #ff3e3e;
-            font-weight: 800;
-            margin-bottom: 4px;
-            text-shadow: 0 0 10px rgba(255, 62, 62, 0.6);
-        }
-
-        .title-main {
-            font-size: 28px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #fff 0%, #ff8800 50%, #ff0044 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255, 68, 0, 0.4);
-        }
-
-        .title-sub {
-            font-size: 13px;
-            color: #a0a0c0;
-            font-style: italic;
-        }
-
-        .card-stats {
-            background: rgba(20, 10, 25, 0.7);
-            border: 1px solid rgba(255, 80, 0, 0.4);
-            padding: 10px 18px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 0 15px rgba(255, 50, 0, 0.2);
-        }
-
-        .hp-badge {
-            font-size: 18px;
-            font-weight: 900;
-            color: #ff3b3b;
-        }
-
-        .type-icon {
-            width: 24px;
-            height: 24px;
-            background: #ff4500;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 10px #ff4500;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Bottom Control Deck */
-        .controls-panel {
-            align-self: center;
-            background: rgba(12, 8, 20, 0.85);
-            border: 1px solid rgba(255, 100, 0, 0.3);
-            border-radius: 20px;
-            padding: 14px 28px;
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 60, 0, 0.2);
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #2a1020 0%, #150818 100%);
-            border: 1px solid #ff4400;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-        }
-
-        .btn:hover {
-            background: linear-gradient(135deg, #ff4400 0%, #b30000 100%);
-            box-shadow: 0 0 15px rgba(255, 68, 0, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff5500 0%, #990000 100%);
-            box-shadow: 0 0 12px rgba(255, 85, 0, 0.5);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #ff7700 0%, #cc0000 100%);
-            box-shadow: 0 0 25px rgba(255, 119, 0, 0.9);
-        }
-
-        /* Mode Switcher Tabs */
-        .mode-tabs {
-            position: absolute;
-            left: 24px;
-            bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .tab-btn {
-            background: rgba(15, 10, 25, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #a0a0b0;
-            padding: 12px 18px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            backdrop-filter: blur(6px);
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-
-        .tab-btn.active, .tab-btn:hover {
-            border-color: #ff5500;
-            color: #fff;
-            background: rgba(40, 15, 30, 0.8);
-            box-shadow: 0 0 10px rgba(255, 85, 0, 0.3);
-        }
-
-        /* Flash FX Overlay */
-        #fx-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            background: radial-gradient(circle at center, rgba(255,50,0,0) 0%, rgba(0,0,0,0.4) 100%);
-            transition: background 0.1s ease;
-        }
-
-        /* Loading Screen */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #08030a;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s ease;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 68, 0, 0.1);
-            border-top: 4px solid #ff4400;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255, 68, 0, 0.5);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loader-text {
-            font-size: 14px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #ff6600;
-            font-weight: 700;
-        }
-
-        /* Attack Description Popup */
-        .attack-toast {
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            background: rgba(20, 5, 10, 0.9);
-            border: 2px solid #ff3300;
-            padding: 15px 30px;
-            border-radius: 12px;
-            text-align: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 30px rgba(255, 51, 0, 0.6);
-        }
-
-        .attack-toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .attack-name {
-            font-size: 20px;
-            font-weight: 900;
-            color: #ff9900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .attack-dmg {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ff0044;
-            margin-left: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .title-main { font-size: 20px; }
-            .controls-panel { flex-wrap: wrap; justify-content: center; }
-            .mode-tabs { display: none; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon TCG — Nuit Noire × Chaos Ascendant | Nexus 3D</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{display:['Unbounded','sans-serif'],body:['"Space Grotesk"','sans-serif'],serif2:['Cinzel','serif']},colors:{void:'#06060f',abyss:'#0a0a1a',nuit:'#7c3aed',nuitgold:'#f5c518',chaosPink:'#ff2bd6',chaosCyan:'#00f0ff',chaosOrange:'#ff6b00'}}}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Cinzel:wght@600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }</script>
+<style>
+:root{--nuit1:#7c3aed;--nuit2:#f5c518;--chaos1:#ff2bd6;--chaos2:#00f0ff;--mx:50%;--my:50%}
+*{-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;background:#06060f}
+body{background:#06060f;color:#e8e8f2;font-family:"Space Grotesk",sans-serif;overflow-x:hidden}
+::selection{background:#ff2bd6;color:#fff}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:#06060f}::-webkit-scrollbar-thumb{background:linear-gradient(#7c3aed,#ff2bd6,#00f0ff);border-radius:10px}
+.font-display{font-family:Unbounded,sans-serif}.font-cinzel{font-family:Cinzel,serif}.mono{font-family:"JetBrains Mono",monospace}
+.glass{background:rgba(255,255,255,.06);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1)}
+.glass-strong{background:rgba(10,10,26,.82);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.12)}
+.stroke-text{-webkit-text-stroke:1.5px rgba(255,255,255,.85);color:transparent}
+.gold-text{background:linear-gradient(105deg,#fff6c8 0%,#f5c518 25%,#fff 50%,#b8860b 75%,#ffe98a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chaos-text{background:linear-gradient(100deg,#ff2bd6,#ff6b00 30%,#f5c518 50%,#00f0ff 75%,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:shineMove 5s linear infinite}
+@keyframes shineMove{to{background-position:200% center}}
+#preloader{position:fixed;inset:0;z-index:200;background:#06060f;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
+#preloader.done{opacity:0;visibility:hidden}
+.pokeball-loader{width:96px;height:96px;border-radius:50%;border:6px solid #111;position:relative;overflow:hidden;animation:shakeBall 1s infinite;background:linear-gradient(to bottom,#ee1c25 0 46%,#111 46% 54%,#fff 54% 100%)}
+.pokeball-loader::after{content:'';position:absolute;left:50%;top:50%;width:26px;height:26px;background:#fff;border:6px solid #111;border-radius:50%;transform:translate(-50%,-50%)}
+@keyframes shakeBall{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+#cursor-glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(124,58,237,.18),rgba(255,43,214,.08),transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen}
+#cursor-dot{position:fixed;width:8px;height:8px;background:#fff;border-radius:50%;pointer-events:none;z-index:100;transform:translate(-50%,-50%);box-shadow:0 0 12px #fff,0 0 24px #ff2bd6}
+@media(pointer:coarse){#cursor-dot,#cursor-glow{display:none}}
+.ticker-track{display:flex;white-space:nowrap;animation:ticker 28s linear infinite;width:max-content}
+@keyframes ticker{to{transform:translateX(-50%)}}
+/* ORNATE FRAME like reference */
+.ornate-frame{position:relative;border-radius:18px;padding:10px;background:linear-gradient(135deg,#3a1a0a,#f5c518 15%,#3a0a0a 30%,#f5c518 50%,#2a1505 70%,#ffe9a8 85%,#4a1a0a);box-shadow:0 40px 100px rgba(0,0,0,.8),0 0 80px rgba(245,197,24,.18)}
+.ornate-inner{position:relative;border-radius:12px;overflow:hidden;background:#0a0a12;border:2px solid #f5e6b8;outline:2px solid #1a0f00;outline-offset:-6px}
+.plaque-top{position:absolute;top:-2px;left:50%;transform:translateX(-50%);z-index:20;background:linear-gradient(180deg,#1a0f0a,#0a0505);border:2px solid #e8d5a3;border-top:none;border-radius:0 0 22px 22px;padding:8px 28px;min-width:72%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.7)}
+.poke-logo{font-family:Unbounded,sans-serif;font-weight:900;font-style:italic;letter-spacing:-.02em;color:#ffcb05;-webkit-text-stroke:2px #2a4d9b;text-shadow:3px 3px 0 #1e3a7a,-1px -1px 0 #1e3a7a,0 6px 18px rgba(0,0,0,.6);transform:rotate(-8deg);line-height:1}
+.corner-orn{position:absolute;right:-10px;bottom:-10px;width:150px;height:150px;z-index:20;pointer-events:none;filter:drop-shadow(0 0 12px rgba(245,197,24,.8))}
+.poke-card{--mx:50%;--my:50%;--rx:0deg;--ry:0deg;position:relative;width:100%;aspect-ratio:63/88;border-radius:18px;overflow:hidden;transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .15s ease-out,box-shadow .3s;background:#0d0d1f;border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:pointer}
+.poke-card:hover{box-shadow:0 30px 80px rgba(124,58,237,.45),0 0 0 1px rgba(255,255,255,.2)}
+.poke-card .holo{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.55) 0%,transparent 35%),linear-gradient(115deg,transparent 20%,rgba(255,43,214,.35) 35%,rgba(0,240,255,.35) 50%,rgba(245,197,24,.35) 65%,transparent 80%);background-blend-mode:screen;mix-blend-mode:screen;filter:saturate(1.4)}
+.poke-card:hover .holo{opacity:1}
+.poke-card.gold{border:1px solid #f5c518;box-shadow:0 0 0 1px #f5c518,0 20px 70px rgba(245,197,24,.35)}
+.poke-card.rainbow{border:1px solid transparent;background:linear-gradient(#0d0d1f,#0d0d1f) padding-box,linear-gradient(135deg,#ff2bd6,#00f0ff,#f5c518,#7c3aed) border-box}
+.card-shine{position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.14),transparent 20%);animation:spinShine 6s linear infinite;pointer-events:none;z-index:4}
+@keyframes spinShine{to{transform:rotate(360deg)}}
+.booster{width:270px;height:410px;border-radius:18px;position:relative;overflow:hidden;transform-style:preserve-3d;transition:transform .4s;box-shadow:0 30px 80px rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2)}
+.booster::before{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 45%,transparent 60%);transform:translateX(-100%);animation:foilSweep 3.2s ease-in-out infinite;z-index:5;pointer-events:none}
+@keyframes foilSweep{0%,60%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.booster.nuit{background:radial-gradient(120% 100% at 50% 0%,#2a165a 0%,#120826 45%,#05030f 100%)}
+.booster.chaos{background:radial-gradient(120% 100% at 50% 0%,#3d0a3a 0%,#170a2e 40%,#031018 100%)}
+.pack-tear{position:absolute;top:0;left:0;right:0;height:8px;background:repeating-linear-gradient(90deg,#fff 0 10px,transparent 10px 18px);opacity:.9}
+.btn-primary{position:relative;overflow:hidden;background:linear-gradient(90deg,#7c3aed,#ff2bd6);transition:.3s;box-shadow:0 10px 40px rgba(255,43,214,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 50px rgba(255,43,214,.55)}
+.btn-gold{background:linear-gradient(90deg,#b8860b,#f5c518,#fff2a8,#f5c518,#b8860b);background-size:200% auto;color:#1a1200;box-shadow:0 10px 40px rgba(245,197,24,.35);transition:.3s}
+.btn-gold:hover{background-position:right center;transform:translateY(-2px)}
+.btn-ghost{border:1px solid rgba(255,255,255,.2);transition:.3s}.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.eyebrow{letter-spacing:.35em;font-size:.7rem;text-transform:uppercase}
+.bg-grid{background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:44px 44px}
+.noise{position:relative}.noise::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");pointer-events:none}
+.flip-inner{transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1);position:relative;width:100%;height:100%}
+.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;overflow:hidden}
+.flip-back{transform:rotateY(180deg)}
+.product-3d{transform-style:preserve-3d;transition:transform .5s}.product-3d:hover{transform:perspective(800px) rotateY(12deg) rotateX(-6deg) translateY(-8px)}
+.timeline-line{background:linear-gradient(90deg,#7c3aed,#ff2bd6,#00f0ff,#f5c518);height:3px}
+.modal-bg{background:rgba(3,3,10,.82);backdrop-filter:blur(12px)}
+#toasts{position:fixed;bottom:24px;right:24px;z-index:150;display:flex;flex-direction:column;gap:10px;max-width:92vw}
+.toast{animation:toastIn .4s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes toastIn{from{transform:translateX(100px);opacity:0}}
+@keyframes packShake{0%,100%{transform:rotate(0)}20%{transform:rotate(-4deg) scale(1.02)}40%{transform:rotate(4deg)}60%{transform:rotate(-3deg) scale(1.05)}80%{transform:rotate(2deg)}}
+.pack-shaking{animation:packShake .6s ease}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.floaty{animation:floaty 5s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 30px rgba(124,58,237,.6)}50%{box-shadow:0 0 70px rgba(255,43,214,.9)}}
+.pulse-glow{animation:pulseGlow 2.5s infinite}
+.orb-nuit{background:radial-gradient(circle at 30% 30%,#a78bfa,#7c3aed 40%,#1e0f4a 75%,#000)}
+.orb-chaos{background:radial-gradient(circle at 30% 30%,#ff8ae2,#ff2bd6 30%,#ff6b00 55%,#031018 85%)}
+input[type=range]{accent-color:#ff2bd6}
+.tab-active{background:linear-gradient(90deg,#7c3aed,#ff2bd6)!important;color:#fff!important;border-color:transparent!important}
+.chip{border:1px solid rgba(255,255,255,.15)}
+.stat-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.stat-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c3aed,#ff2bd6,#f5c518)}
+.hotspot{position:absolute;width:28px;height:28px;border-radius:50%;border:2px solid #fff;background:rgba(255,43,214,.6);box-shadow:0 0 18px #ff2bd6;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;animation:pulseGlow 2s infinite;z-index:10}
+.reveal-card{animation:revealPop .6s cubic-bezier(.2,1.4,.3,1) both}
+@keyframes revealPop{from{transform:rotateY(90deg) scale(.6);opacity:0}to{transform:rotateY(0) scale(1);opacity:1}}
+.ember{position:absolute;width:4px;height:4px;border-radius:50%;background:#ff6b00;box-shadow:0 0 10px #ff2bd6;animation:rise linear infinite}
+@keyframes rise{from{transform:translateY(0) scale(1);opacity:1}to{transform:translateY(-520px) scale(.2);opacity:0}}
+select{background:#0a0a1a}
+</style>
 </head>
-<body>
-
-    <div id="loader">
-        <div class="spinner"></div>
-        <div class="loader-text">Invocation de la Nuit Noire...</div>
-    </div>
-
-    <div id="webgl-container"></div>
-    <div id="fx-overlay"></div>
-
-    <div class="ui-layer">
-        <header class="interactive">
-            <div class="logo-container">
-                <span class="tcg-badge">Pokémon TCG • Édition Spéciale</span>
-                <h1 class="title-main">Nuit Noire : Chaos Ascendant</h1>
-                <span class="title-sub">Giga-Évolution Dragon d'Obsidienne EX</span>
-            </div>
-            <div class="card-stats">
-                <div class="type-icon">🔥</div>
-                <div>
-                    <div style="font-size: 10px; color: #aaa; text-transform: uppercase;">PV MAX</div>
-                    <div class="hp-badge">340 HP</div>
-                </div>
-            </div>
-        </header>
-
-        <div class="attack-toast" id="attackToast">
-            <span class="attack-name" id="toastName">Éruption du Chaos</span>
-            <span class="attack-dmg" id="toastDmg">280</span>
-        </div>
-
-        <div class="mode-tabs interactive">
-            <button class="tab-btn active" onclick="setCameraView('cinematic')">🎬 Vue Cinématique</button>
-            <button class="tab-btn" onclick="setCameraView('card')">🃏 Carte 3D TCG</button>
-            <button class="tab-btn" onclick="setCameraView('close')">👁️ Focus Tête & Magma</button>
-        </div>
-
-        <div class="controls-panel interactive">
-            <button class="btn btn-primary" onclick="triggerAttack('chaos')">
-                🔥 Rayon de Chaos
-            </button>
-            <button class="btn" onclick="triggerAttack('nuit')">
-                ⚡ Nuit Noire
-            </button>
-            <button class="btn" onclick="toggleAudio()">
-                🔊 <span id="audioLabel">Son : OFF</span>
-            </button>
-            <button class="btn" onclick="burstEmbers()">
-                💥 Éruption Rocks
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // --- AUDIO SYNTHESIZER (Web Audio API) ---
-        let audioCtx = null;
-        let isAudioOn = false;
-        let bgOsc = null;
-
-        function initAudio() {
-            if (audioCtx) return;
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new AudioContext();
-        }
-
-        function toggleAudio() {
-            if (!audioCtx) initAudio();
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            isAudioOn = !isAudioOn;
-            document.getElementById('audioLabel').innerText = isAudioOn ? "Son : ON" : "Son : OFF";
-            
-            if (isAudioOn) {
-                playAtmosphereDrone();
-            } else if (bgOsc) {
-                bgOsc.stop();
-                bgOsc = null;
-            }
-        }
-
-        function playAtmosphereDrone() {
-            if (!isAudioOn || !audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(45, audioCtx.currentTime); // Low bass hum
-            
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(120, audioCtx.currentTime);
-
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            osc.connect(filter);
-            filter.connect(audioCtx.destination);
-            osc.start();
-            bgOsc = osc;
-        }
-
-        function playRoarSound() {
-            if (!isAudioOn || !audioCtx) return;
-            const now = audioCtx.currentTime;
-            
-            // White noise buffer for fire roar
-            const bufferSize = audioCtx.sampleRate * 1.5;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1;
-            }
-
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(200, now);
-            filter.frequency.exponentialRampToValueAtTime(800, now + 0.4);
-            filter.frequency.exponentialRampToValueAtTime(100, now + 1.5);
-
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
-
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            noise.start(now);
-        }
-
-        // --- THREE.JS SCENE SETUP ---
-        const container = document.getElementById('webgl-container');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a040d, 0.025);
-
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 4, 18);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.25;
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        container.appendChild(renderer.domElement);
-
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2 + 0.05;
-        controls.minDistance = 5;
-        controls.maxDistance = 35;
-        controls.target.set(0, 3, 0);
-
-        // --- LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0x1a0a2a, 0.8);
-        scene.add(ambientLight);
-
-        // Dramatic Backlight (Sun behind cloud feel)
-        const backLight = new THREE.DirectionalLight(0xffaa44, 3.5);
-        backLight.position.set(0, 15, -15);
-        backLight.castShadow = true;
-        scene.add(backLight);
-
-        // Core Lava Chest Glow Light
-        const chestLight = new THREE.PointLight(0xff3300, 5, 12);
-        chestLight.position.set(0, 3.5, 1);
-        scene.add(chestLight);
-
-        // Secondary Sky Rim Light
-        const rimLight = new THREE.DirectionalLight(0x8833ff, 1.5);
-        rimLight.position.set(-10, 10, 10);
-        scene.add(rimLight);
-
-        // Ground Lava Glow Light
-        const groundLight = new THREE.PointLight(0xff5500, 3, 15);
-        groundLight.position.set(0, -1, 0);
-        scene.add(groundLight);
-
-        // --- PROCEDURAL TEXTURES ---
-        // Lava Vein Noise Canvas Texture
-        function createLavaTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d');
-
-            ctx.fillStyle = '#0a0a0d';
-            ctx.fillRect(0, 0, 512, 512);
-
-            // Draw glowing lava crack networks
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#ff3300';
-            ctx.shadowColor = '#ff6600';
-            ctx.shadowBlur = 12;
-
-            for (let i = 0; i < 40; i++) {
-                ctx.beginPath();
-                let x = Math.random() * 512;
-                let y = Math.random() * 512;
-                ctx.moveTo(x, y);
-                for (let j = 0; j < 6; j++) {
-                    x += (Math.random() - 0.5) * 80;
-                    y += (Math.random() - 0.5) * 80;
-                    ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-            }
-
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        const lavaTexture = createLavaTexture();
-        lavaTexture.wrapS = THREE.RepeatWrapping;
-        lavaTexture.wrapT = THREE.RepeatWrapping;
-
-        // --- MATERIALS ---
-        const obsidianMaterial = new THREE.MeshStandardMaterial({
-            color: 0x111116,
-            roughness: 0.35,
-            metalness: 0.8,
-            emissive: 0xff2200,
-            emissiveMap: lavaTexture,
-            emissiveIntensity: 1.2
-        });
-
-        const wingMembraneMat = new THREE.MeshStandardMaterial({
-            color: 0x1a0508,
-            roughness: 0.6,
-            metalness: 0.2,
-            emissive: 0xff1100,
-            emissiveMap: lavaTexture,
-            emissiveIntensity: 0.8,
-            side: THREE.DoubleSide
-        });
-
-        const rockMat = new THREE.MeshStandardMaterial({
-            color: 0x18151d,
-            roughness: 0.9,
-            metalness: 0.1
-        });
-
-        // --- 3D DRAGON MONSTER CONSTRUCTION ---
-        const dragonGroup = new THREE.Group();
-        scene.add(dragonGroup);
-
-        // Torso / Chest
-        const chestGeo = new THREE.DodecahedronGeometry(1.8, 1);
-        chestGeo.scale(1, 1.3, 1.1);
-        const chest = new THREE.Mesh(chestGeo, obsidianMaterial);
-        chest.position.set(0, 3.8, 0);
-        chest.castShadow = true;
-        dragonGroup.add(chest);
-
-        // Abdomen / Lower Spine
-        const abdomenGeo = new THREE.DodecahedronGeometry(1.3, 1);
-        const abdomen = new THREE.Mesh(abdomenGeo, obsidianMaterial);
-        abdomen.position.set(0, 2.2, -0.4);
-        dragonGroup.add(abdomen);
-
-        // Neck
-        const neckGroup = new THREE.Group();
-        neckGroup.position.set(0, 4.8, 0.4);
-        dragonGroup.add(neckGroup);
-
-        const neckGeo = new THREE.CylinderGeometry(0.8, 1.2, 1.6, 8);
-        const neck = new THREE.Mesh(neckGeo, obsidianMaterial);
-        neck.position.set(0, 0.6, 0.3);
-        neck.rotation.x = 0.4;
-        neckGroup.add(neck);
-
-        // Head Group
-        const headGroup = new THREE.Group();
-        headGroup.position.set(0, 1.5, 0.7);
-        neckGroup.add(headGroup);
-
-        // Upper Skull
-        const skullGeo = new THREE.ConeGeometry(1.1, 2, 5);
-        skullGeo.rotateX(Math.PI / 2);
-        const skull = new THREE.Mesh(skullGeo, obsidianMaterial);
-        skull.position.set(0, 0.2, 0.6);
-        skull.scale.set(0.9, 0.6, 1.2);
-        headGroup.add(skull);
-
-        // Horns
-        for (let side of [-1, 1]) {
-            const hornGeo = new THREE.ConeGeometry(0.25, 2.2, 5);
-            const horn = new THREE.Mesh(hornGeo, obsidianMaterial);
-            horn.position.set(side * 0.7, 0.6, -0.2);
-            horn.rotation.set(-0.6, side * 0.3, side * -0.4);
-            headGroup.add(horn);
-
-            // Brow horns
-            const miniHorn = new THREE.Mesh(hornGeo, obsidianMaterial);
-            miniHorn.position.set(side * 0.5, 0.4, 0.6);
-            miniHorn.scale.set(0.6, 0.6, 0.6);
-            miniHorn.rotation.set(-0.8, side * 0.2, side * -0.2);
-            headGroup.add(miniHorn);
-        }
-
-        // Glowing Eyes
-        const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0022 });
-        for (let side of [-1, 1]) {
-            const eyeGeo = new THREE.SphereGeometry(0.12, 8, 8);
-            const eye = new THREE.Mesh(eyeGeo, eyeMat);
-            eye.position.set(side * 0.45, 0.25, 0.8);
-            headGroup.add(eye);
-        }
-
-        // Jaw / Mouth Glow
-        const jawGeo = new THREE.BoxGeometry(0.8, 0.3, 1.4);
-        const jaw = new THREE.Mesh(jawGeo, obsidianMaterial);
-        jaw.position.set(0, -0.3, 0.6);
-        headGroup.add(jaw);
-
-        const mouthLight = new THREE.PointLight(0xff1100, 4, 6);
-        mouthLight.position.set(0, 0, 0.8);
-        headGroup.add(mouthLight);
-
-        // --- ARMS & LEGS ---
-        // Shoulders / Legs positioning
-        function createClawLeg(isRight) {
-            const leg = new THREE.Group();
-            const side = isRight ? 1 : -1;
-
-            const thighGeo = new THREE.CylinderGeometry(0.7, 0.5, 2, 6);
-            const thigh = new THREE.Mesh(thighGeo, obsidianMaterial);
-            thigh.position.set(side * 1.6, 2.2, 0);
-            thigh.rotation.z = side * -0.4;
-            thigh.rotation.x = 0.3;
-            leg.add(thigh);
-
-            const shinGeo = new THREE.CylinderGeometry(0.5, 0.35, 2.2, 6);
-            const shin = new THREE.Mesh(shinGeo, obsidianMaterial);
-            shin.position.set(side * 2.1, 0.6, 0.4);
-            shin.rotation.x = -0.5;
-            leg.add(shin);
-
-            // Foot Claws
-            const footGeo = new THREE.BoxGeometry(0.9, 0.3, 1.2);
-            const foot = new THREE.Mesh(footGeo, obsidianMaterial);
-            foot.position.set(side * 2.2, -0.4, 0.8);
-            leg.add(foot);
-
-            return leg;
-        }
-
-        dragonGroup.add(createClawLeg(false));
-        dragonGroup.add(createClawLeg(true));
-
-        // --- WINGS ---
-        const wingsGroup = new THREE.Group();
-        wingsGroup.position.set(0, 4.2, -0.5);
-        dragonGroup.add(wingsGroup);
-
-        function createWing(isRight) {
-            const wing = new THREE.Group();
-            const side = isRight ? 1 : -1;
-
-            // Wing Bone Arm 1
-            const arm1Geo = new THREE.CylinderGeometry(0.25, 0.4, 3.5, 6);
-            const arm1 = new THREE.Mesh(arm1Geo, obsidianMaterial);
-            arm1.position.set(side * 1.8, 1.2, 0);
-            arm1.rotation.z = side * -1.1;
-            arm1.rotation.y = side * 0.3;
-            wing.add(arm1);
-
-            // Wing Bone Arm 2 (Finger struts)
-            const arm2Geo = new THREE.CylinderGeometry(0.15, 0.25, 4.5, 6);
-            const arm2 = new THREE.Mesh(arm2Geo, obsidianMaterial);
-            arm2.position.set(side * 3.8, 2.8, -0.5);
-            arm2.rotation.z = side * -0.3;
-            arm2.rotation.x = -0.4;
-            wing.add(arm2);
-
-            // Custom Triangular Wing Membrane Mesh
-            const shape = new THREE.Shape();
-            shape.moveTo(0, 0);
-            shape.lineTo(side * 3.5, 2.5);
-            shape.lineTo(side * 5.2, 0.5);
-            shape.lineTo(side * 4.0, -2.5);
-            shape.lineTo(side * 2.0, -2.0);
-            shape.closePath();
-
-            const geom = new THREE.ShapeGeometry(shape);
-            const membrane = new THREE.Mesh(geom, wingMembraneMat);
-            membrane.position.set(0, 0, -0.2);
-            wing.add(membrane);
-
-            return wing;
-        }
-
-        const leftWing = createWing(false);
-        const rightWing = createWing(true);
-        wingsGroup.add(leftWing);
-        wingsGroup.add(rightWing);
-
-        // --- ENVIRONMENT & RUINS ---
-        const envGroup = new THREE.Group();
-        scene.add(envGroup);
-
-        // Exploding Ground Shattered Platform
-        const groundGeo = new THREE.CylinderGeometry(9, 11, 2, 12);
-        const ground = new THREE.Mesh(groundGeo, rockMat);
-        ground.position.y = -1.2;
-        ground.receiveShadow = true;
-        envGroup.add(ground);
-
-        // Broken Pillars / Ruin Structures
-        for (let i = 0; i < 7; i++) {
-            const angle = (i / 7) * Math.PI * 2 + 0.3;
-            const radius = 7 + Math.random() * 3;
-            const height = 4 + Math.random() * 6;
-
-            const pillarGeo = new THREE.CylinderGeometry(0.7, 0.9, height, 7);
-            const pillar = new THREE.Mesh(pillarGeo, rockMat);
-            pillar.position.set(Math.cos(angle) * radius, height / 2 - 1, Math.sin(angle) * radius);
-            pillar.rotation.set((Math.random() - 0.5) * 0.3, Math.random() * Math.PI, (Math.random() - 0.5) * 0.3);
-            pillar.castShadow = true;
-            pillar.receiveShadow = true;
-            envGroup.add(pillar);
-        }
-
-        // Floating Debris / Shattered Rocks (Chaos Ascendant effect)
-        const floatingRocks = [];
-        const rockGeo = new THREE.DodecahedronGeometry(0.5, 0);
-
-        for (let i = 0; i < 45; i++) {
-            const rock = new THREE.Mesh(rockGeo, rockMat);
-            const dist = 3 + Math.random() * 9;
-            const ang = Math.random() * Math.PI * 2;
-            const yPos = Math.random() * 10 - 1;
-
-            rock.position.set(Math.cos(ang) * dist, yPos, Math.sin(ang) * dist);
-            rock.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
-            
-            const scale = 0.4 + Math.random() * 1.2;
-            rock.scale.set(scale, scale, scale);
-
-            rock.userData = {
-                speedY: 0.005 + Math.random() * 0.01,
-                rotSpeed: (Math.random() - 0.5) * 0.02,
-                initialY: yPos,
-                angle: ang,
-                radius: dist
-            };
-
-            floatingRocks.push(rock);
-            envGroup.add(rock);
-        }
-
-        // --- EMBERS & PARTICLES SYSTEM ---
-        const particleCount = 250;
-        const particleGeo = new THREE.BufferGeometry();
-        const particlePos = new Float32Array(particleCount * 3);
-        const particleVel = [];
-
-        for (let i = 0; i < particleCount; i++) {
-            particlePos[i * 3] = (Math.random() - 0.5) * 20;
-            particlePos[i * 3 + 1] = Math.random() * 12;
-            particlePos[i * 3 + 2] = (Math.random() - 0.5) * 20;
-
-            particleVel.push({
-                x: (Math.random() - 0.5) * 0.02,
-                y: 0.02 + Math.random() * 0.04,
-                z: (Math.random() - 0.5) * 0.02
-            });
-        }
-
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-
-        const particleMat = new THREE.PointsMaterial({
-            color: 0xff5500,
-            size: 0.25,
-            transparent: true,
-            opacity: 0.85,
-            blending: THREE.AdditiveBlending
-        });
-
-        const emberParticles = new THREE.Points(particleGeo, particleMat);
-        scene.add(emberParticles);
-
-        // --- 3D TCG DISPLAY CARD FRAME ---
-        const cardGroup = new THREE.Group();
-        cardGroup.position.set(0, 3.5, 8);
-        cardGroup.visible = false;
-        scene.add(cardGroup);
-
-        // Load visual reference onto TCG Card Texture
-        const textureLoader = new THREE.TextureLoader();
-        const cardRefUrl = "https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/images/inputs/1788654591907_9ifwkdcl0.jpg?token=eyJraWQiOiI0NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvaW5wdXRzLzE3ODg2NTQ1OTE5MDdfOWlmd2tkY2wwLmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODg2NTczNjEsImV4cCI6MTgyMDE5MzM2MX0.cG9RCm4M-C2hePslAfBGN5Jp1J23ENn7yc2yY9Sctzc";
-
-        textureLoader.load(cardRefUrl, (artTexture) => {
-            // Hide Loader once main texture is loaded
-            document.getElementById('loader').style.opacity = '0';
-            setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 800);
-
-            // Create 3D Card Geometry
-            const cardGeo = new THREE.BoxGeometry(4.2, 6.0, 0.08);
-            
-            // Front Card Shader Canvas
-            const cardMat = new THREE.MeshStandardMaterial({
-                map: artTexture,
-                roughness: 0.2,
-                metalness: 0.5
-            });
-
-            const cardBorderMat = new THREE.MeshStandardMaterial({
-                color: 0x221100,
-                metalness: 0.9,
-                roughness: 0.1
-            });
-
-            const cardMesh = new THREE.Mesh(cardGeo, [
-                cardBorderMat, cardBorderMat, cardBorderMat, cardBorderMat, cardMat, cardBorderMat
-            ]);
-            cardGroup.add(cardMesh);
-        });
-
-        // --- INTERACTION & ANIMATIONS ---
-        let clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const time = clock.getElapsedTime();
-
-            // Dragon Idle Breath & Wing Flutter Animation
-            dragonGroup.position.y = Math.sin(time * 1.5) * 0.25;
-            headGroup.rotation.x = Math.sin(time * 2.0) * 0.05 + 0.1;
-            headGroup.rotation.y = Math.cos(time * 0.8) * 0.1;
-
-            leftWing.rotation.z = Math.sin(time * 2.0) * 0.12;
-            rightWing.rotation.z = -Math.sin(time * 2.0) * 0.12;
-
-            // Animate Floating Shattered Rocks
-            floatingRocks.forEach(rock => {
-                rock.position.y += rock.userData.speedY;
-                rock.rotation.x += rock.userData.rotSpeed;
-                rock.rotation.y += rock.userData.rotSpeed;
-
-                if (rock.position.y > 10) {
-                    rock.position.y = -1;
-                }
-            });
-
-            // Animate Embers
-            const positions = particleGeo.attributes.position.array;
-            for (let i = 0; i < particleCount; i++) {
-                positions[i * 3 + 1] += particleVel[i].y;
-                positions[i * 3] += Math.sin(time + i) * 0.01;
-
-                if (positions[i * 3 + 1] > 12) {
-                    positions[i * 3 + 1] = 0;
-                }
-            }
-            particleGeo.attributes.position.needsUpdate = true;
-
-            // Dynamic Light Flickering (Lava Glow)
-            chestLight.intensity = 4.5 + Math.sin(time * 8.0) * 1.2;
-            mouthLight.intensity = 3.5 + Math.cos(time * 10.0) * 1.5;
-
-            // Pulse Lava Texture Offset
-            lavaTexture.offset.x = (time * 0.05) % 1;
-            lavaTexture.offset.y = (time * 0.08) % 1;
-
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        // --- USER INTERACTIONS & CAMERA VIEWS ---
-        function setCameraView(mode) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-            if (mode === 'cinematic') {
-                event.target.classList.add('active');
-                cardGroup.visible = false;
-                gsap.to(camera.position, { x: 0, y: 4, z: 18, duration: 2, ease: "power2.inOut" });
-                gsap.to(controls.target, { x: 0, y: 3, z: 0, duration: 2 });
-            } else if (mode === 'card') {
-                event.target.classList.add('active');
-                cardGroup.visible = true;
-                gsap.to(camera.position, { x: 0, y: 3.5, z: 14, duration: 2, ease: "power2.inOut" });
-                gsap.to(controls.target, { x: 0, y: 3.5, z: 8, duration: 2 });
-            } else if (mode === 'close') {
-                event.target.classList.add('active');
-                cardGroup.visible = false;
-                gsap.to(camera.position, { x: 0, y: 5.5, z: 6, duration: 1.8, ease: "power2.inOut" });
-                gsap.to(controls.target, { x: 0, y: 5, z: 1, duration: 1.8 });
-            }
-        }
-
-        // Attack FX Trigger
-        function triggerAttack(type) {
-            const toast = document.getElementById('attackToast');
-            const toastName = document.getElementById('toastName');
-            const toastDmg = document.getElementById('toastDmg');
-            const fxOverlay = document.getElementById('fx-overlay');
-
-            playRoarSound();
-
-            if (type === 'chaos') {
-                toastName.innerText = "RAYON DU CHAOS";
-                toastDmg.innerText = "300";
-
-                // Screen Shake
-                gsap.to(camera.position, {
-                    x: "+=0.6", y: "+=0.4", duration: 0.05, repeat: 10, yoyo: true,
-                    onComplete: () => { camera.position.x = 0; }
-                });
-
-                // Flash red overlay
-                fxOverlay.style.background = 'radial-gradient(circle at center, rgba(255,80,0,0.6) 0%, rgba(0,0,0,0.8) 100%)';
-                setTimeout(() => {
-                    fxOverlay.style.background = 'radial-gradient(circle at center, rgba(255,50,0,0) 0%, rgba(0,0,0,0.4) 100%)';
-                }, 400);
-
-                // Open Jaw + Intense Light
-                gsap.to(jaw.rotation, { x: 0.6, duration: 0.3, yoyo: true, repeat: 1 });
-                gsap.to(mouthLight, { intensity: 15, duration: 0.3, yoyo: true, repeat: 1 });
-
-            } else if (type === 'nuit') {
-                toastName.innerText = "NUIT NOIRE : ÉCLIPSE";
-                toastDmg.innerText = "250";
-
-                // Darken scene instantly then flare up
-                gsap.to(ambientLight, { intensity: 0.05, duration: 0.2, yoyo: true, repeat: 1 });
-                gsap.to(backLight, { intensity: 8, duration: 0.4, yoyo: true, repeat: 1 });
-
-                fxOverlay.style.background = 'radial-gradient(circle at center, rgba(150,0,255,0.5) 0%, rgba(5,0,15,0.9) 100%)';
-                setTimeout(() => {
-                    fxOverlay.style.background = 'radial-gradient(circle at center, rgba(255,50,0,0) 0%, rgba(0,0,0,0.4) 100%)';
-                }, 500);
-            }
-
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2200);
-        }
-
-        // Exploding Embers Effect
-        function burstEmbers() {
-            floatingRocks.forEach(rock => {
-                gsap.to(rock.position, {
-                    y: rock.position.y + 3 + Math.random() * 4,
-                    x: rock.position.x + (Math.random() - 0.5) * 4,
-                    duration: 0.8,
-                    ease: "power2.out",
-                    yoyo: true,
-                    repeat: 1
-                });
-            });
-            playRoarSound();
-        }
-
-        // Responsive Resize Handler
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+<body class="antialiased">
+
+<div id="preloader">
+<div class="pokeball-loader"></div>
+<div class="mt-6 font-display font-800 text-xl tracking-widest">NEXUS <span class="chaos-text">3D</span></div>
+<div class="mono text-xs mt-2 text-white/60">Chargement du Chaos Ascendant... <span id="loadPct">0%</span></div>
+<div class="w-64 h-2 mt-4 rounded-full bg-white/10 overflow-hidden"><div id="loadBar" class="h-full w-0 bg-gradient-to-r from-violet-600 via-pink-500 to-cyan-400"></div></div>
+<div class="font-cinzel text-[#f5c518] mt-3 text-sm tracking-widest">Nuit Noire / Chaos Ascendant</div>
+</div>
+
+<div id="cursor-glow"></div><div id="cursor-dot"></div>
+<div id="toasts"></div>
+
+<!-- NAV -->
+<header class="fixed top-0 left-0 right-0 z-[90] glass-strong border-b border-white/10">
+<div class="max-w-7xl mx-auto px-4 md:px-6 h-[68px] flex items-center justify-between gap-3">
+<a href="#top" class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-600 via-pink-500 to-amber-400 p-[2px]"><div class="w-full h-full rounded-full bg-black flex items-center justify-center font-display font-900 text-lg">N</div></div>
+<div class="leading-none"><div class="font-display font-800 font-bold tracking-wider text-sm md:text-base">NEXUS 3D <span class="text-[10px] align-top bg-gradient-to-r from-violet-500 to-pink-500 px-2 py-[2px] rounded-full">TCG</span></div><div class="font-cinzel text-[11px] text-[#f5c518] tracking-[.2em]">NUIT NOIRE × CHAOS</div></div>
+</a>
+<nav class="hidden lg:flex items-center gap-7 text-sm text-white/70">
+<a href="#univers" class="hover:text-white transition nav-link">Univers</a>
+<a href="#arene3d" class="hover:text-white transition nav-link">Arène 3D</a>
+<a href="#boosters" class="hover:text-white transition nav-link">Boosters</a>
+<a href="#pokedex" class="hover:text-white transition nav-link">Pokédex Obscur</a>
+<a href="#coffrets" class="hover:text-white transition nav-link">Coffrets</a>
+<a href="#lore" class="hover:text-white transition nav-link">Lore</a>
+</nav>
+<div class="flex items-center gap-2">
+<button id="btnCartOpen" class="btn-ghost rounded-full px-4 py-2 text-sm flex items-center gap-2"><i class="fa-solid fa-cart-shopping"></i><span class="hidden sm:inline">Panier</span><span id="cartCount" class="mono text-xs bg-white text-black rounded-full px-2 py-[1px] font-bold">0</span></button>
+<button onclick="openPackModal('nuit')" class="btn-primary hidden md:inline-flex rounded-full px-5 py-2 text-sm font-bold">Ouvrir un Booster</button>
+<button id="burger" class="lg:hidden w-10 h-10 grid place-items-center rounded-full border border-white/20"><i class="fa-solid fa-bars"></i></button>
+</div>
+</div>
+<div id="mobileMenu" class="lg:hidden hidden border-t border-white/10 px-6 py-4 flex flex-col gap-3 text-white/80 bg-[#0a0a1a]">
+<a href="#univers">Univers</a><a href="#arene3d">Arène 3D</a><a href="#boosters">Boosters</a><a href="#pokedex">Pokédex Obscur</a><a href="#coffrets">Coffrets</a><a href="#lore">Lore</a>
+<button onclick="openPackModal('nuit')" class="btn-primary rounded-full py-3 font-bold mt-2">Ouvrir un Booster</button>
+</div>
+</header>
+
+<!-- TICKER -->
+<div class="mt-[68px] bg-black border-b border-amber-200/20 overflow-hidden py-2 relative z-10">
+<div class="ticker-track font-cinzel text-[13px] tracking-[.25em] text-[#f5e6b8]">
+<span class="px-4">★ NUIT NOIRE — NOCTYRAX EX 340 PV ★ CHAOS ASCENDANT — 248 CARTES ★ ULTRA RARES GOLD ★ DISPLAYS DISPONIBLES ★ NOUVEAU MODÈLE 3D RÉACTIF ★&nbsp;</span>
+<span class="px-4">★ NUIT NOIRE — NOCTYRAX EX 340 PV ★ CHAOS ASCENDANT — 248 CARTES ★ ULTRA RARES GOLD ★ DISPLAYS DISPONIBLES ★ NOUVEAU MODÈLE 3D RÉACTIF ★&nbsp;</span>
+</div>
+</div>
+
+<!-- HERO -->
+<section id="top" class="relative noise bg-grid overflow-hidden">
+<div class="absolute inset-0 pointer-events-none">
+<div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-violet-700/30 blur-[120px]"></div>
+<div class="absolute top-20 right-0 w-[600px] h-[600px] rounded-full bg-pink-600/20 blur-[120px]"></div>
+<div class="absolute bottom-0 left-1/3 w-[500px] h-[400px] rounded-full bg-amber-500/10 blur-[100px]"></div>
+<div id="heroEmbers" class="absolute inset-0 overflow-hidden"></div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-16 grid lg:grid-cols-2 gap-10 items-center relative z-10">
+<div>
+<div class="eyebrow text-[#f5c518] mb-4 flex items-center gap-3"><span class="w-10 h-[1px] bg-[#f5c518]"></span> Extension Double — 2026 • Nexus 3D Expérience</div>
+<h1 class="font-display font-black leading-[.95] text-[42px] sm:text-6xl xl:text-7xl">NUIT <span class="gold-text">NOIRE</span><br><span class="text-2xl sm:text-4xl font-700 tracking-widest text-white/80">×</span> <span class="chaos-text">CHAOS</span><br><span class="stroke-text">ASCENDANT</span></h1>
+<p class="mt-5 text-white/70 max-w-xl leading-relaxed">Explore le modèle 3D vivant de <strong class="text-white">Noctyrax, le Dragon d'Obsidienne</strong>. Bascule entre l'ombre violette de la Nuit Noire et la fournaise chromatique du Chaos Ascendant. Ouvre des boosters, collectionne les ex, ressens les braises.</p>
+<div class="flex flex-wrap gap-3 mt-7">
+<button onclick="scrollToId('arene3d')" class="btn-gold rounded-full px-7 py-3 font-display font-bold text-sm"><i class="fa-solid fa-dragon mr-2"></i>VOIR LE MODÈLE 3D</button>
+<button onclick="openPackModal('chaos')" class="btn-primary rounded-full px-7 py-3 font-display font-bold text-sm text-white"><i class="fa-solid fa-box-open mr-2"></i>OUVRIR UN BOOSTER</button>
+<button onclick="scrollToId('pokedex')" class="btn-ghost rounded-full px-6 py-3 text-sm">Pokédex <i class="fa-solid fa-arrow-right ml-2"></i></button>
+</div>
+<div class="grid grid-cols-3 gap-3 mt-8 max-w-md">
+<div class="glass rounded-2xl p-4 text-center"><div class="font-display font-black text-2xl"><span class="counter" data-target="248">0</span></div><div class="mono text-[11px] text-white/60 tracking-widest">CARTES</div></div>
+<div class="glass rounded-2xl p-4 text-center"><div class="font-display font-black text-2xl text-[#f5c518]"><span class="counter" data-target="37">0</span></div><div class="mono text-[11px] text-white/60 tracking-widest">ULTRA RARES</div></div>
+<div class="glass rounded-2xl p-4 text-center"><div class="font-display font-black text-2xl chaos-text"><span class="counter" data-target="98">0</span>%</div><div class="mono text-[11px] text-white/60 tracking-widest">HYPE</div></div>
+</div>
+<div class="flex items-center gap-3 mt-6">
+<span class="mono text-xs text-white/50">MODE VITRINE :</span>
+<div class="flex gap-2">
+<button data-vitrine="nuit" class="vitrineBtn tab-active chip rounded-full px-4 py-1 text-xs font-bold">🌙 Nuit Noire</button>
+<button data-vitrine="chaos" class="vitrineBtn chip rounded-full px-4 py-1 text-xs font-bold">🔥 Chaos Ascendant</button>
+<button data-vitrine="fusion" class="vitrineBtn chip rounded-full px-4 py-1 text-xs font-bold">✨ Fusion</button>
+</div>
+</div>
+</div>
+
+<!-- ORNATE CARD RECREATING REFERENCE -->
+<div class="relative mx-auto w-full max-w-[520px]" id="heroCardWrap">
+<div class="ornate-frame floaty">
+<div class="plaque-top"><div class="font-cinzel font-bold text-[#f5e6b8] text-lg md:text-2xl tracking-wide" style="text-shadow:0 2px 10px #000">Nuit Noire / Chaos Ascendant</div></div>
+<div class="ornate-inner aspect-[1/1.05] relative">
+<img id="heroDragonImg" src="https://image.pollinations.ai/prompt/obsidian%20black%20dragon%20glowing%20red%20lava%20cracks%20huge%20wings%20open%20standing%20on%20rubble%20dark%20ruined%20castle%20stormy%20sky%20cinematic%20epic%20fantasy%20art?width=900&height=1000&nologo=true" alt="Noctyrax" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/60"></div>
+<div class="absolute top-4 left-4 z-20"><div class="poke-logo text-3xl md:text-4xl">Pokémon</div><div class="mono text-[10px] bg-black/70 text-amber-200 px-2 py-[2px] rounded mt-2 inline-block border border-amber-200/40">⚡ NEXUS 3D • ÉDITION FAN</div></div>
+<div class="absolute top-4 right-4 z-20 flex flex-col items-end gap-1"><span class="mono text-[10px] px-2 py-1 rounded bg-red-600/90 font-bold">PV 340</span><span class="mono text-[10px] px-2 py-1 rounded bg-black/70 border border-red-500/50">OBSIDIAN ex</span></div>
+<!-- floating debris -->
+<div class="absolute inset-0 pointer-events-none" id="debrisLayer"></div>
+<div class="absolute bottom-0 left-0 right-0 p-4 z-20 flex items-end justify-between gap-3 bg-gradient-to-t from-black to-transparent">
+<div><div class="font-cinzel text-[#ffe9a8] font-bold text-xl leading-none">NOCTYRAX <span class="text-red-500">ex</span></div><div class="mono text-[11px] text-white/70 mt-1">N°248/248 • Dragon Obsidienne • Illus. Nexus</div>
+<div class="flex gap-1 mt-2"><span class="text-[10px] px-2 py-[2px] rounded-full bg-violet-600">Ténèbres</span><span class="text-[10px] px-2 py-[2px] rounded-full bg-red-600">Feu</span><span class="text-[10px] px-2 py-[2px] rounded-full bg-amber-400 text-black font-bold">Gold Secret</span></div></div>
+<button onclick="openCardDetail(0)" class="shrink-0 w-12 h-12 rounded-full bg-[#f5c518] text-black grid place-items-center text-xl shadow-[0_0_25px_#f5c518] hover:scale-110 transition"><i class="fa-solid fa-expand"></i></button>
+</div>
+<div class="absolute inset-0 z-[6] pointer-events-none" style="background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.25),transparent 45%),linear-gradient(115deg,transparent 30%,rgba(255,43,214,.25) 45%,rgba(0,240,255,.2) 55%,transparent 70%);mix-blend-mode:screen"></div>
+</div>
+<svg class="corner-orn" viewBox="0 0 150 150" fill="none"><path d="M10 140 Q 60 120 90 90 Q 120 60 140 10 Q 110 40 80 60 Q 50 85 15 125 Z" fill="url(#g1)" stroke="#ffe9a8" stroke-width="2"/><path d="M40 140 Q 70 110 95 85 Q 115 65 135 30" stroke="#fff2c0" stroke-width="1.5"/><circle cx="120" cy="45" r="10" fill="#ffe9a8" opacity=".9"/><defs><linearGradient id="g1" x1="0" y1="150" x2="150" y2="0"><stop stop-color="#7a3a00"/><stop offset=".5" stop-color="#f5c518"/><stop offset="1" stop-color="#fff6c8"/></linearGradient></defs></svg>
+</div>
+<div class="flex justify-center gap-2 mt-4">
+<button onclick="switchHeroArt('nuit')" class="chip rounded-full px-4 py-2 text-xs hover:bg-white/10">🌑 Ruines Sombres</button>
+<button onclick="switchHeroArt('chaos')" class="chip rounded-full px-4 py-2 text-xs hover:bg-white/10">🌋 Fournaise</button>
+<button onclick="triggerHeroExplosion()" class="chip rounded-full px-4 py-2 text-xs bg-red-600/20 border-red-500/40 hover:bg-red-600/40">💥 Frénésie</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- UNIVERS TABS -->
+<section id="univers" class="max-w-7xl mx-auto px-4 md:px-6 py-16">
+<div class="text-center max-w-2xl mx-auto">
+<div class="eyebrow text-pink-400">Double Extension</div>
+<h2 class="font-display font-black text-3xl md:text-5xl mt-3">DEUX MONDES, <span class="chaos-text">UN CHAOS</span></h2>
+<p class="text-white/60 mt-3">Le packaging TCG poussé à l'extrême : foil violet nuit d'un côté, explosion chromatique de l'autre. Choisis ton camp — ou fusionne-les.</p>
+</div>
+<div class="flex justify-center gap-3 mt-8">
+<button class="setTab tab-active chip rounded-full px-6 py-2 text-sm font-bold" data-set="nuit">🌙 NUIT NOIRE</button>
+<button class="setTab chip rounded-full px-6 py-2 text-sm font-bold" data-set="chaos">🔥 CHAOS ASCENDANT</button>
+</div>
+<div id="setPanels" class="mt-8 grid md:grid-cols-2 gap-6">
+<div id="panel-nuit" class="glass rounded-3xl p-7 relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-72 h-72 orb-nuit rounded-full opacity-60 blur-2xl"></div>
+<h3 class="font-cinzel text-2xl text-[#c4b5fd]">Nuit Noire — L'élégance de l'ombre</h3>
+<p class="text-white/65 mt-3 text-sm leading-relaxed">Foil violet profond, dorures lunaires, textures cuir et constellations. Inspiré des ETB premium : coffret mat soft-touch, dés nacrés, sleeves à pleine lune.</p>
+<ul class="mt-4 space-y-2 text-sm">
+<li><i class="fa-solid fa-moon text-violet-400 mr-2"></i>Noctali Lune d'Ombre • Zoroark Abyssal • Umbreon Gold</li>
+<li><i class="fa-solid fa-wand-magic-sparkles text-amber-300 mr-2"></i>Effet Cosmos Holo exclusif + bordures dorées</li>
+<li><i class="fa-solid fa-box text-violet-300 mr-2"></i>Packaging : violet nuit, liseré or, sceau de cire</li>
+</ul>
+<div class="flex gap-2 mt-6"><button onclick="openPackModal('nuit')" class="btn-primary rounded-full px-5 py-2 text-sm font-bold text-white">Acheter — 6,99€</button><button onclick="setArenaMode('nuit')" class="btn-ghost rounded-full px-5 py-2 text-sm">Voir en 3D</button></div>
+</div>
+<div id="panel-chaos" class="glass rounded-3xl p-7 relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-72 h-72 orb-chaos rounded-full opacity-60 blur-2xl"></div>
+<h3 class="font-cinzel text-2xl text-[#ff8ad6]">Chaos Ascendant — La fournaise</h3>
+<p class="text-white/65 mt-3 text-sm leading-relaxed">Foil arc-en-ciel magmatique, éclats cyan/orange, vernis 3D relief lave. Booster à déchirure irisée, Display volcanique qui s'illumine.</p>
+<ul class="mt-4 space-y-2 text-sm">
+<li><i class="fa-solid fa-fire text-orange-500 mr-2"></i>Noctyrax ex • Dracaufeu Chaos • Giratina Faille</li>
+<li><i class="fa-solid fa-burst text-cyan-300 mr-2"></i>Effet Magma Crack + Rainbow Secret 1/72</li>
+<li><i class="fa-solid fa-box-open text-pink-300 mr-2"></i>Packaging : noir charbon, failles incandescentes</li>
+</ul>
+<div class="flex gap-2 mt-6"><button onclick="openPackModal('chaos')" class="btn-primary rounded-full px-5 py-2 text-sm font-bold text-white">Acheter — 7,49€</button><button onclick="setArenaMode('chaos')" class="btn-ghost rounded-full px-5 py-2 text-sm">Voir en 3D</button></div>
+</div>
+</div>
+</section>
+
+<!-- ARENE 3D -->
+<section id="arene3d" class="relative py-16 bg-[#080812] border-y border-white/10 overflow-hidden">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="flex flex-col lg:flex-row gap-6 items-start justify-between">
+<div><div class="eyebrow text-cyan-300">Modèle 3D Réactif — Three.js</div><h2 class="font-display font-black text-3xl md:text-5xl mt-2">L'ARÈNE <span class="gold-text">NOCTYRAX</span></h2><p class="text-white/60 max-w-xl mt-3 text-sm md:text-base">Dragon procédural en obsidienne : corps facetté, ailes membraneuses animées, cœur magmatique pulsant, rochers en lévitation et 1 500 braises. Clique les points chauds, change de skin, déclenche la Frénésie.</p></div>
+<div class="flex gap-2 flex-wrap">
+<button onclick="setArenaMode('nuit')" id="mNuit" class="arenaMode chip rounded-full px-5 py-2 text-xs font-bold tab-active">🌙 NUIT</button>
+<button onclick="setArenaMode('chaos')" id="mChaos" class="arenaMode chip rounded-full px-5 py-2 text-xs font-bold">🔥 CHAOS</button>
+<button onclick="setArenaMode('fusion')" id="mFusion" class="arenaMode chip rounded-full px-5 py-2 text-xs font-bold">✨ FUSION</button>
+</div>
+</div>
+
+<div class="grid lg:grid-cols-[1fr_340px] gap-6 mt-8">
+<div class="relative rounded-3xl overflow-hidden border border-white/15 bg-black min-h-[520px]">
+<canvas id="scene3d" class="w-full h-[560px] block cursor-grab"></canvas>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="mono text-[11px] px-3 py-1 rounded-full bg-black/70 border border-white/20"><span class="w-2 h-2 inline-block rounded-full bg-green-400 animate-pulse"></span> LIVE • <span id="fps">60</span> FPS</span>
+<span class="mono text-[11px] px-3 py-1 rounded-full bg-black/70 border border-white/20">◭ <span id="partCount">1500</span> braises</span>
+</div>
+<div class="absolute top-4 right-4 flex gap-2">
+<button onclick="setCamera('face')" class="glass rounded-full px-3 py-1 text-xs">Face</button>
+<button onclick="setCamera('aile')" class="glass rounded-full px-3 py-1 text-xs">Aile</button>
+<button onclick="setCamera('sol')" class="glass rounded-full px-3 py-1 text-xs">Sol</button>
+</div>
+<!-- hotspots -->
+<button class="hotspot" style="left:50%;top:32%" onclick="showHotspot('coeur')">+</button>
+<button class="hotspot" style="left:62%;top:22%" onclick="showHotspot('aile')">+</button>
+<button class="hotspot" style="left:42%;top:18%" onclick="showHotspot('oeil')">+</button>
+<div id="hotspotCard" class="absolute left-1/2 -translate-x-1/2 bottom-24 glass-strong rounded-2xl p-4 w-[300px] hidden z-20">
+<div class="flex justify-between items-center"><strong id="hsTitle" class="font-display text-sm">Cœur Magmatique</strong><button onclick="document.getElementById('hotspotCard').classList.add('hidden')" class="text-white/60"><i class="fa-solid fa-xmark"></i></button></div>
+<p id="hsText" class="text-xs text-white/70 mt-2">Réacteur à 1400°C. Pulse avec la musique du chaos.</p>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-strong rounded-2xl p-3 flex flex-wrap items-center gap-3">
+<button id="btnFrenzy" class="btn-primary rounded-full px-5 py-2 text-sm font-bold text-white"><i class="fa-solid fa-bolt mr-1"></i> FRÉNÉSIE</button>
+<button id="btnExplode" class="btn-gold rounded-full px-5 py-2 text-sm font-bold"><i class="fa-solid fa-explosion mr-1"></i> EXPLOSION</button>
+<button id="btnWire" class="btn-ghost rounded-full px-4 py-2 text-xs">Wireframe</button>
+<button id="btnAuto" class="btn-ghost rounded-full px-4 py-2 text-xs">⏸ Pause orbit</button>
+<div class="mono text-[11px] text-white/60 ml-auto">Drag pour orbiter • Scroll pour zoomer</div>
+</div>
+<div id="flash3d" class="absolute inset-0 pointer-events-none opacity-0 bg-[radial-gradient(circle,white,orange,transparent)]"></div>
+</div>
+
+<aside class="space-y-4">
+<div class="glass rounded-3xl p-5">
+<div class="flex items-center justify-between"><h4 class="font-display font-bold text-sm tracking-widest">CONTRÔLES NEXUS</h4><span class="mono text-[10px] px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">EN LIGNE</span></div>
+<label class="block mt-4 text-xs text-white/60">Vitesse orbitale <span id="vSpeed" class="mono text-white">1.0×</span><input id="rngSpeed" type="range" min="0" max="3" step="0.1" value="1" class="w-full mt-1"></label>
+<label class="block mt-3 text-xs text-white/60">Intensité braises <span id="vEmber" class="mono text-white">100%</span><input id="rngEmber" type="range" min="10" max="200" value="100" class="w-full mt-1"></label>
+<label class="block mt-3 text-xs text-white/60">Battement d'ailes <span id="vWing" class="mono text-white">1.2×</span><input id="rngWing" type="range" min="0" max="4" step="0.1" value="1.2" class="w-full mt-1"></label>
+<label class="block mt-3 text-xs text-white/60">Lueur lave <span id="vGlow" class="mono text-white">80%</span><input id="rngGlow" type="range" min="0" max="150" value="80" class="w-full mt-1"></label>
+<div class="mt-4 text-xs font-bold tracking-widest text-white/50">SKIN DRAGON</div>
+<div class="grid grid-cols-3 gap-2 mt-2">
+<button onclick="setSkin('obsidienne')" class="skinBtn tab-active chip rounded-xl py-2 text-xs font-bold">⬛ Obsidienne</button>
+<button onclick="setSkin('magma')" class="skinBtn chip rounded-xl py-2 text-xs font-bold">🟥 Magma</button>
+<button onclick="setSkin('spectral')" class="skinBtn chip rounded-xl py-2 text-xs font-bold">🟪 Spectral</button>
+</div>
+</div>
+<div class="rounded-3xl p-5 border border-amber-200/30 bg-gradient-to-br from-[#1a1205] to-[#0a0a12]">
+<div class="font-cinzel text-amber-200 font-bold">NOCTYRAX ex — Fiche Arène</div>
+<div class="flex justify-between mono text-xs mt-2"><span>PV 340</span><span class="text-red-400">● Feu/Ténèbres</span></div>
+<div class="mt-3 space-y-2 text-xs">
+<div><div class="flex justify-between mb-1"><span>Souffle du Chaos — 180</span><span>🔥🔥🌑</span></div><div class="stat-bar"><div class="stat-fill" style="width:92%"></div></div></div>
+<div><div class="flex justify-between mb-1"><span>Éruption Abyssale — 280</span><span>🔥🔥🔥🌑</span></div><div class="stat-bar"><div class="stat-fill" style="width:100%"></div></div></div>
+<div class="flex justify-between text-white/60"><span>Faiblesse: Eau ×2</span><span>Retraite: 3</span></div>
+</div>
+<button onclick="openCardDetail(0)" class="w-full mt-4 btn-gold rounded-full py-2 text-sm font-bold">Voir la carte Gold</button>
+</div>
+</aside>
+</div>
+</div>
+</section>
+
+<!-- BOOSTERS -->
+<section id="boosters" class="max-w-7xl mx-auto px-4 md:px-6 py-16">
+<div class="text-center"><div class="eyebrow text-amber-300">Packaging TCG Authentique</div><h2 class="font-display font-black text-3xl md:text-5xl mt-2">BOOSTERS <span class="gold-text">FOIL 3D</span></h2><p class="text-white/60 mt-3">Survole pour le tilt holographique. Clique pour ouvrir — 5 cartes garanties, 1 holo minimum.</p></div>
+<div class="flex flex-wrap justify-center gap-8 mt-10">
+<div class="text-center">
+<div class="booster nuit mx-auto product-3d" id="boosterNuit">
+<div class="pack-tear"></div>
+<div class="p-6 pt-8 h-full flex flex-col">
+<div class="poke-logo text-2xl">Pokémon</div>
+<div class="font-cinzel text-violet-200 tracking-[.2em] text-sm mt-1">NUIT NOIRE</div>
+<div class="my-4 mx-auto w-36 h-36 rounded-full orb-nuit border-2 border-violet-300/40 shadow-[0_0_40px_#7c3aed] grid place-items-center text-5xl">🌙</div>
+<div class="mono text-[10px] text-white/60 tracking-widest">10 CARTES • 1 HOLO GARANTIE</div>
+<div class="mt-auto"><div class="font-display font-black text-xl">6,99€</div><button onclick="openPackModal('nuit')" class="btn-primary w-full mt-2 rounded-full py-2 text-sm font-bold text-white">DÉCHIRER</button></div>
+</div>
+</div>
+<div class="mono text-xs mt-3 text-violet-300">● 37% taux EX • Cosmos Holo</div>
+</div>
+<div class="text-center">
+<div class="booster chaos mx-auto product-3d pulse-glow" id="boosterChaos">
+<div class="pack-tear"></div>
+<div class="p-6 pt-8 h-full flex flex-col">
+<div class="poke-logo text-2xl">Pokémon</div>
+<div class="font-cinzel text-pink-200 tracking-[.2em] text-sm mt-1">CHAOS ASCENDANT</div>
+<div class="my-4 mx-auto w-36 h-36 rounded-full orb-chaos border-2 border-pink-300/50 shadow-[0_0_40px_#ff2bd6] grid place-items-center text-5xl">🐉</div>
+<div class="mono text-[10px] text-white/60 tracking-widest">10 CARTES • MAGMA CRACK</div>
+<div class="mt-auto"><div class="font-display font-black text-xl">7,49€</div><button onclick="openPackModal('chaos')" class="btn-gold w-full mt-2 rounded-full py-2 text-sm font-bold">DÉCHIRER</button></div>
+</div>
+</div>
+<div class="mono text-xs mt-3 text-pink-300">● 42% taux EX • Rainbow 1/72</div>
+</div>
+<div class="glass rounded-3xl p-6 w-full max-w-[300px] text-left self-center">
+<h4 class="font-display font-bold">DISPLAY SCELLÉE</h4>
+<p class="text-xs text-white/60 mt-1">36 boosters • Poster Noctyrax A2 + carte promo Gold offerte.</p>
+<div class="text-3xl font-display font-black mt-3">199€ <span class="text-sm line-through text-white/40 font-normal">239€</span></div>
+<div class="stat-bar mt-2"><div class="stat-fill" style="width:78%"></div></div><div class="mono text-[11px] mt-1 text-amber-300">🔥 Plus que 7 displays !</div>
+<button onclick="addToCart('display')" class="btn-gold w-full mt-4 rounded-full py-2 text-sm font-bold">Ajouter au panier</button>
+<button onclick="openPackModal('fusion')" class="btn-ghost w-full mt-2 rounded-full py-2 text-sm">Tester opening gratuit</button>
+</div>
+</div>
+</section>
+
+<!-- POKEDEX -->
+<section id="pokedex" class="bg-[#0a0a1a] border-y border-white/10 py-16">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div><div class="eyebrow text-pink-400">Pokédex Obscur — 8 Ultra</div><h2 class="font-display font-black text-3xl md:text-5xl mt-2">CARTES <span class="chaos-text">NOTABLES</span></h2></div>
+<div class="flex flex-wrap gap-2">
+<input id="searchCards" placeholder="Rechercher Dracaufeu..." class="glass rounded-full px-4 py-2 text-sm outline-none focus:border-pink-500 w-56">
+<select id="filterSet" class="rounded-full px-4 py-2 text-sm border border-white/15"><option value="all">Tous sets</option><option value="nuit">Nuit Noire</option><option value="chaos">Chaos Ascendant</option></select>
+<select id="filterRarity" class="rounded-full px-4 py-2 text-sm border border-white/15"><option value="all">Toutes raretés</option><option value="EX">EX</option><option value="Gold">Gold</option><option value="Rainbow">Rainbow</option><option value="Holo">Holo</option></select>
+</div>
+</div>
+<div id="cardsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-5 mt-8"></div>
+</div>
+</section>
+
+<!-- COFFRETS -->
+<section id="coffrets" class="max-w-7xl mx-auto px-4 md:px-6 py-16">
+<div class="text-center"><div class="eyebrow text-cyan-300">Coffrets & Packaging Premium</div><h2 class="font-display font-black text-3xl md:text-5xl mt-2">COFFRETS <span class="gold-text">COLLECTOR</span></h2></div>
+<div class="grid md:grid-cols-3 gap-6 mt-10">
+<div class="glass rounded-3xl overflow-hidden product-3d"><div class="h-44 bg-gradient-to-br from-violet-900 to-black grid place-items-center text-6xl relative">🌌<span class="absolute bottom-2 mono text-[10px] bg-black/60 px-3 py-1 rounded-full border border-violet-400/40">ETB • 9 BOOSTERS</span></div><div class="p-5"><h4 class="font-display font-bold">Elite Trainer Box Nuit Noire</h4><p class="text-xs text-white/60 mt-1">Sleeves lune, dés nacrés, promo Noctali Cosmos Holo.</p><div class="flex justify-between items-center mt-4"><span class="font-black text-xl">54,99€</span><button onclick="addToCart('etb-nuit')" class="btn-primary text-white rounded-full px-5 py-2 text-sm font-bold">Ajouter</button></div></div></div>
+<div class="rounded-3xl overflow-hidden product-3d border border-amber-300/50 bg-gradient-to-b from-[#1d1206] to-[#0a0a12]"><div class="h-44 grid place-items-center text-6xl relative bg-[radial-gradient(circle_at_50%_30%,#ff2bd633,#000)]">🔥<span class="absolute top-3 left-3 mono text-[10px] bg-amber-400 text-black px-2 py-1 rounded-full font-bold">BEST-SELLER</span><span class="absolute bottom-2 mono text-[10px] bg-black/60 px-3 py-1 rounded-full border border-amber-300/40">COFFRET • FIGURINE NOCTYRAX</span></div><div class="p-5"><h4 class="font-display font-bold">Coffret Chaos Ascendant Figurine</h4><p class="text-xs text-white/60 mt-1">Figurine 18cm LED lave + 6 boosters + carte Gold Noctyrax.</p><div class="flex justify-between items-center mt-4"><span class="font-black text-xl">79,99€</span><button onclick="addToCart('coffret-chaos')" class="btn-gold rounded-full px-5 py-2 text-sm font-bold">Ajouter</button></div></div></div>
+<div class="glass rounded-3xl overflow-hidden product-3d"><div class="h-44 bg-gradient-to-br from-cyan-900 via-fuchsia-900 to-black grid place-items-center text-6xl relative">🌀<span class="absolute bottom-2 mono text-[10px] bg-black/60 px-3 py-1 rounded-full border border-cyan-300/40">TRIPACK • 3 BOOSTERS + PIN'S</span></div><div class="p-5"><h4 class="font-display font-bold">Tripack Fusion Arc-en-ciel</h4><p class="text-xs text-white/60 mt-1">1 Nuit + 2 Chaos, pin's doré, carte jumbo Giratina.</p><div class="flex justify-between items-center mt-4"><span class="font-black text-xl">19,99€</span><button onclick="addToCart('tripack')" class="btn-primary text-white rounded-full px-5 py-2 text-sm font-bold">Ajouter</button></div></div></div>
+</div>
+<!-- LORE TIMELINE -->
+<div id="lore" class="mt-14 glass rounded-3xl p-6 md:p-8">
+<div class="flex items-center justify-between"><h3 class="font-cinzel text-xl text-amber-200">Chroniques du Chaos — Lore officiel Nexus</h3><div class="flex gap-2"><button onclick="scrollTimeline(-1)" class="w-9 h-9 rounded-full border border-white/20">←</button><button onclick="scrollTimeline(1)" class="w-9 h-9 rounded-full border border-white/20">→</button></div></div>
+<div class="timeline-line mt-4 rounded-full"></div>
+<div id="timeline" class="flex gap-4 mt-4 overflow-x-auto pb-2 snap-x">
+<div class="min-w-[260px] snap-center glass rounded-2xl p-4"><div class="mono text-xs text-violet-300">ÈRE I — ÉCLIPSE</div><div class="font-bold mt-1">La Nuit Tombe</div><p class="text-xs text-white/60 mt-1">Noctali absorbe la lune. Les ruines s'éveillent sous Paldea.</p></div>
+<div class="min-w-[260px] snap-center glass rounded-2xl p-4"><div class="mono text-xs text-pink-300">ÈRE II — FRACTURE</div><div class="font-bold mt-1">L'Obsidienne Saigne</div><p class="text-xs text-white/60 mt-1">Noctyrax brise sa chrysalide. Ses failles crachent le magma.</p></div>
+<div class="min-w-[260px] snap-center glass rounded-2xl p-4"><div class="mono text-xs text-orange-300">ÈRE III — ASCENSION</div><div class="font-bold mt-1">Le Chaos Couronné</div><p class="text-xs text-white/60 mt-1">Dracaufeu et Giratina s'inclinent. 248 cartes scellent le destin.</p></div>
+<div class="min-w-[260px] snap-center glass rounded-2xl p-4"><div class="mono text-xs text-cyan-300">ÈRE IV — FUSION</div><div class="font-bold mt-1">Nexus 3D</div><p class="text-xs text-white/60 mt-1">Toi, dresseur, tu fusionnes les deux sets dans l'arène.</p></div>
+</div>
+</div>
+</section>
+
+<!-- CTA + FOOTER -->
+<section class="relative py-16 text-center overflow-hidden bg-gradient-to-b from-transparent to-[#1a0a2a]">
+<h2 class="font-display font-black text-3xl md:text-5xl">PRÊT POUR <span class="chaos-text">L'ASCENSION ?</span></h2>
+<p class="text-white/60 mt-3">Rejoins 12 480 dresseurs. 1 booster offert à l'inscription.</p>
+<form id="newsForm" class="max-w-md mx-auto mt-6 flex gap-2"><input required type="email" placeholder="ton@email.fr" class="flex-1 glass rounded-full px-5 py-3 text-sm outline-none focus:border-pink-500"><button class="btn-primary text-white rounded-full px-6 py-3 text-sm font-bold">GO</button></form>
+</section>
+<footer class="border-t border-white/10 bg-black py-10">
+<div class="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-8 text-sm text-white/60">
+<div><div class="font-display font-bold text-white">NEXUS 3D</div><div class="font-cinzel text-xs text-amber-200 mt-1">Nuit Noire / Chaos Ascendant</div><p class="mt-3 text-xs">Projet fan non-officiel. Pokémon © Nintendo / Creatures / GAME FREAK. Maquettes 3D procédurales Nexus.</p></div>
+<div><div class="font-bold text-white mb-3">Collections</div><div class="space-y-2"><a href="#boosters" class="block hover:text-white">Boosters</a><a href="#pokedex" class="block hover:text-white">Cartes EX</a><a href="#coffrets" class="block hover:text-white">Coffrets</a></div></div>
+<div><div class="font-bold text-white mb-3">Arène</div><div class="space-y-2"><a href="#arene3d" class="block hover:text-white">Modèle 3D</a><a href="#lore" class="block hover:text-white">Lore</a><a href="#univers" class="block hover:text-white">Univers</a></div></div>
+<div><div class="font-bold text-white mb-3">Paiement sécurisé</div><div class="flex gap-2 text-2xl"><i class="fa-brands fa-cc-visa"></i><i class="fa-brands fa-cc-mastercard"></i><i class="fa-brands fa-cc-paypal"></i><i class="fa-brands fa-bitcoin"></i></div><div class="mono text-[11px] mt-3">© 2026 Nexus 3D — Tous droits réservés</div></div>
+</div>
+</footer>
+
+<!-- CART DRAWER -->
+<div id="cartDrawer" class="fixed top-0 right-0 h-full w-[380px] max-w-[92vw] glass-strong z-[120] translate-x-full transition-transform duration-300 flex flex-col">
+<div class="p-5 flex justify-between items-center border-b border-white/10"><h3 class="font-display font-bold">PANIER <span id="cartCount2" class="mono text-xs bg-white text-black px-2 rounded-full">0</span></h3><button onclick="toggleCart(false)" class="w-9 h-9 rounded-full border border-white/20"><i class="fa-solid fa-xmark"></i></button></div>
+<div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+<div class="p-5 border-t border-white/10"><div class="flex justify-between font-bold"><span>Total</span><span id="cartTotal">0,00€</span></div><button onclick="checkout()" class="btn-gold w-full mt-3 rounded-full py-3 font-bold">COMMANDER • PAIEMENT 3D SECURE</button></div>
+</div>
+<div id="cartOverlay" onclick="toggleCart(false)" class="fixed inset-0 modal-bg z-[110] hidden"></div>
+
+<!-- PACK MODAL -->
+<div id="packModal" class="fixed inset-0 z-[130] hidden items-center justify-center p-4 modal-bg">
+<div class="glass-strong rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-6 relative">
+<button onclick="closePackModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full border border-white/20 z-10"><i class="fa-solid fa-xmark"></i></button>
+<div id="packClosedView" class="text-center py-8">
+<div class="eyebrow text-amber-300" id="packSetLabel">Booster Chaos Ascendant</div>
+<h3 class="font-display font-black text-2xl mt-2">PRÊT À DÉCHIRER ?</h3>
+<div id="packVisual" class="booster chaos mx-auto my-6"></div>
+<button onclick="tearPack()" id="btnTear" class="btn-gold rounded-full px-8 py-3 font-bold">DÉCHIRER LE FOIL ✂</button>
+<div class="mono text-xs text-white/50 mt-3">5 cartes • 1 holo min • Gold 1/24</div>
+</div>
+<div id="packOpenView" class="hidden">
+<div class="flex justify-between items-center"><h3 class="font-display font-bold">TON BUTIN — <span id="packResultLabel" class="chaos-text">CHAOS</span></h3><button onclick="tearPack()" class="btn-ghost rounded-full px-4 py-1 text-xs">↻ Re-ouvrir</button></div>
+<div id="packCards" class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-5"></div>
+<div class="flex gap-2 mt-6"><button onclick="closePackModal()" class="btn-ghost flex-1 rounded-full py-3 text-sm">Fermer</button><button onclick="addPackToCollection()" class="btn-primary flex-1 rounded-full py-3 text-sm font-bold text-white">Tout ajouter au panier</button></div>
+</div>
+</div>
+</div>
+
+<!-- CARD DETAIL MODAL -->
+<div id="cardModal" class="fixed inset-0 z-[130] hidden items-center justify-center p-4 modal-bg">
+<div class="glass-strong rounded-3xl max-w-3xl w-full overflow-hidden grid md:grid-cols-2 relative">
+<button onclick="document.getElementById('cardModal').style.display='none'" class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 border border-white/20 z-10"><i class="fa-solid fa-xmark"></i></button>
+<div id="cardModalArt" class="min-h-[320px] bg-cover bg-center"></div>
+<div class="p-6"><div id="cardModalInfo"></div><div class="flex gap-2 mt-5"><button id="cardModalAdd" class="btn-gold flex-1 rounded-full py-3 text-sm font-bold">Ajouter — <span id="cardModalPrice"></span></button><button onclick="document.getElementById('cardModal').style.display='none'" class="btn-ghost rounded-full px-5 py-3 text-sm">Fermer</button></div></div>
+</div>
+</div>
+
+<script>
+// ---------- DATA ----------
+const CARDS=[
+{id:0,name:"Noctyrax ex",set:"chaos",rarity:"Gold",hp:340,type:"Dragon Obsidienne",price:89.99,art:"obsidian%20black%20dragon%20lava%20cracks%20epic",atk1:"Souffle du Chaos 180",atk2:"Éruption Abyssale 280",desc:"Le cœur du Chaos Ascendant. Ses ailes déchirent les ruines."},
+{id:1,name:"Dracaufeu Chaos",set:"chaos",rarity:"Rainbow",hp:330,type:"Feu / Ténèbres",price:64.99,art:"black%20charizard%20rainbow%20flames%20dark",atk1:"Brasier Arc-en-ciel 200",atk2:"Nova Infernale 300",desc:"Ses flammes ont absorbé le spectre du chaos."},
+{id:2,name:"Noctali Lune d'Ombre",set:"nuit",rarity:"EX",hp:280,type:"Ténèbres",price:24.99,art:"black%20umbreon%20glowing%20yellow%20rings%20moon%20night",atk1:"Rayon Lunaire 120",atk2:"Éclipse Totale 220",desc:"Gardien de la Nuit Noire. Il voit dans l'obscurité absolue."},
+{id:3,name:"Giratina Faille",set:"chaos",rarity:"EX",hp:320,type:"Spectre / Dragon",price:34.99,art:"giratina%20dark%20portal%20distortion%20world",atk1:"Griffe Distorsion 150",atk2:"Faille Originelle 260",desc:"Il a ouvert la brèche entre les deux sets."},
+{id:4,name:"Ectoplasma Abyssal",set:"nuit",rarity:"Holo",hp:250,type:"Spectre",price:12.99,art:"gengar%20dark%20purple%20ghost%20ruins%20night",atk1:"Langue d'Ombre 90",atk2:"Cauchemar Abyssal 180",desc:"Il hante les coffrets scellés depuis l'éclipse."},
+{id:5,name:"Zoroark Abyssal",set:"nuit",rarity:"EX",hp:290,type:"Ténèbres",price:19.99,art:"zoroark%20dark%20illusion%20purple%20fog",atk1:"Illusion Noire 110",atk2:"Lames de la Nuit 210",desc:"Maître des illusions de la Nuit Noire."},
+{id:6,name:"Rayquaza Faille Céleste",set:"chaos",rarity:"Gold",hp:310,type:"Dragon / Ciel",price:54.99,art:"black%20rayquaza%20golden%20sky%20storm",atk1:"Draco Ascension 160",atk2:"Jugement Céleste 270",desc:"Descendu pour stopper Noctyrax. Échec critique."},
+{id:7,name:"Mewtwo Ascendant",set:"chaos",rarity:"Holo",hp:300,type:"Psy / Chaos",price:16.99,art:"mewtwo%20dark%20psychic%20chaos%20aura",atk1:"Psyko-Chaos 130",atk2:"Domination 230",desc:"Son esprit a fusionné avec le réacteur."}
+];
+const PRODUCTS={'display':{name:"Display 36 Boosters Chaos",price:199},'etb-nuit':{name:"ETB Nuit Noire",price:54.99},'coffret-chaos':{name:"Coffret Figurine Noctyrax",price:79.99},'tripack':{name:"Tripack Fusion",price:19.99}};
+let cart=[]; let lastPack=[];
+function imgFor(c){return `https://image.pollinations.ai/prompt/${c.art}%20pokemon%20card%20art%20detailed?width=600&height=800&nologo=true`;}
+// ---------- PRELOADER ----------
+let pct=0; let li=setInterval(()=>{pct=Math.min(100,pct+Math.random()*14);document.getElementById('loadBar').style.width=pct+'%';document.getElementById('loadPct').textContent=Math.floor(pct)+'%';if(pct>=100){clearInterval(li);setTimeout(()=>document.getElementById('preloader').classList.add('done'),400);}},180);
+// ---------- CURSOR ----------
+const glow=document.getElementById('cursor-glow'),dot=document.getElementById('cursor-dot');
+document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';
+const h=document.querySelector('.ornate-inner'); if(h){const r=h.getBoundingClientRect();let x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;h.style.setProperty('--mx',x+'%');h.style.setProperty('--my',y+'%');}});
+document.getElementById('burger').onclick=()=>document.getElementById('mobileMenu').classList.toggle('hidden');
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.add('hidden'));
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+function toast(msg,icon='fa-check'){const t=document.createElement('div');t.className='toast glass-strong rounded-2xl px-4 py-3 flex items-center gap-3 text-sm max-w-[340px]';t.innerHTML=`<span class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-600 to-pink-500 grid place-items-center shrink-0"><i class="fa-solid ${icon}"></i></span><span>${msg}</span>`;document.getElementById('toasts').appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='.4s';setTimeout(()=>t.remove(),400)},3200);}
+// ---------- COUNTERS ----------
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){let el=e.target,target=+el.dataset.target,v=0;let iv=setInterval(()=>{v+=Math.ceil(target/40);if(v>=target){v=target;clearInterval(iv)}el.textContent=v},40);obs.unobserve(el)}}),{threshold:.5});
+document.querySelectorAll('.counter').forEach(c=>obs.observe(c));
+gsap.registerPlugin(ScrollTrigger);
+gsap.utils.toArray('section h2').forEach(h=>{gsap.from(h,{y:40,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:h,start:'top 85%'}})});
+// ---------- HERO EMBERS + DEBRIS ----------
+(function(){const w=document.getElementById('heroEmbers');for(let i=0;i<24;i++){let s=document.createElement('span');s.className='ember';s.style.left=Math.random()*100+'%';s.style.bottom='0';s.style.animationDuration=(3+Math.random()*5)+'s';s.style.animationDelay=(Math.random()*5)+'s';s.style.background=Math.random()>.5?'#ff6b00':'#ff2bd6';w.appendChild(s);}const d=document.getElementById('debrisLayer');for(let i=0;i<10;i++){let b=document.createElement('div');b.style.cssText=`position:absolute;width:${6+Math.random()*14}px;height:${6+Math.random()*14}px;background:#111;border:1px solid #ffffff22;left:${Math.random()*100}%;top:${30+Math.random()*60}%;transform:rotate(${Math.random()*45}deg);border-radius:3px;animation:floaty ${3+Math.random()*4}s ease-in-out infinite;opacity:.9`;d.appendChild(b);}})();
+function switchHeroArt(mode){const img=document.getElementById('heroDragonImg');gsap.to(img,{scale:1.08,filter:'brightness(1.6)',duration:.2,yoyo:true,repeat:1});setTimeout(()=>{img.src=mode==='nuit'
+?`https://image.pollinations.ai/prompt/black%20dragon%20purple%20moon%20night%20ruins%20fog%20violet%20cinematic?width=900&height=1000&nologo=true&seed=${Date.now()}`
+:`https://image.pollinations.ai/prompt/obsidian%20black%20dragon%20glowing%20red%20lava%20cracks%20volcano%20fire%20epic?width=900&height=1000&nologo=true&seed=${Date.now()}`;},250);toast(mode==='nuit'?'Vitrine Nuit Noire activée 🌙':'Vitrine Chaos Ascendant activée 🔥','fa-wand-magic-sparkles');setArenaMode(mode);}
+function triggerHeroExplosion(){confetti({particleCount:140,spread:90,origin:{y:.6},colors:['#f5c518','#ff2bd6','#00f0ff','#ff6b00']});gsap.fromTo('#heroCardWrap',{x:-8},{x:0,duration:.5,ease:'elastic.out(1,.3)'});toast('Frénésie Noctyrax déclenchée ! 340 dégâts !','fa-explosion');}
+document.querySelectorAll('.vitrineBtn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.vitrineBtn').forEach(x=>x.classList.remove('tab-active'));b.classList.add('tab-active');switchHeroArt(b.dataset.vitrine==='fusion'?'chaos':b.dataset.vitrine);});
+document.querySelectorAll('.setTab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.setTab').forEach(x=>x.classList.remove('tab-active'));b.classList.add('tab-active');gsap.fromTo('#panel-'+b.dataset.set,{scale:.96,opacity:.6},{scale:1,opacity:1,duration:.4});document.getElementById('panel-'+b.dataset.set).scrollIntoView({behavior:'smooth',block:'center'});});
+// ---------- CARDS GRID ----------
+function rarityBadge(r){if(r==='Gold')return `<span class="text-[10px] px-2 py-[2px] rounded-full bg-amber-400 text-black font-bold">★ GOLD</span>`;if(r==='Rainbow')return `<span class="text-[10px] px-2 py-[2px] rounded-full bg-gradient-to-r from-pink-500 via-amber-400 to-cyan-400 text-black font-bold">RAINBOW</span>`;if(r==='EX')return `<span class="text-[10px] px-2 py-[2px] rounded-full bg-red-600 font-bold">EX</span>`;return `<span class="text-[10px] px-2 py-[2px] rounded-full bg-cyan-500/80 text-black font-bold">HOLO</span>`;}
+function renderCards(){const q=document.getElementById('searchCards').value.toLowerCase(),fs=document.getElementById('filterSet').value,fr=document.getElementById('filterRarity').value;
+const grid=document.getElementById('cardsGrid');grid.innerHTML='';
+CARDS.filter(c=>(fs==='all'||c.set===fs)&&(fr==='all'||c.rarity===fr)&&c.name.toLowerCase().includes(q)).forEach((c,i)=>{
+const d=document.createElement('div');d.className=`poke-card ${c.rarity==='Gold'?'gold':''} ${c.rarity==='Rainbow'?'rainbow':''}`;
+d.innerHTML=`<div class="card-shine"></div><div class="holo"></div>
+<img src="${imgFor(c)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(160deg,#1a0b2e,#3b0a3a,#031018)'">
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute top-2 left-2 right-2 flex justify-between items-start z-10"><span class="mono text-[10px] bg-black/70 px-2 py-1 rounded border border-white/20">${c.set==='nuit'?'🌙 NUIT':'🔥 CHAOS'}</span>${rarityBadge(c.rarity)}</div>
+<div class="absolute bottom-0 p-3 z-10 w-full"><div class="font-display font-bold text-sm leading-tight">${c.name}</div><div class="mono text-[11px] text-white/60">PV ${c.hp} • ${c.type}</div><div class="flex justify-between items-center mt-2"><span class="font-black text-amber-300">${c.price.toFixed(2)}€</span><button class="text-[11px] bg-white text-black px-3 py-1 rounded-full font-bold hover:bg-amber-300">VOIR +</button></div></div>`;
+d.onclick=()=>openCardDetail(c.id);attachTilt(d);grid.appendChild(d);});
+if(!grid.children.length)grid.innerHTML=`<div class="col-span-full text-center py-10 text-white/50">Aucune carte trouvée... Essaie "Dracaufeu" 🔍</div>`;}
+document.getElementById('searchCards').oninput=renderCards;document.getElementById('filterSet').onchange=renderCards;document.getElementById('filterRarity').onchange=renderCards;
+function attachTilt(el){el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;el.style.setProperty('--mx',x+'%');el.style.setProperty('--my',y+'%');el.style.setProperty('--ry',((x-50)/5)+'deg');el.style.setProperty('--rx',(-(y-50)/5)+'deg');});el.addEventListener('mouseleave',()=>{el.style.setProperty('--rx','0deg');el.style.setProperty('--ry','0deg');});}
+renderCards();
+// ---------- CARD MODAL ----------
+let currentCard=0;
+function openCardDetail(id){currentCard=id;const c=CARDS[id];document.getElementById('cardModal').style.display='flex';
+document.getElementById('cardModalArt').style.backgroundImage=`url('${imgFor(c)}'), linear-gradient(160deg,#2a165a,#3d0a3a)`;document.getElementById('cardModalArt').innerHTML=`<div class="h-full min-h-[320px] md:min-h-[480px] flex flex-col justify-end p-4 bg-gradient-to-t from-black/85 to-transparent"><div class="poke-logo text-xl">Pokémon</div><div class="font-cinzel text-amber-200 font-bold text-lg">${c.name}</div></div>`;
+document.getElementById('cardModalInfo').innerHTML=`<div class="flex gap-2 items-center">${rarityBadge(c.rarity)}<span class="mono text-xs text-white/50">${c.set==='nuit'?'Nuit Noire':'Chaos Ascendant'} • ${c.type}</span></div><h3 class="font-display font-black text-2xl mt-2">${c.name}</h3><div class="mono text-sm mt-1">PV ${c.hp} — <span class="text-amber-300">★ Secrète ${c.id+1}/248</span></div><p class="text-sm text-white/65 mt-3">${c.desc}</p><div class="mt-4 space-y-2 text-sm"><div class="glass rounded-xl p-3">⚔️ <strong>${c.atk1}</strong><div class="stat-bar mt-2"><div class="stat-fill" style="width:75%"></div></div></div><div class="glass rounded-xl p-3">🔥 <strong>${c.atk2}</strong><div class="stat-bar mt-2"><div class="stat-fill" style="width:96%"></div></div></div></div>`;
+document.getElementById('cardModalPrice').textContent=c.price.toFixed(2)+'€';
+document.getElementById('cardModalAdd').onclick=()=>{cart.push({name:c.name,price:c.price});updateCart();toast(`${c.name} ajouté au panier !`,'fa-cart-plus');};}
+// ---------- PACK OPENING ----------
+let currentSet='chaos';
+function openPackModal(set){currentSet=set;document.getElementById('packModal').style.display='flex';document.getElementById('packClosedView').classList.remove('hidden');document.getElementById('packOpenView').classList.add('hidden');
+document.getElementById('packSetLabel').textContent=set==='nuit'?'Booster Nuit Noire — 6,99€':set==='fusion'?'Booster Fusion Test — GRATUIT':'Booster Chaos Ascendant — 7,49€';
+document.getElementById('packVisual').className='booster mx-auto my-6 '+(set==='nuit'?'nuit':'chaos');document.getElementById('packVisual').innerHTML=`<div class="pack-tear"></div><div class="p-6 pt-8 h-full flex flex-col items-center"><div class="poke-logo text-2xl">Pokémon</div><div class="font-cinzel text-sm mt-1 tracking-[.2em]">${set.toUpperCase()}</div><div class="my-4 w-28 h-28 rounded-full ${set==='nuit'?'orb-nuit':'orb-chaos'} grid place-items-center text-4xl border border-white/30">${set==='nuit'?'🌙':'🐉'}</div><div class="mono text-[10px] text-white/60">SCELLÉ • FOIL</div></div>`;}
+function closePackModal(){document.getElementById('packModal').style.display='none';}
+function pickCards(){let pool=[...CARDS];if(currentSet!=='fusion')pool=pool.filter(c=>c.set===currentSet||Math.random()>.6);let out=[];for(let i=0;i<5;i++){let r=Math.random(),pick;if(r>.93)pick=CARDS.find(c=>c.rarity==='Gold')||CARDS[0];else if(r>.78)pick=CARDS.find(c=>c.rarity==='Rainbow')||CARDS[1];else if(r>.45)pick=pool[Math.floor(Math.random()*pool.length)];else pick=CARDS[Math.floor(Math.random()*CARDS.length)];out.push(pick);}out[4]=pool.find(c=>['EX','Gold','Rainbow'].includes(c.rarity))||out[4];return out;}
+function tearPack(){const v=document.getElementById('packVisual');v.classList.add('pack-shaking');document.getElementById('btnTear').textContent='OUVERTURE...';setTimeout(()=>{
+v.classList.remove('pack-shaking');document.getElementById('btnTear').textContent='DÉCHIRER LE FOIL ✂';
+document.getElementById('packClosedView').classList.add('hidden');document.getElementById('packOpenView').classList.remove('hidden');
+document.getElementById('packResultLabel').textContent=currentSet.toUpperCase();
+lastPack=pickCards();const wrap=document.getElementById('packCards');wrap.innerHTML='';
+lastPack.forEach((c,i)=>{setTimeout(()=>{const d=document.createElement('div');d.className=`poke-card reveal-card ${c.rarity==='Gold'?'gold':''} ${c.rarity==='Rainbow'?'rainbow':''}`;
+d.innerHTML=`<img src="${imgFor(c)}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'"><div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div><div class="absolute top-1 left-1 z-10">${rarityBadge(c.rarity)}</div><div class="absolute bottom-0 p-2 z-10 w-full bg-black/70"><div class="text-[11px] font-bold leading-tight">${c.name}</div><div class="mono text-[10px] text-amber-300">${c.price.toFixed(2)}€</div></div><div class="holo" style="opacity:1"></div>`;
+d.onclick=()=>openCardDetail(c.id);wrap.appendChild(d);
+if(['Gold','Rainbow'].includes(c.rarity)){confetti({particleCount:90,spread:70,origin:{y:.6},colors:['#f5c518','#ff2bd6','#00f0ff']});toast(`✨ ULTRA RARE : ${c.name} !`,'fa-crown');}},i*220);});
+},650);}
+function addPackToCollection(){lastPack.forEach(c=>cart.push({name:c.name,price:c.price}));updateCart();toast('Butin ajouté au panier !','fa-gem');}
+// ---------- CART ----------
+function addToCart(id){const p=PRODUCTS[id];cart.push({name:p.name,price:p.price});updateCart();toast(`${p.name} ajouté !`,'fa-cart-plus');toggleCart(true);}
+function toggleCart(open){document.getElementById('cartDrawer').style.transform=open?'translateX(0)':'translateX(100%)';document.getElementById('cartOverlay').classList.toggle('hidden',!open);}
+document.getElementById('btnCartOpen').onclick=()=>toggleCart(true);
+function updateCart(){document.getElementById('cartCount').textContent=cart.length;document.getElementById('cartCount2').textContent=cart.length;
+let total=cart.reduce((s,i)=>s+i.price,0);document.getElementById('cartTotal').textContent=total.toFixed(2).replace('.',',')+'€';
+const w=document.getElementById('cartItems');w.innerHTML=cart.length?'':'<div class="text-center text-white/40 py-10">Panier vide...<br>Ouvre un booster 🔥</div>';
+cart.forEach((it,i)=>{const d=document.createElement('div');d.className='glass rounded-2xl p-3 flex justify-between items-center';d.innerHTML=`<div><div class="text-sm font-bold">${it.name}</div><div class="mono text-xs text-amber-300">${it.price.toFixed(2)}€</div></div><button class="w-8 h-8 rounded-full border border-white/20 hover:bg-red-600"><i class="fa-solid fa-trash text-xs"></i></button>`;d.querySelector('button').onclick=()=>{cart.splice(i,1);updateCart();};w.appendChild(d);});}
+updateCart();
+function checkout(){if(!cart.length)return toast('Panier vide !','fa-triangle-exclamation');confetti({particleCount:160,spread:100,origin:{y:.7}});toast(`Commande de ${cart.length} articles validée ! Merci dresseur ❤`,'fa-check');cart=[];updateCart();toggleCart(false);}
+document.getElementById('newsForm').onsubmit=e=>{e.preventDefault();confetti({particleCount:80,spread:60,origin:{y:.8}});toast('Bienvenue dans le Chaos ! Booster offert envoyé.','fa-envelope');e.target.reset();};
+function scrollTimeline(dir){document.getElementById('timeline').scrollBy({left:dir*280,behavior:'smooth'});}
+// hotspot + arena bridge (non-3D part)
+function showHotspot(which){const card=document.getElementById('hotspotCard');card.classList.remove('hidden');
+const data={coeur:['Cœur Magmatique','1400°C. Chaque pulsation projette 12 braises incandescentes. Faiblesse : Eau.'],aile:['Aile Déchirée','Membrane de 4,2m. Battement à 1,2Hz, rafale de 90km/h dans l’arène.'],oeil:['Œil du Chaos','Verrouille sa proie à 2km. Rougeoyant en mode Frénésie.']};
+document.getElementById('hsTitle').textContent=data[which][0];document.getElementById('hsText').textContent=data[which][1];}
+// expose to module
+window.setArenaMode=function(m){if(window.__setArena)window.__setArena(m);document.querySelectorAll('.arenaMode').forEach(b=>b.classList.remove('tab-active'));const map={nuit:'mNuit',chaos:'mChaos',fusion:'mFusion'};document.getElementById(map[m])?.classList.add('tab-active');};
+window.setSkin=function(s){if(window.__setSkin)window.__setSkin(s);document.querySelectorAll('.skinBtn').forEach(b=>b.classList.remove('tab-active'));event?.target?.classList?.add('tab-active');};
+window.setCamera=function(p){if(window.__setCam)window.__setCam(p);};
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+const canvas=document.getElementById('scene3d');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x0a0a1a,0.035);
+const camera=new THREE.PerspectiveCamera(50,1,0.1,200);camera.position.set(0,3.2,11);
+const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.maxDistance=20;controls.minDistance=4;controls.maxPolarAngle=Math.PI/1.8;
+scene.add(new THREE.AmbientLight(0x334,1.2));
+const moonLight=new THREE.DirectionalLight(0xc4b5fd,1.2);moonLight.position.set(-6,8,4);scene.add(moonLight);
+const coreLight=new THREE.PointLight(0xff2200,60,20);coreLight.position.set(0,2.5,1);scene.add(coreLight);
+const rimPink=new THREE.PointLight(0xff2bd6,40,25);rimPink.position.set(5,3,-3);scene.add(rimPink);
+const rimCyan=new THREE.PointLight(0x00f0ff,30,25);rimCyan.position.set(-5,2,-2);scene.add(rimCyan);
+// stars
+function makeStars(){const g=new THREE.BufferGeometry(),n=600,pos=new Float32Array(n*3);for(let i=0;i<n;i++){pos[i*3]=(Math.random()-.5)*80;pos[i*3+1]=Math.random()*40-5;pos[i*3+2]=(Math.random()-.5)*80;}g.setAttribute('position',new THREE.BufferAttribute(pos,3));const m=new THREE.PointsMaterial({color:0xffffff,size:.12,transparent:true,opacity:.8});scene.add(new THREE.Points(g,m));}
+makeStars();
+// moon
+const moon=new THREE.Mesh(new THREE.SphereGeometry(1.4,32,32),new THREE.MeshBasicMaterial({color:0xf5f0ff}));moon.position.set(-10,10,-14);scene.add(moon);
+const moonGlow=new THREE.Mesh(new THREE.SphereGeometry(1.9,32,32),new THREE.MeshBasicMaterial({color:0x7c3aed,transparent:true,opacity:.25}));moonGlow.position.copy(moon.position);scene.add(moonGlow);
+// ground + ruins
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(60,60),new THREE.MeshStandardMaterial({color:0x0a0a12,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-1.5;scene.add(ground);
+const ruinMat=new THREE.MeshStandardMaterial({color:0x15151f,roughness:.9});
+for(let i=0;i<14;i++){const h=2+Math.random()*6;const b=new THREE.Mesh(new THREE.BoxGeometry(1+Math.random()*1.5,h,1+Math.random()*1.5),ruinMat);const side=i%2?1:-1;b.position.set(side*(7+Math.random()*6),h/2-1.5,-4+Math.random()*8-(i*.4));b.rotation.y=Math.random();scene.add(b);}
+// DRAGON GROUP
+const dragon=new THREE.Group();scene.add(dragon);
+const obsMat=new THREE.MeshStandardMaterial({color:0x0d0d14,roughness:.55,metalness:.7,flatShading:true});
+const lavaMat=new THREE.MeshStandardMaterial({color:0x1a0000,emissive:0xff2200,emissiveIntensity:.9,roughness:.4,metalness:.2,flatShading:true});
+const body=new THREE.Mesh(new THREE.IcosahedronGeometry(1.7,2),obsMat);body.position.y=2.2;body.scale.set(1,.95,1.15);dragon.add(body);
+const core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.72,2),new THREE.MeshBasicMaterial({color:0xff3300,wireframe:true,transparent:true,opacity:.35}));core.position.copy(body.position);dragon.add(core);
+const chest=new THREE.Mesh(new THREE.SphereGeometry(.75,16,16),new THREE.MeshStandardMaterial({color:0x000000,emissive:0xff1a00,emissiveIntensity:2}));chest.position.set(0,2.3,1.35);dragon.add(chest);
+// head
+const headG=new THREE.Group();headG.position.set(0,4.1,1.2);dragon.add(headG);
+const skull=new THREE.Mesh(new THREE.DodecahedronGeometry(.85,1),obsMat);headG.add(skull);
+const snout=new THREE.Mesh(new THREE.ConeGeometry(.55,.9,6),obsMat);snout.rotation.x=Math.PI/2;snout.position.set(0,-.15,.85);headG.add(snout);
+const jaw=new THREE.Mesh(new THREE.ConeGeometry(.45,.7,5),new THREE.MeshStandardMaterial({color:0x0d0d14,emissive:0xff2200,emissiveIntensity:1.2}));jaw.rotation.x=Math.PI/2;jaw.position.set(0,-.55,.7);headG.add(jaw);
+const eyeMat=new THREE.MeshBasicMaterial({color:0xff0000});
+[-.32,.32].forEach(x=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.11,12,12),eyeMat);e.position.set(x,.15,.65);headG.add(e);const gl=new THREE.PointLight(0xff0000,6,4);gl.position.copy(e.position);headG.add(gl);});
+[.5,-.5].forEach(x=>{const horn=new THREE.Mesh(new THREE.ConeGeometry(.18,.9,5),obsMat);horn.position.set(x*1.2,.7,-.2);horn.rotation.z=-x;horn.rotation.x=-.5;headG.add(horn);});
+// neck spikes
+for(let i=0;i<5;i++){const s=new THREE.Mesh(new THREE.ConeGeometry(.16,.6,4),obsMat);s.position.set(0,3.6-i*.45,.6-i*.2);s.rotation.x=-.6;dragon.add(s);}
+// wings
+function makeWing(side){const shape=new THREE.Shape();shape.moveTo(0,0);shape.lineTo(side*3.8,.8);shape.lineTo(side*3.2,-.6);shape.lineTo(side*4.6,-1.4);shape.lineTo(side*2.8,-1.6);shape.lineTo(side*3.4,-2.8);shape.lineTo(side*1.2,-1.4);shape.lineTo(0,-1.8);shape.lineTo(0,0);
+const geo=new THREE.ShapeGeometry(shape);const mat=new THREE.MeshStandardMaterial({color:0x0a0a12,transparent:true,opacity:.92,side:THREE.DoubleSide,roughness:.8,emissive:0xff2200,emissiveIntensity:.08});
+const m=new THREE.Mesh(geo,mat);m.position.set(side*.9,3.4,-.3);dragon.add(m);
+// lava veins on wing
+const veins=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xff3300,wireframe:true,transparent:true,opacity:.28}));veins.position.copy(m.position);veins.position.z+=.02;dragon.add(veins);
+return {m,veins};} 
+const wL=makeWing(-1),wR=makeWing(1);
+// arms / claws
+[-1,1].forEach(s=>{const arm=new THREE.Mesh(new THREE.CylinderGeometry(.32,.22,1.8,6),obsMat);arm.position.set(s*1.5,1.4,.6);arm.rotation.z=s*.5;arm.rotation.x=.4;dragon.add(arm);
+for(let f=0;f<3;f++){const claw=new THREE.Mesh(new THREE.ConeGeometry(.12,.6,5),new THREE.MeshStandardMaterial({color:0x222222,roughness:.3,metalness:.9}));claw.position.set(s*(1.9+f*.18),.4-f*.05,1.1+f*.1);claw.rotation.x=Math.PI;dragon.add(claw);}});
+// legs
+[-1,1].forEach(s=>{const leg=new THREE.Mesh(new THREE.CylinderGeometry(.5,.35,1.6,6),obsMat);leg.position.set(s*.9,.1,-.2);dragon.add(leg);});
+// floating rocks
+const rocks=[];const rockGeo=new THREE.DodecahedronGeometry(.3,0);
+for(let i=0;i<36;i++){const m=new THREE.Mesh(rockGeo,new THREE.MeshStandardMaterial({color:0x15151f,roughness:.9,flatShading:true,emissive:0xff2200,emissiveIntensity:Math.random()*.3}));const a=Math.random()*Math.PI*2,r=3+Math.random()*5;m.position.set(Math.cos(a)*r,Math.random()*6-1,Math.sin(a)*r);m.userData={a,r,sp:.2+Math.random()*.6,y0:m.position.y};dragon.add(m);rocks.push(m);}
+// embers
+let EMBER_N=1500;let emberGeo=new THREE.BufferGeometry();let emberPos=new Float32Array(EMBER_N*3);let emberVel=[];
+for(let i=0;i<EMBER_N;i++){emberPos[i*3]=(Math.random()-.5)*20;emberPos[i*3+1]=Math.random()*10-1.5;emberPos[i*3+2]=(Math.random()-.5)*20;emberVel.push(.01+Math.random()*.04);}
+emberGeo.setAttribute('position',new THREE.BufferAttribute(emberPos,3));
+let emberMat=new THREE.PointsMaterial({color:0xff6b00,size:.09,transparent:true,opacity:.95,blending:THREE.AdditiveBlending});
+let embers=new THREE.Points(emberGeo,emberMat);scene.add(embers);
+// shockwave ring
+const ring=new THREE.Mesh(new THREE.TorusGeometry(1,0.08,12,64),new THREE.MeshBasicMaterial({color:0xffcc00,transparent:true,opacity:0}));ring.rotation.x=Math.PI/2;ring.position.y=.2;scene.add(ring);
+// state
+let mode='chaos';let speed=1,wingSpeed=1.2,glowI=.8,auto=true,wire=false,frenzy=0;
+const modes={nuit:{fog:0x0d0a25,core:0x7c3aed,ember:0xa78bfa,rim1:0x7c3aed,rim2:0xf5c518},chaos:{fog:0x18050a,core:0xff2200,ember:0xff6b00,rim1:0xff2bd6,rim2:0x00f0ff},fusion:{fog:0x0e0718,core:0xff2bd6,ember:0xffd166,rim1:0xff2bd6,rim2:0x7c3aed}};
+function applyMode(m){mode=m;const c=modes[m];scene.fog.color.setHex(c.fog);coreLight.color.setHex(c.core);emberMat.color.setHex(c.ember);rimPink.color.setHex(c.rim1);rimCyan.color.setHex(c.rim2);lavaMat.emissive.setHex(c.core==0x7c3aed?0x7c3aed:0xff2200);moonGlow.material.color.setHex(m==='nuit'?0xf5c518:0x7c3aed);}
+applyMode('chaos');
+window.__setArena=function(m){applyMode(m);toast(m==='nuit'?'Arène : Nuit Noire — brume violette 🌙':m==='chaos'?'Arène : Chaos Ascendant — fournaise 🔥':'Arène : Fusion — spectre complet ✨','fa-dragon');};
+window.__setSkin=function(s){if(s==='obsidienne'){obsMat.color.setHex(0x0d0d14);lavaMat.emissiveIntensity=.9;}if(s==='magma'){obsMat.color.setHex(0x2a0a0a);lavaMat.emissiveIntensity=2.2;}if(s==='spectral'){obsMat.color.setHex(0x1a0f3a);lavaMat.emissive.setHex(0x9d4dff);lavaMat.emissiveIntensity=1.6;}toast('Skin '+s+' équipé','fa-palette');};
+window.__setCam=function(p){if(p==='face')gsap.to(camera.position,{x:0,y:3.2,z:11,duration:1});if(p==='aile')gsap.to(camera.position,{x:8,y:4.5,z:4,duration:1});if(p==='sol')gsap.to(camera.position,{x:0,y:.6,z:7,duration:1});};
+// UI binds
+document.getElementById('rngSpeed').oninput=e=>{speed=+e.target.value;document.getElementById('vSpeed').textContent=speed.toFixed(1)+'×';};
+document.getElementById('rngEmber').oninput=e=>{document.getElementById('vEmber').textContent=e.target.value+'%';emberMat.opacity=e.target.value/100;document.getElementById('partCount').textContent=Math.floor(EMBER_N*e.target.value/100);};
+document.getElementById('rngWing').oninput=e=>{wingSpeed=+e.target.value;document.getElementById('vWing').textContent=wingSpeed.toFixed(1)+'×';};
+document.getElementById('rngGlow').oninput=e=>{glowI=e.target.value/100;document.getElementById('vGlow').textContent=e.target.value+'%';};
+document.getElementById('btnFrenzy').onclick=()=>{frenzy=3;toast('FRÉNÉSIE : vitesse ×3 pendant 4s !','fa-bolt');confetti({particleCount:60,spread:50,origin:{y:.5}});};
+document.getElementById('btnExplode').onclick=explode;
+function explode(){frenzy=5;ring.material.opacity=1;ring.scale.set(1,1,1);gsap.to(ring.scale,{x:12,y:12,z:12,duration:1,ease:'power2.out'});gsap.to(ring.material,{opacity:0,duration:1});gsap.fromTo('#flash3d',{opacity:.9},{opacity:0,duration:.8});confetti({particleCount:180,spread:120,origin:{y:.6},colors:['#fff','#f5c518','#ff2bd6','#ff6b00']});toast('EXPLOSION ABYSSALE — 280 dégâts à tous !','fa-explosion');}
+document.getElementById('btnWire').onclick=e=>{wire=!wire;obsMat.wireframe=wire;e.target.textContent=wire?'Solide':'Wireframe';};
+document.getElementById('btnAuto').onclick=e=>{auto=!auto;e.target.textContent=auto?'⏸ Pause orbit':'▶ Reprendre';};
+// resize
+function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(canvas);resize();
+// loop
+let last=performance.now(),frames=0,fpsT=0;const clock=new THREE.Clock();
+function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();const dt=Math.min(.05,clock.getDelta()||.016);
+const eff=speed+(frenzy>0?2.5:0);if(frenzy>0)frenzy-=dt;
+dragon.rotation.y+=dt*.35*eff;
+body.rotation.y=Math.sin(t*.6)*.15;core.rotation.x+=dt*.8*eff;core.rotation.y+=dt*.6*eff;
+chest.material.emissiveIntensity=(1.5+Math.sin(t*4)*.8)* (0.5+glowI);
+coreLight.intensity=(40+Math.sin(t*5)*20)*(0.5+glowI);
+headG.position.y=4.1+Math.sin(t*1.4)*.18;headG.rotation.y=Math.sin(t*.7)*.35;
+const flap=Math.sin(t*3.2)*.45*wingSpeed;
+wL.m.rotation.z=flap*.6;wR.m.rotation.z=-flap*.6;wL.veins.rotation.z=flap*.6;wR.veins.rotation.z=-flap*.6;
+rocks.forEach((r,i)=>{r.userData.a+=dt*.4*r.userData.sp*eff;r.position.x=Math.cos(r.userData.a)*r.userData.r;r.position.z=Math.sin(r.userData.a)*r.userData.r;r.position.y=r.userData.y0+Math.sin(t*1.5+i)*.5;r.rotation.x+=dt;r.rotation.y+=dt*.7;});
+const pos=emberGeo.attributes.position.array;const op=emberMat.opacity;
+for(let i=0;i<EMBER_N;i++){pos[i*3+1]+=emberVel[i]*(1+eff)* (op+.2);pos[i*3]+=Math.sin(t+i)*.002;if(pos[i*3+1]>10){pos[i*3+1]=-1.5;pos[i*3]=(Math.random()-.5)*20;pos[i*3+2]=(Math.random()-.5)*20;}}
+emberGeo.attributes.position.needsUpdate=true;
+if(auto)controls.autoRotate=true,controls.autoRotateSpeed=1.2*eff;else controls.autoRotate=false;
+controls.update();renderer.render(scene, camera);
+frames++;fpsT+=performance.now()-last;last=performance.now();if(fpsT>500){document.getElementById('fps').textContent=Math.round(frames*1000/fpsT);frames=0;fpsT=0;}}
+animate();
+</script>
 </body>
 </html>
