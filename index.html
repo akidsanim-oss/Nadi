@@ -1,854 +1,466 @@
-<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Card Studio & Pokémon 8K Promos</title>
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
-    <style>
-        :root {
-            --bg-dark: #0a0c10;
-            --panel-bg: rgba(16, 20, 28, 0.85);
-            --panel-border: rgba(255, 255, 255, 0.1);
-            --gold: #f5c542;
-            --gold-glow: rgba(245, 197, 66, 0.35);
-            --cyan: #38bdf8;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --radius: 12px;
-            --poke-fire: #ef4444;
-            --poke-water: #3b82f6;
-            --poke-electric: #eab308;
-            --poke-psychic: #a855f7;
-            --poke-dragon: #10b981;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: var(--bg-dark);
-            color: var(--text-main);
-        }
-
-        #webgl-canvas {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        /* App Header */
-        .brand-header {
-            position: absolute;
-            top: 18px;
-            left: 24px;
-            z-index: 10;
-            pointer-events: auto;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border);
-            padding: 10px 18px;
-            border-radius: 999px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .brand-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f59e0b, #ec4899, #6366f1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 0 15px rgba(245,158,11,0.6);
-        }
-
-        .brand-text h1 {
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: #fff;
-        }
-
-        .brand-text p {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        /* Top Right Studio Toolbars */
-        .top-tools {
-            position: absolute;
-            top: 18px;
-            right: 24px;
-            z-index: 10;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn-pill {
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border);
-            color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-pill:hover, .btn-pill.active {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--gold);
-            color: var(--gold);
-            box-shadow: 0 0 12px var(--gold-glow);
-        }
-
-        /* Side Inspector Panel */
-        .prompt-panel {
-            position: absolute;
-            top: 76px;
-            right: 24px;
-            bottom: 24px;
-            width: 420px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--panel-border);
-            border-radius: var(--radius);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: -10px 15px 40px rgba(0,0,0,0.6);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .prompt-panel.collapsed {
-            transform: translateX(calc(100% + 40px));
-        }
-
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--panel-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .panel-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tabs {
-            display: flex;
-            background: rgba(0,0,0,0.3);
-            padding: 3px;
-            border-radius: 8px;
-            margin: 12px 18px 6px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 7px 0;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background: rgba(255,255,255,0.12);
-            color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .panel-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 14px 18px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .panel-body::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .panel-body::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
-        }
-
-        .tab-content {
-            display: none;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .tab-content.active {
-            display: flex;
-        }
-
-        /* Prompt Cards */
-        .prompt-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--panel-border);
-            border-radius: 10px;
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .prompt-card:hover {
-            border-color: rgba(245, 197, 66, 0.4);
-            background: rgba(255,255,255,0.05);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .tag {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 3px 7px;
-            border-radius: 4px;
-        }
-
-        .tag-photo { background: rgba(56, 189, 248, 0.2); color: var(--cyan); }
-        .tag-avatar { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
-
-        .prompt-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .prompt-text {
-            font-size: 11px;
-            line-height: 1.45;
-            color: #cbd5e1;
-            background: rgba(0,0,0,0.3);
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-family: ui-monospace, SFMono-Regular, monospace;
-            max-height: 80px;
-            overflow-y: auto;
-            user-select: all;
-        }
-
-        /* Pokémon 8K Promos Section */
-        .pokemon-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .poke-item {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--panel-border);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .poke-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            border-color: var(--gold);
-        }
-
-        .poke-img-container {
-            width: 100%;
-            height: 120px;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .poke-img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
-            transition: transform 0.3s;
-        }
-
-        .poke-item:hover .poke-img {
-            transform: scale(1.1);
-        }
-
-        .promo-badge {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
-            color: white;
-            font-size: 9px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            letter-spacing: 0.5px;
-            z-index: 2;
-        }
-
-        .poke-info {
-            padding: 8px 10px;
-            background: rgba(255,255,255,0.03);
-            border-top: 1px solid var(--panel-border);
-        }
-
-        .poke-name {
-            font-size: 12px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .poke-desc {
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-
-        .btn-view-3d {
-            width: 100%;
-            margin-top: 8px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 6px 0;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .poke-item:hover .btn-view-3d {
-            background: var(--gold);
-            color: #000;
-            border-color: var(--gold);
-        }
-
-        /* Bottom Controls Floating Bar */
-        .bottom-bar {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border);
-            padding: 8px 14px;
-            border-radius: 999px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        }
-
-        .ctrl-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 7px 14px;
-            border-radius: 999px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-        }
-
-        .ctrl-btn:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .ctrl-btn.active {
-            color: #000;
-            background: var(--gold);
-            font-weight: 700;
-            box-shadow: 0 0 12px var(--gold-glow);
-        }
-
-        .divider {
-            width: 1px;
-            height: 20px;
-            background: var(--panel-border);
-        }
-
-        /* On-canvas Toast */
-        .toast {
-            position: absolute;
-            bottom: 84px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: #10b981;
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 8px 20px;
-            border-radius: 999px;
-            pointer-events: none;
-            opacity: 0;
-            box-shadow: 0 10px 25px rgba(16,185,129,0.5);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 100;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        @media (max-width: 860px) {
-            .prompt-panel {
-                width: calc(100% - 32px);
-                right: 16px;
-                left: 16px;
-                top: auto;
-                bottom: 80px;
-                height: 50vh;
+    <title>Pokémon TCG: Nuit Noire & Chaos Ascendant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nuit: {
+                            900: '#0a0a0f',
+                            800: '#12121a',
+                            700: '#1a1a2e',
+                            accent: '#00d4ff'
+                        },
+                        chaos: {
+                            900: '#1a0505',
+                            800: '#2d0a0a',
+                            accent: '#ff0055'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Rajdhani', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'holographic': 'holographic 3s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        holographic: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' }
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 5px currentColor' },
+                            '50%': { boxShadow: '0 0 20px currentColor' }
+                        }
+                    }
+                }
             }
-            .bottom-bar {
-                width: calc(100% - 32px);
-                justify-content: space-around;
-                overflow-x: auto;
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-nuit-accent to-chaos-accent;
+            }
+            .glass {
+                @apply bg-white/5 backdrop-blur-md border border-white/10;
+            }
+            .holo-border {
+                @apply relative overflow-hidden;
+            }
+            .holo-border::before {
+                content: '';
+                @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 animate-holographic;
             }
         }
     </style>
 </head>
-<body>
-
-    <!-- WebGL 3D Canvas Container -->
-    <div id="webgl-canvas"></div>
-
-    <!-- Header -->
-    <header class="brand-header">
-        <div class="brand-badge">⚡</div>
-        <div class="brand-text">
-            <h1>TCG Studio 3D</h1>
-            <p>Marketplace & Pokémon 8K Promos</p>
-        </div>
-    </header>
-
-    <!-- Top Right Tools -->
-    <div class="top-tools">
-        <button class="btn-pill active" id="btn-toggle-slab">💎 Case: <span id="slab-status">Graded Slab</span></button>
-        <button class="btn-pill active" id="btn-toggle-holo">✨ Holo Prism: <span id="holo-status">ON</span></button>
-    </div>
-
-    <!-- Side Inspector Panel -->
-    <div class="prompt-panel" id="inspector-panel">
-        <div class="panel-header">
-            <div class="panel-title">🛠️ Studio Inspector</div>
-        </div>
-
-        <div class="tabs">
-            <button class="tab-btn" data-target="tab-prompts">Prompts Lab</button>
-            <button class="tab-btn active" data-target="tab-pokemon">Pokémon 8K Promos</button>
-        </div>
-
-        <div class="panel-body">
-            
-            <!-- Tab 1: Standard Prompts -->
-            <div id="tab-prompts" class="tab-content">
-                <div class="prompt-card">
-                    <div class="card-top">
-                        <span class="tag tag-photo">Base Frame</span>
-                        <span class="prompt-name">Holo Standard</span>
-                    </div>
-                    <div class="prompt-text">/generate texture base=tcg_holographic style=prism border=silver effect=rainbow_foil</div>
+<body class="bg-nuit-900 text-white font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="font-display font-bold text-2xl text-gradient">Pokémon TCG</span>
                 </div>
-                <div class="prompt-card">
-                    <div class="card-top">
-                        <span class="tag tag-avatar">Character</span>
-                        <span class="prompt-name">Dark Magician V2</span>
-                    </div>
-                    <div class="prompt-text">/generate artwork subject="dark wizard" environment="cosmic nebula" style=8k_render lighting=dramatic</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-nuit-accent transition-colors duration-300">Home</a>
+                    <a href="#sets" class="hover:text-nuit-accent transition-colors duration-300">Sets</a>
+                    <a href="#cards" class="hover:text-nuit-accent transition-colors duration-300">Cards</a>
+                    <a href="#preorder" class="hover:text-nuit-accent transition-colors duration-300">Pre-order</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white hover:text-nuit-accent transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 hover:bg-white/10 rounded-md">Home</a>
+                <a href="#sets" class="block px-3 py-2 hover:bg-white/10 rounded-md">Sets</a>
+                <a href="#cards" class="block px-3 py-2 hover:bg-white/10 rounded-md">Cards</a>
+                <a href="#preorder" class="block px-3 py-2 hover:bg-white/10 rounded-md">Pre-order</a>
+            </div>
+        </div>
+    </nav>
 
-            <!-- Tab 2: Pokémon 8K Promos -->
-            <div id="tab-pokemon" class="tab-content active">
-                <div class="pokemon-grid" id="pokemon-grid">
-                    <!-- Populated by JS -->
+    <!-- Hero Section -->
+    <section id="home" class="h-screen relative overflow-hidden">
+        <div id="pokemon-3d" class="absolute top-0 left-0 w-full h-full z-0"></div>
+        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+            <span class="animate-pulse-glow px-4 py-2 rounded-full bg-nuit-accent/20 text-nuit-accent text-sm font-semibold mb-6 border border-nuit-accent/30">
+                New Expansion | Available Now
+            </span>
+            <h1 class="font-display font-bold text-5xl md:text-7xl mb-4">
+                <span class="text-gradient">Nuit Noire</span> & <span class="text-gradient">Chaos Ascendant</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl">
+                Embrace the darkness. Unleash the chaos. Collect the most powerful Dark-type Pokémon ever released.
+            </p>
+            <a href="#preorder" class="px-8 py-4 bg-gradient-to-r from-nuit-accent to-chaos-accent rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-nuit-accent/50">
+                Pre-order Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Cards Section -->
+    <section id="cards" class="py-20 bg-nuit-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-display font-bold text-4xl md:text-5xl text-center mb-16 text-gradient">Notable Pokémon</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1: Yveltal -->
+                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-nuit-accent/20">
+                    <div class="h-48 bg-gradient-to-br from-nuit-700 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-nuit-accent" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Yveltal</h3>
+                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-nuit-accent/20 text-nuit-accent mb-2">Dark / Flying</span>
+                    <p class="text-sm text-gray-400 mb-2">Rare Holo VMAX</p>
+                    <p class="text-gray-300 text-sm">The legendary harbinger of destruction from Nuit Noire, capable of stealing life force from all who oppose it.</p>
+                </div>
+
+                <!-- Card 2: Umbreon -->
+                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-nuit-accent/20">
+                    <div class="h-48 bg-gradient-to-br from-nuit-700 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-nuit-accent" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Umbreon</h3>
+                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-nuit-accent/20 text-nuit-accent mb-2">Dark</span>
+                    <p class="text-sm text-gray-400 mb-2">Rare Holo GX</p>
+                    <p class="text-gray-300 text-sm">The moonlit evolution of Eevee, its glowing rings pulse with dark energy to confuse and disorient opponents.</p>
+                </div>
+
+                <!-- Card 3: Tyranitar -->
+                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-chaos-accent/20">
+                    <div class="h-48 bg-gradient-to-br from-chaos-900 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-chaos-accent" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Tyranitar</h3>
+                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-chaos-accent/20 text-chaos-accent mb-2">Rock / Dark</span>
+                    <p class="text-sm text-gray-400 mb-2">Rare Holo V</p>
+                    <p class="text-gray-300 text-sm">The armored juggernaut of Chaos Ascendant, capable of reshaping the battlefield with its raw, chaotic power.</p>
+                </div>
+
+                <!-- Card 4: Shiny Garchomp -->
+                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-chaos-accent/20">
+                    <div class="h-48 bg-gradient-to-br from-chaos-900 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-chaos-accent" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Shiny Garchomp</h3>
+                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-chaos-accent/20 text-chaos-accent mb-2">Dragon / Ground</span>
+                    <p class="text-sm text-gray-400 mb-2">Secret Rare</p>
+                    <p class="text-gray-300 text-sm">The elusive shiny variant, its black scales and red fins embody the chaotic energy of the new expansion.</p>
                 </div>
             </div>
-
         </div>
-    </div>
+    </section>
 
-    <!-- Bottom Controls -->
-    <div class="bottom-bar">
-        <button class="ctrl-btn active" id="view-front">🎴 Front View</button>
-        <div class="divider"></div>
-        <button class="ctrl-btn" id="view-angle">📐 3D Angle</button>
-        <div class="divider"></div>
-        <button class="ctrl-btn" id="view-back">🔙 Back View</button>
-    </div>
+    <!-- Packaging Section -->
+    <section id="sets" class="py-20 bg-nuit-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-display font-bold text-4xl md:text-5xl text-center mb-16 text-gradient">Booster Packs</h2>
+            <div class="flex flex-col md:flex-row gap-12 justify-center items-center">
+                <!-- Nuit Noire Pack -->
+                <div class="w-64 h-96 rounded-2xl p-4 relative transform transition-transform duration-500 hover:rotate-y-12 hover:scale-105 border-2 border-white/10 bg-gradient-to-b from-nuit-900 to-nuit-700 shadow-lg shadow-nuit-accent/30">
+                    <div class="absolute inset-0 rounded-2xl overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 animate-holographic"></div>
+                    </div>
+                    <div class="relative z-10 h-full flex flex-col items-center justify-center">
+                        <div class="w-32 h-40 bg-nuit-800/50 rounded-lg mb-4 border border-nuit-accent/30 flex items-center justify-center">
+                            <span class="text-nuit-accent font-display font-bold text-2xl">NN</span>
+                        </div>
+                        <h3 class="font-display font-bold text-2xl mb-2 bg-gradient-to-r from-gray-300 to-white bg-clip-text text-transparent">Nuit Noire</h3>
+                        <p class="text-sm text-gray-400">15 Cards per Pack</p>
+                        <p class="text-nuit-accent font-semibold mt-2">1 Rare Holo per Pack</p>
+                    </div>
+                </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">Texture Loaded</div>
+                <!-- Chaos Ascendant Pack -->
+                <div class="w-64 h-96 rounded-2xl p-4 relative transform transition-transform duration-500 hover:rotate-y-12 hover:scale-105 border-2 border-white/10 bg-gradient-to-b from-chaos-900 to-chaos-800 shadow-lg shadow-chaos-accent/30">
+                    <div class="absolute inset-0 rounded-2xl overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 animate-holographic"></div>
+                    </div>
+                    <div class="relative z-10 h-full flex flex-col items-center justify-center">
+                        <div class="w-32 h-40 bg-chaos-800/50 rounded-lg mb-4 border border-chaos-accent/30 flex items-center justify-center">
+                            <span class="text-chaos-accent font-display font-bold text-2xl">CA</span>
+                        </div>
+                        <h3 class="font-display font-bold text-2xl mb-2 bg-gradient-to-r from-chaos-accent to-pink-400 bg-clip-text text-transparent">Chaos Ascendant</h3>
+                        <p class="text-sm text-gray-400">15 Cards per Pack</p>
+                        <p class="text-chaos-accent font-semibold mt-2">1 Rare Holo + 1 Reverse Holo per Pack</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Scripts -->
+    <!-- Features Section -->
+    <section class="py-20 bg-nuit-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-display font-bold text-4xl md:text-5xl text-center mb-16 text-gradient">What's New</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-8 text-center hover:border-nuit-accent/30 transition-colors duration-300">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-nuit-accent/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-nuit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">New Card Mechanics</h3>
+                    <p class="text-gray-300">Introducing Dark Energies that boost your Dark-type Pokémon's attacks while weakening your opponent's bench.</p>
+                </div>
+
+                <div class="glass rounded-2xl p-8 text-center hover:border-chaos-accent/30 transition-colors duration-300">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-chaos-accent/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-chaos-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Limited Edition</h3>
+                    <p class="text-gray-300">Each booster pack contains a chance for a special etched foil card, only available in this expansion.</p>
+                </div>
+
+                <div class="glass rounded-2xl p-8 text-center hover:border-nuit-accent/30 transition-colors duration-300">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-nuit-accent/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-nuit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Elite Trainer Box</h3>
+                    <p class="text-gray-300">Premium packaging with exclusive promo cards, dice, card sleeves, and a premium collector's tin.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-order Section -->
+    <section id="preorder" class="py-20 bg-gradient-to-r from-nuit-900 to-chaos-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display font-bold text-4xl md:text-5xl mb-8">Pre-order Now</h2>
+            <p class="text-xl text-gray-300 mb-8">Secure your copy of Nuit Noire & Chaos Ascendant before they sell out. Available in booster packs, elite trainer boxes, and complete sets.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="px-10 py-4 bg-white text-nuit-900 rounded-full font-bold text-lg hover:bg-nuit-accent hover:text-white transition-colors duration-300">
+                    Booster Pack - $4.99
+                </button>
+                <button class="px-10 py-4 bg-chaos-accent text-white rounded-full font-bold text-lg hover:bg-chaos-accent/80 transition-colors duration-300">
+                    Elite Trainer Box - $49.99
+                </button>
+                <button class="px-10 py-4 border-2 border-nuit-accent text-nuit-accent rounded-full font-bold text-lg hover:bg-nuit-accent hover:text-white transition-colors duration-300">
+                    Complete Set - $199.99
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-nuit-800/50 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <span class="font-display font-bold text-2xl text-gradient">Pokémon TCG</span>
+                    <p class="text-gray-400 mt-2">Nuit Noire & Chaos Ascendant</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-nuit-accent transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-nuit-accent transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-nuit-accent transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400 text-sm">
+                &copy; 2024 Pokémon TCG. Not affiliated with The Pokémon Company. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js and Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script>
-        // --- 1. Pokémon Data & Canvas Texture Generator ---
-        const pokemonData = [
-            { id: 'charizard', name: 'Dracaufeu', type: 'Feu', hp: 330, color1: '#1a0505', color2: '#ef4444', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png' },
-            { id: 'pikachu', name: 'Pikachu', type: 'Électrique', hp: 120, color1: '#1a1a00', color2: '#eab308', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png' },
-            { id: 'mewtwo', name: 'Mewtwo', type: 'Psy', hp: 280, color1: '#15051a', color2: '#a855f7', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png' },
-            { id: 'rayquaza', name: 'Rayquaza', type: 'Dragon', hp: 320, color1: '#051a10', color2: '#10b981', imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png' }
-        ];
-
-        // Store the active card material
-        let cardFrontMaterial;
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
-        }
-
-        // Generate high-res 2D canvas texture for the 3D card
-        function loadPokemonTexture(poke) {
-            showToast(`Génération 8K : ${poke.name}...`);
-            
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024;
-            canvas.height = 1433;
-            const ctx = canvas.getContext('2d');
-
-            // Draw Background Gradient
-            const grad = ctx.createLinearGradient(0, 0, 1024, 1433);
-            grad.addColorStop(0, poke.color1);
-            grad.addColorStop(0.5, '#2a2a3a');
-            grad.addColorStop(1, poke.color2);
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 1024, 1433);
-
-            // Draw Borders
-            ctx.strokeStyle = '#f5c542'; // Gold border
-            ctx.lineWidth = 36;
-            ctx.strokeRect(18, 18, 988, 1397);
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(40, 40, 944, 1353);
-
-            // Draw Top UI (Name, HP)
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(40, 40, 944, 120);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 64px sans-serif';
-            ctx.fillText(poke.name, 70, 120);
-
-            ctx.fillStyle = '#f5c542';
-            ctx.font = 'bold 54px sans-serif';
-            ctx.fillText(`HP ${poke.hp}`, 740, 115);
-
-            // Draw 8K Promo Badge
-            ctx.fillStyle = 'rgba(239, 68, 68, 0.9)';
-            ctx.beginPath();
-            ctx.roundRect(70, 150, 280, 50, 10);
-            ctx.fill();
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 28px sans-serif';
-            ctx.fillText('⭐ 8K PROMO ⭐', 95, 185);
-
-            // Bottom Description UI
-            ctx.fillStyle = 'rgba(0,0,0,0.6)';
-            ctx.fillRect(40, 1100, 944, 293);
-            ctx.fillStyle = '#f5c542';
-            ctx.font = 'italic 34px serif';
-            ctx.fillText(`Édition Limitée - ${poke.type} Class`, 70, 1160);
-            ctx.fillStyle = '#cbd5e1';
-            ctx.font = '30px sans-serif';
-            ctx.fillText("Illustration générée en résolution 8K ultra-détaillée.", 70, 1220);
-            ctx.fillText("Effets holographiques avancés et certification d'authenticité.", 70, 1270);
-
-            // Load and draw the image
-            const img = new Image();
-            img.crossOrigin = 'Anonymous';
-            img.src = poke.imgUrl;
-            img.onload = () => {
-                // Add a glow effect behind pokemon
-                ctx.shadowColor = poke.color2;
-                ctx.shadowBlur = 100;
-                ctx.drawImage(img, 112, 220, 800, 800);
-                ctx.shadowBlur = 0; // reset
-
-                // Apply to 3D material
-                const texture = new THREE.CanvasTexture(canvas);
-                texture.anisotropy = 16;
-                cardFrontMaterial.map = texture;
-                cardFrontMaterial.needsUpdate = true;
-                showToast(`${poke.name} chargé avec succès !`);
-            };
-        }
-
-        // --- 2. Build UI Grid ---
-        const grid = document.getElementById('pokemon-grid');
-        pokemonData.forEach(poke => {
-            const el = document.createElement('div');
-            el.className = 'poke-item';
-            el.innerHTML = `
-                <div class="promo-badge">8K PROMO</div>
-                <div class="poke-img-container" style="background: radial-gradient(circle, ${poke.color2}40 0%, transparent 70%)">
-                    <img src="${poke.imgUrl}" class="poke-img" alt="${poke.name}" crossorigin="anonymous">
-                </div>
-                <div class="poke-info">
-                    <div class="poke-name">${poke.name}</div>
-                    <div class="poke-desc">Type: ${poke.type} • HP: ${poke.hp}</div>
-                    <button class="btn-view-3d">Voir en 3D</button>
-                </div>
-            `;
-            el.addEventListener('click', () => loadPokemonTexture(poke));
-            grid.appendChild(el);
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
 
-        // --- 3. UI Tab Logic ---
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                e.target.classList.add('active');
-                document.getElementById(e.target.getAttribute('data-target')).classList.add('active');
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    mobileMenu.classList.add('hidden');
+                }
             });
         });
 
-        // --- 4. WebGL / Three.js Setup ---
-        const container = document.getElementById('webgl-canvas');
-        const scene = new THREE.Scene();
-        // Add a subtle environment fog
-        scene.fog = new THREE.FogExp2(0x0a0c10, 0.05);
+        // Three.js 3D Pokémon Model (Stylized Umbreon)
+        const init3DModel = () => {
+            const container = document.getElementById('pokemon-3d');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
 
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 0, 5.5);
+            // Controls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = true;
+            controls.minDistance = 2;
+            controls.maxDistance = 5;
+            controls.enablePan = false;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
+            // Pokémon Group
+            const pokemonGroup = new THREE.Group();
+            scene.add(pokemonGroup);
 
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.enablePan = false;
-        controls.minDistance = 3;
-        controls.maxDistance = 10;
+            // Materials
+            const bodyMaterial = new THREE.MeshStandardMaterial({
+                color: 0x1a1a2e,
+                roughness: 0.3,
+                metalness: 0.5
+            });
+            const ringMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00d4ff,
+                emissive: 0x00d4ff,
+                emissiveIntensity: 1,
+                roughness: 0.2,
+                metalness: 0.3
+            });
 
-        // Group to hold card + slab
-        const cardGroup = new THREE.Group();
-        scene.add(cardGroup);
+            // Body
+            const bodyGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            pokemonGroup.add(body);
 
-        // --- Card Mesh ---
-        // Standard TCG ratio ~ 63x88mm
-        const cardGeometry = new THREE.BoxGeometry(2.5, 3.5, 0.02);
-        
-        // Materials
-        cardFrontMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0xffffff,
-            roughness: 0.2,
-            metalness: 0.8 // High metalness for holo effect reflection
-        });
-        
-        const cardBackMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x1e3a8a, // Dark blue TCG back
-            roughness: 0.6,
-            metalness: 0.1
-        });
-        
-        const cardEdgeMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
+            // Ears
+            const earGeometry = new THREE.ConeGeometry(0.2, 0.8, 16);
+            const leftEar = new THREE.Mesh(earGeometry, bodyMaterial);
+            leftEar.position.set(0.4, 1.2, 0);
+            leftEar.rotation.z = -0.3;
+            pokemonGroup.add(leftEar);
 
-        const materials = [
-            cardEdgeMaterial, cardEdgeMaterial, // Right, Left
-            cardEdgeMaterial, cardEdgeMaterial, // Top, Bottom
-            cardFrontMaterial, // Front
-            cardBackMaterial   // Back
-        ];
+            const rightEar = new THREE.Mesh(earGeometry, bodyMaterial);
+            rightEar.position.set(-0.4, 1.2, 0);
+            rightEar.rotation.z = 0.3;
+            pokemonGroup.add(rightEar);
 
-        const cardMesh = new THREE.Mesh(cardGeometry, materials);
-        cardGroup.add(cardMesh);
+            // Tail
+            const tailCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0, -0.5, -1),
+                new THREE.Vector3(0, 0, -1.5),
+                new THREE.Vector3(0, 0.5, -1.2)
+            ]);
+            const tailGeometry = new THREE.TubeGeometry(tailCurve, 20, 0.15, 16, false);
+            const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
+            pokemonGroup.add(tail);
 
-        // --- Graded Slab Mesh ---
-        const slabGeometry = new THREE.BoxGeometry(2.8, 4.2, 0.25);
-        const slabMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xffffff,
-            metalness: 0.1,
-            roughness: 0.05,
-            transmission: 0.95, // Glass effect
-            ior: 1.5,
-            transparent: true,
-            opacity: 1,
-            side: THREE.DoubleSide
-        });
-        const slabMesh = new THREE.Mesh(slabGeometry, slabMaterial);
-        cardGroup.add(slabMesh);
+            // Glowing Rings
+            const rings = [];
+            const ringPositions = [
+                { x: 0.5, y: -0.8, z: 0.3 },
+                { x: -0.5, y: -0.8, z: 0.3 },
+                { x: 0.5, y: -0.8, z: -0.3 },
+                { x: -0.5, y: -0.8, z: -0.3 }
+            ];
 
-        // --- Lighting (Holo Prism effect) ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
+            ringPositions.forEach(pos => {
+                const ringGeometry = new THREE.TorusGeometry(0.25, 0.05, 16, 100);
+                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                ring.position.set(pos.x, pos.y, pos.z);
+                ring.rotation.x = Math.PI / 2;
+                pokemonGroup.add(ring);
+                rings.push(ring);
+            });
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight.position.set(2, 5, 5);
-        scene.add(dirLight);
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
 
-        // Moving colored lights to simulate holographic foil
-        const holoLight1 = new THREE.PointLight(0xff00ff, 1.5, 10);
-        const holoLight2 = new THREE.PointLight(0x00ffff, 1.5, 10);
-        scene.add(holoLight1);
-        scene.add(holoLight2);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
 
-        // --- UI Toggles Logic ---
-        let isSlabActive = true;
-        let isHoloActive = true;
+            // Point lights for rings
+            ringPositions.forEach(pos => {
+                const pointLight = new THREE.PointLight(0x00d4ff, 1, 3);
+                pointLight.position.set(pos.x, pos.y, pos.z);
+                scene.add(pointLight);
+            });
 
-        document.getElementById('btn-toggle-slab').addEventListener('click', (e) => {
-            isSlabActive = !isSlabActive;
-            slabMesh.visible = isSlabActive;
-            e.currentTarget.classList.toggle('active');
-            document.getElementById('slab-status').innerText = isSlabActive ? 'Graded Slab' : 'Raw Card';
-        });
+            // Camera Position
+            camera.position.z = 3;
 
-        document.getElementById('btn-toggle-holo').addEventListener('click', (e) => {
-            isHoloActive = !isHoloActive;
-            e.currentTarget.classList.toggle('active');
-            document.getElementById('holo-status').innerText = isHoloActive ? 'ON' : 'OFF';
-            if(!isHoloActive) {
-                holoLight1.intensity = 0;
-                holoLight2.intensity = 0;
-                cardFrontMaterial.metalness = 0.1;
-            } else {
-                holoLight1.intensity = 1.5;
-                holoLight2.intensity = 1.5;
-                cardFrontMaterial.metalness = 0.8;
-            }
-        });
+            // Animation Loop
+            const animate = () => {
+                requestAnimationFrame(animate);
 
-        // Bottom Bar Camera Controls
-        const btnFront = document.getElementById('view-front');
-        const btnAngle = document.getElementById('view-angle');
-        const btnBack = document.getElementById('view-back');
-        const camBtns = [btnFront, btnAngle, btnBack];
+                // Rotate Pokémon slowly
+                pokemonGroup.rotation.y += 0.005;
 
-        function resetCamBtns() {
-            camBtns.forEach(b => b.classList.remove('active'));
-        }
+                // Pulse rings
+                const time = Date.now() * 0.002;
+                rings.forEach(ring => {
+                    ring.scale.setScalar(1 + Math.sin(time) * 0.1);
+                });
 
-        btnFront.addEventListener('click', () => {
-            resetCamBtns(); btnFront.classList.add('active');
-            gsapCamera(0, 0, 5.5);
-        });
-        btnAngle.addEventListener('click', () => {
-            resetCamBtns(); btnAngle.classList.add('active');
-            gsapCamera(3, 2, 4);
-        });
-        btnBack.addEventListener('click', () => {
-            resetCamBtns(); btnBack.classList.add('active');
-            gsapCamera(0, 0, -5.5);
-        });
-
-        // Simple camera interpolator
-        function gsapCamera(tx, ty, tz) {
-            const start = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
-            const end = { x: tx, y: ty, z: tz };
-            let alpha = 0;
-            const animateCam = () => {
-                alpha += 0.05;
-                if(alpha > 1) alpha = 1;
-                // Ease out cubic
-                const ease = 1 - Math.pow(1 - alpha, 3);
-                camera.position.set(
-                    start.x + (end.x - start.x) * ease,
-                    start.y + (end.y - start.y) * ease,
-                    start.z + (end.z - start.z) * ease
-                );
-                if(alpha < 1) requestAnimationFrame(animateCam);
+                controls.update();
+                renderer.render(scene, camera);
             };
-            animateCam();
-        }
 
-        // --- Animation Loop ---
-        const clock = new THREE.Clock();
+            animate();
 
-        function animate() {
-            requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();
+            // Handle Window Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        };
 
-            // Floating animation
-            cardGroup.position.y = Math.sin(time * 1.5) * 0.1;
-
-            // Move holo lights across the card surface
-            if(isHoloActive) {
-                holoLight1.position.set(Math.sin(time * 2) * 2, Math.cos(time * 1.5) * 2, 1.5);
-                holoLight2.position.set(Math.cos(time * 2.5) * 2, Math.sin(time * 1.2) * 2, 1.5);
-            }
-
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        // Handle Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Initialize First Card
-        loadPokemonTexture(pokemonData[0]); // Load Charizard by default
-        animate();
-
+        // Initialize 3D Model when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init3DModel);
     </script>
 </body>
 </html>
