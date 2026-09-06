@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Barlow+Condensed:wght@500;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-night: #0b0d0b;
+  --color-coal: #141813;
+  --color-panel: #1b201a;
+  --color-line: #2a302a;
+  --color-crimson: #c1272d;
+  --color-blood: #8e1c21;
+  --color-palm: #006233;
+  --color-fern: #0f7a45;
+  --color-gold: #d4a24c;
+  --color-sand: #f0e8d8;
+  --color-smoke: #a9ada4;
+
+  --font-display: "Anton", "Tajawal", sans-serif;
+  --font-body: "Barlow", "Tajawal", sans-serif;
+  --font-cond: "Barlow Condensed", "Tajawal", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-night);
+  color: var(--color-sand);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+[dir='rtl'] body,
+[dir='rtl'] {
+  font-family: "Tajawal", "Barlow", sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+[dir='rtl'] .font-display {
+  font-family: "Tajawal", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0 !important;
+}
+
+.font-cond {
+  font-family: var(--font-cond);
+}
+
+[dir='rtl'] .font-cond {
+  font-family: "Tajawal", sans-serif;
+  font-weight: 700;
+}
+
+/* Zellige eight-point star pattern */
+.zellige {
+  background-image: url("data:image/svg+xml,%3Csvg width='56' height='56' viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23d4a24c' stroke-opacity='0.16' stroke-width='1'%3E%3Cpath d='M28 4 L34 22 L52 28 L34 34 L28 52 L22 34 L4 28 L22 22 Z'/%3E%3Ccircle cx='28' cy='28' r='5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.zellige-dense {
+  background-image: url("data:image/svg+xml,%3Csvg width='36' height='36' viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1'%3E%3Cpath d='M18 2 L22 14 L34 18 L22 22 L18 34 L14 22 L2 18 L14 14 Z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+[dir='rtl'] .animate-marquee {
+  animation-direction: reverse;
+}
+
+/* thin scrollbars for horizontal scrollers */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+::selection {
+  background: var(--color-crimson);
+  color: var(--color-sand);
+}

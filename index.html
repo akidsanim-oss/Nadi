@@ -1,309 +1,694 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pokémon TCG — NUIT NOIRE × CHAOS ASCENDANT | Dracaufeu Obsidienne</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
-<style>
-:root{--gold:#f5c86e;--gold2:#ffe9b0;--red:#ff1e2d;--lava:#ff4a00;--bg:#060609;--panel:rgba(10,10,18,.72);--line:rgba(245,200,110,.28);--nuit:#6a7cff;--chaos:#ff3b1f;}
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Inter,system-ui,sans-serif;color:#ece5d3}
-#scene{position:fixed;inset:0;z-index:1}#scene canvas{display:block}
-.vignette{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 42%,rgba(0,0,0,.62) 100%);mix-blend-mode:multiply}
-.grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-#flash{position:fixed;inset:0;z-index:5;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(255,90,0,.65),rgba(255,0,0,.2) 45%,transparent 70%);opacity:0;transition:opacity .15s}
-header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:linear-gradient(to bottom,rgba(0,0,0,.85),transparent);pointer-events:none}
-.brand{display:flex;align-items:center;gap:14px;pointer-events:auto}
-.pokeball{width:38px;height:38px;border-radius:50%;background:conic-gradient(from 0deg,#ff1e2d 0 50%,#eee 50% 100%);border:3px solid #111;position:relative;box-shadow:0 0 18px rgba(255,30,45,.7);flex-shrink:0}
-.pokeball::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:4px;background:#111;transform:translateY(-50%)}
-.pokeball::before{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;background:#fff;border:3px solid #111;border-radius:50%;transform:translate(-50%,-50%);z-index:1}
-.logo-txt{line-height:1}.logo-txt b{font-family:Cinzel,serif;font-size:18px;letter-spacing:3px;color:var(--gold2);text-shadow:0 0 18px rgba(245,200,110,.6)}.logo-txt span{display:block;font-family:Inter;font-size:10px;letter-spacing:4px;color:#9aa0b8;margin-top:3px}
-nav{display:flex;gap:10px;pointer-events:auto}
-.nav-btn{font-size:11px;letter-spacing:2px;padding:8px 16px;border:1px solid var(--line);border-radius:20px;background:rgba(0,0,0,.55);color:var(--gold2);backdrop-filter:blur(8px);cursor:pointer;transition:.3s;font-weight:700}
-.nav-btn.active,.nav-btn:hover{background:var(--gold);color:#000;box-shadow:0 0 20px rgba(245,200,110,.6)}
-#left{position:fixed;left:22px;top:50%;transform:translateY(-50%);z-index:10;width:340px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;backdrop-filter:blur(14px);box-shadow:0 20px 60px rgba(0,0,0,.65)}
-.eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);display:flex;align-items:center;gap:8px;font-weight:800}.eyebrow i{width:28px;height:1px;background:var(--gold);display:inline-block}
-h1{font-family:Cinzel,serif;font-size:32px;line-height:1.02;margin:10px 0 4px;color:#fff;text-shadow:0 0 30px rgba(255,60,0,.55);font-weight:900}
-h1 em{font-style:normal;background:linear-gradient(180deg,#fff6d8,var(--gold) 60%,#ff6a00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.sub{font-size:13px;color:#c8bfa5;font-style:italic}
-.types{display:flex;gap:8px;margin:14px 0}
-.type{font-size:11px;font-weight:800;letter-spacing:1px;padding:6px 12px;border-radius:6px}
-.t-dark{background:linear-gradient(180deg,#2b2b3a,#0a0a12);border:1px solid #5a5aff;color:#c9ccff}.t-fire{background:linear-gradient(180deg,#ff6a00,#7a0a00);border:1px solid #ffb066;color:#fff}.t-dragon{background:linear-gradient(180deg,#6a3bff,#1a004a);border:1px solid #b79bff;color:#fff}
-.desc{font-size:13px;line-height:1.6;color:#d8d0b8}
-.desc strong{color:var(--gold2)}
-.stats{margin-top:16px;display:grid;gap:10px}
-.stat{display:grid;grid-template-columns:78px 1fr 38px;align-items:center;gap:10px;font-size:11px;letter-spacing:1px;font-weight:700;color:#e8dfc5}
-.bar{height:8px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15)}.fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#7a0a00,var(--lava),var(--gold));box-shadow:0 0 12px var(--lava);transition:width 1.2s cubic-bezier(.2,.9,.2,1)}
-.abilities{margin-top:14px;display:flex;gap:8px}
-.ab{flex:1;background:rgba(255,60,0,.08);border:1px solid rgba(255,80,0,.3);border-radius:10px;padding:8px 10px;font-size:11px;line-height:1.4}.ab b{display:block;color:var(--gold);font-size:11px;letter-spacing:1px}
-#right{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:10;width:228px;display:flex;flex-direction:column;gap:14px}
-.pack{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid var(--line);background:#000;transition:.35s;pointer-events:auto;transform-style:preserve-3d}
-.pack:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 18px 50px rgba(255,60,0,.45);border-color:var(--gold)}
-.pack-art{height:152px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column}
-.pack-art.nuit{background:radial-gradient(ellipse at 50% 20%,#3b4bff 0%,#0a0e3a 35%,#000 70%),linear-gradient(180deg,#0a0e2e,#000)}
-.pack-art.chaos{background:radial-gradient(ellipse at 50% 25%,#ffdf9e 0%,#ff5a00 28%,#4a0a00 60%,#000 100%)}
-.pack-art .moon{font-size:44px;filter:drop-shadow(0 0 18px #6a7cff)}
-.pack-art .dragon{font-size:58px;filter:drop-shadow(0 0 22px #ff3b1f) drop-shadow(0 4px 10px #000)}
-.pack-art h3{font-family:Cinzel,serif;letter-spacing:3px;font-size:18px;color:#fff;text-shadow:0 2px 12px #000;margin-top:6px}
-.pack-art p{font-size:9px;letter-spacing:3px;color:var(--gold2)}
-.pack-info{padding:10px 12px;background:linear-gradient(180deg,rgba(20,20,30,.97),rgba(0,0,0,.97))}.pack-info span{display:block;font-size:10px;letter-spacing:2px;color:#999}
-.pack-info button{margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;font-weight:800;font-size:11px;letter-spacing:1px;cursor:pointer;background:linear-gradient(90deg,var(--gold),#ff8a00);color:#000;transition:.25s}.pack-info button:hover{filter:brightness(1.15)}
-#bottom{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.62);border:1px solid var(--line);padding:10px 12px;border-radius:50px;backdrop-filter:blur(12px);max-width:94vw;flex-wrap:wrap;justify-content:center}
-.btn{border:none;cursor:pointer;border-radius:30px;padding:12px 20px;font-weight:800;font-size:12px;letter-spacing:1.2px;transition:.25s;display:flex;align-items:center;gap:8px;white-space:nowrap}
-#roar{background:linear-gradient(90deg,#ff1e2d,#ff6a00);color:#fff;box-shadow:0 0 25px rgba(255,30,0,.6)}#roar:hover{transform:scale(1.06)}
-#modeN,#modeC{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.22)}#modeN.active{background:linear-gradient(90deg,#1a237e,#6a7cff);box-shadow:0 0 18px #6a7cff}#modeC.active{background:linear-gradient(90deg,#4a0a00,#ff3b1f);box-shadow:0 0 18px #ff3b1f}
-#boosterB{background:linear-gradient(90deg,#f5c86e,#fff);color:#000}
-.hint{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:9;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.65);background:rgba(0,0,0,.45);padding:6px 14px;border-radius:20px;pointer-events:none;border:1px solid rgba(255,255,255,.12)}
-#toast{position:fixed;top:78px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:30;background:rgba(0,0,0,.85);border:1px solid var(--gold);color:var(--gold2);padding:10px 20px;border-radius:30px;font-size:12px;letter-spacing:1px;opacity:0;transition:.4s;pointer-events:none}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#loader{position:fixed;inset:0;z-index:50;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .8s}
-#loader.hide{opacity:0;pointer-events:none}.load-dragon{font-size:64px;filter:drop-shadow(0 0 20px #ff3b1f);animation:float 1.5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.08)}}
-.load-bar{width:240px;height:4px;background:#222;border-radius:10px;overflow:hidden}.load-bar div{height:100%;width:40%;background:linear-gradient(90deg,var(--gold),var(--red));animation:slide 1s infinite}
-@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
-.load-txt{font-family:Cinzel,serif;letter-spacing:4px;font-size:12px;color:var(--gold)}
-#modal{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);padding:20px}
-#modal.show{display:flex}.modal-box{max-width:860px;width:100%;text-align:center}
-.modal-box h2{font-family:Cinzel,serif;color:var(--gold2);letter-spacing:4px;margin-bottom:14px;text-shadow:0 0 20px rgba(255,80,0,.6)}
-.cards{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
-.pcard{width:210px;height:310px;border-radius:14px;background:linear-gradient(165deg,#1c1c28 0%,#0a0a12 55%,#2a0a0a 100%);border:3px solid var(--gold);overflow:hidden;position:relative;transform:rotateY(90deg);animation:flip .7s forwards;box-shadow:0 20px 60px rgba(0,0,0,.8)}
-.pcard:nth-child(2){animation-delay:.25s;border-color:#ff3b1f}.pcard:nth-child(3){animation-delay:.5s;border-color:#6a7cff}
-@keyframes flip{to{transform:rotateY(0)}}
-.pcard-top{height:132px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;overflow:hidden}
-.pcard:nth-child(1) .pcard-top{background:radial-gradient(circle at 50% 30%,#ff9a3c,#7a0a00 60%,#000)}
-.pcard:nth-child(2) .pcard-top{background:radial-gradient(circle at 50% 30%,#ff4a6a,#2a000a 60%,#000)}
-.pcard:nth-child(3) .pcard-top{background:radial-gradient(circle at 50% 30%,#8a9bff,#0a0e4a 60%,#000)}
-.pcard-body{padding:12px;text-align:left}.pcard-body b{font-family:Cinzel,serif;font-size:13px;color:#fff;letter-spacing:.5px}.pcard-body small{display:block;color:var(--gold);font-size:10px;letter-spacing:2px;margin:4px 0}.pcard-body p{font-size:11px;color:#c9c0a8;line-height:1.5}.rarity{position:absolute;top:8px;right:8px;background:#000;color:var(--gold);font-size:9px;padding:3px 8px;border-radius:20px;border:1px solid var(--gold);letter-spacing:1px}
-#closeM{margin-top:18px;background:#fff;color:#000;border:none;padding:12px 30px;border-radius:30px;font-weight:800;letter-spacing:2px;cursor:pointer}
-.hp{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);color:#7dff8a;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;border:1px solid rgba(125,255,138,.4)}
-@media(max-width:1020px){#left{width:270px;padding:16px}h1{font-size:24px}#right{width:190px}}
-@media(max-width:760px){#left{display:none}#right{display:none}header{padding:10px 12px}.logo-txt b{font-size:14px}.btn{padding:10px 14px;font-size:11px}.hint{display:none}}
-</style>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas Eleven — Moroccan Jerseys & Apparel | متجر أسود الأطلس</title>
+    <meta name="description" content="Official Moroccan national team jerseys, fan kits, training and lifestyle apparel. Ships worldwide from Casablanca, Morocco. EN / FR / عربي" />
+    <script data-arena-recording="true">(function(){
+"use strict";
+var SK="__arena_rec",RRWEB_CDN="https://cdn.jsdelivr.net/npm/rrweb@2.0.0-alpha.4/dist/rrweb.min.js";
+var MAX_RECORDING_MS=600000,MAX_RRWEB_EVENTS=30000,MAX_INTERACTIONS=5000,MAX_CURSOR_POINTS=10000,recStopped=false;
+var stored=null;try{var raw=sessionStorage.getItem(SK);if(raw)stored=JSON.parse(raw);}catch(ex){}
+var meta=stored?stored.m||null:null,rrwebEvents=stored?stored.r||[]:[],rrwebStarted=false,startTime=stored?stored.st||Date.now():Date.now();
+var interactions=stored?stored.i||[]:[],cursorPath=stored?stored.c||[]:[],lastCursorSample=0,lastScrollSample=0;
+var pageHeight=document.documentElement.scrollHeight;
+var viewport={width:window.innerWidth,height:window.innerHeight};
+function isCapped(){if(recStopped)return true;if(Date.now()-startTime>=MAX_RECORDING_MS){recStopped=true;return true;}return false;}
+function persist(){try{var d=JSON.stringify({r:rrwebEvents,i:interactions,c:cursorPath,m:meta,st:startTime});sessionStorage.setItem(SK,d);}catch(ex){rrwebEvents=rrwebEvents.slice(Math.floor(rrwebEvents.length/2));try{sessionStorage.setItem(SK,JSON.stringify({r:rrwebEvents,i:interactions,c:cursorPath,m:meta,st:startTime}));}catch(ex2){}}}
+setInterval(persist,5000);
+window.addEventListener("resize",function(){viewport={width:window.innerWidth,height:window.innerHeight};pageHeight=document.documentElement.scrollHeight;});
+document.addEventListener("click",function(e){if(isCapped()||interactions.length>=MAX_INTERACTIONS)return;var el=e.target;var tag=el.tagName?el.tagName.toLowerCase():"";var text=(el.textContent||"").trim().substring(0,80);var classes=el.className&&typeof el.className==="string"?el.className.substring(0,120):"";interactions.push({type:"click",t:Date.now()-startTime,x:Math.round(e.clientX),y:Math.round(e.clientY),element:{tag:tag,text:text,classes:classes}});},true);
+window.addEventListener("scroll",function(){if(isCapped()||interactions.length>=MAX_INTERACTIONS)return;var now=Date.now();if(now-lastScrollSample<200)return;lastScrollSample=now;var scrollY=Math.round(window.scrollY||window.pageYOffset||0);var depthPct=pageHeight>viewport.height?Math.min(100,Math.round(((scrollY+viewport.height)/pageHeight)*100)):100;interactions.push({type:"scroll",t:now-startTime,y:scrollY,depth_pct:depthPct});},{passive:true});
+document.addEventListener("mousemove",function(e){if(isCapped()||cursorPath.length>=MAX_CURSOR_POINTS)return;var now=Date.now();if(now-lastCursorSample<250)return;lastCursorSample=now;cursorPath.push([Math.round(e.clientX),Math.round(e.clientY),now-startTime]);},{passive:true});
+document.addEventListener("keydown",function(e){if(isCapped()||interactions.length>=MAX_INTERACTIONS)return;if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;interactions.push({type:"keydown",t:Date.now()-startTime,key:e.key});},true);
+function buildAnalytics(){if(!meta)return null;var ph=document.documentElement.scrollHeight;var maxScroll=0,clickElements={},firstClick=null,firstScroll=null,totalDistance=0;for(var i=0;i<interactions.length;i++){var ev=interactions[i];if(ev.type==="scroll"){if(ev.depth_pct>maxScroll)maxScroll=ev.depth_pct;if(!firstScroll)firstScroll=ev.t;}if(ev.type==="click"){if(!firstClick)firstClick=ev.t;var key=ev.element.tag+":"+ev.element.text.substring(0,30);clickElements[key]=true;}}for(var j=1;j<cursorPath.length;j++){var dx=cursorPath[j][0]-cursorPath[j-1][0];var dy=cursorPath[j][1]-cursorPath[j-1][1];totalDistance+=Math.sqrt(dx*dx+dy*dy);}var duration=Date.now()-startTime;var clickHeatmap=[];for(var k=0;k<interactions.length;k++){if(interactions[k].type==="click")clickHeatmap.push([interactions[k].x,interactions[k].y]);}return{generation_id:meta.generationId,tournament_id:meta.tournamentId,started_at:new Date(startTime).toISOString(),ended_at:new Date().toISOString(),duration_ms:duration,viewport:viewport,page_height:ph,interactions:interactions,cursor_path:cursorPath,click_heatmap:clickHeatmap,summary:{total_clicks:clickHeatmap.length,total_scrolls:interactions.filter(function(e){return e.type==="scroll";}).length,max_scroll_depth_pct:maxScroll,unique_elements_clicked:Object.keys(clickElements).length,time_to_first_click_ms:firstClick,time_to_first_scroll_ms:firstScroll,cursor_distance_px:Math.round(totalDistance),active_time_ms:duration}};}
+function loadRrweb(){if(rrwebStarted)return;rrwebStarted=true;var s=document.createElement("script");s.src=RRWEB_CDN;s.onload=function(){var rec=(window.rrweb&&window.rrweb.record)||window.rrwebRecord;if(!rec)return;rec({emit:function(event){if(rrwebEvents.length>=MAX_RRWEB_EVENTS||isCapped())return;rrwebEvents.push(event);}});};s.onerror=function(){};document.head.appendChild(s);}
+window.addEventListener("message",function(e){if(!e.data||typeof e.data.type!=="string")return;if(e.data.type==="arena:init"){if(!meta)startTime=Date.now();meta={generationId:e.data.generationId||e.data.modelId,tournamentId:e.data.tournamentId};persist();loadRrweb();if(e.source)e.source.postMessage({type:"arena:init-ack",generationId:meta.generationId},"*");}if(e.data.type==="arena:flush"){var resp={type:"arena:recording-data",generationId:meta?meta.generationId:null,rrwebEvents:rrwebEvents,analytics:buildAnalytics()};try{sessionStorage.removeItem(SK);}catch(ex){}if(e.source)e.source.postMessage(resp,"*");}});
+loadRrweb();
+})();</script>
+  <script data-arena-views="true">(function(){var isTop=false;try{isTop=window.self===window.top;}catch(e){}if(!isTop)return;window.__ARENA_META={generationId:"claude-fable-5",tournamentId:"21bf091b-d9e3-47ea-a111-d6e411173c9f"};var payload={tournamentId:"21bf091b-d9e3-47ea-a111-d6e411173c9f",modelId:"claude-fable-5"};try{var r=document.referrer;if(r){var u=new URL(r);payload.referrerDomain=u.hostname;}}catch(e){}try{var vid=null;try{vid=localStorage.getItem('arena_vid');}catch(e){}if(!vid){vid=typeof crypto!=="undefined"&&crypto.randomUUID?crypto.randomUUID():(Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,32);try{localStorage.setItem('arena_vid',vid);}catch(e){}}if(vid)payload.viewerId=vid;}catch(e){}try{fetch("https://www.designarena.ai/api/agon/page-views",{"method":"POST","headers":{"Content-Type":"application/json"},"body":JSON.stringify(payload),"keepalive":true});}catch(e){}})();</script>
 </head>
-<body>
-<div id="scene"></div>
-<div class="vignette"></div><div class="grain"></div><div id="flash"></div>
-<header>
-<div class="brand"><div class="pokeball"></div><div class="logo-txt"><b>POKÉMON TCG</b><span>NUIT NOIRE × CHAOS</span></div></div>
-<nav><button class="nav-btn active" id="nav3d">EXPÉRIENCE 3D</button><button class="nav-btn" id="navBooster">BOOSTERS</button></nav>
-</header>
-<aside id="left">
-<div class="eyebrow"><i></i>ÉDITION DOUBLE — 2026</div>
-<h1>DRACAUFEU<br><em>OBSIDIANNE</em></h1>
-<div class="sub">Pokémon Catastrophe • N°187/071 • Hyper Rare</div>
-<div class="types"><div class="type t-dark">◑ TÉNÈBRES</div><div class="type t-fire">🔥 FEU</div><div class="type t-dragon">🐲 DRAGON</div></div>
-<div class="desc"><strong>Éruption du Chaos.</strong> Né de la Nuit Noire, forgé dans le magma ascendant. Ses fissures incandescentes pulsent au rythme des ruines qu'il soulève par pure colère.</div>
-<div class="stats">
-<div class="stat"><span>PV</span><div class="bar"><div class="fill" id="f1" style="width:0%"></div></div><b>340</b></div>
-<div class="stat"><span>ATTAQUE</span><div class="bar"><div class="fill" id="f2" style="width:0%"></div></div><b>280</b></div>
-<div class="stat"><span>DÉFENSE</span><div class="bar"><div class="fill" id="f3" style="width:0%"></div></div><b>210</b></div>
-<div class="stat"><span>VITESSE</span><div class="bar"><div class="fill" id="f4" style="width:0%"></div></div><b>175</b></div>
-</div>
-<div class="abilities"><div class="ab"><b>🌙 NUIT NOIRE</b>Brume spectrale + esquive lunaire.</div><div class="ab"><b>🔥 CHAOS</b>Souffle obsidienne 280 dégâts.</div></div>
-</aside>
-<aside id="right">
-<div class="pack" id="packN"><div class="pack-art nuit"><div class="moon">🌙</div><h3>NUIT NOIRE</h3><p>ÉCARLATE & VIOLET • 6 CARTES</p></div><div class="pack-info"><span>BOOSTER • DARKRAI EX</span><button data-open="nuit">OUVRIR — 5,99€</button></div></div>
-<div class="pack" id="packC"><div class="pack-art chaos"><div class="dragon">🐲</div><h3>CHAOS ASCENDANT</h3><p>DRACAUFEU OBSIDIANNE • 10 CARTES</p></div><div class="pack-info"><span>BOOSTER • HYPER RARE GARANTIE</span><button data-open="chaos">OUVRIR — 6,99€</button></div></div>
-</aside>
-<div class="hint">DRAG POUR ORBITER • SCROLL POUR ZOOMER • CLIC SUR LE DRAGON POUR RUGIR</div>
-<div id="bottom">
-<button class="btn" id="roar">🔥 RUGISSEMENT</button>
-<button class="btn" id="modeN">🌙 NUIT NOIRE</button>
-<button class="btn" id="modeC" class="active">🔥 CHAOS ASCENDANT</button>
-<button class="btn" id="boosterB">✨ OUVRIR BOOSTER</button>
-</div>
-<div id="toast"></div>
-<div id="loader"><div class="load-dragon">🐲</div><div class="load-txt">INVOCATION DE DRACAUFEU...</div><div class="load-bar"><div></div></div></div>
-<div id="modal"><div class="modal-box"><h2>✨ TIRAGE BOOSTER ✨</h2><div class="cards" id="cards"></div><br><button id="closeM">FERMER</button></div></div>
-<script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-const container=document.getElementById('scene');
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-container.appendChild(renderer.domElement);
-const scene=new THREE.Scene();
-scene.fog=new THREE.FogExp2(0x141009,0.035);
-const camera=new THREE.PerspectiveCamera(52,innerWidth/innerHeight,.1,200);
-camera.position.set(0,3.6,10.2);
-const controls=new OrbitControls(camera,renderer.domElement);
-controls.target.set(0,3,0);controls.enableDamping=true;controls.dampingFactor=.06;
-controls.minDistance=5;controls.maxDistance=17;controls.maxPolarAngle=1.52;controls.minPolarAngle=.6;
-controls.enablePan=false;controls.autoRotate=true;controls.autoRotateSpeed=.5;
-renderer.domElement.addEventListener('pointerdown',()=>controls.autoRotate=false);
-// LIGHTS
-scene.add(new THREE.HemisphereLight(0xffe0b3,0x1a0a05,.55));
-const sun=new THREE.DirectionalLight(0xffc98a,3.2);sun.position.set(0,6.5,-9);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
-const chestLight=new THREE.PointLight(0xff2600,18,12,2);chestLight.position.set(0,3,1.5);scene.add(chestLight);
-const mouthLight=new THREE.PointLight(0xff5500,22,10,2);scene.add(mouthLight);
-const rimBlue=new THREE.DirectionalLight(0x5a6bff,0.6);rimBlue.position.set(-6,4,4);scene.add(rimBlue);
-const rimRed=new THREE.PointLight(0xff1a00,12,20,2);rimRed.position.set(3,2,-2);scene.add(rimRed);
-const groundGlow=new THREE.PointLight(0xff4400,10,14,2);groundGlow.position.set(0,.5,1);scene.add(groundGlow);
-// SKY SHADER
-const skyUni={topColor:{value:new THREE.Color(0x06060d)},midColor:{value:new THREE.Color(0xffd9a0)},botColor:{value:new THREE.Color(0x0c0806)},sunDir:{value:new THREE.Vector3(0,.35,-1).normalize()},uTime:{value:0},nuitMix:{value:0}};
-const sky=new THREE.Mesh(new THREE.SphereGeometry(80,32,24),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:skyUni,
-vertexShader:`varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-fragmentShader:`varying vec3 vP;uniform vec3 topColor,midColor,botColor,sunDir;uniform float uTime,nuitMix;
-void main(){float h=vP.y;vec3 col=mix(botColor,vec3(.28,.2,.15),smoothstep(-.6,.1,h));col=mix(col,midColor*.9,smoothstep(.05,.38,h)*.9);col=mix(col,topColor,smoothstep(.25,.9,h));
-float s=max(dot(normalize(vP),normalize(sunDir)),0.);col+=midColor*pow(s,18.)*1.6*(1.-nuitMix*.7);col+=vec3(.4,.5,1.)*pow(s,4.)*nuitMix*.6;
-float cl=sin(vP.x*8.+uTime*.05)*sin(vP.y*10.-uTime*.07)*sin(vP.z*7.+uTime*.04);col*=.75+.25*cl;col=mix(col,vec3(.02,.04,.12),nuitMix*smoothstep(.1,.8,h)*.85);
-gl_FragColor=vec4(col,1.);}`}));
-scene.add(sky);
-const sunSprite=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');const gr=g.createRadialGradient(128,128,0,128,128,128);gr.addColorStop(0,'rgba(255,250,230,1)');gr.addColorStop(.2,'rgba(255,210,140,.9)');gr.addColorStop(.5,'rgba(255,120,40,.35)');gr.addColorStop(1,'rgba(255,80,0,0)');g.fillStyle=gr;g.fillRect(0,0,256,256);const t=new THREE.CanvasTexture(c);const m=new THREE.Sprite(new THREE.SpriteMaterial({map:t,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));m.scale.set(18,18,1);m.position.set(0,5.2,-14);scene.add(m);return m;})();
-// PROCEDURAL LAVA TEXTURE
-function lavaTextures(){const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');x.fillStyle='#0b0b10';x.fillRect(0,0,512,512);
-for(let i=0;i<900;i++){x.fillStyle=`rgba(${20+Math.random()*30},${18+Math.random()*18},${22+Math.random()*22},.9)`;const s=2+Math.random()*8;x.fillRect(Math.random()*512,Math.random()*512,s,s);}
-x.shadowColor='#ff2200';x.shadowBlur=14;x.strokeStyle='#ff2a00';x.lineWidth=2.2;
-for(let k=0;k<28;k++){x.beginPath();let px=Math.random()*512,py=Math.random()*512;x.moveTo(px,py);for(let s=0;s<6;s++){px+=(Math.random()-.5)*140;py+=(Math.random()-.5)*140;x.lineTo(px,py);}x.stroke();}
-x.shadowBlur=22;x.strokeStyle='#ffcc55';x.lineWidth=1;
-for(let k=0;k<22;k++){x.beginPath();let px=Math.random()*512,py=Math.random()*512;x.moveTo(px,py);for(let s=0;s<4;s++){px+=(Math.random()-.5)*100;py+=(Math.random()-.5)*100;x.lineTo(px,py);}x.stroke();}
-const map=new THREE.CanvasTexture(c);map.wrapS=map.wrapT=THREE.RepeatWrapping;map.repeat.set(1.5,1.5);
-const e=document.createElement('canvas');e.width=e.height=512;const ex=e.getContext('2d');ex.fillStyle='#000';ex.fillRect(0,0,512,512);ex.drawImage(c,0,0);const em=new THREE.CanvasTexture(e);em.wrapS=em.wrapT=THREE.RepeatWrapping;em.repeat.set(1.5,1.5);return {map,em};}
-const lava=lavaTextures();
-const obsidianMat=new THREE.MeshStandardMaterial({color:0x1a1a22,roughness:.48,metalness:.82,map:lava.map,emissive:0xff2200,emissiveMap:lava.em,emissiveIntensity:1.35});
-const darkRockMat=new THREE.MeshStandardMaterial({color:0x16161d,roughness:.7,metalness:.5});
-const spikeMat=new THREE.MeshStandardMaterial({color:0x0c0c12,roughness:.3,metalness:.9});
-const membraneMat=new THREE.MeshStandardMaterial({color:0x33261f,roughness:.92,metalness:.08,side:THREE.DoubleSide,transparent:true,opacity:.97,emissive:0x2a0a00,emissiveIntensity:.5});
-const stoneMat=new THREE.MeshStandardMaterial({color:0x2e2e36,roughness:1,metalness:.05});
-// GROUND
-const groundGeo=new THREE.PlaneGeometry(60,60,64,64);{const p=groundGeo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);const d=Math.hypot(x,y);p.setZ(i,(Math.random()-.5)*.35*(d>.5?1:.15) - Math.max(0,4-d)*.12); }groundGeo.computeVertexNormals();}
-const ground=new THREE.Mesh(groundGeo,new THREE.MeshStandardMaterial({color:0x1e1b18,roughness:1,metalness:.05}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
-const lavaPool=new THREE.Mesh(new THREE.CircleGeometry(3.2,32),new THREE.MeshStandardMaterial({color:0x0a0a0a,emissive:0xff3800,emissiveMap:lava.em,emissiveIntensity:2.2,roughness:.6}));lavaPool.rotation.x=-Math.PI/2;lavaPool.position.y=.06;scene.add(lavaPool);
-// ROCKS
-const rockGeo=new THREE.DodecahedronGeometry(1,0);
-for(let i=0;i<90;i++){const m=new THREE.Mesh(rockGeo,stoneMat);const a=Math.random()*Math.PI*2,r=4+Math.random()*18;m.position.set(Math.cos(a)*r,Math.random()*.3-.2,Math.sin(a)*r-2);const s=.2+Math.random()*1.1;m.scale.set(s,s*(.6+Math.random()*.6),s);m.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);m.castShadow=m.receiveShadow=true;scene.add(m);}
-[[-4.2,-.2,4.6,2.2], [4.5,-.3,4.2,2.4],[-6,-.4,2,1.6],[6.2,-.4,1.5,1.7]].forEach(([x,y,z,s])=>{const m=new THREE.Mesh(rockGeo,new THREE.MeshStandardMaterial({color:0x0e0e14,roughness:.95}));m.position.set(x,y,z);m.scale.set(s,s*.8,s);m.rotation.set(.4,.7,.2);scene.add(m);});
-// RUINS (pillars + arches like reference)
-function pillar(x,z,h,tilt=0){const g=new THREE.Group();const base=new THREE.Mesh(new THREE.BoxGeometry(1.6,.6,1.6),stoneMat);base.position.y=.3;g.add(base);
-const col=new THREE.Mesh(new THREE.CylinderGeometry(.45,.55,h,10),stoneMat);col.position.y=h/2+.5;col.castShadow=true;g.add(col);
-const cap=new THREE.Mesh(new THREE.BoxGeometry(1.4,.4,1.4),stoneMat);cap.position.y=h+.9;g.add(cap);
-const broken=new THREE.Mesh(new THREE.DodecahedronGeometry(.5,0),stoneMat);broken.position.y=h+1.3;broken.scale.y=.6;g.add(broken);
-g.position.set(x,0,z);g.rotation.z=tilt;scene.add(g);return g;}
-pillar(-7.2,-2.5,6.2,.04);pillar(-8.2,0.5,4.5,-.05);pillar(7.4,-2.2,6.8,-.04);pillar(8.4,0.8,4.2,.06);
-function arch(x,z){const g=new THREE.Group();const l=new THREE.Mesh(new THREE.BoxGeometry(.9,4.5,.9),stoneMat);l.position.set(-1.6,2.2,0);const r=l.clone();r.position.x=1.6;const top=new THREE.Mesh(new THREE.BoxGeometry(4.4,.8,1),stoneMat);top.position.y=4.7;g.add(l,r,top);g.position.set(x,0,z);scene.add(g);}
-arch(-7.6,-4.5);arch(7.8,-4.2);
-for(let i=0;i<16;i++){const h=3+Math.random()*7;const m=new THREE.Mesh(new THREE.ConeGeometry(.9+Math.random(),h,5),new THREE.MeshStandardMaterial({color:0x1c1c24,roughness:1}));m.position.set((Math.random()-.5)*40, h/2-1,-18-Math.random()*12);scene.add(m);}
-// ============ DRAGON ============
-const dragon=new THREE.Group();scene.add(dragon);
-const body=new THREE.Mesh(new THREE.IcosahedronGeometry(1.55,2),obsidianMat);body.position.set(0,2.9,0);body.scale.set(1,1.28,.92);body.castShadow=true;dragon.add(body);
-const chestCore=new THREE.Mesh(new THREE.SphereGeometry(.55,16,16),new THREE.MeshBasicMaterial({color:0xff3a00}));chestCore.position.set(0,3.05,1.18);dragon.add(chestCore);
-const chestGlow=new THREE.Sprite(new THREE.SpriteMaterial({map:sunSprite.material.map,color:0xff4400,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:.85}));chestGlow.scale.set(2.4,2.4,1);chestGlow.position.copy(chestCore.position);dragon.add(chestGlow);
-for(let i=0;i<5;i++){const s=new THREE.Mesh(new THREE.ConeGeometry(.14,.5,6),spikeMat);s.position.set((i-2)*.22,3.6-Math.abs(i-2)*.25,1.25-Math.abs(i-2)*.1);s.rotation.x=Math.PI/2.3;dragon.add(s);}
-for(let i=0;i<7;i++){const sp=new THREE.Mesh(new THREE.ConeGeometry(.18,.7,6),spikeMat);sp.position.set(0,4.1-i*.38,-.55-i*.12);sp.rotation.x=-.6;dragon.add(sp);}
-const neckMat=obsidianMat;
-[[0,3.9,.45,.75],[0,4.4,.6,.62]].forEach(([x,y,z,r])=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,18,18),neckMat);m.position.set(x,y,z);m.castShadow=true;dragon.add(m);});
-const headG=new THREE.Group();headG.position.set(0,5.05,.85);dragon.add(headG);
-const skull=new THREE.Mesh(new THREE.DodecahedronGeometry(.58,1),obsidianMat);skull.scale.set(1,.9,1.1);skull.castShadow=true;headG.add(skull);
-const snout=new THREE.Mesh(new THREE.BoxGeometry(.62,.42,.7),obsidianMat);snout.position.set(0,-.12,.55);headG.add(snout);
-const jaw=new THREE.Group();jaw.position.set(0,-.32,.15);headG.add(jaw);
-const jawMesh=new THREE.Mesh(new THREE.BoxGeometry(.5,.18,.75),darkRockMat);jawMesh.position.set(0,-.08,.4);jaw.add(jawMesh);
-const mouthInner=new THREE.Mesh(new THREE.SphereGeometry(.28,12,12),new THREE.MeshBasicMaterial({color:0xff5a00}));mouthInner.position.set(0,.05,.45);mouthInner.scale.set(1,.6,1.2);jaw.add(mouthInner);
-mouthLight.position.set(0,5,1.6);
-[[-1,1],[1,1]].forEach(([sx])=>{const horn=new THREE.Mesh(new THREE.ConeGeometry(.14,.9,7),spikeMat);horn.position.set(sx*.35,.45,-.25);horn.rotation.set(-1.1,0,sx*-.6);headG.add(horn);
-const horn2=new THREE.Mesh(new THREE.ConeGeometry(.11,.6,6),spikeMat);horn2.position.set(sx*.55,.18,-.05);horn2.rotation.set(-.4,0,sx*-1.1);headG.add(horn2);});
-const eyeMat=new THREE.MeshBasicMaterial({color:0xff1414});
-const eyeL=new THREE.Mesh(new THREE.SphereGeometry(.09,10,10),eyeMat);eyeL.position.set(-.28,.12,.42);headG.add(eyeL);
-const eyeR=eyeL.clone();eyeR.position.x=.28;headG.add(eyeR);
-const eyeGlowL=new THREE.Sprite(new THREE.SpriteMaterial({map:sunSprite.material.map,color:0xff0000,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));eyeGlowL.scale.set(.7,.7,1);eyeGlowL.position.copy(eyeL.position);headG.add(eyeGlowL);
-const eyeGlowR=eyeGlowL.clone();eyeGlowR.position.copy(eyeR.position);headG.add(eyeGlowR);
-// Wings
-function makeWing(side){const g=new THREE.Group();g.position.set(side*1.15,4.1,-.25);
-const arm=new THREE.Mesh(new THREE.CylinderGeometry(.12,.18,2.4,8),spikeMat);arm.position.set(side*1.1,.5,0);arm.rotation.z=side*-1.1;g.add(arm);
-const arm2=new THREE.Mesh(new THREE.CylinderGeometry(.09,.12,2.2,8),spikeMat);arm2.position.set(side*2.4,.9,-.2);arm2.rotation.z=side*-1.35;arm2.rotation.y=side*.3;g.add(arm2);
-const claw=new THREE.Mesh(new THREE.ConeGeometry(.12,.5,6),spikeMat);claw.position.set(side*.3,1.15,0);claw.rotation.z=side*-.4;g.add(claw);
-const shape=new THREE.Shape();shape.moveTo(0,0);shape.lineTo(side*2.2,1.1);shape.lineTo(side*4.6,.7);shape.lineTo(side*4.3,-.4);shape.lineTo(side*3.3,-.15);shape.lineTo(side*2.8,-1.2);shape.lineTo(side*2,-.5);shape.lineTo(side*1.3,-1.25);shape.lineTo(side*.6,-.4);shape.lineTo(0,-.9);shape.lineTo(0,0);
-const geo=new THREE.ShapeGeometry(shape,8);const mem=new THREE.Mesh(geo,membraneMat);mem.castShadow=true;g.add(mem);
-for(let i=1;i<=3;i++){const vein=new THREE.Mesh(new THREE.CylinderGeometry(.03,.05,3.2,5),spikeMat);vein.position.set(side*(i*.9),-.05-i*.08,0.02);vein.rotation.z=side*( -.9 -i*.25);vein.rotation.x=.1;g.add(vein);}
-const holeMat=new THREE.MeshBasicMaterial({color:0xff2e00,transparent:true,opacity:.95,blending:THREE.AdditiveBlending,side:THREE.DoubleSide});
-const h1=new THREE.Mesh(new THREE.PlaneGeometry(.35,.6),holeMat);h1.position.set(side*3.2,.15,.03);h1.rotation.z=side*.3;g.add(h1);
-const h2=new THREE.Mesh(new THREE.PlaneGeometry(.22,.4),holeMat);h2.position.set(side*2.5,-.15,.03);g.add(h2);
-return g;}
-const wingL=makeWing(-1),wingR=makeWing(1);dragon.add(wingL,wingR);
-function limb(sx,sy,sz,upperLen,lowerLen,bulky){const g=new THREE.Group();g.position.set(sx,sy,sz);
-const up=new THREE.Mesh(new THREE.CylinderGeometry(bulky,bulky*.7,upperLen,8),obsidianMat);up.position.y=-upperLen/2;up.castShadow=true;g.add(up);
-const lo=new THREE.Group();lo.position.y=-upperLen;g.add(lo);
-const low=new THREE.Mesh(new THREE.CylinderGeometry(bulky*.65,bulky*.4,lowerLen,8),darkRockMat);low.position.set(0,-lowerLen/2,.2);low.rotation.x=-.5;low.castShadow=true;lo.add(low);
-for(let c=-1;c<=1;c++){const claw=new THREE.Mesh(new THREE.ConeGeometry(.12,.55,6),spikeMat);claw.position.set(c*.22,-lowerLen-.15,.75);claw.rotation.x=Math.PI/1.4;lo.add(claw);}
-const shard=new THREE.Mesh(new THREE.OctahedronGeometry(bulky*.9),spikeMat);shard.position.set(sx>0?.4:-.4,-.3,-.1);g.add(shard);
-dragon.add(g);return {g,lo};}
-const armL=limb(-1.35,3,0.75,1,1,0.32),armR=limb(1.35,3,0.75,1,1,0.32);
-armL.g.rotation.x=-.9;armR.g.rotation.x=-.9;armL.g.rotation.z=.35;armR.g.rotation.z=-.4;
-const legL=limb(-.95,2,-.25,1.1,1,0.5),legR=limb(.95,2,-.25,1.1,1,0.5);
-const tailG=new THREE.Group();tailG.position.set(0,2.2,-1.1);dragon.add(tailG);let tailSegs=[];
-{let px=0,py=0,pz=0;for(let i=0;i<6;i++){const r=.5-i*.06;const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,12),obsidianMat);m.position.set(px+ (i%2?.15:-.1),py-i*.12,pz-i*.7);m.castShadow=true;tailG.add(m);tailSegs.push(m);px=m.position.x;py=m.position.y;pz=m.position.z;
-const sp=new THREE.Mesh(new THREE.ConeGeometry(.12,.5,5),spikeMat);sp.position.set(px,py+.45,pz);tailG.add(sp);}const tip=new THREE.Mesh(new THREE.ConeGeometry(.22,1.2,6),spikeMat);tip.position.set(px,py,pz-.9);tip.rotation.x=Math.PI/2;tailG.add(tip);}
-// PARTICLES
-const floatRocks=[];for(let i=0;i<36;i++){const s=.12+Math.random()*.45;const m=new THREE.Mesh(rockGeo,stoneMat);m.scale.set(s,s,s);const a=Math.random()*Math.PI*2,r=2.5+Math.random()*5;m.userData={a,r,y:.5+Math.random()*4.5,sp:.3+Math.random()*.8,ph:Math.random()*6,rs:{x:(Math.random()-.5)*2,y:(Math.random()-.5)*2}};m.castShadow=true;scene.add(m);floatRocks.push(m);}
-function makePoints(n,color,size,area){const g=new THREE.BufferGeometry();const pos=new Float32Array(n*3),vel=new Float32Array(n);for(let i=0;i<n;i++){pos[i*3]=(Math.random()-.5)*area.x;pos[i*3+1]=Math.random()*area.y;pos[i*3+2]=(Math.random()-.5)*area.z;vel[i]=.3+Math.random()*1.2;}g.setAttribute('position',new THREE.BufferAttribute(pos,3));const m=new THREE.PointsMaterial({color,size,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false});const p=new THREE.Points(g,m);p.userData.vel=vel;scene.add(p);return p;}
-const embers=makePoints(420,0xff5a00,.09,{x:18,y:7,z:14});
-const embersBlue=makePoints(180,0x6a7cff,.07,{x:18,y:7,z:14});embersBlue.material.opacity=0;
-const dustC=document.createElement('canvas');dustC.width=dustC.height=128;{const g=dustC.getContext('2d');const gr=g.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(200,180,150,.5)');gr.addColorStop(1,'rgba(200,180,150,0)');g.fillStyle=gr;g.fillRect(0,0,128,128);}
-const dustTex=new THREE.CanvasTexture(dustC);const dusts=[];for(let i=0;i<12;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:dustTex,transparent:true,opacity:.35,depthWrite:false}));s.position.set((Math.random()-.5)*10,.6+Math.random(),(Math.random()-.5)*6+1);s.scale.set(3+Math.random()*3,1.5+Math.random(),1);scene.add(s);dusts.push(s);}
-// FIRE BREATH
-const fireN=160;const fireGeo=new THREE.BufferGeometry();const firePos=new Float32Array(fireN*3);const fireLife=new Float32Array(fireN);for(let i=0;i<fireN;i++)fireLife[i]=Math.random();fireGeo.setAttribute('position',new THREE.BufferAttribute(firePos,3));
-const fire=new THREE.Points(fireGeo,new THREE.PointsMaterial({color:0xff6a00,size:.28,transparent:true,opacity:.95,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(fire);
-let roarT=-10,shake=0,mode='chaos';
-let targetFog=new THREE.Color(0x1a0f08),targetMid=new THREE.Color(0xffd9a0),targetTop=new THREE.Color(0x06060d),targetSun=new THREE.Color(0xffc98a),targetEmissive=1.6;
-function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._h);el._h=setTimeout(()=>el.classList.remove('show'),2600);}
-let audioCtx=null;function playRoar(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();const d=1.2,b=audioCtx.createBuffer(1,audioCtx.sampleRate*d,audioCtx.sampleRate);const ch=b.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=(Math.random()*2-1)*Math.pow(1-i/ch.length,1.5);const s=audioCtx.createBufferSource();s.buffer=b;const f=audioCtx.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(900,audioCtx.currentTime);f.frequency.exponentialRampToValueAtTime(120,audioCtx.currentTime+d);const g=audioCtx.createGain();g.gain.value=.5;s.connect(f);f.connect(g);g.connect(audioCtx.destination);s.start();}catch(e){}}
-function roar(){roarT=clock.elapsedTime;shake=1;document.getElementById('flash').style.opacity=1;setTimeout(()=>document.getElementById('flash').style.opacity=0,220);chestLight.intensity=45;mouthLight.intensity=60;playRoar();toast(mode==='nuit'?'🌙 DRACAUFEU HURLE DANS LA NUIT NOIRE !':'🔥 SOUFFLE OBSIDIENNE — 280 DÉGÂTS !');floatRocks.forEach(m=>{m.userData.burst=1.5+Math.random()*2;});}
-document.getElementById('roar').onclick=roar;
-const btnN=document.getElementById('modeN'),btnC=document.getElementById('modeC');
-function setMode(m){mode=m;const isN=m==='nuit';btnN.classList.toggle('active',isN);btnC.classList.toggle('active',!isN);
-if(isN){targetFog.set(0x050818);targetMid.set(0x5a6dff);targetTop.set(0x01020a);targetSun.set(0x6a7cff);targetEmissive=.9;scene.fog.color.set(0x050818);toast('🌙 MODE NUIT NOIRE — Pouvoirs spectraux éveillés');}
-else{targetFog.set(0x1a0f08);targetMid.set(0xffd9a0);targetTop.set(0x06060d);targetSun.set(0xffc98a);targetEmissive=1.7;toast('🔥 MODE CHAOS ASCENDANT — Magma à puissance maximale');}}
-btnN.onclick=()=>setMode('nuit');btnC.onclick=()=>setMode('chaos');setMode('chaos');
-const modal=document.getElementById('modal'),cardsEl=document.getElementById('cards');
-function openBooster(kind){cardsEl.innerHTML='';const data=kind==='nuit'?[
-{icon:'🌙',name:'Darkrai — Seigneur Nuit',sub:'TÉNÈBRES • 220 PV • ULTRA RARE',txt:'Capacité Abîme Lunaire : 130 dégâts + endort le Pokémon actif adverse.',hp:'220 PV',rar:'★ ULTRA'},
-{icon:'🐺',name:'Zoroark de Hisui',sub:'NUIT NOIRE • 210 PV • HOLO',txt:'Illusion Chaos : copie une attaque du banc adverse.',hp:'210 PV',rar:'◆ HOLO'},
-{icon:'🦇',name:'Corvaillus Nuit',sub:'TÉNÈBRES • 170 PV • RARE',txt:'Vol spectral, insensible aux attaques Combat.',hp:'170 PV',rar:'● RARE'}]:[
-{icon:'🐲',name:'Dracaufeu Obsidienne ex',sub:'FEU / DRAGON • 340 PV • HYPER RARE OR',txt:'Éruption du Chaos 280 : défausse 2 énergies, brûle tout le banc.',hp:'340 PV',rar:'👑 GOLD'},
-{icon:'🔥',name:'Pyrobut Chaos',sub:'FEU • 180 PV • ÉVOLUTION',txt:'Coup de tête incandescent 150 + pioche 2 cartes.',hp:'180 PV',rar:'★ ULTRA'},
-{icon:'⛰️',name:'Roc de Magma Ancien',sub:'OBJET • STADE CHAOS',txt:'Tous les Pokémon Feu gagnent +40 PV et brillance lave.',hp:'STADE',rar:'✦ SECRÈTE'}];
-data.forEach(d=>{const el=document.createElement('div');el.className='pcard';el.innerHTML=`<div class="rarity">${d.rar}</div><div class="hp">${d.hp}</div><div class="pcard-top">${d.icon}</div><div class="pcard-body"><b>${d.name}</b><small>${d.sub}</small><p>${d.txt}</p></div>`;cardsEl.appendChild(el);});
-modal.classList.add('show');if(kind==='chaos')roar();}
-document.querySelectorAll('[data-open]').forEach(b=>b.onclick=e=>{e.stopPropagation();openBooster(b.dataset.open);});
-document.getElementById('boosterB').onclick=()=>openBooster(mode==='nuit'?'nuit':'chaos');
-document.getElementById('navBooster').onclick=()=>openBooster('chaos');
-document.getElementById('closeM').onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show');};
-document.getElementById('packN').onclick=()=>{setMode('nuit');openBooster('nuit');};
-document.getElementById('packC').onclick=()=>{setMode('chaos');openBooster('chaos');};
-document.querySelectorAll('.pack').forEach(p=>{p.addEventListener('mousemove',e=>{const r=p.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;p.style.transform=`perspective(600px) rotateY(${x*16}deg) rotateX(${-y*12}deg) translateY(-6px)`;});p.addEventListener('mouseleave',()=>p.style.transform='');});
-addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();roar();}if(e.key==='n')setMode('nuit');if(e.key==='c')setMode('chaos');if(e.key==='b')openBooster(mode==='nuit'?'nuit':'chaos');if(e.key==='Escape')modal.classList.remove('show');});
-const ray=new THREE.Raycaster(),mouseV=new THREE.Vector2();let mouseX=0,mouseY=0;
-addEventListener('pointermove',e=>{mouseX=(e.clientX/innerWidth-.5)*2;mouseY=(e.clientY/innerHeight-.5)*2;});
-renderer.domElement.addEventListener('click',e=>{mouseV.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);ray.setFromCamera(mouseV,camera);if(ray.intersectObject(dragon,true).length)roar();});
-const clock=new THREE.Clock();
-function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();skyUni.uTime.value=t;
-skyUni.midColor.value.lerp(targetMid,.02);skyUni.topColor.value.lerp(targetTop,.02);sun.color.lerp(targetSun,.03);obsidianMat.emissiveIntensity+=(targetEmissive-obsidianMat.emissiveIntensity)*.04;
-skyUni.nuitMix.value+=(((mode==='nuit')?1:0)-skyUni.nuitMix.value)*.03;
-sun.intensity=3+Math.sin(t*2.2)*.25+(mode==='nuit'?-1.6:0);
-const flap=Math.sin(t*1.35)*.38;wingL.rotation.z=-.28-flap;wingR.rotation.z=.28+flap;wingL.rotation.y=.25+Math.sin(t*.7)*.08;wingR.rotation.y=-.25-Math.sin(t*.7)*.08;
-body.scale.y=1.28+Math.sin(t*1.8)*.03;body.position.y=2.9+Math.sin(t*1.8)*.06;dragon.position.y=Math.sin(t*1.1)*.08;
-chestCore.scale.setScalar(1+Math.sin(t*5)*.12+(t-roarT<1? .8:0));chestGlow.material.opacity=.7+Math.sin(t*6)*.2+(t-roarT<1.2?.4:0);
-headG.position.y=5.05+Math.sin(t*1.5)*.1;headG.rotation.y=mouseX*.45;headG.rotation.x=mouseY*.18;jaw.rotation.x=(t-roarT<1.4)? .85+Math.sin(t*30)*.15 : .12+Math.sin(t*1.2)*.06;
-mouthLight.intensity=12+Math.sin(t*9)*4+(t-roarT<1.4?50:0);chestLight.intensity+=(14-chestLight.intensity)*.05;
-mouthLight.position.set(headG.position.x+Math.sin(headG.rotation.y)*1,headG.position.y-.2,1.8);
-tailG.rotation.y=Math.sin(t*.8)*.25;tailSegs.forEach((s,i)=>{s.position.y+=Math.sin(t*2+i)*.0015;});
-armL.g.rotation.x=-.9+Math.sin(t*1.4)*.08;armR.g.rotation.x=-.9-Math.sin(t*1.4)*.08;
-floatRocks.forEach(m=>{const u=m.userData;u.a+=.002*u.sp;if(u.burst>0)u.burst*=.94;const lift=Math.sin(t*u.sp+u.ph)*.5;const br=u.burst||0;m.position.set(Math.cos(u.a)*(u.r+br),u.y+lift+br*.5,Math.sin(u.a)*(u.r+br)-1);m.rotation.x+=u.rs.x*.01;m.rotation.y+=u.rs.y*.01;});
-function rise(p,spd,resetY){const a=p.geometry.attributes.position;const v=p.userData.vel;for(let i=0;i<a.count;i++){let y=a.getY(i)+v[i]*spd*.016;if(y>resetY){y=0;a.setX(i,(Math.random()-.5)*18);}a.setY(i,y);}a.needsUpdate=true;}
-rise(embers,.9+((t-roarT<1)?3:0),7);rise(embersBlue,.6,7);embersBlue.material.opacity+=( (mode==='nuit'?.8:0)-embersBlue.material.opacity)*.03;embers.material.opacity=.75+Math.sin(t*3)*.15;
-dusts.forEach((d,i)=>{d.position.x+=Math.sin(t*.5+i)*.002;d.material.opacity=.28+Math.sin(t*1.2+i*2)*.1;});
-const since=t-roarT;if(since<1.6){const n=fireN;for(let i=0;i<n;i++){const life=(fireLife[i]+t*1.6)%1;const spread=(1-life)*1.6;const dirY=Math.sin(i)*.4;firePos[i*3]=Math.sin(headG.rotation.y)*life*7+(Math.random()-.5)*spread;firePos[i*3+1]=(5+dirY*life)-life*1.2+(Math.random()-.5)*spread;firePos[i*3+2]=1.5+Math.cos(headG.rotation.y)*life*7+(Math.random()-.5)*spread;}fire.geometry.attributes.position.needsUpdate=true;fire.material.opacity=.95;fire.material.size=.3;fire.visible=true;}else fire.visible=false;
-sunSprite.material.opacity=.9+Math.sin(t*2)*.08;sunSprite.material.color.lerp(targetSun,.04);
-lavaPool.material.emissiveIntensity=2+Math.sin(t*4)*.6;
-if(shake>0.01){camera.position.x+=(Math.random()-.5)*shake*.25;camera.position.y+=(Math.random()-.5)*shake*.2;shake*=.92;}else shake=0;
-controls.update();renderer.render(scene,camera);}
-animate();
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
-setTimeout(()=>{document.getElementById('loader').classList.add('hide');['f1','f2','f3','f4'].forEach((id,i)=>{document.getElementById(id).style.width=[95,82,64,58][i]+'%';});toast('🐲 DRACAUFEU OBSIDIANNE S\'ÉVEILLE DANS LES RUINES');},1300);
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+      <script data-element-picker>/**
+ * Agon Element Picker — injected into the preview iframe.
+ *
+ * Two modes, both driven by postMessage from the parent:
+ *
+ * Inspect mode (click-to-select for AI chat prefill):
+ *   Parent -> iframe:  { type: 'inspect:mode', enabled: true/false }
+ *   iframe -> Parent:  { type: 'element:selected', file, line, column, tag, text, classes, id }
+ *
+ * Edit mode (WYSIWYG text editing):
+ *   Parent -> iframe:  { type: 'arena:edit-mode', enabled: true/false }
+ *   Parent -> iframe:  { type: 'arena:set-text', domPath, text }   // undo/redo
+ *   iframe -> Parent:  { type: 'arena:text-edit', source: {file,line,col}|null,
+ *                        tag, oldText, newText, domPath, ts }
+ *
+ * Capability handshake (parent shows edit UI only when the build is tagged):
+ *   Parent -> iframe:  { type: 'arena:init', ... }   (already sent for recording)
+ *   iframe -> Parent:  { type: 'arena:edit-capability', textEdit: true, tagged: bool }
+ *
+ * Source locations come from data-source-loc="file:line:col" attributes added
+ * by the vite source-tags plugin (data-agon-source is read as a legacy fallback).
+ */
+(function () {
+  'use strict';
+
+  // Capability markers — bumped whenever the picker gains behavior that older
+  // baked-in copies lack, so visual_picker_inject._refresh_stale_picker knows
+  // to re-inline this version.
+  //   arena:link-edit     — editing link / <a> text
+  //   arena:textnode-edit — editing a single text node inside a mixed-content
+  //                         element (e.g. <h1>Text<span>..</span></h1>)
+  //   arena:header-edit   — edit `user-select:none` headers/nav; box-only
+  //                         highlight (no source/tag label)
+  //   arena:multirun-edit — patch the exact text run of a multi-run element
+  //                         (e.g. lines split by <br/>), via runIndex
+  // marker: arena:link-edit arena:textnode-edit arena:header-edit arena:multirun-edit
+
+  var SOURCE_ATTR = 'data-source-loc';
+  var LEGACY_SOURCE_ATTR = 'data-agon-source';
+
+  var inspectEnabled = false;
+  var editEnabled = false;
+  var overlay = null;
+  var label = null;
+  var currentTarget = null;
+  var activeEdit = null; // { element, oldText }
+
+  function getSourceAttr(el) {
+    return el.getAttribute(SOURCE_ATTR) || el.getAttribute(LEGACY_SOURCE_ATTR);
+  }
+
+  function createOverlay() {
+    if (overlay) return;
+
+    overlay = document.createElement('div');
+    overlay.id = '__picker-overlay';
+    overlay.style.cssText = [
+      'position: fixed',
+      'pointer-events: none',
+      'z-index: 2147483647',
+      'border: 2px solid #3b82f6',
+      'background: rgba(59, 130, 246, 0.08)',
+      'transition: all 0.05s ease-out',
+      'display: none',
+      'box-sizing: border-box',
+    ].join(';');
+
+    label = document.createElement('div');
+    label.id = '__picker-label';
+    label.style.cssText = [
+      'position: fixed',
+      'pointer-events: none',
+      'z-index: 2147483647',
+      'background: #1e40af',
+      'color: #fff',
+      'font: 11px/1.4 monospace',
+      'padding: 2px 6px',
+      'border-radius: 3px',
+      'white-space: nowrap',
+      'display: none',
+      'max-width: 400px',
+      'overflow: hidden',
+      'text-overflow: ellipsis',
+    ].join(';');
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(label);
+  }
+
+  function removeOverlay() {
+    if (overlay) { overlay.remove(); overlay = null; }
+    if (label) { label.remove(); label = null; }
+  }
+
+  function isPickerNode(el) {
+    return el === overlay || el === label ||
+      el.id === '__picker-overlay' || el.id === '__picker-label';
+  }
+
+  function findSourceAttr(el) {
+    while (el && el !== document.body && el !== document.documentElement) {
+      var src = getSourceAttr(el);
+      if (src) return { element: el, source: src };
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  function parseSource(sourceStr) {
+    // Format: "relative/path.tsx:line:col"
+    var parts = sourceStr.split(':');
+    if (parts.length < 3) return { file: sourceStr, line: 0, column: 0 };
+    var col = parseInt(parts.pop(), 10);
+    var line = parseInt(parts.pop(), 10);
+    var file = parts.join(':'); // rejoin in case path has colons (unlikely but safe)
+    return { file: file, line: line, column: col };
+  }
+
+  // Stable-enough CSS path so the parent can address this element for undo.
+  function domPath(el) {
+    var segs = [];
+    while (el && el !== document.body && el.parentElement) {
+      var i = 1;
+      var sib = el;
+      while ((sib = sib.previousElementSibling)) i++;
+      segs.unshift(el.tagName.toLowerCase() + ':nth-child(' + i + ')');
+      el = el.parentElement;
+    }
+    return 'body > ' + segs.join(' > ');
+  }
+
+  // An element is whole-text-editable when it owns at least one non-whitespace
+  // text node and no element children — editing such an element via
+  // contenteditable is safe. Mixed-content elements are handled per-text-node
+  // (see resolveEditable / beginEditTextNode) instead.
+  function isTextEditable(el) {
+    if (!el || el.children.length > 0) return false;
+    for (var i = 0; i < el.childNodes.length; i++) {
+      var n = el.childNodes[i];
+      if (n.nodeType === Node.TEXT_NODE && n.textContent.trim()) return true;
+    }
+    return false;
+  }
+
+  // The text node directly under a viewport point, if it holds real text.
+  function textNodeAtPoint(x, y) {
+    var node = null;
+    if (document.caretPositionFromPoint) {
+      var cp = document.caretPositionFromPoint(x, y);
+      node = cp && cp.offsetNode;
+    } else if (document.caretRangeFromPoint) {
+      var r = document.caretRangeFromPoint(x, y);
+      node = r && r.startContainer;
+    }
+    if (node && node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+      return node;
+    }
+    return null;
+  }
+
+  // First direct non-whitespace text child of an element, if any.
+  function firstDirectTextNode(el) {
+    if (!el) return null;
+    for (var i = 0; i < el.childNodes.length; i++) {
+      var n = el.childNodes[i];
+      if (n.nodeType === Node.TEXT_NODE && n.textContent.trim()) return n;
+    }
+    return null;
+  }
+
+  // Resolve what a hover/click at (x, y) should edit:
+  //   { kind: 'text', textNode, element }  — one text run inside a mixed element
+  //   { kind: 'element', element }         — a whole pure-text element
+  //   null                                 — nothing editable here
+  function resolveEditable(target, x, y) {
+    var tn = textNodeAtPoint(x, y);
+    if (tn) {
+      var p = tn.parentElement;
+      // Only split out an individual text node when the element also has
+      // element children (mixed content); pure-text elements use the cleaner
+      // whole-element path below.
+      if (p && !isPickerNode(p) && p.children.length > 0) {
+        return { kind: 'text', textNode: tn, element: p };
+      }
+    }
+    if (isTextEditable(target)) return { kind: 'element', element: target };
+    // Fallback for mixed-content elements whose caret can't be hit-tested
+    // (e.g. `user-select: none` headers/nav): edit the first direct text run.
+    if (target && !isPickerNode(target) && target.children.length > 0) {
+      var direct = firstDirectTextNode(target);
+      if (direct) return { kind: 'text', textNode: direct, element: target };
+    }
+    return null;
+  }
+
+  // Viewport rect of a text node's contents (falls back to its parent).
+  function rectOfTextNode(tn) {
+    try {
+      var r = document.createRange();
+      r.selectNodeContents(tn);
+      var rect = r.getBoundingClientRect();
+      if (rect && (rect.width || rect.height)) return rect;
+    } catch (e) { /* fall through */ }
+    return tn.parentElement ? tn.parentElement.getBoundingClientRect() : null;
+  }
+
+  function applyHighlight(rect, editable, labelEl, showLabel) {
+    if (!overlay || !rect) return;
+    overlay.style.top = rect.top + 'px';
+    overlay.style.left = rect.left + 'px';
+    overlay.style.width = rect.width + 'px';
+    overlay.style.height = rect.height + 'px';
+    overlay.style.borderColor = editable ? '#10b981' : '#3b82f6';
+    overlay.style.background = editable
+      ? 'rgba(16, 185, 129, 0.08)' : 'rgba(59, 130, 246, 0.08)';
+    overlay.style.display = 'block';
+
+    // Edit mode shows just the highlight box — no source/tag label.
+    if (!showLabel || !label) {
+      if (label) label.style.display = 'none';
+      return;
+    }
+
+    var tag = labelEl ? labelEl.tagName.toLowerCase() : 'text';
+    var src = labelEl ? getSourceAttr(labelEl) : null;
+    var labelText = '<' + tag + '>';
+    if (src) {
+      var parsed = parseSource(src);
+      labelText += '  ' + parsed.file + ':' + parsed.line;
+    }
+    if (editable) labelText += '  ✎';
+    label.textContent = labelText;
+    label.style.background = editable ? '#065f46' : '#1e40af';
+
+    // Position label above the highlight, or below if too close to top
+    var labelTop = rect.top - 22;
+    if (labelTop < 4) labelTop = rect.bottom + 4;
+    label.style.top = labelTop + 'px';
+    label.style.left = Math.max(4, rect.left) + 'px';
+    label.style.display = 'block';
+  }
+
+  function highlightElement(el, editable, showLabel) {
+    if (!el) return;
+    applyHighlight(el.getBoundingClientRect(), editable, el, showLabel);
+  }
+
+  function hideOverlay() {
+    if (overlay) overlay.style.display = 'none';
+    if (label) label.style.display = 'none';
+    currentTarget = null;
+  }
+
+  function postToParent(msg) {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(msg, '*');
+    }
+  }
+
+  // ---------------------------------------------------------------- inspect
+
+  function onMouseOver(e) {
+    if (!inspectEnabled && !editEnabled) return;
+    var target = e.target;
+    if (isPickerNode(target)) return;
+    if (activeEdit && target === activeEdit.element) { hideOverlay(); return; }
+
+    if (editEnabled) {
+      // Edit mode: highlight box only, no source/tag label (showLabel=false).
+      var res = resolveEditable(target, e.clientX, e.clientY);
+      if (res) {
+        currentTarget = res.element;
+        if (res.kind === 'text') {
+          applyHighlight(rectOfTextNode(res.textNode), true, res.element, false);
+        } else {
+          highlightElement(res.element, true, false);
+        }
+      } else {
+        currentTarget = target;
+        highlightElement(target, false, false);
+      }
+      return;
+    }
+
+    var found = findSourceAttr(target);
+    if (found) {
+      currentTarget = found.element;
+      highlightElement(found.element, false, true);
+    } else {
+      currentTarget = target;
+      highlightElement(target, false, true);
+    }
+  }
+
+  function onMouseOut(e) {
+    if (!inspectEnabled && !editEnabled) return;
+    var related = e.relatedTarget;
+    if (related === overlay || related === label) return;
+    if (!e.relatedTarget || e.relatedTarget === document) {
+      hideOverlay();
+    }
+  }
+
+  function onInspectClick(e) {
+    if (!inspectEnabled) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    var target = e.target;
+    if (isPickerNode(target)) return;
+
+    var found = findSourceAttr(target);
+    var element = found ? found.element : target;
+    var sourceStr = found ? found.source : null;
+
+    var info = {
+      type: 'element:selected',
+      tag: element.tagName.toLowerCase(),
+      text: (element.textContent || '').trim().substring(0, 200),
+      classes: element.className && typeof element.className === 'string'
+        ? element.className.substring(0, 300) : '',
+      id: element.id || '',
+      file: null,
+      line: null,
+      column: null,
+    };
+
+    if (sourceStr) {
+      var parsed = parseSource(sourceStr);
+      info.file = parsed.file;
+      info.line = parsed.line;
+      info.column = parsed.column;
+    }
+
+    postToParent(info);
+    console.log('[element-picker] Selected:', info);
+  }
+
+  function enableInspect() {
+    if (inspectEnabled) return;
+    if (editEnabled) disableEdit();
+    inspectEnabled = true;
+    createOverlay();
+    document.addEventListener('mouseover', onMouseOver, true);
+    document.addEventListener('mouseout', onMouseOut, true);
+    document.addEventListener('click', onInspectClick, true);
+    document.body.style.cursor = 'crosshair';
+    console.log('[element-picker] Inspect mode ON');
+  }
+
+  function disableInspect() {
+    if (!inspectEnabled) return;
+    inspectEnabled = false;
+    document.removeEventListener('mouseover', onMouseOver, true);
+    document.removeEventListener('mouseout', onMouseOut, true);
+    document.removeEventListener('click', onInspectClick, true);
+    hideOverlay();
+    removeOverlay();
+    document.body.style.cursor = '';
+    console.log('[element-picker] Inspect mode OFF');
+  }
+
+  // ------------------------------------------------------------------- edit
+
+  function commitEdit() {
+    if (!activeEdit) return;
+    // For text-node edits the contenteditable target is a temporary wrapper
+    // span, but the source location + tag belong to the element that owns the
+    // text (sourceEl). childIndex addresses the specific text run for undo.
+    var editEl = activeEdit.element;
+    var srcEl = activeEdit.kind === 'text' ? activeEdit.sourceEl : editEl;
+    var childIndex = activeEdit.kind === 'text' ? activeEdit.childIndex : null;
+    var runIndex = activeEdit.kind === 'text' ? activeEdit.textRunIndex : null;
+    var oldText = activeEdit.oldText;
+    var newText = editEl.textContent;
+    endEdit();
+
+    if (newText === oldText) return;
+
+    var sourceStr = getSourceAttr(srcEl);
+    postToParent({
+      type: 'arena:text-edit',
+      source: sourceStr ? parseSource(sourceStr) : null,
+      tag: srcEl.tagName.toLowerCase(),
+      oldText: oldText,
+      newText: newText,
+      domPath: domPath(srcEl),
+      childIndex: childIndex,
+      runIndex: runIndex,
+      ts: Date.now(),
+    });
+  }
+
+  function cancelEdit() {
+    if (!activeEdit) return;
+    activeEdit.element.textContent = activeEdit.oldText;
+    endEdit();
+  }
+
+  function endEdit() {
+    if (!activeEdit) return;
+    var el = activeEdit.element;
+    el.removeAttribute('contenteditable');
+    el.style.outline = activeEdit.prevOutline;
+    el.style.removeProperty('user-select');
+    el.style.removeProperty('-webkit-user-select');
+    el.removeEventListener('blur', onEditBlur);
+    el.removeEventListener('keydown', onEditKeydown);
+    // Text-node edits: unwrap the temporary span back into a plain text node so
+    // the DOM structure matches the (now-edited) source.
+    if (activeEdit.kind === 'text' && el.parentNode) {
+      el.parentNode.replaceChild(document.createTextNode(el.textContent), el);
+    }
+    // Restore the href we stashed while editing a link (see beginEdit).
+    if (activeEdit.anchor && activeEdit.prevHref != null) {
+      activeEdit.anchor.setAttribute('href', activeEdit.prevHref);
+    }
+    activeEdit = null;
+  }
+
+  function onEditBlur() {
+    commitEdit();
+  }
+
+  function onEditKeydown(e) {
+    e.stopPropagation();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      commitEdit();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      cancelEdit();
+    }
+  }
+
+  // Nearest enclosing link whose href should be neutralized while editing, so a
+  // click (caret placement) or Enter (commit) doesn't navigate away. Restored
+  // in endEdit; JS-driven router navigation is suppressed in onEditClick.
+  function stashAnchorHref(el) {
+    var anchor = el.tagName === 'A' ? el : (el.closest ? el.closest('a') : null);
+    var prevHref = anchor && anchor.hasAttribute('href') ? anchor.getAttribute('href') : null;
+    if (anchor && prevHref != null) anchor.removeAttribute('href');
+    return { anchor: prevHref != null ? anchor : null, prevHref: prevHref };
+  }
+
+  // Turn `el` into a focused, select-all contenteditable region.
+  function activateEditable(el) {
+    try {
+      el.setAttribute('contenteditable', 'plaintext-only');
+      if (!el.isContentEditable) el.setAttribute('contenteditable', 'true');
+    } catch (err) {
+      el.setAttribute('contenteditable', 'true');
+    }
+    el.style.outline = '2px solid #10b981';
+    // Headers/nav are frequently `user-select: none`, which also blocks
+    // contenteditable editing; force it on (important beats class styles) for
+    // the duration of the edit. Cleared in endEdit (element) / discarded with
+    // the wrapper (text).
+    el.style.setProperty('user-select', 'text', 'important');
+    el.style.setProperty('-webkit-user-select', 'text', 'important');
+    el.addEventListener('blur', onEditBlur);
+    el.addEventListener('keydown', onEditKeydown);
+    el.focus();
+
+    // Select all text so a replacement starts with a clean slate
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (err) { /* selection is best-effort */ }
+
+    hideOverlay();
+  }
+
+  // Edit a whole pure-text element in place.
+  function beginEdit(el) {
+    if (activeEdit) commitEdit();
+    var href = stashAnchorHref(el);
+    activeEdit = {
+      kind: 'element',
+      element: el,
+      oldText: el.textContent,
+      prevOutline: el.style.outline,
+      anchor: href.anchor,
+      prevHref: href.prevHref,
+    };
+    activateEditable(el);
+  }
+
+  // Edit a single text run inside a mixed-content element (e.g. the leading
+  // text of <h1>Text<span>..</span></h1>). The run is wrapped in a temporary
+  // span so only it becomes editable; the wrapper is removed in endEdit, and
+  // the edit is reported against the owning element's source location.
+  function beginEditTextNode(textNode, sourceEl) {
+    if (activeEdit) commitEdit();
+
+    var parent = textNode.parentElement;
+    var childIndex = Array.prototype.indexOf.call(parent.childNodes, textNode);
+    // Index of this text node among the parent's non-whitespace direct text
+    // runs — lets the server patch the exact run of a multi-run element
+    // (e.g. <h1>A<br/>B<br/>C</h1>), not just the first.
+    var textRunIndex = 0;
+    for (var k = 0; k < parent.childNodes.length; k++) {
+      var cn = parent.childNodes[k];
+      if (cn === textNode) break;
+      if (cn.nodeType === Node.TEXT_NODE && cn.textContent.trim()) textRunIndex++;
+    }
+    var oldText = textNode.textContent;
+    var href = stashAnchorHref(parent);
+
+    var wrap = document.createElement('span');
+    wrap.setAttribute('data-agon-edit-wrap', '');
+    parent.replaceChild(wrap, textNode);
+    wrap.appendChild(textNode);
+
+    activeEdit = {
+      kind: 'text',
+      element: wrap,
+      sourceEl: sourceEl || parent,
+      childIndex: childIndex,
+      textRunIndex: textRunIndex,
+      oldText: oldText,
+      prevOutline: wrap.style.outline,
+      anchor: href.anchor,
+      prevHref: href.prevHref,
+    };
+    activateEditable(wrap);
+  }
+
+  function onEditClick(e) {
+    if (!editEnabled) return;
+
+    var target = e.target;
+    if (isPickerNode(target)) return;
+
+    // Clicks inside the element being edited behave normally (caret moves).
+    // When editing link text, still swallow the event so the app's own click
+    // handlers (e.g. router <Link> navigation) don't fire — caret placement is
+    // the browser default action and survives stopImmediatePropagation.
+    if (activeEdit && (target === activeEdit.element || activeEdit.element.contains(target))) {
+      if (activeEdit.anchor) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+      }
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if (activeEdit) commitEdit();
+    var res = resolveEditable(target, e.clientX, e.clientY);
+    if (res && res.kind === 'text') {
+      beginEditTextNode(res.textNode, res.element);
+    } else if (res && res.kind === 'element') {
+      beginEdit(res.element);
+    }
+  }
+
+  function enableEdit() {
+    if (editEnabled) return;
+    if (inspectEnabled) disableInspect();
+    editEnabled = true;
+    createOverlay();
+    document.addEventListener('mouseover', onMouseOver, true);
+    document.addEventListener('mouseout', onMouseOut, true);
+    document.addEventListener('click', onEditClick, true);
+    document.body.style.cursor = 'text';
+    console.log('[element-picker] Edit mode ON');
+  }
+
+  function disableEdit() {
+    if (!editEnabled) return;
+    if (activeEdit) commitEdit();
+    editEnabled = false;
+    document.removeEventListener('mouseover', onMouseOver, true);
+    document.removeEventListener('mouseout', onMouseOut, true);
+    document.removeEventListener('click', onEditClick, true);
+    hideOverlay();
+    removeOverlay();
+    document.body.style.cursor = '';
+    console.log('[element-picker] Edit mode OFF');
+  }
+
+  // Parent-driven text set, used for undo/redo of committed edits. When
+  // childIndex is provided the edit targeted a single text run of a
+  // mixed-content element, so only that child node is restored (setting the
+  // element's textContent would clobber its sibling elements).
+  function setText(path, text, childIndex) {
+    var el = null;
+    try { el = document.querySelector(path); } catch (err) { /* bad selector */ }
+    if (!el) {
+      console.warn('[element-picker] arena:set-text target not found:', path);
+      return;
+    }
+    if (activeEdit && activeEdit.element === el) cancelEdit();
+    if (childIndex != null && el.childNodes[childIndex]) {
+      el.childNodes[childIndex].textContent = text;
+    } else {
+      el.textContent = text;
+    }
+  }
+
+  function reportCapability() {
+    var tagged = !!document.querySelector(
+      '[' + SOURCE_ATTR + '], [' + LEGACY_SOURCE_ATTR + ']'
+    );
+    postToParent({ type: 'arena:edit-capability', textEdit: true, tagged: tagged });
+  }
+
+  // ---------------------------------------------------------------- wiring
+
+  window.addEventListener('message', function (e) {
+    if (!e.data || typeof e.data.type !== 'string') return;
+
+    switch (e.data.type) {
+      case 'inspect:mode':
+        if (e.data.enabled) enableInspect();
+        else disableInspect();
+        break;
+      case 'arena:edit-mode':
+        if (e.data.enabled) enableEdit();
+        else disableEdit();
+        break;
+      case 'arena:set-text':
+        setText(e.data.domPath, e.data.text, e.data.childIndex);
+        break;
+      case 'arena:init':
+        reportCapability();
+        break;
+    }
+  });
+
+  // Also support toggling via keyboard for standalone testing:
+  //   Alt+Shift+I — inspect mode, Alt+Shift+E — edit mode
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey && e.shiftKey && e.key === 'I') {
+      inspectEnabled ? disableInspect() : enableInspect();
+    } else if (e.altKey && e.shiftKey && e.key === 'E') {
+      editEnabled ? disableEdit() : enableEdit();
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', reportCapability);
+  } else {
+    reportCapability();
+  }
+
+  console.log('[element-picker] Loaded. inspect:mode / arena:edit-mode (or Alt+Shift+I / Alt+Shift+E).');
+})();
 </script>
-</body>
+  </body>
 </html>
