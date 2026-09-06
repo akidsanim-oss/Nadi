@@ -1,466 +1,977 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon TCG: Nuit Noire & Chaos Ascendant</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        nuit: {
-                            900: '#0a0a0f',
-                            800: '#12121a',
-                            700: '#1a1a2e',
-                            accent: '#00d4ff'
-                        },
-                        chaos: {
-                            900: '#1a0505',
-                            800: '#2d0a0a',
-                            accent: '#ff0055'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Rajdhani', 'sans-serif']
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'holographic': 'holographic 3s ease-in-out infinite',
-                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' }
-                        },
-                        holographic: {
-                            '0%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                            '100%': { backgroundPosition: '0% 50%' }
-                        },
-                        'pulse-glow': {
-                            '0%, 100%': { boxShadow: '0 0 5px currentColor' },
-                            '50%': { boxShadow: '0 0 20px currentColor' }
-                        }
-                    }
-                }
-            }
+    <title>Pokémon TCG - Nuit Noire : Chaos Ascendant</title>
+    <!-- Three.js, OrbitControls & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
         }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .text-gradient {
-                @apply bg-clip-text text-transparent bg-gradient-to-r from-nuit-accent to-chaos-accent;
-            }
-            .glass {
-                @apply bg-white/5 backdrop-blur-md border border-white/10;
-            }
-            .holo-border {
-                @apply relative overflow-hidden;
-            }
-            .holo-border::before {
-                content: '';
-                @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 animate-holographic;
-            }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050308;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+        }
+
+        #webgl-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Overlay UI */
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+        }
+
+        .interactive {
+            pointer-events: auto;
+        }
+
+        /* Header UI */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: linear-gradient(180deg, rgba(10, 5, 15, 0.85) 0%, rgba(10, 5, 15, 0) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tcg-badge {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ff3e3e;
+            font-weight: 800;
+            margin-bottom: 4px;
+            text-shadow: 0 0 10px rgba(255, 62, 62, 0.6);
+        }
+
+        .title-main {
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #fff 0%, #ff8800 50%, #ff0044 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 68, 0, 0.4);
+        }
+
+        .title-sub {
+            font-size: 13px;
+            color: #a0a0c0;
+            font-style: italic;
+        }
+
+        .card-stats {
+            background: rgba(20, 10, 25, 0.7);
+            border: 1px solid rgba(255, 80, 0, 0.4);
+            padding: 10px 18px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 15px rgba(255, 50, 0, 0.2);
+        }
+
+        .hp-badge {
+            font-size: 18px;
+            font-weight: 900;
+            color: #ff3b3b;
+        }
+
+        .type-icon {
+            width: 24px;
+            height: 24px;
+            background: #ff4500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px #ff4500;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Bottom Control Deck */
+        .controls-panel {
+            align-self: center;
+            background: rgba(12, 8, 20, 0.85);
+            border: 1px solid rgba(255, 100, 0, 0.3);
+            border-radius: 20px;
+            padding: 14px 28px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 60, 0, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2a1020 0%, #150818 100%);
+            border: 1px solid #ff4400;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #ff4400 0%, #b30000 100%);
+            box-shadow: 0 0 15px rgba(255, 68, 0, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff5500 0%, #990000 100%);
+            box-shadow: 0 0 12px rgba(255, 85, 0, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff7700 0%, #cc0000 100%);
+            box-shadow: 0 0 25px rgba(255, 119, 0, 0.9);
+        }
+
+        /* Mode Switcher Tabs */
+        .mode-tabs {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(15, 10, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0a0b0;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            border-color: #ff5500;
+            color: #fff;
+            background: rgba(40, 15, 30, 0.8);
+            box-shadow: 0 0 10px rgba(255, 85, 0, 0.3);
+        }
+
+        /* Flash FX Overlay */
+        #fx-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            background: radial-gradient(circle at center, rgba(255,50,0,0) 0%, rgba(0,0,0,0.4) 100%);
+            transition: background 0.1s ease;
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #08030a;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 68, 0, 0.1);
+            border-top: 4px solid #ff4400;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 68, 0, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ff6600;
+            font-weight: 700;
+        }
+
+        /* Attack Description Popup */
+        .attack-toast {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(20, 5, 10, 0.9);
+            border: 2px solid #ff3300;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 30px rgba(255, 51, 0, 0.6);
+        }
+
+        .attack-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .attack-name {
+            font-size: 20px;
+            font-weight: 900;
+            color: #ff9900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .attack-dmg {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ff0044;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .title-main { font-size: 20px; }
+            .controls-panel { flex-wrap: wrap; justify-content: center; }
+            .mode-tabs { display: none; }
         }
     </style>
 </head>
-<body class="bg-nuit-900 text-white font-sans antialiased">
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 glass">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <span class="font-display font-bold text-2xl text-gradient">Pokémon TCG</span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="hover:text-nuit-accent transition-colors duration-300">Home</a>
-                    <a href="#sets" class="hover:text-nuit-accent transition-colors duration-300">Sets</a>
-                    <a href="#cards" class="hover:text-nuit-accent transition-colors duration-300">Cards</a>
-                    <a href="#preorder" class="hover:text-nuit-accent transition-colors duration-300">Pre-order</a>
-                </div>
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-white hover:text-nuit-accent transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text">Invocation de la Nuit Noire...</div>
+    </div>
+
+    <div id="webgl-container"></div>
+    <div id="fx-overlay"></div>
+
+    <div class="ui-layer">
+        <header class="interactive">
+            <div class="logo-container">
+                <span class="tcg-badge">Pokémon TCG • Édition Spéciale</span>
+                <h1 class="title-main">Nuit Noire : Chaos Ascendant</h1>
+                <span class="title-sub">Giga-Évolution Dragon d'Obsidienne EX</span>
+            </div>
+            <div class="card-stats">
+                <div class="type-icon">🔥</div>
+                <div>
+                    <div style="font-size: 10px; color: #aaa; text-transform: uppercase;">PV MAX</div>
+                    <div class="hp-badge">340 HP</div>
                 </div>
             </div>
+        </header>
+
+        <div class="attack-toast" id="attackToast">
+            <span class="attack-name" id="toastName">Éruption du Chaos</span>
+            <span class="attack-dmg" id="toastDmg">280</span>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden glass">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="block px-3 py-2 hover:bg-white/10 rounded-md">Home</a>
-                <a href="#sets" class="block px-3 py-2 hover:bg-white/10 rounded-md">Sets</a>
-                <a href="#cards" class="block px-3 py-2 hover:bg-white/10 rounded-md">Cards</a>
-                <a href="#preorder" class="block px-3 py-2 hover:bg-white/10 rounded-md">Pre-order</a>
-            </div>
+
+        <div class="mode-tabs interactive">
+            <button class="tab-btn active" onclick="setCameraView('cinematic')">🎬 Vue Cinématique</button>
+            <button class="tab-btn" onclick="setCameraView('card')">🃏 Carte 3D TCG</button>
+            <button class="tab-btn" onclick="setCameraView('close')">👁️ Focus Tête & Magma</button>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="h-screen relative overflow-hidden">
-        <div id="pokemon-3d" class="absolute top-0 left-0 w-full h-full z-0"></div>
-        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-            <span class="animate-pulse-glow px-4 py-2 rounded-full bg-nuit-accent/20 text-nuit-accent text-sm font-semibold mb-6 border border-nuit-accent/30">
-                New Expansion | Available Now
-            </span>
-            <h1 class="font-display font-bold text-5xl md:text-7xl mb-4">
-                <span class="text-gradient">Nuit Noire</span> & <span class="text-gradient">Chaos Ascendant</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl">
-                Embrace the darkness. Unleash the chaos. Collect the most powerful Dark-type Pokémon ever released.
-            </p>
-            <a href="#preorder" class="px-8 py-4 bg-gradient-to-r from-nuit-accent to-chaos-accent rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-nuit-accent/50">
-                Pre-order Now
-            </a>
+        <div class="controls-panel interactive">
+            <button class="btn btn-primary" onclick="triggerAttack('chaos')">
+                🔥 Rayon de Chaos
+            </button>
+            <button class="btn" onclick="triggerAttack('nuit')">
+                ⚡ Nuit Noire
+            </button>
+            <button class="btn" onclick="toggleAudio()">
+                🔊 <span id="audioLabel">Son : OFF</span>
+            </button>
+            <button class="btn" onclick="burstEmbers()">
+                💥 Éruption Rocks
+            </button>
         </div>
-    </section>
+    </div>
 
-    <!-- Featured Cards Section -->
-    <section id="cards" class="py-20 bg-nuit-900 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display font-bold text-4xl md:text-5xl text-center mb-16 text-gradient">Notable Pokémon</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Card 1: Yveltal -->
-                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-nuit-accent/20">
-                    <div class="h-48 bg-gradient-to-br from-nuit-700 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-nuit-accent" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Yveltal</h3>
-                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-nuit-accent/20 text-nuit-accent mb-2">Dark / Flying</span>
-                    <p class="text-sm text-gray-400 mb-2">Rare Holo VMAX</p>
-                    <p class="text-gray-300 text-sm">The legendary harbinger of destruction from Nuit Noire, capable of stealing life force from all who oppose it.</p>
-                </div>
-
-                <!-- Card 2: Umbreon -->
-                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-nuit-accent/20">
-                    <div class="h-48 bg-gradient-to-br from-nuit-700 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-nuit-accent" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Umbreon</h3>
-                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-nuit-accent/20 text-nuit-accent mb-2">Dark</span>
-                    <p class="text-sm text-gray-400 mb-2">Rare Holo GX</p>
-                    <p class="text-gray-300 text-sm">The moonlit evolution of Eevee, its glowing rings pulse with dark energy to confuse and disorient opponents.</p>
-                </div>
-
-                <!-- Card 3: Tyranitar -->
-                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-chaos-accent/20">
-                    <div class="h-48 bg-gradient-to-br from-chaos-900 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-chaos-accent" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Tyranitar</h3>
-                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-chaos-accent/20 text-chaos-accent mb-2">Rock / Dark</span>
-                    <p class="text-sm text-gray-400 mb-2">Rare Holo V</p>
-                    <p class="text-gray-300 text-sm">The armored juggernaut of Chaos Ascendant, capable of reshaping the battlefield with its raw, chaotic power.</p>
-                </div>
-
-                <!-- Card 4: Shiny Garchomp -->
-                <div class="glass rounded-2xl p-6 holo-border hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-chaos-accent/20">
-                    <div class="h-48 bg-gradient-to-br from-chaos-900 to-chaos-800 rounded-xl mb-4 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-chaos-accent" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Shiny Garchomp</h3>
-                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-chaos-accent/20 text-chaos-accent mb-2">Dragon / Ground</span>
-                    <p class="text-sm text-gray-400 mb-2">Secret Rare</p>
-                    <p class="text-gray-300 text-sm">The elusive shiny variant, its black scales and red fins embody the chaotic energy of the new expansion.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Packaging Section -->
-    <section id="sets" class="py-20 bg-nuit-800/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display font-bold text-4xl md:text-5xl text-center mb-16 text-gradient">Booster Packs</h2>
-            <div class="flex flex-col md:flex-row gap-12 justify-center items-center">
-                <!-- Nuit Noire Pack -->
-                <div class="w-64 h-96 rounded-2xl p-4 relative transform transition-transform duration-500 hover:rotate-y-12 hover:scale-105 border-2 border-white/10 bg-gradient-to-b from-nuit-900 to-nuit-700 shadow-lg shadow-nuit-accent/30">
-                    <div class="absolute inset-0 rounded-2xl overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 animate-holographic"></div>
-                    </div>
-                    <div class="relative z-10 h-full flex flex-col items-center justify-center">
-                        <div class="w-32 h-40 bg-nuit-800/50 rounded-lg mb-4 border border-nuit-accent/30 flex items-center justify-center">
-                            <span class="text-nuit-accent font-display font-bold text-2xl">NN</span>
-                        </div>
-                        <h3 class="font-display font-bold text-2xl mb-2 bg-gradient-to-r from-gray-300 to-white bg-clip-text text-transparent">Nuit Noire</h3>
-                        <p class="text-sm text-gray-400">15 Cards per Pack</p>
-                        <p class="text-nuit-accent font-semibold mt-2">1 Rare Holo per Pack</p>
-                    </div>
-                </div>
-
-                <!-- Chaos Ascendant Pack -->
-                <div class="w-64 h-96 rounded-2xl p-4 relative transform transition-transform duration-500 hover:rotate-y-12 hover:scale-105 border-2 border-white/10 bg-gradient-to-b from-chaos-900 to-chaos-800 shadow-lg shadow-chaos-accent/30">
-                    <div class="absolute inset-0 rounded-2xl overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 animate-holographic"></div>
-                    </div>
-                    <div class="relative z-10 h-full flex flex-col items-center justify-center">
-                        <div class="w-32 h-40 bg-chaos-800/50 rounded-lg mb-4 border border-chaos-accent/30 flex items-center justify-center">
-                            <span class="text-chaos-accent font-display font-bold text-2xl">CA</span>
-                        </div>
-                        <h3 class="font-display font-bold text-2xl mb-2 bg-gradient-to-r from-chaos-accent to-pink-400 bg-clip-text text-transparent">Chaos Ascendant</h3>
-                        <p class="text-sm text-gray-400">15 Cards per Pack</p>
-                        <p class="text-chaos-accent font-semibold mt-2">1 Rare Holo + 1 Reverse Holo per Pack</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-20 bg-nuit-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-display font-bold text-4xl md:text-5xl text-center mb-16 text-gradient">What's New</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass rounded-2xl p-8 text-center hover:border-nuit-accent/30 transition-colors duration-300">
-                    <div class="w-16 h-16 mx-auto mb-6 bg-nuit-accent/20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-nuit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">New Card Mechanics</h3>
-                    <p class="text-gray-300">Introducing Dark Energies that boost your Dark-type Pokémon's attacks while weakening your opponent's bench.</p>
-                </div>
-
-                <div class="glass rounded-2xl p-8 text-center hover:border-chaos-accent/30 transition-colors duration-300">
-                    <div class="w-16 h-16 mx-auto mb-6 bg-chaos-accent/20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-chaos-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Limited Edition</h3>
-                    <p class="text-gray-300">Each booster pack contains a chance for a special etched foil card, only available in this expansion.</p>
-                </div>
-
-                <div class="glass rounded-2xl p-8 text-center hover:border-nuit-accent/30 transition-colors duration-300">
-                    <div class="w-16 h-16 mx-auto mb-6 bg-nuit-accent/20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-nuit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Elite Trainer Box</h3>
-                    <p class="text-gray-300">Premium packaging with exclusive promo cards, dice, card sleeves, and a premium collector's tin.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pre-order Section -->
-    <section id="preorder" class="py-20 bg-gradient-to-r from-nuit-900 to-chaos-900">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="font-display font-bold text-4xl md:text-5xl mb-8">Pre-order Now</h2>
-            <p class="text-xl text-gray-300 mb-8">Secure your copy of Nuit Noire & Chaos Ascendant before they sell out. Available in booster packs, elite trainer boxes, and complete sets.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="px-10 py-4 bg-white text-nuit-900 rounded-full font-bold text-lg hover:bg-nuit-accent hover:text-white transition-colors duration-300">
-                    Booster Pack - $4.99
-                </button>
-                <button class="px-10 py-4 bg-chaos-accent text-white rounded-full font-bold text-lg hover:bg-chaos-accent/80 transition-colors duration-300">
-                    Elite Trainer Box - $49.99
-                </button>
-                <button class="px-10 py-4 border-2 border-nuit-accent text-nuit-accent rounded-full font-bold text-lg hover:bg-nuit-accent hover:text-white transition-colors duration-300">
-                    Complete Set - $199.99
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-12 bg-nuit-800/50 border-t border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <span class="font-display font-bold text-2xl text-gradient">Pokémon TCG</span>
-                    <p class="text-gray-400 mt-2">Nuit Noire & Chaos Ascendant</p>
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-nuit-accent transition-colors duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-nuit-accent transition-colors duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-nuit-accent transition-colors duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-                    </a>
-                </div>
-            </div>
-            <div class="mt-8 text-center text-gray-400 text-sm">
-                &copy; 2024 Pokémon TCG. Not affiliated with The Pokémon Company. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    <!-- Three.js and Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        // --- AUDIO SYNTHESIZER (Web Audio API) ---
+        let audioCtx = null;
+        let isAudioOn = false;
+        let bgOsc = null;
 
-        // Smooth Scroll for Anchor Links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-        });
+        function initAudio() {
+            if (audioCtx) return;
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+        }
 
-        // Three.js 3D Pokémon Model (Stylized Umbreon)
-        const init3DModel = () => {
-            const container = document.getElementById('pokemon-3d');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        function toggleAudio() {
+            if (!audioCtx) initAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isAudioOn = !isAudioOn;
+            document.getElementById('audioLabel').innerText = isAudioOn ? "Son : ON" : "Son : OFF";
             
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
+            if (isAudioOn) {
+                playAtmosphereDrone();
+            } else if (bgOsc) {
+                bgOsc.stop();
+                bgOsc = null;
+            }
+        }
 
-            // Controls
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.enableZoom = true;
-            controls.minDistance = 2;
-            controls.maxDistance = 5;
-            controls.enablePan = false;
+        function playAtmosphereDrone() {
+            if (!isAudioOn || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(45, audioCtx.currentTime); // Low bass hum
+            
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(120, audioCtx.currentTime);
 
-            // Pokémon Group
-            const pokemonGroup = new THREE.Group();
-            scene.add(pokemonGroup);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            osc.connect(filter);
+            filter.connect(audioCtx.destination);
+            osc.start();
+            bgOsc = osc;
+        }
 
-            // Materials
-            const bodyMaterial = new THREE.MeshStandardMaterial({
-                color: 0x1a1a2e,
-                roughness: 0.3,
-                metalness: 0.5
-            });
-            const ringMaterial = new THREE.MeshStandardMaterial({
-                color: 0x00d4ff,
-                emissive: 0x00d4ff,
-                emissiveIntensity: 1,
-                roughness: 0.2,
-                metalness: 0.3
-            });
+        function playRoarSound() {
+            if (!isAudioOn || !audioCtx) return;
+            const now = audioCtx.currentTime;
+            
+            // White noise buffer for fire roar
+            const bufferSize = audioCtx.sampleRate * 1.5;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
 
-            // Body
-            const bodyGeometry = new THREE.SphereGeometry(1, 32, 32);
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            pokemonGroup.add(body);
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
 
-            // Ears
-            const earGeometry = new THREE.ConeGeometry(0.2, 0.8, 16);
-            const leftEar = new THREE.Mesh(earGeometry, bodyMaterial);
-            leftEar.position.set(0.4, 1.2, 0);
-            leftEar.rotation.z = -0.3;
-            pokemonGroup.add(leftEar);
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(200, now);
+            filter.frequency.exponentialRampToValueAtTime(800, now + 0.4);
+            filter.frequency.exponentialRampToValueAtTime(100, now + 1.5);
 
-            const rightEar = new THREE.Mesh(earGeometry, bodyMaterial);
-            rightEar.position.set(-0.4, 1.2, 0);
-            rightEar.rotation.z = 0.3;
-            pokemonGroup.add(rightEar);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
 
-            // Tail
-            const tailCurve = new THREE.CatmullRomCurve3([
-                new THREE.Vector3(0, -0.5, -1),
-                new THREE.Vector3(0, 0, -1.5),
-                new THREE.Vector3(0, 0.5, -1.2)
-            ]);
-            const tailGeometry = new THREE.TubeGeometry(tailCurve, 20, 0.15, 16, false);
-            const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
-            pokemonGroup.add(tail);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
 
-            // Glowing Rings
-            const rings = [];
-            const ringPositions = [
-                { x: 0.5, y: -0.8, z: 0.3 },
-                { x: -0.5, y: -0.8, z: 0.3 },
-                { x: 0.5, y: -0.8, z: -0.3 },
-                { x: -0.5, y: -0.8, z: -0.3 }
-            ];
+            noise.start(now);
+        }
 
-            ringPositions.forEach(pos => {
-                const ringGeometry = new THREE.TorusGeometry(0.25, 0.05, 16, 100);
-                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-                ring.position.set(pos.x, pos.y, pos.z);
-                ring.rotation.x = Math.PI / 2;
-                pokemonGroup.add(ring);
-                rings.push(ring);
-            });
+        // --- THREE.JS SCENE SETUP ---
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a040d, 0.025);
 
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-            scene.add(ambientLight);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 4, 18);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(5, 5, 5);
-            scene.add(directionalLight);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.25;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
 
-            // Point lights for rings
-            ringPositions.forEach(pos => {
-                const pointLight = new THREE.PointLight(0x00d4ff, 1, 3);
-                pointLight.position.set(pos.x, pos.y, pos.z);
-                scene.add(pointLight);
-            });
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 + 0.05;
+        controls.minDistance = 5;
+        controls.maxDistance = 35;
+        controls.target.set(0, 3, 0);
 
-            // Camera Position
-            camera.position.z = 3;
+        // --- LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0x1a0a2a, 0.8);
+        scene.add(ambientLight);
 
-            // Animation Loop
-            const animate = () => {
-                requestAnimationFrame(animate);
+        // Dramatic Backlight (Sun behind cloud feel)
+        const backLight = new THREE.DirectionalLight(0xffaa44, 3.5);
+        backLight.position.set(0, 15, -15);
+        backLight.castShadow = true;
+        scene.add(backLight);
 
-                // Rotate Pokémon slowly
-                pokemonGroup.rotation.y += 0.005;
+        // Core Lava Chest Glow Light
+        const chestLight = new THREE.PointLight(0xff3300, 5, 12);
+        chestLight.position.set(0, 3.5, 1);
+        scene.add(chestLight);
 
-                // Pulse rings
-                const time = Date.now() * 0.002;
-                rings.forEach(ring => {
-                    ring.scale.setScalar(1 + Math.sin(time) * 0.1);
-                });
+        // Secondary Sky Rim Light
+        const rimLight = new THREE.DirectionalLight(0x8833ff, 1.5);
+        rimLight.position.set(-10, 10, 10);
+        scene.add(rimLight);
 
-                controls.update();
-                renderer.render(scene, camera);
+        // Ground Lava Glow Light
+        const groundLight = new THREE.PointLight(0xff5500, 3, 15);
+        groundLight.position.set(0, -1, 0);
+        scene.add(groundLight);
+
+        // --- PROCEDURAL TEXTURES ---
+        // Lava Vein Noise Canvas Texture
+        function createLavaTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#0a0a0d';
+            ctx.fillRect(0, 0, 512, 512);
+
+            // Draw glowing lava crack networks
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#ff3300';
+            ctx.shadowColor = '#ff6600';
+            ctx.shadowBlur = 12;
+
+            for (let i = 0; i < 40; i++) {
+                ctx.beginPath();
+                let x = Math.random() * 512;
+                let y = Math.random() * 512;
+                ctx.moveTo(x, y);
+                for (let j = 0; j < 6; j++) {
+                    x += (Math.random() - 0.5) * 80;
+                    y += (Math.random() - 0.5) * 80;
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        const lavaTexture = createLavaTexture();
+        lavaTexture.wrapS = THREE.RepeatWrapping;
+        lavaTexture.wrapT = THREE.RepeatWrapping;
+
+        // --- MATERIALS ---
+        const obsidianMaterial = new THREE.MeshStandardMaterial({
+            color: 0x111116,
+            roughness: 0.35,
+            metalness: 0.8,
+            emissive: 0xff2200,
+            emissiveMap: lavaTexture,
+            emissiveIntensity: 1.2
+        });
+
+        const wingMembraneMat = new THREE.MeshStandardMaterial({
+            color: 0x1a0508,
+            roughness: 0.6,
+            metalness: 0.2,
+            emissive: 0xff1100,
+            emissiveMap: lavaTexture,
+            emissiveIntensity: 0.8,
+            side: THREE.DoubleSide
+        });
+
+        const rockMat = new THREE.MeshStandardMaterial({
+            color: 0x18151d,
+            roughness: 0.9,
+            metalness: 0.1
+        });
+
+        // --- 3D DRAGON MONSTER CONSTRUCTION ---
+        const dragonGroup = new THREE.Group();
+        scene.add(dragonGroup);
+
+        // Torso / Chest
+        const chestGeo = new THREE.DodecahedronGeometry(1.8, 1);
+        chestGeo.scale(1, 1.3, 1.1);
+        const chest = new THREE.Mesh(chestGeo, obsidianMaterial);
+        chest.position.set(0, 3.8, 0);
+        chest.castShadow = true;
+        dragonGroup.add(chest);
+
+        // Abdomen / Lower Spine
+        const abdomenGeo = new THREE.DodecahedronGeometry(1.3, 1);
+        const abdomen = new THREE.Mesh(abdomenGeo, obsidianMaterial);
+        abdomen.position.set(0, 2.2, -0.4);
+        dragonGroup.add(abdomen);
+
+        // Neck
+        const neckGroup = new THREE.Group();
+        neckGroup.position.set(0, 4.8, 0.4);
+        dragonGroup.add(neckGroup);
+
+        const neckGeo = new THREE.CylinderGeometry(0.8, 1.2, 1.6, 8);
+        const neck = new THREE.Mesh(neckGeo, obsidianMaterial);
+        neck.position.set(0, 0.6, 0.3);
+        neck.rotation.x = 0.4;
+        neckGroup.add(neck);
+
+        // Head Group
+        const headGroup = new THREE.Group();
+        headGroup.position.set(0, 1.5, 0.7);
+        neckGroup.add(headGroup);
+
+        // Upper Skull
+        const skullGeo = new THREE.ConeGeometry(1.1, 2, 5);
+        skullGeo.rotateX(Math.PI / 2);
+        const skull = new THREE.Mesh(skullGeo, obsidianMaterial);
+        skull.position.set(0, 0.2, 0.6);
+        skull.scale.set(0.9, 0.6, 1.2);
+        headGroup.add(skull);
+
+        // Horns
+        for (let side of [-1, 1]) {
+            const hornGeo = new THREE.ConeGeometry(0.25, 2.2, 5);
+            const horn = new THREE.Mesh(hornGeo, obsidianMaterial);
+            horn.position.set(side * 0.7, 0.6, -0.2);
+            horn.rotation.set(-0.6, side * 0.3, side * -0.4);
+            headGroup.add(horn);
+
+            // Brow horns
+            const miniHorn = new THREE.Mesh(hornGeo, obsidianMaterial);
+            miniHorn.position.set(side * 0.5, 0.4, 0.6);
+            miniHorn.scale.set(0.6, 0.6, 0.6);
+            miniHorn.rotation.set(-0.8, side * 0.2, side * -0.2);
+            headGroup.add(miniHorn);
+        }
+
+        // Glowing Eyes
+        const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0022 });
+        for (let side of [-1, 1]) {
+            const eyeGeo = new THREE.SphereGeometry(0.12, 8, 8);
+            const eye = new THREE.Mesh(eyeGeo, eyeMat);
+            eye.position.set(side * 0.45, 0.25, 0.8);
+            headGroup.add(eye);
+        }
+
+        // Jaw / Mouth Glow
+        const jawGeo = new THREE.BoxGeometry(0.8, 0.3, 1.4);
+        const jaw = new THREE.Mesh(jawGeo, obsidianMaterial);
+        jaw.position.set(0, -0.3, 0.6);
+        headGroup.add(jaw);
+
+        const mouthLight = new THREE.PointLight(0xff1100, 4, 6);
+        mouthLight.position.set(0, 0, 0.8);
+        headGroup.add(mouthLight);
+
+        // --- ARMS & LEGS ---
+        // Shoulders / Legs positioning
+        function createClawLeg(isRight) {
+            const leg = new THREE.Group();
+            const side = isRight ? 1 : -1;
+
+            const thighGeo = new THREE.CylinderGeometry(0.7, 0.5, 2, 6);
+            const thigh = new THREE.Mesh(thighGeo, obsidianMaterial);
+            thigh.position.set(side * 1.6, 2.2, 0);
+            thigh.rotation.z = side * -0.4;
+            thigh.rotation.x = 0.3;
+            leg.add(thigh);
+
+            const shinGeo = new THREE.CylinderGeometry(0.5, 0.35, 2.2, 6);
+            const shin = new THREE.Mesh(shinGeo, obsidianMaterial);
+            shin.position.set(side * 2.1, 0.6, 0.4);
+            shin.rotation.x = -0.5;
+            leg.add(shin);
+
+            // Foot Claws
+            const footGeo = new THREE.BoxGeometry(0.9, 0.3, 1.2);
+            const foot = new THREE.Mesh(footGeo, obsidianMaterial);
+            foot.position.set(side * 2.2, -0.4, 0.8);
+            leg.add(foot);
+
+            return leg;
+        }
+
+        dragonGroup.add(createClawLeg(false));
+        dragonGroup.add(createClawLeg(true));
+
+        // --- WINGS ---
+        const wingsGroup = new THREE.Group();
+        wingsGroup.position.set(0, 4.2, -0.5);
+        dragonGroup.add(wingsGroup);
+
+        function createWing(isRight) {
+            const wing = new THREE.Group();
+            const side = isRight ? 1 : -1;
+
+            // Wing Bone Arm 1
+            const arm1Geo = new THREE.CylinderGeometry(0.25, 0.4, 3.5, 6);
+            const arm1 = new THREE.Mesh(arm1Geo, obsidianMaterial);
+            arm1.position.set(side * 1.8, 1.2, 0);
+            arm1.rotation.z = side * -1.1;
+            arm1.rotation.y = side * 0.3;
+            wing.add(arm1);
+
+            // Wing Bone Arm 2 (Finger struts)
+            const arm2Geo = new THREE.CylinderGeometry(0.15, 0.25, 4.5, 6);
+            const arm2 = new THREE.Mesh(arm2Geo, obsidianMaterial);
+            arm2.position.set(side * 3.8, 2.8, -0.5);
+            arm2.rotation.z = side * -0.3;
+            arm2.rotation.x = -0.4;
+            wing.add(arm2);
+
+            // Custom Triangular Wing Membrane Mesh
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.lineTo(side * 3.5, 2.5);
+            shape.lineTo(side * 5.2, 0.5);
+            shape.lineTo(side * 4.0, -2.5);
+            shape.lineTo(side * 2.0, -2.0);
+            shape.closePath();
+
+            const geom = new THREE.ShapeGeometry(shape);
+            const membrane = new THREE.Mesh(geom, wingMembraneMat);
+            membrane.position.set(0, 0, -0.2);
+            wing.add(membrane);
+
+            return wing;
+        }
+
+        const leftWing = createWing(false);
+        const rightWing = createWing(true);
+        wingsGroup.add(leftWing);
+        wingsGroup.add(rightWing);
+
+        // --- ENVIRONMENT & RUINS ---
+        const envGroup = new THREE.Group();
+        scene.add(envGroup);
+
+        // Exploding Ground Shattered Platform
+        const groundGeo = new THREE.CylinderGeometry(9, 11, 2, 12);
+        const ground = new THREE.Mesh(groundGeo, rockMat);
+        ground.position.y = -1.2;
+        ground.receiveShadow = true;
+        envGroup.add(ground);
+
+        // Broken Pillars / Ruin Structures
+        for (let i = 0; i < 7; i++) {
+            const angle = (i / 7) * Math.PI * 2 + 0.3;
+            const radius = 7 + Math.random() * 3;
+            const height = 4 + Math.random() * 6;
+
+            const pillarGeo = new THREE.CylinderGeometry(0.7, 0.9, height, 7);
+            const pillar = new THREE.Mesh(pillarGeo, rockMat);
+            pillar.position.set(Math.cos(angle) * radius, height / 2 - 1, Math.sin(angle) * radius);
+            pillar.rotation.set((Math.random() - 0.5) * 0.3, Math.random() * Math.PI, (Math.random() - 0.5) * 0.3);
+            pillar.castShadow = true;
+            pillar.receiveShadow = true;
+            envGroup.add(pillar);
+        }
+
+        // Floating Debris / Shattered Rocks (Chaos Ascendant effect)
+        const floatingRocks = [];
+        const rockGeo = new THREE.DodecahedronGeometry(0.5, 0);
+
+        for (let i = 0; i < 45; i++) {
+            const rock = new THREE.Mesh(rockGeo, rockMat);
+            const dist = 3 + Math.random() * 9;
+            const ang = Math.random() * Math.PI * 2;
+            const yPos = Math.random() * 10 - 1;
+
+            rock.position.set(Math.cos(ang) * dist, yPos, Math.sin(ang) * dist);
+            rock.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
+            
+            const scale = 0.4 + Math.random() * 1.2;
+            rock.scale.set(scale, scale, scale);
+
+            rock.userData = {
+                speedY: 0.005 + Math.random() * 0.01,
+                rotSpeed: (Math.random() - 0.5) * 0.02,
+                initialY: yPos,
+                angle: ang,
+                radius: dist
             };
 
-            animate();
+            floatingRocks.push(rock);
+            envGroup.add(rock);
+        }
 
-            // Handle Window Resize
-            window.addEventListener('resize', () => {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
+        // --- EMBERS & PARTICLES SYSTEM ---
+        const particleCount = 250;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePos = new Float32Array(particleCount * 3);
+        const particleVel = [];
+
+        for (let i = 0; i < particleCount; i++) {
+            particlePos[i * 3] = (Math.random() - 0.5) * 20;
+            particlePos[i * 3 + 1] = Math.random() * 12;
+            particlePos[i * 3 + 2] = (Math.random() - 0.5) * 20;
+
+            particleVel.push({
+                x: (Math.random() - 0.5) * 0.02,
+                y: 0.02 + Math.random() * 0.04,
+                z: (Math.random() - 0.5) * 0.02
             });
-        };
+        }
 
-        // Initialize 3D Model when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init3DModel);
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+
+        const particleMat = new THREE.PointsMaterial({
+            color: 0xff5500,
+            size: 0.25,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending
+        });
+
+        const emberParticles = new THREE.Points(particleGeo, particleMat);
+        scene.add(emberParticles);
+
+        // --- 3D TCG DISPLAY CARD FRAME ---
+        const cardGroup = new THREE.Group();
+        cardGroup.position.set(0, 3.5, 8);
+        cardGroup.visible = false;
+        scene.add(cardGroup);
+
+        // Load visual reference onto TCG Card Texture
+        const textureLoader = new THREE.TextureLoader();
+        const cardRefUrl = "https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/images/inputs/1788654591907_9ifwkdcl0.jpg?token=eyJraWQiOiI0NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvaW5wdXRzLzE3ODg2NTQ1OTE5MDdfOWlmd2tkY2wwLmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODg2NTczNjEsImV4cCI6MTgyMDE5MzM2MX0.cG9RCm4M-C2hePslAfBGN5Jp1J23ENn7yc2yY9Sctzc";
+
+        textureLoader.load(cardRefUrl, (artTexture) => {
+            // Hide Loader once main texture is loaded
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 800);
+
+            // Create 3D Card Geometry
+            const cardGeo = new THREE.BoxGeometry(4.2, 6.0, 0.08);
+            
+            // Front Card Shader Canvas
+            const cardMat = new THREE.MeshStandardMaterial({
+                map: artTexture,
+                roughness: 0.2,
+                metalness: 0.5
+            });
+
+            const cardBorderMat = new THREE.MeshStandardMaterial({
+                color: 0x221100,
+                metalness: 0.9,
+                roughness: 0.1
+            });
+
+            const cardMesh = new THREE.Mesh(cardGeo, [
+                cardBorderMat, cardBorderMat, cardBorderMat, cardBorderMat, cardMat, cardBorderMat
+            ]);
+            cardGroup.add(cardMesh);
+        });
+
+        // --- INTERACTION & ANIMATIONS ---
+        let clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = clock.getElapsedTime();
+
+            // Dragon Idle Breath & Wing Flutter Animation
+            dragonGroup.position.y = Math.sin(time * 1.5) * 0.25;
+            headGroup.rotation.x = Math.sin(time * 2.0) * 0.05 + 0.1;
+            headGroup.rotation.y = Math.cos(time * 0.8) * 0.1;
+
+            leftWing.rotation.z = Math.sin(time * 2.0) * 0.12;
+            rightWing.rotation.z = -Math.sin(time * 2.0) * 0.12;
+
+            // Animate Floating Shattered Rocks
+            floatingRocks.forEach(rock => {
+                rock.position.y += rock.userData.speedY;
+                rock.rotation.x += rock.userData.rotSpeed;
+                rock.rotation.y += rock.userData.rotSpeed;
+
+                if (rock.position.y > 10) {
+                    rock.position.y = -1;
+                }
+            });
+
+            // Animate Embers
+            const positions = particleGeo.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3 + 1] += particleVel[i].y;
+                positions[i * 3] += Math.sin(time + i) * 0.01;
+
+                if (positions[i * 3 + 1] > 12) {
+                    positions[i * 3 + 1] = 0;
+                }
+            }
+            particleGeo.attributes.position.needsUpdate = true;
+
+            // Dynamic Light Flickering (Lava Glow)
+            chestLight.intensity = 4.5 + Math.sin(time * 8.0) * 1.2;
+            mouthLight.intensity = 3.5 + Math.cos(time * 10.0) * 1.5;
+
+            // Pulse Lava Texture Offset
+            lavaTexture.offset.x = (time * 0.05) % 1;
+            lavaTexture.offset.y = (time * 0.08) % 1;
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // --- USER INTERACTIONS & CAMERA VIEWS ---
+        function setCameraView(mode) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (mode === 'cinematic') {
+                event.target.classList.add('active');
+                cardGroup.visible = false;
+                gsap.to(camera.position, { x: 0, y: 4, z: 18, duration: 2, ease: "power2.inOut" });
+                gsap.to(controls.target, { x: 0, y: 3, z: 0, duration: 2 });
+            } else if (mode === 'card') {
+                event.target.classList.add('active');
+                cardGroup.visible = true;
+                gsap.to(camera.position, { x: 0, y: 3.5, z: 14, duration: 2, ease: "power2.inOut" });
+                gsap.to(controls.target, { x: 0, y: 3.5, z: 8, duration: 2 });
+            } else if (mode === 'close') {
+                event.target.classList.add('active');
+                cardGroup.visible = false;
+                gsap.to(camera.position, { x: 0, y: 5.5, z: 6, duration: 1.8, ease: "power2.inOut" });
+                gsap.to(controls.target, { x: 0, y: 5, z: 1, duration: 1.8 });
+            }
+        }
+
+        // Attack FX Trigger
+        function triggerAttack(type) {
+            const toast = document.getElementById('attackToast');
+            const toastName = document.getElementById('toastName');
+            const toastDmg = document.getElementById('toastDmg');
+            const fxOverlay = document.getElementById('fx-overlay');
+
+            playRoarSound();
+
+            if (type === 'chaos') {
+                toastName.innerText = "RAYON DU CHAOS";
+                toastDmg.innerText = "300";
+
+                // Screen Shake
+                gsap.to(camera.position, {
+                    x: "+=0.6", y: "+=0.4", duration: 0.05, repeat: 10, yoyo: true,
+                    onComplete: () => { camera.position.x = 0; }
+                });
+
+                // Flash red overlay
+                fxOverlay.style.background = 'radial-gradient(circle at center, rgba(255,80,0,0.6) 0%, rgba(0,0,0,0.8) 100%)';
+                setTimeout(() => {
+                    fxOverlay.style.background = 'radial-gradient(circle at center, rgba(255,50,0,0) 0%, rgba(0,0,0,0.4) 100%)';
+                }, 400);
+
+                // Open Jaw + Intense Light
+                gsap.to(jaw.rotation, { x: 0.6, duration: 0.3, yoyo: true, repeat: 1 });
+                gsap.to(mouthLight, { intensity: 15, duration: 0.3, yoyo: true, repeat: 1 });
+
+            } else if (type === 'nuit') {
+                toastName.innerText = "NUIT NOIRE : ÉCLIPSE";
+                toastDmg.innerText = "250";
+
+                // Darken scene instantly then flare up
+                gsap.to(ambientLight, { intensity: 0.05, duration: 0.2, yoyo: true, repeat: 1 });
+                gsap.to(backLight, { intensity: 8, duration: 0.4, yoyo: true, repeat: 1 });
+
+                fxOverlay.style.background = 'radial-gradient(circle at center, rgba(150,0,255,0.5) 0%, rgba(5,0,15,0.9) 100%)';
+                setTimeout(() => {
+                    fxOverlay.style.background = 'radial-gradient(circle at center, rgba(255,50,0,0) 0%, rgba(0,0,0,0.4) 100%)';
+                }, 500);
+            }
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        // Exploding Embers Effect
+        function burstEmbers() {
+            floatingRocks.forEach(rock => {
+                gsap.to(rock.position, {
+                    y: rock.position.y + 3 + Math.random() * 4,
+                    x: rock.position.x + (Math.random() - 0.5) * 4,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    yoyo: true,
+                    repeat: 1
+                });
+            });
+            playRoarSound();
+        }
+
+        // Responsive Resize Handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
 </html>
