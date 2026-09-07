@@ -3,1436 +3,688 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casa Verde — Résidence Citron</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#151713">
+<meta name="description" content="Maison Commune — des appartements privés, des espaces partagés et une nouvelle manière d'habiter la ville.">
+<title>Maison Commune — Vivre grand, ensemble.</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Work+Sans:wght@400;500;600;700&display=swap');
 :root{
-  --carbone:#0E0E10;
-  --carbone-2:#16171A;
-  --carbone-3:#1F2024;
-  --blanc-casse:#F4F1EA;
-  --blanc-casse-2:#EAE6DC;
-  --citron:#D7FF3A;
-  --citron-2:#B8E02B;
-  --line:rgba(244,241,234,.12);
-  --line-2:rgba(244,241,234,.22);
-  --shadow:0 30px 60px -20px rgba(0,0,0,.6);
-  --radius:18px;
-  --t:400ms cubic-bezier(.2,.7,.2,1);
+  --carbon:#151713; --carbon-soft:#232620;
+  --paper:#f1f0e8; --paper-bright:#fbfaef;
+  --acid:#cfff35; --acid-dark:#a9d61d;
+  --muted:#777b70;
+  --line:rgba(21,23,19,.18); --line-light:rgba(241,240,232,.18);
+  --display:"Archivo",sans-serif; --body:"Work Sans",sans-serif;
+  --page:min(1440px,calc(100vw - 64px));
+  --radius:18px; --ease:cubic-bezier(.2,.8,.2,1);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:'Work Sans',system-ui,sans-serif;
-  background:var(--carbone);
-  color:var(--blanc-casse);
-  font-weight:300;
-  line-height:1.5;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
-img{width:100%;display:block}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{margin:0;overflow-x:hidden;color:var(--carbon);background:var(--paper);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+::selection{color:var(--carbon);background:var(--acid)}
+button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{color:inherit}
 a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
-
-/* ---------- NAV ---------- */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:22px 48px;
-  background:rgba(14,14,16,.72);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);
-}
-.logo{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:18px;letter-spacing:-.02em;
-  display:flex;align-items:center;gap:8px;
-}
-.logo .dot{width:10px;height:10px;background:var(--citron);border-radius:50%;display:inline-block}
-.nav-links{display:flex;gap:6px}
-.nav-links a{
-  padding:8px 14px;font-size:13px;font-weight:500;
-  letter-spacing:.02em;border-radius:999px;
-  transition:all var(--t);color:var(--blanc-casse-2);
-}
-.nav-links a:hover{background:var(--line);color:var(--blanc-casse)}
-.nav-links a.active{background:var(--citron);color:var(--carbone)}
-.nav-cta{
-  padding:10px 18px;background:var(--citron);color:var(--carbone);
-  border-radius:999px;font-weight:600;font-size:13px;
-  transition:all var(--t);
-}
-.nav-cta:hover{background:var(--citron-2);transform:translateY(-1px)}
-
-/* ---------- HERO ---------- */
-.hero{
-  min-height:100vh;
-  padding:140px 48px 80px;
-  position:relative;
-  display:flex;align-items:center;
-  overflow:hidden;
-}
-.hero-bg{
-  position:absolute;inset:0;z-index:0;
-  background:
-    radial-gradient(800px 500px at 80% 20%, rgba(215,255,58,.12), transparent 60%),
-    radial-gradient(600px 400px at 10% 80%, rgba(215,255,58,.06), transparent 60%);
-}
-.hero-grid{
-  position:absolute;inset:0;z-index:0;opacity:.4;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size:80px 80px;
-  mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
-  -webkit-mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
-}
-.hero-inner{
-  position:relative;z-index:2;
-  display:grid;grid-template-columns:1.4fr 1fr;
-  gap:80px;align-items:center;width:100%;max-width:1400px;margin:0 auto;
-}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:8px 14px;border:1px solid var(--line-2);
-  border-radius:999px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--blanc-casse-2);margin-bottom:28px;
-}
-.hero-eyebrow .pulse{
-  width:8px;height:8px;border-radius:50%;background:var(--citron);
-  box-shadow:0 0 12px var(--citron);
-  animation:pulse 2s ease-in-out infinite;
-}
-@keyframes pulse{50%{opacity:.4;transform:scale(.8)}}
-h1.display{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:clamp(48px,7vw,108px);
-  line-height:.95;letter-spacing:-.04em;
-  margin-bottom:32px;
-}
-h1.display .marker{
-  position:relative;display:inline-block;
-}
-h1.display .marker::after{
-  content:'';position:absolute;
-  left:-4%;right:-4%;bottom:6%;
-  height:28%;background:var(--citron);z-index:-1;
-  border-radius:4px;
-  transform:skewX(-6deg);
-  animation:markerIn 1s cubic-bezier(.2,.7,.2,1) .4s both;
-}
-@keyframes markerIn{from{transform:skewX(-6deg) scaleX(0)}to{transform:skewX(-6deg) scaleX(1)}}
-.hero-lead{
-  font-size:18px;color:var(--blanc-casse-2);
-  max-width:520px;margin-bottom:40px;
-}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
-.btn{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:16px 26px;border-radius:999px;
-  font-weight:600;font-size:14px;letter-spacing:.01em;
-  transition:all var(--t);
-}
-.btn.primary{background:var(--citron);color:var(--carbone)}
-.btn.primary:hover{background:var(--citron-2);transform:translateY(-2px);box-shadow:0 12px 24px -8px rgba(215,255,58,.4)}
-.btn.ghost{border:1px solid var(--line-2);color:var(--blanc-casse)}
-.btn.ghost:hover{background:var(--line)}
-
-/* Hero 3D building */
-.hero-visual{
-  position:relative;height:560px;
-  perspective:1200px;
-}
-.building{
-  position:absolute;inset:0;
-  transform-style:preserve-3d;
-  animation:float 6s ease-in-out infinite;
-}
-@keyframes float{50%{transform:translateY(-14px) rotateX(2deg)}}
-.face{
-  position:absolute;left:50%;top:50%;
-  transform-style:preserve-3d;
-}
-.face-front{
-  width:280px;height:380px;
-  transform:translate(-50%,-50%) translateZ(110px);
-  background:linear-gradient(180deg,#1F2024,#16171A);
-  border:1px solid var(--line-2);
-  border-radius:4px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-}
-.face-back{
-  width:280px;height:380px;
-  transform:translate(-50%,-50%) translateZ(-110px) rotateY(180deg);
-  background:#0E0E10;border:1px solid var(--line);border-radius:4px;
-}
-.face-right{
-  width:220px;height:380px;
-  transform:translate(-50%,-50%) rotateY(90deg) translateZ(110px);
-  background:linear-gradient(90deg,#1A1B1F,#0E0E10);
-  border:1px solid var(--line);
-}
-.face-left{
-  width:220px;height:380px;
-  transform:translate(-50%,-50%) rotateY(-90deg) translateZ(110px);
-  background:linear-gradient(270deg,#1A1B1F,#0E0E10);
-  border:1px solid var(--line);
-}
-.windows{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:10px;padding:20px;height:100%;
-}
-.win{
-  background:linear-gradient(180deg,rgba(215,255,58,.4),rgba(215,255,58,.1));
-  border:1px solid rgba(215,255,58,.2);
-  border-radius:2px;
-  animation:winFlicker 4s ease-in-out infinite;
-}
-.win:nth-child(odd){animation-delay:1s}
-.win:nth-child(3n){animation-delay:2s}
-@keyframes winFlicker{
-  0%,100%{opacity:.7}
-  50%{opacity:1;box-shadow:0 0 16px rgba(215,255,58,.5)}
-}
-.citron-tag{
-  position:absolute;
-  background:var(--citron);color:var(--carbone);
-  padding:14px 18px;border-radius:8px;
-  font-weight:700;font-size:13px;font-family:'Archivo',sans-serif;
-  box-shadow:var(--shadow);
-  animation:tagIn .8s cubic-bezier(.2,.7,.2,1) both;
-  white-space:nowrap;
-}
-.citron-tag .arr{
-  position:absolute;width:0;height:0;
-}
-.tag-1{
-  top:12%;left:-8%;
-  animation-delay:1s;
-}
-.tag-1::before{
-  content:'';position:absolute;bottom:-6px;left:24px;
-  border-left:6px solid transparent;border-right:6px solid transparent;
-  border-top:8px solid var(--citron);
-}
-.tag-2{
-  top:48%;right:-12%;
-  animation-delay:1.4s;
-}
-.tag-2::before{
-  content:'';position:absolute;top:24px;left:-6px;
-  border-top:6px solid transparent;border-bottom:6px solid transparent;
-  border-right:8px solid var(--citron);
-}
-.tag-3{
-  bottom:10%;left:8%;
-  animation-delay:1.8s;
-}
-.tag-3::before{
-  content:'';position:absolute;top:-6px;right:24px;
-  border-left:6px solid transparent;border-right:6px solid transparent;
-  border-bottom:8px solid var(--citron);
-}
-@keyframes tagIn{from{opacity:0;transform:translateY(10px) scale(.9)}}
-
-/* ---------- SECTIONS ---------- */
-section{padding:120px 48px;position:relative}
-.container{max-width:1400px;margin:0 auto}
-.section-head{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  margin-bottom:60px;gap:40px;flex-wrap:wrap;
-}
-.section-head .left{max-width:680px}
-.section-label{
-  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--citron);font-weight:600;margin-bottom:18px;
-  display:flex;align-items:center;gap:10px;
-}
-.section-label::before{content:'';width:24px;height:1px;background:var(--citron)}
-h2.display{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:clamp(36px,5vw,72px);
-  line-height:1;letter-spacing:-.03em;
-}
-.section-head p{color:var(--blanc-casse-2);max-width:420px;font-size:15px}
-
-/* ---------- PARCOURS ---------- */
-.cases{display:flex;flex-direction:column;gap:0}
-.case{
-  border-top:1px solid var(--line);
-  cursor:pointer;
-}
-.case:last-child{border-bottom:1px solid var(--line)}
-.case-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:32px 0;gap:24px;
-  transition:padding-left var(--t);
-}
-.case:hover .case-head{padding-left:12px}
-.case-num{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:14px;color:var(--citron);
-  letter-spacing:.1em;width:60px;
-}
-.case-title{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:clamp(24px,3vw,38px);letter-spacing:-.02em;
-  flex:1;
-}
-.case-meta{display:flex;gap:14px;font-size:13px;color:var(--blanc-casse-2);align-items:center}
-.case-meta .pill{
-  padding:4px 10px;border:1px solid var(--line-2);
-  border-radius:999px;font-size:11px;
-}
-.case-toggle{
-  width:44px;height:44px;border-radius:50%;
-  border:1px solid var(--line-2);
-  display:flex;align-items:center;justify-content:center;
-  transition:all var(--t);flex-shrink:0;
-}
-.case.open .case-toggle{background:var(--citron);border-color:var(--citron);color:var(--carbone);transform:rotate(45deg)}
-.case-body{
-  max-height:0;overflow:hidden;
-  transition:max-height .6s cubic-bezier(.2,.7,.2,1), padding .6s;
-  padding:0 0 0 60px;
-}
-.case.open .case-body{max-height:600px;padding-bottom:40px}
-.case-body-grid{
-  display:grid;grid-template-columns:1.2fr 1fr;
-  gap:48px;align-items:center;
-}
-.case-body p{color:var(--blanc-casse-2);margin-bottom:18px;font-size:15px}
-.case-body .stat{display:flex;gap:32px;margin-top:24px}
-.case-body .stat > div .n{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:36px;color:var(--citron);line-height:1;
-}
-.case-body .stat > div small{font-size:11px;color:var(--blanc-casse-2);text-transform:uppercase;letter-spacing:.1em}
-.case-img{
-  height:280px;border-radius:12px;overflow:hidden;
-  background:linear-gradient(135deg,#1F2024,#16171A);
-  border:1px solid var(--line);
-  display:grid;place-items:center;position:relative;
-}
-.case-img svg{width:80%;height:auto;opacity:.7}
-
-/* ---------- APPROCHE ---------- */
-.tabs{
-  display:flex;gap:6px;
-  border-bottom:1px solid var(--line);
-  margin-bottom:48px;overflow-x:auto;
-}
-.tab{
-  padding:18px 24px;font-weight:500;font-size:14px;
-  color:var(--blanc-casse-2);
-  border-bottom:2px solid transparent;
-  transition:all var(--t);white-space:nowrap;
-  display:flex;align-items:center;gap:10px;
-}
-.tab .n{font-family:'Archivo',sans-serif;font-weight:900;color:var(--citron);font-size:12px}
-.tab:hover{color:var(--blanc-casse)}
-.tab.active{color:var(--blanc-casse);border-bottom-color:var(--citron)}
-.tab-content{display:none;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.tab-content.active{display:grid;animation:fadeIn .6s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
-.tab-content h3{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:clamp(28px,3.5vw,46px);letter-spacing:-.02em;
-  margin-bottom:24px;line-height:1.05;
-}
-.tab-content p{color:var(--blanc-casse-2);font-size:16px;margin-bottom:20px}
-.tab-content ul{list-style:none;margin-top:24px}
-.tab-content ul li{
-  display:flex;gap:14px;align-items:flex-start;
-  padding:14px 0;border-top:1px solid var(--line);
-  font-size:14px;
-}
-.tab-content ul li .check{
-  width:20px;height:20px;background:var(--citron);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;color:var(--carbone);font-size:11px;font-weight:900;margin-top:2px;
-}
-.tab-visual{
-  height:420px;border-radius:12px;
-  background:linear-gradient(135deg,#1F2024,#16171A);
-  border:1px solid var(--line);
-  position:relative;overflow:hidden;padding:32px;
-  display:flex;flex-direction:column;justify-content:space-between;
-}
-
-/* ---------- BUDGET CONFIGURATOR ---------- */
-.configurator{
-  background:linear-gradient(180deg,#16171A,#0E0E10);
-  border:1px solid var(--line-2);
-  border-radius:16px;overflow:hidden;
-  box-shadow:var(--shadow);
-}
-.browser-bar{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 20px;
-  background:#1F2024;border-bottom:1px solid var(--line);
-}
-.dots{display:flex;gap:6px}
-.dots span{width:11px;height:11px;border-radius:50%;background:#2A2B2F}
-.dots span:nth-child(1){background:#FF5F57}
-.dots span:nth-child(2){background:#FEBC2E}
-.dots span:nth-child(3){background:#28C840}
-.url{
-  flex:1;background:#0E0E10;border-radius:8px;padding:7px 14px;
-  font-size:12px;color:var(--blanc-casse-2);
-  display:flex;align-items:center;gap:8px;
-  border:1px solid var(--line);
-}
-.url .lock{color:var(--citron)}
-.config-body{
-  display:grid;grid-template-columns:1fr 1.3fr;
-  min-height:520px;
-}
-.config-form{padding:40px;border-right:1px solid var(--line)}
-.config-form h3{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:24px;letter-spacing:-.02em;margin-bottom:8px;
-}
-.config-form .sub{color:var(--blanc-casse-2);font-size:13px;margin-bottom:32px}
-.config-row{margin-bottom:26px}
-.config-row label{
-  display:flex;justify-content:space-between;
-  font-size:12px;text-transform:uppercase;letter-spacing:.1em;
-  color:var(--blanc-casse-2);margin-bottom:12px;
-}
-.config-row label .val{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:14px;color:var(--citron);text-transform:none;letter-spacing:0;
-}
-input[type=range]{
-  width:100%;-webkit-appearance:none;appearance:none;
-  height:4px;background:var(--line-2);border-radius:4px;outline:none;
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:20px;height:20px;background:var(--citron);
-  border-radius:50%;cursor:pointer;
-  box-shadow:0 0 0 4px rgba(215,255,58,.15);
-  transition:all var(--t);
-}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 0 8px rgba(215,255,58,.2)}
-input[type=range]::-moz-range-thumb{
-  width:20px;height:20px;background:var(--citron);
-  border-radius:50%;cursor:pointer;border:0;
-}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{
-  padding:8px 14px;border:1px solid var(--line-2);
-  border-radius:999px;font-size:13px;cursor:pointer;
-  transition:all var(--t);font-weight:500;
-}
-.chip:hover{border-color:var(--citron);color:var(--citron)}
-.chip.active{background:var(--citron);color:var(--carbone);border-color:var(--citron)}
-.config-result{padding:40px;background:var(--carbone-2);position:relative;overflow:hidden}
-.config-result::before{
-  content:'';position:absolute;
-  top:-100px;right:-100px;width:300px;height:300px;
-  background:radial-gradient(circle, rgba(215,255,58,.15), transparent 70%);
-  border-radius:50%;
-}
-.result-head{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  margin-bottom:24px;
-}
-.result-head h4{
-  font-family:'Archivo',sans-serif;font-weight:900;font-size:14px;
-  text-transform:uppercase;letter-spacing:.12em;color:var(--blanc-casse-2);
-}
-.result-head .budget{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:42px;letter-spacing:-.02em;line-height:1;
-}
-.result-head .budget small{font-size:14px;color:var(--citron);font-weight:500;margin-left:4px}
-.match-bar{
-  height:6px;background:var(--line);
-  border-radius:3px;margin-bottom:24px;overflow:hidden;
-}
-.match-bar .fill{
-  height:100%;background:linear-gradient(90deg,var(--citron),var(--citron-2));
-  border-radius:3px;transition:width .6s cubic-bezier(.2,.7,.2,1);
-  position:relative;
-}
-.match-bar .fill::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
-  animation:shimmer 2s linear infinite;
-}
-@keyframes shimmer{to{transform:translateX(100%)}}
-.plans{display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
-.plan{
-  padding:18px;border:1px solid var(--line);
-  border-radius:10px;
-  display:flex;justify-content:space-between;align-items:center;
-  transition:all var(--t);background:rgba(14,14,16,.5);
-}
-.plan.recommended{
-  background:rgba(215,255,58,.06);
-  border-color:var(--citron);
-  transform:translateX(4px);
-  box-shadow:0 0 0 1px var(--citron), 0 12px 24px -8px rgba(215,255,58,.2);
-}
-.plan.dimmed{opacity:.4;filter:grayscale(.5)}
-.plan-info h5{font-family:'Archivo',sans-serif;font-weight:900;font-size:16px;margin-bottom:4px}
-.plan-info p{font-size:12px;color:var(--blanc-casse-2)}
-.plan-meta{text-align:right}
-.plan-meta .price{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:18px;color:var(--citron);
-}
-.plan-meta .badge{
-  font-size:10px;text-transform:uppercase;letter-spacing:.1em;
-  margin-top:4px;color:var(--citron);font-weight:600;
-}
-.plan-badge{
-  position:absolute;top:-8px;right:14px;
-  background:var(--citron);color:var(--carbone);
-  padding:3px 8px;border-radius:4px;
-  font-size:10px;font-weight:800;letter-spacing:.1em;
-  text-transform:uppercase;
-}
-
-/* ---------- APPARTEMENTS (RESKIN) ---------- */
-.apt-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
-}
-.apt{
-  border:1px solid var(--line);border-radius:14px;overflow:hidden;
-  background:var(--carbone-2);
-  transition:all var(--t);
-}
-.apt:hover{transform:translateY(-4px);border-color:var(--citron)}
-.apt-img{
-  height:240px;
-  background:linear-gradient(135deg,#1F2024,#16171A);
-  border-bottom:1px solid var(--line);
-  position:relative;overflow:hidden;
-}
-.apt-img::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 70% 30%, rgba(215,255,58,.1), transparent 50%);
-}
-.apt-tag{
-  position:absolute;top:14px;left:14px;
-  background:rgba(14,14,16,.7);backdrop-filter:blur(8px);
-  padding:6px 10px;border-radius:6px;
-  font-size:11px;font-weight:600;
-  border:1px solid var(--line-2);
-}
-.apt-body{padding:24px}
-.apt-body h4{font-family:'Archivo',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.02em;margin-bottom:10px}
-.apt-body p{color:var(--blanc-casse-2);font-size:13px;margin-bottom:18px}
-.apt-specs{display:flex;gap:18px;font-size:12px;color:var(--blanc-casse-2);padding-top:18px;border-top:1px solid var(--line)}
-.apt-specs span{display:flex;align-items:center;gap:6px}
-.apt-specs .icon{color:var(--citron)}
-.apt-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
-.apt-foot .price{font-family:'Archivo',sans-serif;font-weight:900;font-size:20px;color:var(--citron)}
-.apt-foot .arrow{
-  width:36px;height:36px;border-radius:50%;
-  border:1px solid var(--line-2);
-  display:flex;align-items:center;justify-content:center;
-  transition:all var(--t);
-}
-.apt:hover .apt-foot .arrow{background:var(--citron);color:var(--carbone);border-color:var(--citron);transform:rotate(-45deg)}
-
-/* ---------- FAQ ---------- */
-.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 60px}
-.faq{
-  border-top:1px solid var(--line);
-  padding:28px 0;
-}
-.faq:last-child{border-bottom:1px solid var(--line)}
-.faq-q{
-  display:flex;justify-content:space-between;align-items:center;
-  font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;
-  cursor:pointer;gap:20px;
-}
-.faq-q .plus{
-  width:24px;height:24px;flex-shrink:0;
-  position:relative;color:var(--citron);
-  transition:transform var(--t);font-size:22px;font-weight:300;
-}
-.faq.open .plus{transform:rotate(45deg)}
-.faq-a{
-  max-height:0;overflow:hidden;
-  transition:max-height .5s ease, padding .5s;
-  color:var(--blanc-casse-2);font-size:14px;
-}
-.faq.open .faq-a{max-height:300px;padding-top:14px}
-
-/* ---------- EQUIPEMENTS ---------- */
-.equip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.equip{
-  aspect-ratio:1;
-  background:linear-gradient(135deg,#1F2024,#16171A);
-  border:1px solid var(--line);border-radius:14px;
-  padding:24px;
-  display:flex;flex-direction:column;justify-content:space-between;
-  transition:all var(--t);position:relative;overflow:hidden;
-}
-.equip::before{
-  content:'';position:absolute;
-  top:0;right:0;width:100px;height:100px;
-  background:radial-gradient(circle, rgba(215,255,58,.1), transparent 70%);
-  opacity:0;transition:opacity var(--t);
-}
-.equip:hover{border-color:var(--citron);transform:translateY(-2px)}
-.equip:hover::before{opacity:1}
-.equip .ico{
-  width:44px;height:44px;border-radius:10px;
-  background:rgba(215,255,58,.1);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--citron);font-size:20px;
-  border:1px solid rgba(215,255,58,.2);
-}
-.equip h5{font-family:'Archivo',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.02em;line-height:1.1}
-.equip p{font-size:12px;color:var(--blanc-casse-2)}
-
-/* ---------- FOOTER ---------- */
-footer{
-  padding:80px 48px 40px;
-  border-top:1px solid var(--line);
-  background:var(--carbone-2);
-  margin-top:40px;
-}
-.foot-grid{
-  max-width:1400px;margin:0 auto;
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:60px;margin-bottom:60px;
-}
-.foot-grid h6{
-  font-size:11px;text-transform:uppercase;letter-spacing:.12em;
-  color:var(--citron);margin-bottom:20px;font-weight:700;
-}
-.foot-grid ul{list-style:none}
-.foot-grid li{padding:6px 0;font-size:13px;color:var(--blanc-casse-2)}
-.foot-grid li a:hover{color:var(--citron)}
-.foot-logo{
-  font-family:'Archivo',sans-serif;font-weight:900;
-  font-size:32px;letter-spacing:-.02em;margin-bottom:16px;
-}
-.foot-grid > div:first-child p{color:var(--blanc-casse-2);font-size:14px;max-width:340px}
-.foot-bottom{
-  max-width:1400px;margin:0 auto;
-  padding-top:32px;border-top:1px solid var(--line);
-  display:flex;justify-content:space-between;
-  font-size:12px;color:var(--blanc-casse-2);
-  flex-wrap:wrap;gap:14px;
-}
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width:980px){
-  .nav{padding:18px 24px}
-  .nav-links{display:none}
-  .hero,.section{padding-left:24px;padding-right:24px}
-  .hero-inner{grid-template-columns:1fr;gap:60px}
-  .hero-visual{height:400px;max-width:480px}
-  .face-front,.face-back{width:220px;height:300px}
-  .face-right,.face-left{width:170px;height:300px}
-  .config-body{grid-template-columns:1fr}
-  .config-form{border-right:0;border-bottom:1px solid var(--line)}
-  .apt-grid,.equip-grid{grid-template-columns:repeat(2,1fr)}
-  .faq-grid{grid-template-columns:1fr}
-  .foot-grid{grid-template-columns:1fr 1fr;gap:40px}
-  .case-body-grid{grid-template-columns:1fr;gap:24px}
-  .tab-content{grid-template-columns:1fr;gap:32px}
-  .tab-visual{height:280px}
-}
-@media (max-width:560px){
-  .hero-eyebrow{font-size:10px}
-  .apt-grid,.equip-grid{grid-template-columns:1fr}
-  .foot-grid{grid-template-columns:1fr}
-  .hero-visual{height:340px}
-  .face-front,.face-back{width:180px;height:240px}
-  .face-right,.face-left{width:140px;height:240px}
-  .citron-tag{font-size:11px;padding:10px 12px}
-  .tag-1{left:-2%}
-  .tag-2{right:-2%}
+svg{display:block}
+canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+canvas:active{cursor:grabbing}
+.grain{position:fixed;z-index:100;inset:0;opacity:.035;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E")}
+/* ---------- header ---------- */
+.site-header{position:fixed;z-index:90;top:14px;left:50%;display:grid;grid-template-columns:auto 1fr auto;align-items:center;width:var(--page);min-height:68px;padding:8px 10px 8px 14px;color:var(--paper-bright);background:rgba(21,23,19,.92);border:1px solid rgba(255,255,255,.12);border-radius:14px;box-shadow:0 14px 45px rgba(0,0,0,.14);backdrop-filter:blur(18px);transform:translateX(-50%);transition:min-height .3s var(--ease),box-shadow .3s ease}
+.site-header.scrolled{min-height:60px;box-shadow:0 18px 60px rgba(0,0,0,.22)}
+.brand{display:flex;align-items:center;gap:11px;min-width:205px;font-family:var(--display);font-size:11px;font-weight:900;line-height:.95;letter-spacing:.04em;text-transform:uppercase}
+.brand-mark{display:grid;width:42px;height:42px;color:var(--carbon);background:var(--acid);place-items:center;font-size:18px;letter-spacing:-.08em}
+.primary-nav{display:flex;align-items:center;justify-content:center;gap:clamp(16px,2.3vw,38px)}
+.primary-nav a{position:relative;padding:9px 0;color:rgba(251,250,239,.75);font-size:13px;font-weight:600;transition:color .25s ease}
+.primary-nav a::after{position:absolute;right:0;bottom:4px;left:0;height:2px;background:var(--acid);content:"";transform:scaleX(0);transform-origin:right;transition:transform .3s var(--ease)}
+.primary-nav a:hover,.primary-nav a.active{color:var(--paper-bright)}
+.primary-nav a:hover::after,.primary-nav a.active::after{transform:scaleX(1);transform-origin:left}
+.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.header-cta,.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border:1px solid transparent;border-radius:4px;cursor:pointer;font-size:13px;font-weight:700;transition:color .25s ease,background .25s ease,border-color .25s ease,transform .25s var(--ease)}
+.header-cta{color:var(--carbon);background:var(--acid)}
+.header-cta:hover,.button-acid:hover{background:var(--paper-bright);transform:translateY(-2px)}
+.button-acid{color:var(--carbon);background:var(--acid)}
+.button-dark{color:var(--paper-bright);background:var(--carbon);border-color:var(--carbon)}
+.button-dark:hover{color:var(--carbon);background:transparent}
+.button-outline{color:var(--carbon);background:transparent;border-color:var(--carbon)}
+.button-outline:hover{color:var(--paper-bright);background:var(--carbon)}
+.button svg,.header-cta svg{width:17px;margin-left:10px;transition:transform .25s var(--ease)}
+.button:hover svg,.header-cta:hover svg{transform:translateX(4px)}
+.menu-toggle{display:none;width:44px;height:44px;padding:0;color:var(--paper-bright);background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:4px;cursor:pointer}
+.menu-toggle span{display:block;width:19px;height:2px;margin:5px auto;background:currentColor;transition:transform .25s ease,opacity .25s ease}
+.site-header.menu-open .menu-toggle span:first-child{transform:translateY(3.5px) rotate(45deg)}
+.site-header.menu-open .menu-toggle span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+main{overflow:hidden}
+/* ---------- hero ---------- */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(460px,1.1fr);gap:clamp(28px,4vw,64px);width:var(--page);margin:0 auto;padding:136px 0 76px;align-items:center}
+.hero::before{position:absolute;z-index:-1;top:80px;bottom:0;left:-11vw;width:62vw;content:"";opacity:.55;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,transparent,black 20%,transparent 88%)}
+.eyebrow,.section-kicker{display:flex;align-items:center;gap:11px;margin:0 0 22px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow::before,.section-kicker::before{width:24px;height:4px;background:var(--acid);content:""}
+.hero h1,.section-title,.footer-title{margin:0;font-family:var(--display);font-weight:900;letter-spacing:-.065em;text-transform:uppercase}
+.hero h1{max-width:710px;font-size:clamp(3.4rem,6vw,6.6rem);line-height:.83}
+.hero h1 span{display:block}
+.hero h1 .highlight{display:inline-block;width:max-content;margin-top:.08em;padding:.08em .09em .11em;color:var(--carbon);background:var(--acid);clip-path:polygon(1% 5%,100% 0,98.5% 94%,0 100%);transform:rotate(-1deg)}
+.hero-intro{max-width:510px;margin:30px 0 0;color:#4b4e46;font-size:clamp(17px,1.4vw,19px)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);max-width:540px;margin-top:44px;border-top:1px solid var(--carbon);border-bottom:1px solid var(--carbon)}
+.hero-stats div{padding:16px 14px 14px;border-right:1px solid var(--line)}
+.hero-stats div:last-child{border-right:0}
+.hero-stats strong{display:block;font-family:var(--display);font-size:clamp(1.6rem,2.4vw,2.2rem);font-weight:900;letter-spacing:-.05em}
+.hero-stats small{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.hero-visual{position:relative;height:clamp(460px,62vh,660px);background:var(--carbon);border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 80px rgba(21,23,19,.28)}
+.hero-visual::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.hero-hint{position:absolute;left:16px;bottom:14px;z-index:2;display:flex;align-items:center;gap:8px;padding:8px 14px;color:var(--paper-bright);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(21,23,19,.6);border:1px solid var(--line-light);border-radius:99px;backdrop-filter:blur(6px);pointer-events:none}
+.hero-hint i{width:8px;height:8px;border-radius:50%;background:var(--acid);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}}
+.hero-badge{position:absolute;top:16px;right:16px;z-index:2;padding:10px 14px;color:var(--carbon);background:var(--acid);font-family:var(--display);font-weight:900;font-size:12px;letter-spacing:.02em;text-transform:uppercase;transform:rotate(2deg);pointer-events:none}
+/* ---------- sections ---------- */
+.section{width:var(--page);margin:0 auto;padding:clamp(70px,9vw,120px) 0}
+.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:clamp(30px,4vw,54px)}
+.section-title{font-size:clamp(2.2rem,4.4vw,4rem);line-height:.88;max-width:640px}
+.section-lead{max-width:400px;color:#4b4e46;margin:0}
+/* parcours accordion */
+.case{border-top:1px solid var(--carbon)}
+.case:last-child{border-bottom:1px solid var(--carbon)}
+.case-head{display:grid;grid-template-columns:70px 1fr auto 44px;gap:18px;align-items:center;width:100%;padding:24px 6px;background:none;border:0;text-align:left;cursor:pointer;transition:background .25s ease}
+.case-head:hover{background:rgba(207,255,53,.14)}
+.case-num{font-family:var(--display);font-weight:900;font-size:1.4rem;letter-spacing:-.05em;color:var(--muted)}
+.case.open .case-num{color:var(--acid-dark)}
+.case-name{font-family:var(--display);font-weight:900;font-size:clamp(1.2rem,2.4vw,1.8rem);letter-spacing:-.04em;text-transform:uppercase}
+.case-tag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.case-plus{position:relative;width:36px;height:36px;border:1px solid var(--carbon);border-radius:50%}
+.case-plus::before,.case-plus::after{content:"";position:absolute;top:50%;left:50%;width:14px;height:2px;background:var(--carbon);transform:translate(-50%,-50%);transition:transform .3s var(--ease)}
+.case-plus::after{transform:translate(-50%,-50%) rotate(90deg)}
+.case.open .case-plus{background:var(--acid);border-color:var(--acid)}
+.case.open .case-plus::after{transform:translate(-50%,-50%) rotate(0deg)}
+.case-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.case.open .case-body{grid-template-rows:1fr}
+.case-inner{overflow:hidden}
+.case-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;padding:6px 6px 34px}
+.case-grid p{margin:0;color:#4b4e46;max-width:560px}
+.case-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.case-facts div{padding:14px;background:var(--paper-bright);border:1px solid var(--line);border-radius:10px}
+.case-facts strong{display:block;font-family:var(--display);font-weight:900;font-size:1.3rem;letter-spacing:-.04em}
+.case-facts small{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+/* approche */
+.approche{color:var(--paper-bright);background:var(--carbon);border-radius:var(--radius)}
+.approche .section-lead{color:rgba(251,250,239,.6)}
+.approche-inner{padding:clamp(40px,5vw,70px) clamp(24px,4vw,64px)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px;border-bottom:1px solid var(--line-light);padding-bottom:14px}
+.tab-btn{padding:12px 18px;background:none;border:1px solid var(--line-light);border-radius:99px;color:rgba(251,250,239,.7);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s ease}
+.tab-btn:hover{color:var(--paper-bright);border-color:var(--paper-bright)}
+.tab-btn.active{color:var(--carbon);background:var(--acid);border-color:var(--acid)}
+.tab-panel{display:none;grid-template-columns:auto 1fr auto;gap:clamp(20px,4vw,60px);align-items:start;animation:fadeUp .5s var(--ease)}
+.tab-panel.active{display:grid}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.tab-num{font-family:var(--display);font-weight:900;font-size:clamp(3.4rem,7vw,6rem);line-height:.8;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px var(--acid)}
+.tab-panel h3{margin:0 0 12px;font-family:var(--display);font-weight:900;font-size:clamp(1.4rem,2.6vw,2rem);letter-spacing:-.05em;text-transform:uppercase}
+.tab-panel p{margin:0;max-width:520px;color:rgba(251,250,239,.7)}
+.tab-stat{padding:18px 22px;background:var(--carbon-soft);border:1px solid var(--line-light);border-radius:12px;min-width:170px}
+.tab-stat strong{display:block;font-family:var(--display);font-weight:900;font-size:2rem;letter-spacing:-.05em;color:var(--acid)}
+.tab-stat small{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(251,250,239,.55)}
+/* configurateur / browser frame */
+.browser{background:var(--paper-bright);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(21,23,19,.14)}
+.browser-bar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--carbon);border-bottom:1px solid var(--line)}
+.browser-dots{display:flex;gap:6px}
+.browser-dots i{width:11px;height:11px;border-radius:50%;background:rgba(251,250,239,.22)}
+.browser-dots i:first-child{background:var(--acid)}
+.browser-url{flex:1;max-width:420px;padding:7px 16px;color:rgba(251,250,239,.65);background:var(--carbon-soft);border-radius:99px;font-size:12px;font-weight:600}
+.browser-live{margin-left:auto;display:flex;align-items:center;gap:7px;color:var(--acid);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.browser-live i{width:7px;height:7px;border-radius:50%;background:var(--acid);animation:pulse 1.6s infinite}
+.browser-body{display:grid;grid-template-columns:minmax(320px,.9fr) 1.1fr;min-height:560px}
+.config-panel{padding:clamp(24px,3vw,40px);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px}
+.config-panel h3{margin:0;font-family:var(--display);font-weight:900;font-size:clamp(1.3rem,2vw,1.7rem);letter-spacing:-.05em;text-transform:uppercase}
+.budget-readout{display:flex;align-items:baseline;gap:10px}
+.budget-readout output{font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,4vw,3.4rem);letter-spacing:-.05em;padding:0 .1em;background:var(--acid)}
+.budget-readout span{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--acid) var(--pct,45%),rgba(21,23,19,.15) var(--pct,45%));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--carbon);border:5px solid var(--acid);cursor:grab;transition:transform .2s var(--ease)}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--carbon);border:5px solid var(--acid);cursor:grab}
+.range-marks{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--muted)}
+.config-count{padding:14px 18px;border:1px dashed var(--carbon);border-radius:10px;font-weight:600;font-size:14px}
+.config-count strong{font-family:var(--display);font-weight:900;font-size:1.4rem;letter-spacing:-.04em;color:var(--acid-dark);margin-right:6px}
+.plan-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.plan-card{position:relative;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);transition:all .35s var(--ease);opacity:.55}
+.plan-card.ok{border-color:var(--carbon);background:var(--paper-bright);opacity:1;box-shadow:0 8px 24px rgba(21,23,19,.1)}
+.plan-card.ok::after{content:"✓ Accessible";position:absolute;top:10px;right:10px;padding:3px 8px;background:var(--acid);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:99px}
+.plan-card svg{width:52px;height:44px;margin-bottom:8px}
+.plan-card svg rect,.plan-card svg line{stroke:var(--carbon);stroke-width:1.6;fill:none}
+.plan-card.ok svg .fillz{fill:var(--acid)}
+.plan-card h4{margin:0;font-family:var(--display);font-weight:900;font-size:.95rem;letter-spacing:-.02em;text-transform:uppercase}
+.plan-card small{display:block;color:var(--muted);font-size:11.5px;font-weight:600}
+.plan-price{font-weight:700;font-size:13px}
+.config-view{position:relative;background:var(--paper);min-height:420px}
+.config-tooltip{position:absolute;z-index:3;padding:8px 12px;background:var(--carbon);color:var(--paper-bright);font-size:12px;font-weight:600;border-radius:8px;pointer-events:none;opacity:0;transform:translate(-50%,-120%);transition:opacity .15s ease;white-space:nowrap}
+.config-tooltip b{color:var(--acid)}
+.config-legend{position:absolute;left:14px;bottom:12px;z-index:2;display:flex;gap:16px;padding:8px 14px;background:rgba(251,250,239,.85);border:1px solid var(--line);border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;backdrop-filter:blur(6px);pointer-events:none}
+.config-legend i{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px;vertical-align:-1px}
+.config-legend .ok i{background:var(--acid);border:1px solid var(--carbon)}
+.config-legend .no i{background:var(--carbon-soft)}
+/* faq */
+.faq-item{border-top:1px solid var(--carbon)}
+.faq-item:last-of-type{border-bottom:1px solid var(--carbon)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;padding:20px 6px;background:none;border:0;text-align:left;cursor:pointer;font-weight:700;font-size:clamp(15px,1.6vw,18px);transition:background .25s ease}
+.faq-q:hover{background:rgba(207,255,53,.14)}
+.faq-q .case-plus{flex:none;width:30px;height:30px}
+.faq-q .case-plus::before,.faq-q .case-plus::after{width:11px}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+.faq-item.open .case-plus{background:var(--acid);border-color:var(--acid)}
+.faq-item.open .case-plus::after{transform:translate(-50%,-50%) rotate(0)}
+.faq-a>div{overflow:hidden}
+.faq-a p{margin:0;padding:0 6px 24px;max-width:680px;color:#4b4e46}
+/* footer */
+.site-footer{margin-top:clamp(60px,8vw,110px);color:var(--paper-bright);background:var(--carbon)}
+.footer-inner{width:var(--page);margin:0 auto;padding:clamp(60px,7vw,100px) 0 32px}
+.footer-title{font-size:clamp(2.6rem,6vw,5.4rem);line-height:.85;max-width:900px}
+.footer-title em{font-style:normal;color:var(--acid)}
+.footer-cta{margin-top:30px}
+.footer-cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px;margin-top:clamp(44px,5vw,70px);padding-top:34px;border-top:1px solid var(--line-light)}
+.footer-cols h5{margin:0 0 12px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(251,250,239,.5)}
+.footer-cols a{display:block;padding:4px 0;color:rgba(251,250,239,.75);font-size:14px;transition:color .2s}
+.footer-cols a:hover{color:var(--acid)}
+.footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line-light);color:rgba(251,250,239,.45);font-size:12.5px}
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+/* responsive */
+@media (max-width:1060px){
+  .hero{grid-template-columns:1fr;padding-top:120px}
+  .hero-visual{order:-1;height:min(58vw,440px)}
+  .browser-body{grid-template-columns:1fr}
+  .config-panel{border-right:0;border-bottom:1px solid var(--line)}
+  .tab-panel{grid-template-columns:1fr}
+  .tab-num{-webkit-text-stroke-width:1px}
+  .case-grid{grid-template-columns:1fr}
+  .footer-cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:820px){
+  :root{--page:calc(100vw - 32px)}
+  .primary-nav{position:absolute;top:calc(100% + 8px);left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:10px;background:rgba(21,23,19,.97);border:1px solid rgba(255,255,255,.12);border-radius:12px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .3s var(--ease)}
+  .site-header.menu-open .primary-nav{opacity:1;visibility:visible;transform:none}
+  .primary-nav a{padding:13px 12px}
+  .primary-nav a::after{display:none}
+  .menu-toggle{display:block}
+  .header-cta{display:none}
+  .brand{min-width:0}
+  .case-head{grid-template-columns:44px 1fr 36px}
+  .case-tag{display:none}
+  .hero-stats div{padding:12px 8px}
 }
 </style>
 </head>
 <body>
+<div class="grain"></div>
 
-<!-- NAV -->
-<nav class="nav">
-  <a href="#" class="logo"><span class="dot"></span> Casa Verde</a>
-  <div class="nav-links">
-    <a href="#" class="active">Accueil</a>
-    <a href="#appartements">Appartements</a>
-    <a href="#equipements">Équipements</a>
-    <a href="#faq">FAQ</a>
+<header class="site-header" id="siteHeader">
+  <a class="brand" href="#top"><span class="brand-mark">MC</span>Maison<br>Commune</a>
+  <nav class="primary-nav" id="primaryNav">
+    <a href="#parcours" data-sec="parcours">Résidents</a>
+    <a href="#approche" data-sec="approche">Approche</a>
+    <a href="#configurateur" data-sec="configurateur">Appartements</a>
+    <a href="#faq" data-sec="faq">FAQ</a>
+  </nav>
+  <div class="header-actions">
+    <a class="header-cta" href="#configurateur">Visiter
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span></button>
   </div>
-  <a href="#config" class="nav-cta">Configurer →</a>
-</nav>
+</header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="hero-text">
-      <div class="hero-eyebrow"><span class="pulse"></span> Livraison T3 2026 — 14 logements disponibles</div>
-      <h1 class="display">Vivre <span class="marker">citron</span><br>au cœur du 11e.</h1>
-      <p class="hero-lead">Une résidence contemporaine pensée pour les urbains en quête de lumière, de calme et d'audace architecturale. Matériaux bruts, espaces généreux, lumière naturelle.</p>
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Coliving nouvelle génération — Paris 20ᵉ</p>
+      <h1><span>Vivre</span><span class="highlight">grand,</span><span>ensemble.</span></h1>
+      <p class="hero-intro">Des appartements privés, 1 200 m² d'espaces partagés et une communauté de 84 résidents. Faites pivoter la résidence, puis configurez votre budget plus bas — les logements correspondants s'illuminent en direct.</p>
       <div class="hero-actions">
-        <a href="#config" class="btn primary">Lancer le configurateur <span>→</span></a>
-        <a href="#cases" class="btn ghost">Voir les parcours</a>
+        <a class="button button-acid" href="#configurateur">Configurer mon budget
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="button button-outline" href="#parcours">Parcours résidents</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>84</strong><small>Résidents</small></div>
+        <div><strong>1 200 m²</strong><small>Partagés</small></div>
+        <div><strong>640 €</strong><small>Dès / mois</small></div>
       </div>
     </div>
-
-    <div class="hero-visual">
-      <div class="building" id="building">
-        <div class="face face-front">
-          <div class="windows">
-            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
-            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
-            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
-            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
-          </div>
-        </div>
-        <div class="face face-back"></div>
-        <div class="face face-right"></div>
-        <div class="face face-left"></div>
-
-        <div class="citron-tag tag-1">☀ Plein sud</div>
-        <div class="citron-tag tag-2">4.2m sous plafond</div>
-        <div class="citron-tag tag-3">★ BBC 2025</div>
-      </div>
+    <div class="hero-visual reveal">
+      <div class="hero-badge">Résidence 3D</div>
+      <canvas id="heroCanvas"></canvas>
+      <div class="hero-hint"><i></i>Glissez pour pivoter</div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PARCOURS RESIDENTS -->
-<section id="cases">
-  <div class="container">
-    <div class="section-head">
-      <div class="left">
-        <div class="section-label">Études de cas</div>
-        <h2 class="display">Parcours résidents.<br>Histoires vraies.</h2>
-      </div>
-      <p>Cliquez sur un profil pour découvrir comment Casa Verde s'adapte à chaque mode de vie.</p>
-    </div>
-
-    <div class="cases">
-      <div class="case open">
-        <div class="case-head">
-          <span class="case-num">01 / 04</span>
-          <h3 class="case-title">Le primo-accédant</h3>
-          <div class="case-meta"><span class="pill">T2</span><span class="pill">285K €</span></div>
-          <div class="case-toggle">+</div>
-        </div>
-        <div class="case-body">
-          <div class="case-body-grid">
-            <div>
-              <p>Léa, 28 ans, graphiste freelance, achète son premier bien. Elle cherche un espace lumineux, bien isolé, avec un extérieur pour travailler le week-end.</p>
-              <p>Solution : un T2 de 48m² exposé sud avec balcon de 9m², à 8 minutes du métro. Plan sans perte, hauteur sous plafond 3.8m pour un espace bureau en mezzanine.</p>
-              <div class="stat">
-                <div><div class="n">285K</div><small>Prix total</small></div>
-                <div><div class="n">9m²</div><small>Balcon</small></div>
-                <div><div class="n">3.8m</div><small>Sous plafond</small></div>
-              </div>
-            </div>
-            <div class="case-img">
-              <svg viewBox="0 0 200 160" fill="none">
-                <rect x="20" y="40" width="160" height="100" stroke="#D7FF3A" stroke-width="1.5" opacity=".6"/>
-                <rect x="40" y="60" width="40" height="40" fill="#D7FF3A" opacity=".3"/>
-                <rect x="90" y="80" width="50" height="2" fill="#D7FF3A"/>
-                <circle cx="135" cy="40" r="8" fill="#D7FF3A"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="case">
-        <div class="case-head">
-          <span class="case-num">02 / 04</span>
-          <h3 class="case-title">La famille urbaine</h3>
-          <div class="case-meta"><span class="pill">T4</span><span class="pill">620K €</span></div>
-          <div class="case-toggle">+</div>
-        </div>
-        <div class="case-body">
-          <div class="case-body-grid">
-            <div>
-              <p>Marc & Inès, deux enfants, veulent rester dans Paris intra-muros. Priorité : 3 chambres, double exposition, espace buanderie, accès poussette.</p>
-              <p>Solution : un T4 traversant de 92m² avec loggia parentale, cellier, rangements intégrés sur-mesure. École et crèche à 5 min à pied.</p>
-              <div class="stat">
-                <div><div class="n">92m²</div><small>Surface</small></div>
-                <div><div class="n">3</div><small>Chambres</small></div>
-                <div><div class="n">5min</div><small>École</small></div>
-              </div>
-            </div>
-            <div class="case-img">
-              <svg viewBox="0 0 200 160" fill="none">
-                <rect x="20" y="30" width="160" height="100" stroke="#D7FF3A" stroke-width="1.5" opacity=".6"/>
-                <line x1="80" y1="30" x2="80" y2="130" stroke="#D7FF3A" stroke-width="1" opacity=".4"/>
-                <line x1="140" y1="30" x2="140" y2="130" stroke="#D7FF3A" stroke-width="1" opacity=".4"/>
-                <rect x="30" y="90" width="40" height="30" fill="#D7FF3A" opacity=".3"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="case">
-        <div class="case-head">
-          <span class="case-num">03 / 04</span>
-          <h3 class="case-title">L'investisseur</h3>
-          <div class="case-meta"><span class="pill">T1</span><span class="pill">215K €</span></div>
-          <div class="case-toggle">+</div>
-        </div>
-        <div class="case-body">
-          <div class="case-body-grid">
-            <div>
-              <p>Thomas, 42 ans, cherche un placement patrimonial sur Paris avec un bon ratio loyer/prix et une décote énergétique avantageuse.</p>
-              <p>Solution : un T1 de 32m² en étage élevé, gestion locative déléguée par notre partenaire, rendement locatif net estimé à 4.2%.</p>
-              <div class="stat">
-                <div><div class="n">4.2%</div><small>Rendement net</small></div>
-                <div><div class="n">215K</div><small>Prix achat</small></div>
-                <div><div class="n">A</div><small>DPE</small></div>
-              </div>
-            </div>
-            <div class="case-img">
-              <svg viewBox="0 0 200 160" fill="none">
-                <rect x="60" y="30" width="80" height="100" stroke="#D7FF3A" stroke-width="1.5" opacity=".6"/>
-                <text x="100" y="90" font-family="Archivo" font-weight="900" font-size="38" fill="#D7FF3A" text-anchor="middle">€</text>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="case">
-        <div class="case-head">
-          <span class="case-num">04 / 04</span>
-          <h3 class="case-title">Le retraité actif</h3>
-          <div class="case-meta"><span class="pill">T3</span><span class="pill">440K €</span></div>
-          <div class="case-toggle">+</div>
-        </div>
-        <div class="case-body">
-          <div class="case-body-grid">
-            <div>
-              <p>Annie et Paul, 67 et 70 ans, vendent leur maison de banlieue pour retrouver la ville. Besoins : accessibilité, vie de quartier, espaces communs.</p>
-              <p>Solution : un T3 de 68m² au rez-de-chaussée avec jardin privatif, accès direct au rooftop commun, conciergerie 7j/7.</p>
-              <div class="stat">
-                <div><div class="n">0</div><small>Marches</small></div>
-                <div><div class="n">25m²</div><small>Jardin</small></div>
-                <div><div class="n">7j/7</div><small>Conciergerie</small></div>
-              </div>
-            </div>
-            <div class="case-img">
-              <svg viewBox="0 0 200 160" fill="none">
-                <path d="M40 130 L100 70 L160 130" stroke="#D7FF3A" stroke-width="1.5" fill="none" opacity=".6"/>
-                <rect x="60" y="100" width="80" height="30" fill="#D7FF3A" opacity=".15"/>
-                <path d="M20 130 Q100 110 180 130" stroke="#D7FF3A" stroke-width="1" fill="none" opacity=".5"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- APPROCHE -->
-<section>
-  <div class="container">
-    <div class="section-head">
-      <div class="left">
-        <div class="section-label">Notre approche</div>
-        <h2 class="display">Quatre piliers.<br>Zéro concession.</h2>
-      </div>
-      <p>Cliquez sur chaque pilier pour comprendre comment Casa Verde se distingue.</p>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="1"><span class="n">01</span> Lumière</button>
-      <button class="tab" data-tab="2"><span class="n">02</span> Matériaux</button>
-      <button class="tab" data-tab="3"><span class="n">03</span> Vivant</button>
-      <button class="tab" data-tab="4"><span class="n">04</span> Durable</button>
-    </div>
-
-    <div class="tab-content active" data-pane="1">
+  <!-- PARCOURS -->
+  <section class="section" id="parcours">
+    <div class="section-head reveal">
       <div>
-        <h3>Une lumière qui sculpte l'espace.</h3>
-        <p>Chaque logement est conçu autour de la lumière naturelle : orientations croisées, baies toute hauteur, puits de lumière dans les espaces d'eau.</p>
-        <p>Les séjours dépassent systématiquement 3.8m sous plafond. Aucun recoin sombre, aucun couloir aveugle.</p>
-        <ul>
-          <li><span class="check">✓</span> Baies minimalistes aluminium thermolaqué</li>
-          <li><span class="check">✓</span> Orientation optimisée par logiciel solaire</li>
-          <li><span class="check">✓</span> Brise-soleil orientables motorisés</li>
-        </ul>
+        <p class="section-kicker">Études de cas</p>
+        <h2 class="section-title">Parcours<br>résidents</h2>
       </div>
-      <div class="tab-visual">
-        <div style="font-family:'Archivo';font-weight:900;font-size:64px;color:var(--citron);letter-spacing:-.04em;line-height:1">10h37</div>
-        <div style="font-size:13px;color:var(--blanc-casse-2)">d'ensoleillement direct moyen<br>au solstice d'été</div>
-        <svg viewBox="0 0 200 80" style="margin-top:auto">
-          <path d="M0 60 Q50 30 100 40 T200 35" stroke="#D7FF3A" stroke-width="2" fill="none"/>
-          <circle cx="100" cy="40" r="6" fill="#D7FF3A"/>
-          <circle cx="100" cy="40" r="12" fill="#D7FF3A" opacity=".2"/>
-        </svg>
-      </div>
+      <p class="section-lead">Trois trajectoires réelles. Dépliez pour voir le avant / après, les chiffres et ce qui a changé.</p>
     </div>
+    <div class="reveal">
+      <article class="case open">
+        <button class="case-head" aria-expanded="true">
+          <span class="case-num">01</span>
+          <span class="case-name">Nadia — Designer freelance</span>
+          <span class="case-tag">Studio → T2 atelier</span>
+          <span class="case-plus"></span>
+        </button>
+        <div class="case-body"><div class="case-inner"><div class="case-grid">
+          <p>Nadia travaillait depuis son lit dans un 18 m². Aujourd'hui : un T2 avec coin atelier, un espace coworking à l'étage et trois clients rencontrés au petit-déjeuner commun. Son loyer inclut internet fibré, ménage des communs et l'accès au rooftop.</p>
+          <div class="case-facts">
+            <div><strong>−22 %</strong><small>Coût vs studio équivalent</small></div>
+            <div><strong>+41 m²</strong><small>Surface vécue au quotidien</small></div>
+            <div><strong>3</strong><small>Clients via la communauté</small></div>
+            <div><strong>0</strong><small>Meubles à acheter</small></div>
+          </div>
+        </div></div></div>
+      </article>
+      <article class="case">
+        <button class="case-head" aria-expanded="false">
+          <span class="case-num">02</span>
+          <span class="case-name">Marc &amp; Lila — Jeune couple</span>
+          <span class="case-tag">Colocation → T3 duplex</span>
+          <span class="case-plus"></span>
+        </button>
+        <div class="case-body"><div class="case-inner"><div class="case-grid">
+          <p>Sortis d'une colocation classique, ils cherchaient de l'intimité sans renoncer au collectif. Leur T3 donne sur le jardin partagé ; la grande cuisine commune accueille leurs dîners à douze sans transformer leur salon en cantine.</p>
+          <div class="case-facts">
+            <div><strong>63 m²</strong><small>Privés + 1 200 m² partagés</small></div>
+            <div><strong>12</strong><small>Couverts en cuisine commune</small></div>
+            <div><strong>2 min</strong><small>Jusqu'à la salle de sport</small></div>
+            <div><strong>1 bail</strong><small>Tout inclus, sans garant</small></div>
+          </div>
+        </div></div></div>
+      </article>
+      <article class="case">
+        <button class="case-head" aria-expanded="false">
+          <span class="case-num">03</span>
+          <span class="case-name">Théo — Étudiant → CDI</span>
+          <span class="case-tag">Studio évolutif</span>
+          <span class="case-plus"></span>
+        </button>
+        <div class="case-body"><div class="case-inner"><div class="case-grid">
+          <p>Arrivé en master avec deux valises, Théo a signé en 48 h sans garant. Deux ans plus tard, CDI en poche, il est passé du studio au loft du dernier étage — même immeuble, mêmes voisins, nouveau bail en trois clics.</p>
+          <div class="case-facts">
+            <div><strong>48 h</strong><small>De la visite aux clés</small></div>
+            <div><strong>0 €</strong><small>De dépôt de garantie</small></div>
+            <div><strong>2</strong><small>Déménagements internes</small></div>
+            <div><strong>100 %</strong><small>Meublé et équipé</small></div>
+          </div>
+        </div></div></div>
+      </article>
+    </div>
+  </section>
 
-    <div class="tab-content" data-pane="2">
-      <div>
-        <h3>Des matières qui durent plus longtemps que les tendances.</h3>
-        <p>Béton brut ciré, chêne massif, céramique italienne, métal patiné. Tout est sélectionné pour patiner avec élégance plutôt que pour dater.</p>
-        <p>Chaque fournisseur est traçable à moins de 200km du chantier quand c'est possible.</p>
-        <ul>
-          <li><span class="check">✓</span> Parquet chêne PEFC massif 14mm</li>
-          <li><span class="check">✓</span> Faïence italienne Made in Sassuolo</li>
-          <li><span class="check">✓</span> Quincaillerie laiton brossé garantie 25 ans</li>
-        </ul>
-      </div>
-      <div class="tab-visual">
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;height:100%">
-          <div style="background:linear-gradient(135deg,#3a3530,#1F2024);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#5a4530,#2A2018);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#404040,#1A1B1F);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#D7FF3A,#8FA820);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#6b5d4a,#2A2418);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#2a2a2a,#0E0E10);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#807060,#3A3024);border-radius:6px"></div>
-          <div style="background:linear-gradient(135deg,#1F2024,#0E0E10);border-radius:6px;border:1px solid var(--line)"></div>
+  <!-- APPROCHE -->
+  <section class="section" id="approche">
+    <div class="approche reveal">
+      <div class="approche-inner">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Équipements &amp; méthode</p>
+            <h2 class="section-title">Notre<br>approche</h2>
+          </div>
+          <p class="section-lead">Quatre principes, quatre onglets. C'est toute la différence entre une résidence et une maison commune.</p>
+        </div>
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="0">01 · Habiter</button>
+          <button class="tab-btn" data-tab="1">02 · Partager</button>
+          <button class="tab-btn" data-tab="2">03 · Contribuer</button>
+          <button class="tab-btn" data-tab="3">04 · Évoluer</button>
+        </div>
+        <div class="tab-panel active">
+          <div class="tab-num">01</div>
+          <div><h3>Un vrai chez-soi</h3><p>Chaque logement est privé, insonorisé, meublé sur mesure : cuisine équipée, literie hôtelière, rangements pensés au centimètre. Le collectif commence à votre porte, jamais derrière.</p></div>
+          <div class="tab-stat"><strong>38 dB</strong><small>Isolation entre logements</small></div>
+        </div>
+        <div class="tab-panel">
+          <div class="tab-num">02</div>
+          <div><h3>1 200 m² en plus</h3><p>Cuisine XXL, coworking, salle de sport, ciné-club, buanderie, ateliers et rooftop potager. Des espaces entretenus quotidiennement, réservables depuis l'app en dix secondes.</p></div>
+          <div class="tab-stat"><strong>14</strong><small>Espaces partagés</small></div>
+        </div>
+        <div class="tab-panel">
+          <div class="tab-num">03</div>
+          <div><h3>Gouvernance résidente</h3><p>Un conseil de maison élu chaque semestre décide du budget animation, des nouveaux équipements et des règles de vie. Les résidents ne sont pas des clients : ce sont des copilotes.</p></div>
+          <div class="tab-stat"><strong>15 k€</strong><small>Budget annuel voté</small></div>
+        </div>
+        <div class="tab-panel">
+          <div class="tab-num">04</div>
+          <div><h3>Bail flexible</h3><p>Du studio au loft, changez de logement dans l'immeuble sans frais ni nouveau dossier. Préavis d'un mois, sans garant, avec un bail unique tout inclus qui grandit avec vous.</p></div>
+          <div class="tab-stat"><strong>1 mois</strong><small>De préavis, sans pénalité</small></div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="tab-content" data-pane="3">
+  <!-- CONFIGURATEUR -->
+  <section class="section" id="configurateur">
+    <div class="section-head reveal">
       <div>
-        <h3>Plus qu'un immeuble : un quartier vertical.</h3>
-        <p>Rooftop partagé de 280m², atelier vélo, salon de coworking en mezzanine, salle de jeux enfants. Les espaces communs font 32% de la surface totale.</p>
-        <p>Une conciergerie de quartier s'installe au rez-de-chaussée dès l'ouverture.</p>
-        <ul>
-          <li><span class="check">✓</span> Rooftop avec vue 360° sur Paris</li>
-          <li><span class="check">✓</span> Coworking privatif gratuit résidents</li>
-          <li><span class="check">✓</span> Salle de sport 80m² équipée Technogym</li>
-        </ul>
+        <p class="section-kicker">Appartements — démo interactive</p>
+        <h2 class="section-title">Le configurateur<br>budget</h2>
       </div>
-      <div class="tab-visual">
-        <div style="font-family:'Archivo';font-weight:900;font-size:48px;color:var(--citron);line-height:1">32%</div>
-        <div style="font-size:13px;color:var(--blanc-casse-2);margin-bottom:auto">de la surface totale dédiée<br>aux espaces partagés</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span class="pill" style="padding:5px 10px;border:1px solid var(--line-2);border-radius:999px;font-size:11px">Rooftop</span>
-          <span class="pill" style="padding:5px 10px;border:1px solid var(--line-2);border-radius:999px;font-size:11px">Coworking</span>
-          <span class="pill" style="padding:5px 10px;border:1px solid var(--line-2);border-radius:999px;font-size:11px">Atelier vélo</span>
-          <span class="pill" style="padding:5px 10px;border:1px solid var(--line-2);border-radius:999px;font-size:11px">Salle jeux</span>
-          <span class="pill" style="padding:5px 10px;border:1px solid var(--line-2);border-radius:999px;font-size:11px">Salle sport</span>
-          <span class="pill" style="padding:5px 10px;border:1px solid var(--line-2);border-radius:999px;font-size:11px">Conciergerie</span>
-        </div>
-      </div>
+      <p class="section-lead">Déplacez le curseur : les logements accessibles s'allument en citron dans la maquette 3D, en temps réel.</p>
     </div>
-
-    <div class="tab-content" data-pane="4">
-      <div>
-        <h3>Sobre en énergie, exemplaire en carbone.</h3>
-        <p>BBC 2025+, panneaux photovoltaïques en toiture, récupération des eaux grises pour les sanitaires, chauffage géothermique.</p>
-        <p>Charges de copropriété divisées par 3 par rapport à un immeuble haussmannien rénové.</p>
-        <ul>
-          <li><span class="check">✓</span> Énergie : 28 kWhEP/m²/an (vs 150+ haussmannien)</li>
-          <li><span class="check">✓</span> 64 places de vélo / 18 voitures (1 pour 3)</li>
-          <li><span class="check">✓</span> Toiture photovoltaïque 100kWc</li>
-        </ul>
-      </div>
-      <div class="tab-visual">
-        <div style="font-family:'Archivo';font-weight:900;font-size:64px;color:var(--citron);letter-spacing:-.04em;line-height:1">-67%</div>
-        <div style="font-size:13px;color:var(--blanc-casse-2);margin-bottom:auto">de consommation énergétique<br>vs. moyenne parisienne</div>
-        <svg viewBox="0 0 200 60" preserveAspectRatio="none" style="width:100%;height:60px">
-          <path d="M0 50 L20 40 L40 35 L60 25 L80 22 L100 18 L120 14 L140 10 L160 7 L180 5 L200 3" stroke="#D7FF3A" stroke-width="2" fill="none" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONFIGURATOR -->
-<section id="config" style="padding-top:60px">
-  <div class="container">
-    <div class="section-head">
-      <div class="left">
-        <div class="section-label">Configurateur budget</div>
-        <h2 class="display">Trouvez votre plan<br>en temps réel.</h2>
-      </div>
-      <p>Ajustez votre budget, vos pièces et vos priorités. Les plans correspondants s'illuminent automatiquement.</p>
-    </div>
-
-    <div class="configurator">
+    <div class="browser reveal">
       <div class="browser-bar">
-        <div class="dots"><span></span><span></span><span></span></div>
-        <div class="url"><span class="lock">⌬</span> casaverde.fr/configurateur</div>
+        <div class="browser-dots"><i></i><i></i><i></i></div>
+        <div class="browser-url">maisoncommune.fr/configurateur</div>
+        <div class="browser-live"><i></i>Temps réel</div>
       </div>
-
-      <div class="config-body">
-        <div class="config-form">
-          <h3>Vos critères</h3>
-          <p class="sub">3 curseurs, 1 sélection. Le plan idéal s'allume.</p>
-
-          <div class="config-row">
-            <label>Budget maximum <span class="val" id="budgetVal">350 000 €</span></label>
-            <input type="range" id="budget" min="150" max="700" step="10" value="350">
-          </div>
-
-          <div class="config-row">
-            <label>Nombre de pièces <span class="val" id="roomsVal">2 pièces</span></label>
-            <input type="range" id="rooms" min="1" max="5" step="1" value="2">
-          </div>
-
-          <div class="config-row">
-            <label>Priorité</label>
-            <div class="chips" id="priority">
-              <div class="chip active" data-p="equilibre">Équilibre</div>
-              <div class="chip" data-p="lumire">Lumière</div>
-              <div class="chip" data-p="exterieur">Extérieur</div>
-              <div class="chip" data-p="investissement">Investissement</div>
+      <div class="browser-body">
+        <div class="config-panel">
+          <h3>Votre budget mensuel</h3>
+          <div class="budget-readout"><output id="budgetOut">950 €</output><span>/ mois, tout inclus</span></div>
+          <input type="range" id="budgetRange" min="500" max="1500" step="10" value="950" aria-label="Budget mensuel">
+          <div class="range-marks"><span>500 €</span><span>1 000 €</span><span>1 500 €</span></div>
+          <div class="config-count" id="configCount"><strong>0</strong>logements accessibles sur 36</div>
+          <div class="plan-cards">
+            <div class="plan-card" data-type="studio">
+              <svg viewBox="0 0 52 44"><rect class="fillz" x="2" y="2" width="48" height="40"/><line x1="2" y1="28" x2="24" y2="28"/><line x1="24" y1="28" x2="24" y2="42"/></svg>
+              <h4>Studio</h4><small>22 m² · dès l'étage 1</small><span class="plan-price">640 € / mois</span>
+            </div>
+            <div class="plan-card" data-type="t2">
+              <svg viewBox="0 0 52 44"><rect class="fillz" x="2" y="2" width="48" height="40"/><line x1="28" y1="2" x2="28" y2="26"/><line x1="2" y1="26" x2="40" y2="26"/></svg>
+              <h4>T2</h4><small>41 m² · étages 1–5</small><span class="plan-price">890 € / mois</span>
+            </div>
+            <div class="plan-card" data-type="t3">
+              <svg viewBox="0 0 52 44"><rect class="fillz" x="2" y="2" width="48" height="40"/><line x1="20" y1="2" x2="20" y2="22"/><line x1="20" y1="22" x2="50" y2="22"/><line x1="36" y1="22" x2="36" y2="42"/></svg>
+              <h4>T3</h4><small>63 m² · étages 4–6</small><span class="plan-price">1 150 € / mois</span>
+            </div>
+            <div class="plan-card" data-type="loft">
+              <svg viewBox="0 0 52 44"><rect class="fillz" x="2" y="2" width="48" height="40"/><line x1="2" y1="16" x2="18" y2="16"/><line x1="18" y1="16" x2="18" y2="2"/><line x1="34" y1="42" x2="34" y2="30"/><line x1="34" y1="30" x2="50" y2="30"/></svg>
+              <h4>Loft</h4><small>78 m² · dernier étage</small><span class="plan-price">1 390 € / mois</span>
             </div>
           </div>
         </div>
-
-        <div class="config-result">
-          <div class="result-head">
-            <h4>Votre match</h4>
-            <div class="budget"><span id="matchPct">87</span>%<small>match</small></div>
-          </div>
-          <div class="match-bar"><div class="fill" id="matchFill" style="width:87%"></div></div>
-
-          <div class="plans" id="plans">
-            <div class="plan" data-price="215" data-rooms="1">
-              <div class="plan-info">
-                <h5>T1 — Atelier Nord</h5>
-                <p>32m² · Étage 4 · Vue cour</p>
-              </div>
-              <div class="plan-meta">
-                <div class="price">215K €</div>
-                <div class="badge" style="opacity:0">Recommended</div>
-              </div>
-            </div>
-
-            <div class="plan recommended" data-price="285" data-rooms="2">
-              <div class="plan-badge">Match parfait</div>
-              <div class="plan-info">
-                <h5>T2 — Citron Sud</h5>
-                <p>48m² · Étage 5 · Balcon 9m²</p>
-              </div>
-              <div class="plan-meta">
-                <div class="price">285K €</div>
-                <div class="badge">★ Coup de cœur</div>
-              </div>
-            </div>
-
-            <div class="plan" data-price="320" data-rooms="2">
-              <div class="plan-info">
-                <h5>T2 — Loft</h5>
-                <p>54m² · Étage 6 · 3.8m sous plafond</p>
-              </div>
-              <div class="plan-meta">
-                <div class="price">320K €</div>
-                <div class="badge" style="opacity:0">·</div>
-              </div>
-            </div>
-
-            <div class="plan" data-price="440" data-rooms="3">
-              <div class="plan-info">
-                <h5>T3 — Patio</h5>
-                <p>68m² · RDC · Jardin 25m²</p>
-              </div>
-              <div class="plan-meta">
-                <div class="price">440K €</div>
-                <div class="badge" style="opacity:0">·</div>
-              </div>
-            </div>
-
-            <div class="plan" data-price="620" data-rooms="4">
-              <div class="plan-info">
-                <h5>T4 — Familial</h5>
-                <p>92m² · Étage 3 · Traversant</p>
-              </div>
-              <div class="plan-meta">
-                <div class="price">620K €</div>
-                <div class="badge" style="opacity:0">·</div>
-              </div>
-            </div>
-          </div>
+        <div class="config-view">
+          <canvas id="configCanvas"></canvas>
+          <div class="config-tooltip" id="configTooltip"></div>
+          <div class="config-legend"><span class="ok"><i></i>Dans le budget</span><span class="no"><i></i>Hors budget</span></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- APPARTEMENTS -->
-<section id="appartements">
-  <div class="container">
-    <div class="section-head">
-      <div class="left">
-        <div class="section-label">Le catalogue</div>
-        <h2 class="display">14 appartements.<br>Une signature.</h2>
-      </div>
-      <p>Du T1 compact au T4 familial, chaque plan respecte la même grammaire : fluide, lumineux, généreux.</p>
-    </div>
-
-    <div class="apt-grid">
-      <article class="apt">
-        <div class="apt-img"><span class="apt-tag">Disponible</span></div>
-        <div class="apt-body">
-          <h4>Le Studio Citron</h4>
-          <p>Un pied-à-terre ultra-optimisé avec mezzanine et rangements sur-mesure.</p>
-          <div class="apt-specs">
-            <span><span class="icon">▢</span> 32m²</span>
-            <span><span class="icon">⌂</span> Étage 4</span>
-            <span><span class="icon">☀</span> Sud</span>
-          </div>
-          <div class="apt-foot">
-            <span class="price">215 000 €</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="apt">
-        <div class="apt-img"><span class="apt-tag">★ Coup de cœur</span></div>
-        <div class="apt-body">
-          <h4>Le T2 Sud</h4>
-          <p>Notre best-seller : balcon généreux, double exposition, plan en L sans perte.</p>
-          <div class="apt-specs">
-            <span><span class="icon">▢</span> 48m²</span>
-            <span><span class="icon">⌂</span> Étage 5</span>
-            <span><span class="icon">☀</span> Sud+Ouest</span>
-          </div>
-          <div class="apt-foot">
-            <span class="price">285 000 €</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="apt">
-        <div class="apt-img"><span class="apt-tag">Nouveau</span></div>
-        <div class="apt-body">
-          <h4>Le T3 Patio</h4>
-          <p>Espace nuit isolé, pièce de vie traversante, accès direct au jardin commun.</p>
-          <div class="apt-specs">
-            <span><span class="icon">▢</span> 68m²</span>
-            <span><span class="icon">⌂</span> RDC</span>
-            <span><span class="icon">☀</span> Est+Ouest</span>
-          </div>
-          <div class="apt-foot">
-            <span class="price">440 000 €</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="apt">
-        <div class="apt-img"><span class="apt-tag">Disponible</span></div>
-        <div class="apt-body">
-          <h4>Le T4 Familial</h4>
-          <p>Trois chambres, double salle de bain, cellier, loggia parentale de 8m².</p>
-          <div class="apt-specs">
-            <span><span class="icon">▢</span> 92m²</span>
-            <span><span class="icon">⌂</span> Étage 3</span>
-            <span><span class="icon">☀</span> Traversant</span>
-          </div>
-          <div class="apt-foot">
-            <span class="price">620 000 €</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="apt">
-        <div class="apt-img"><span class="apt-tag">Dernier lot</span></div>
-        <div class="apt-body">
-          <h4>Le Loft Penthouse</h4>
-          <p>3.8m sous plafond, mezzanine, rooftop privatif de 60m². Unique.</p>
-          <div class="apt-specs">
-            <span><span class="icon">▢</span> 110m²</span>
-            <span><span class="icon">⌂</span> Étage 7</span>
-            <span><span class="icon">☀</span> 360°</span>
-          </div>
-          <div class="apt-foot">
-            <span class="price">890 000 €</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="apt">
-        <div class="apt-img"><span class="apt-tag">Investisseur</span></div>
-        <div class="apt-body">
-          <h4>Le T1 Patio</h4>
-          <p>Rendement locatif 4.2%. Gestion déléguée. Idéal première acquisition.</p>
-          <div class="apt-specs">
-            <span><span class="icon">▢</span> 28m²</span>
-            <span><span class="icon">⌂</span> Étage 2</span>
-            <span><span class="icon">☀</span> Ouest</span>
-          </div>
-          <div class="apt-foot">
-            <span class="price">189 000 €</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- EQUIPEMENTS -->
-<section id="equipements">
-  <div class="container">
-    <div class="section-head">
-      <div class="left">
-        <div class="section-label">Équipements & services</div>
-        <h2 class="display">Tout ce qui rend<br>la vie plus douce.</h2>
-      </div>
-      <p>32% de la surface totale est dédiée aux espaces et services partagés.</p>
-    </div>
-
-    <div class="equip-grid">
-      <div class="equip">
-        <div class="ico">⎙</div>
-        <div><h5>Rooftop 360°</h5><p>280m² en libre accès</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">⚙</div>
-        <div><h5>Coworking</h5><p>Réservé aux résidents</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">⚡</div>
-        <div><h5>Salle de sport</h5><p>80m² Technogym</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">◎</div>
-        <div><h5>Conciergerie</h5><p>7j/7 de 8h à 20h</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">⬡</div>
-        <div><h5>Atelier vélo</h5><p>Outils + 64 places</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">⏣</div>
-        <div><h5>Salle de jeux</h5><p>Enfants 3-12 ans</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">≋</div>
-        <div><h5>Spa & sauna</h5><p>Réservation en ligne</p></div>
-      </div>
-      <div class="equip">
-        <div class="ico">⌬</div>
-        <div><h5>Laverie</h5><p>Pro & éco responsable</p></div>
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="section-head reveal">
+      <div>
+        <p class="section-kicker">Questions fréquentes</p>
+        <h2 class="section-title">FAQ</h2>
       </div>
     </div>
-  </div>
-</section>
+    <div class="reveal">
+      <div class="faq-item"><button class="faq-q">Que comprend exactement le loyer ?<span class="case-plus"></span></button>
+        <div class="faq-a"><div><p>Tout : logement meublé, charges, internet fibré, assurance habitation, ménage des espaces communs, accès à l'ensemble des équipements et budget animation. Une seule ligne sur votre relevé bancaire.</p></div></div>
+      </div>
+      <div class="faq-item"><button class="faq-q">Faut-il un garant pour signer ?<span class="case-plus"></span></button>
+        <div class="faq-a"><div><p>Non. Notre bail tout inclus se signe sans garant ni dépôt de garantie, après un simple dossier en ligne validé sous 48 h.</p></div></div>
+      </div>
+      <div class="faq-item"><button class="faq-q">Peut-on changer de logement en cours de bail ?<span class="case-plus"></span></button>
+        <div class="faq-a"><div><p>Oui, c'est le principe du bail évolutif : passez du studio au T3 ou au loft dès qu'un logement se libère, sans frais de dossier ni nouveau garant. Deux résidents sur trois déménagent en interne au moins une fois.</p></div></div>
+      </div>
+      <div class="faq-item"><button class="faq-q">Comment se prennent les décisions collectives ?<span class="case-plus"></span></button>
+        <div class="faq-a"><div><p>Un conseil de maison de six résidents est élu chaque semestre. Il vote le budget animation (15 000 € / an), arbitre les nouveaux équipements et fait vivre la charte commune.</p></div></div>
+      </div>
+    </div>
+  </section>
+</main>
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="container">
-    <div class="section-head">
-      <div class="left">
-        <div class="section-label">Questions fréquentes</div>
-        <h2 class="display">Toutes les réponses,<br>sans détour.</h2>
-      </div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <h2 class="footer-title">Prêt·e à vivre <em>grand</em>, ensemble ?</h2>
+    <div class="footer-cta">
+      <a class="button button-acid" href="#configurateur">Réserver une visite
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
-
-    <div class="faq-grid">
-      <div class="faq open">
-        <div class="faq-q">Quand est prévue la livraison ? <span class="plus">+</span></div>
-        <div class="faq-a">La livraison est prévue au 3e trimestre 2026. Les travaux de gros œuvre sont finalisés, place au second œuvre et aux aménagements intérieurs.</div>
+    <div class="footer-cols">
+      <div>
+        <h5>Maison Commune</h5>
+        <a href="#top">27 rue des Panoyaux, Paris 20ᵉ</a>
+        <a href="mailto:bonjour@maisoncommune.fr">bonjour@maisoncommune.fr</a>
+        <a href="tel:+33144000000">+33 1 44 00 00 00</a>
       </div>
-      <div class="faq">
-        <div class="faq-q">Puis-je personnaliser mon appartement ? <span class="plus">+</span></div>
-        <div class="faq-a">Oui, 4 packs d'ambiance sont proposés (Brut, Cosy, Scandinave, Atelier) et vous pouvez inverser les plans de cuisine et salle de bain gratuitement jusqu'à 6 mois avant livraison.</div>
-      </div>
-      <div class="faq">
-        <div class="faq-q">Quels sont les frais de notaire ? <span class="plus">+</span></div>
-        <div class="faq-a">Dans le neuf, les frais de notaire sont réduits à 2.5% du prix de vente (vs ~7.5% dans l'ancien). Un simulateur est disponible sur demande.</div>
-      </div>
-      <div class="faq">
-        <div class="faq-q">La TVA est-elle réduite ? <span class="plus">+</span></div>
-        <div class="faq-a">Oui, le programme est situé en zone AnRU, ce qui permet de bénéficier de la TVA réduite à 5.5% sous conditions de ressources. Notre équipe vous accompagne pour le montage du dossier.</div>
-      </div>
-      <div class="faq">
-        <div class="faq-q">Comment se passe la gestion locative ? <span class="plus">+</span></div>
-        <div class="faq-a">Nous travaillons avec un partenaire de gestion locative qui garantit un loyer (qu'il y ait locataire ou non) dès la livraison. Commission 7% tout inclus.</div>
-      </div>
-      <div class="faq">
-        <div class="faq-q">Y a-t-il des places de parking ? <span class="plus">+</span></div>
-        <div class="faq-a">18 places pour 53 logements, dont 4 avec borne de recharge électrique. Local vélo de 64 places au RDC. Le ratio est volontairement limité pour privilégier les mobilités douces.</div>
-      </div>
+      <div><h5>Habiter</h5><a href="#configurateur">Appartements</a><a href="#approche">Équipements</a><a href="#parcours">Résidents</a></div>
+      <div><h5>Découvrir</h5><a href="#approche">Notre approche</a><a href="#faq">FAQ</a><a href="#configurateur">Configurateur</a></div>
+      <div><h5>Suivre</h5><a href="#top">Instagram</a><a href="#top">LinkedIn</a><a href="#top">Newsletter</a></div>
     </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="foot-grid">
-    <div>
-      <div class="foot-logo"><span style="display:inline-block;width:14px;height:14px;background:var(--citron);border-radius:50%;margin-right:10px;vertical-align:middle"></span>Casa Verde</div>
-      <p>Une résidence contemporaine de 53 logements développée par Atelier Rivage & livrés en 2026 au cœur du 11e arrondissement.</p>
-    </div>
-    <div>
-      <h6>Le projet</h6>
-      <ul>
-        <li><a href="#appartements">Appartements</a></li>
-        <li><a href="#equipements">Équipements</a></li>
-        <li><a href="#cases">Parcours résidents</a></li>
-        <li><a href="#config">Configurateur</a></li>
-      </ul>
-    </div>
-    <div>
-      <h6>Acheter</h6>
-      <ul>
-        <li>Résidence principale</li>
-        <li>Investissement</li>
-        <li>LMNP / LMP</li>
-        <li>TVA réduite</li>
-      </ul>
-    </div>
-    <div>
-      <h6>Contact</h6>
-      <ul>
-        <li>12 rue de la Roquette</li>
-        <li>75011 Paris</li>
-        <li>+33 1 84 88 22 14</li>
-        <li>contact@casaverde.fr</li>
-      </ul>
-    </div>
-  </div>
-  <div class="foot-bottom">
-    <div>© 2025 Casa Verde · Tous droits réservés</div>
-    <div>Mention légales · Politique de confidentialité · Cookies</div>
+    <div class="footer-bottom"><span>© 2025 Maison Commune — Tous droits réservés</span><span>Mentions légales · Confidentialité</span></div>
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ============ PARCOURS : dépliable ============ */
-document.querySelectorAll('.case').forEach(c => {
-  c.addEventListener('click', () => {
-    document.querySelectorAll('.case').forEach(o => { if (o !== c) o.classList.remove('open') });
-    c.classList.toggle('open');
+(function(){
+"use strict";
+/* ============ UI : header, menu, accordions, tabs, reveal ============ */
+const header=document.getElementById('siteHeader');
+addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>30),{passive:true});
+document.getElementById('menuToggle').addEventListener('click',()=>header.classList.toggle('menu-open'));
+document.querySelectorAll('#primaryNav a').forEach(a=>a.addEventListener('click',()=>header.classList.remove('menu-open')));
+
+document.querySelectorAll('.case-head').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const c=btn.closest('.case'),was=c.classList.contains('open');
+    document.querySelectorAll('.case.open').forEach(o=>{o.classList.remove('open');o.querySelector('.case-head').setAttribute('aria-expanded','false');});
+    if(!was){c.classList.add('open');btn.setAttribute('aria-expanded','true');}
   });
 });
+document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>btn.closest('.faq-item').classList.toggle('open')));
 
-/* ============ APPROCHE : onglets ============ */
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    const id = t.dataset.tab;
-    document.querySelectorAll('.tab').forEach(o => o.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
-    t.classList.add('active');
-    document.querySelector(`[data-pane="${id}"]`).classList.add('active');
+const tabBtns=[...document.querySelectorAll('.tab-btn')],tabPanels=[...document.querySelectorAll('.tab-panel')];
+tabBtns.forEach(b=>b.addEventListener('click',()=>{
+  tabBtns.forEach(x=>x.classList.remove('active'));tabPanels.forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');tabPanels[+b.dataset.tab].classList.add('active');
+}));
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+const navLinks=[...document.querySelectorAll('#primaryNav a')];
+const secObs=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){navLinks.forEach(l=>l.classList.toggle('active',l.dataset.sec===e.target.id));}
+}),{rootMargin:'-40% 0px -50% 0px'});
+['parcours','approche','configurateur','faq'].forEach(id=>secObs.observe(document.getElementById(id)));
+
+/* ============ 3D : shared helpers ============ */
+const ACID=new THREE.Color(0xcfff35),CARBON=new THREE.Color(0x151713),
+      CSOFT=new THREE.Color(0x2a2d26),PAPER=new THREE.Color(0xe9e8de),
+      EM_ACID=new THREE.Color(0x8fb010),EM_NONE=new THREE.Color(0x000000);
+const TYPES={studio:{label:'Studio',price:640},t2:{label:'T2',price:890},t3:{label:'T3',price:1150},loft:{label:'Loft',price:1390}};
+function pickType(f,i,floors){
+  if(f===floors-1)return i%2?'loft':'t3';
+  if(f>=4)return ['t3','t2','t3','t2','t3','t2'][i];
+  if(f>=2)return ['t2','studio','t2','t2','studio','t2'][i];
+  return ['studio','studio','t2','studio','t2','studio'][i];
+}
+function makeScene(canvas,bgHex,camPos,lookY){
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  const scene=new THREE.Scene();scene.background=new THREE.Color(bgHex);
+  scene.fog=new THREE.Fog(bgHex,16,34);
+  const camera=new THREE.PerspectiveCamera(36,1,.1,100);
+  camera.position.set(...camPos);camera.lookAt(0,lookY,0);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x3a3e33,.8));
+  const dir=new THREE.DirectionalLight(0xfff5dd,1.15);
+  dir.position.set(7,11,5);dir.castShadow=true;
+  dir.shadow.mapSize.set(1024,1024);
+  dir.shadow.camera.left=-8;dir.shadow.camera.right=8;dir.shadow.camera.top=10;dir.shadow.camera.bottom=-4;
+  scene.add(dir);
+  const acidL=new THREE.PointLight(0xcfff35,.9,20);acidL.position.set(-5,3.5,5);scene.add(acidL);
+  function resize(){
+    const w=canvas.clientWidth||1,h=canvas.clientHeight||1;
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+  }
+  resize();
+  const st={rot:0,target:.55,dragging:false,active:true};
+  let px=0,down=false;
+  canvas.addEventListener('pointerdown',e=>{down=true;st.dragging=true;px=e.clientX;canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',e=>{if(down){st.target+=(e.clientX-px)*.006;px=e.clientX;}});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{down=false;st.dragging=false;}));
+  new IntersectionObserver(es=>es.forEach(e=>st.active=e.isIntersecting),{rootMargin:'80px'}).observe(canvas);
+  addEventListener('resize',resize);
+  return {renderer,scene,camera,st,resize};
+}
+function buildTower(scene,mode){
+  const group=new THREE.Group();scene.add(group);
+  const cols=3,rows=2,floors=6,W=1.5,H=.92,D=1.3,G=.1;
+  const totW=cols*(W+G)-G,totD=rows*(D+G)-G;
+  const units=[];
+  const winGeo=new THREE.BoxGeometry(W*.56,H*.44,.05);
+  const boxGeo=new THREE.BoxGeometry(W,H,D);
+  const winMat=new THREE.MeshStandardMaterial({color:0x11130f,roughness:.25,metalness:.5});
+  const acidWinMat=new THREE.MeshStandardMaterial({color:0xcfff35,emissive:0x7a9a0d,roughness:.4});
+  // base slab + lobby
+  const slab=new THREE.Mesh(new THREE.BoxGeometry(totW+1.3,.3,totD+1.3),new THREE.MeshStandardMaterial({color:0x1b1e18,roughness:.9}));
+  slab.position.y=.15;slab.receiveShadow=true;slab.castShadow=true;group.add(slab);
+  for(let f=0;f<floors;f++)for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+    const i=r*cols+c,type=pickType(f,i,floors);
+    const base=mode==='hero'?((f*7+i*3)%11===0?ACID.clone():PAPER.clone()):CSOFT.clone();
+    const mat=new THREE.MeshStandardMaterial({color:base.clone(),roughness:.72,metalness:.06});
+    const m=new THREE.Mesh(boxGeo,mat);
+    m.position.set(c*(W+G)-totW/2+W/2, .35+f*(H+G)+H/2, r*(D+G)-totD/2+D/2);
+    m.castShadow=true;m.receiveShadow=true;group.add(m);
+    // window on outer face
+    const win=new THREE.Mesh(winGeo,(mode==='hero'&&(f*5+i)%7===0)?acidWinMat:winMat);
+    win.position.copy(m.position);win.position.z+= (r===rows-1? D/2+.03 : -(D/2+.03));
+    group.add(win);
+    // balconies front, alternating
+    if(r===rows-1&&(f+c)%2===1&&f>0){
+      const bal=new THREE.Mesh(new THREE.BoxGeometry(W*.8,.07,.42),new THREE.MeshStandardMaterial({color:mode==='hero'?0xcfff35:0x151713,roughness:.6}));
+      bal.position.set(m.position.x,m.position.y-H/2+.1,m.position.z+D/2+.24);
+      bal.castShadow=true;group.add(bal);
+    }
+    units.push({mesh:m,type,floor:f+1,base,hot:false,pulse:0});
+  }
+  const topY=.35+floors*(H+G);
+  // roof
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(totW+.5,.16,totD+.5),new THREE.MeshStandardMaterial({color:0x1b1e18,roughness:.9}));
+  roof.position.y=topY+.03;roof.castShadow=true;group.add(roof);
+  // pergola + trees on roof
+  const post=new THREE.BoxGeometry(.07,.7,.07);
+  const postMat=new THREE.MeshStandardMaterial({color:0xcfff35,roughness:.5});
+  [[-1.6,-.7],[1.6,-.7],[-1.6,.7],[1.6,.7]].forEach(p=>{
+    const pm=new THREE.Mesh(post,postMat);pm.position.set(p[0],topY+.45,p[1]);pm.castShadow=true;group.add(pm);
   });
-});
-
-/* ============ FAQ ============ */
-document.querySelectorAll('.faq').forEach(f => {
-  f.querySelector('.faq-q').addEventListener('click', () => f.classList.toggle('open'));
-});
-
-/* ============ CONFIGURATEUR ============ */
-const budget = document.getElementById('budget');
-const rooms = document.getElementById('rooms');
-const priority = document.getElementById('priority');
-const budgetVal = document.getElementById('budgetVal');
-const roomsVal = document.getElementById('roomsVal');
-const matchPct = document.getElementById('matchPct');
-const matchFill = document.getElementById('matchFill');
-const plans = [...document.querySelectorAll('.plan')];
-
-let currentPriority = 'equilibre';
-
-function roomLabel(n){
-  return ['Studio','2 pièces','3 pièces','4 pièces','5+ pièces'][n-1] || (n+' pièces');
+  const perg=new THREE.Mesh(new THREE.BoxGeometry(3.5,.06,1.7),postMat);perg.position.y=topY+.82;perg.castShadow=true;group.add(perg);
+  const foli=new THREE.IcosahedronGeometry(.3,0);
+  const foliMat=new THREE.MeshStandardMaterial({color:0x6f8f2a,roughness:.8,flatShading:true});
+  const trunkMat=new THREE.MeshStandardMaterial({color:0x3d3527,roughness:.9});
+  function tree(x,z,y,s){
+    const t=new THREE.Group();
+    const tr=new THREE.Mesh(new THREE.CylinderGeometry(.04,.06,.4*s,6),trunkMat);tr.position.y=.2*s;tr.castShadow=true;
+    const fo=new THREE.Mesh(foli,foliMat);fo.scale.setScalar(s);fo.position.y=.5*s;fo.castShadow=true;
+    t.add(tr,fo);t.position.set(x,y,z);group.add(t);return t;
+  }
+  tree(-2.2,.9,topY+.1,1);tree(2.3,-.9,topY+.1,.8);
+  tree(-totW/2-1.3,.4,0,1.5);tree(totW/2+1.4,-.5,0,1.2);tree(totW/2+1.1,1.1,0,.9);
+  // ground
+  const ground=new THREE.Mesh(new THREE.CircleGeometry(11,48),new THREE.MeshStandardMaterial({color:mode==='hero'?0x1b1e18:0xe4e3d8,roughness:1}));
+  ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;group.add(ground);
+  // acid ring path
+  const ring=new THREE.Mesh(new THREE.RingGeometry(4.1,4.22,64),new THREE.MeshBasicMaterial({color:0xcfff35,side:THREE.DoubleSide,transparent:true,opacity:mode==='hero'?.5:.35}));
+  ring.rotation.x=-Math.PI/2;ring.position.y=.012;group.add(ring);
+  return {group,units,totW,topY};
 }
 
-function updateConfig(){
-  const b = parseInt(budget.value);
-  const r = parseInt(rooms.value);
-  budgetVal.textContent = b.toLocaleString('fr-FR') + ' 000 €';
-  roomsVal.textContent = roomLabel(r);
+/* ============ HERO scene ============ */
+const heroW=makeScene(document.getElementById('heroCanvas'),0x151713,[8.6,5.6,10.2],2.6);
+const heroT=buildTower(heroW.scene,'hero');
+// elevator cube
+const lift=new THREE.Mesh(new THREE.BoxGeometry(.4,.5,.4),new THREE.MeshStandardMaterial({color:0xcfff35,emissive:0x7a9a0d,roughness:.4}));
+lift.castShadow=true;lift.position.x=heroT.totW/2+.55;heroT.group.add(lift);
+const rail=new THREE.Mesh(new THREE.BoxGeometry(.06,heroT.topY,.06),new THREE.MeshStandardMaterial({color:0x3a3e33}));
+rail.position.set(heroT.totW/2+.55,heroT.topY/2,0);heroT.group.add(rail);
 
-  let bestScore = -1, bestPlan = null;
-  plans.forEach((p, i) => {
-    const pPrice = parseInt(p.dataset.price);
-    const pRooms = parseInt(p.dataset.rooms);
-    const priceOk = b >= pPrice * 0.85;
-    const roomsOk = Math.abs(pRooms - r) <= 1;
-    let score = 0;
-    if(priceOk) score += 50 - Math.abs(b - pPrice) / 5;
-    if(roomsOk) score += 30 - Math.abs(pRooms - r) * 8;
+/* ============ CONFIG scene ============ */
+const cfgW=makeScene(document.getElementById('configCanvas'),0xf1f0e8,[8.2,6.2,9.8],2.7);
+const cfgT=buildTower(cfgW.scene,'config');
 
-    // Bonus priorité
-    if(currentPriority === 'lumire' && pRooms <= 2) score += 10;
-    if(currentPriority === 'exterieur' && (pPrice >= 280 && pPrice <= 480)) score += 12;
-    if(currentPriority === 'investissement' && pPrice <= 280) score += 15;
-    if(currentPriority === 'equilibre') score += 5;
-
-    score = Math.max(0, Math.min(99, Math.round(score)));
-    p.style.setProperty('--s', score);
-
-    const dim = score < 35;
-    p.classList.toggle('dimmed', dim);
-    if(score > bestScore){ bestScore = score; bestPlan = p }
+/* ============ budget logic ============ */
+const range=document.getElementById('budgetRange'),out=document.getElementById('budgetOut'),
+      count=document.getElementById('configCount'),cards={};
+document.querySelectorAll('.plan-card').forEach(c=>cards[c.dataset.type]=c);
+function fmt(n){return n.toLocaleString('fr-FR')+' €';}
+function setBudget(v){
+  out.textContent=fmt(v);
+  range.style.setProperty('--pct',((v-500)/1000*100)+'%');
+  let n=0;
+  cfgT.units.forEach(u=>{
+    const ok=TYPES[u.type].price<=v;
+    if(ok!==u.hot){u.hot=ok;u.pulse=1;}
+    if(ok)n++;
   });
-
-  plans.forEach(p => p.classList.remove('recommended'));
-  if(bestPlan) bestPlan.classList.add('recommended');
-
-  matchPct.textContent = bestScore;
-  matchFill.style.width = bestScore + '%';
+  for(const t in cards)cards[t].classList.toggle('ok',TYPES[t].price<=v);
+  count.innerHTML='<strong>'+n+'</strong>logement'+(n>1?'s':'')+' accessible'+(n>1?'s':'')+' sur '+cfgT.units.length;
 }
+range.addEventListener('input',()=>setBudget(+range.value));
+setBudget(+range.value);
 
-budget.addEventListener('input', updateConfig);
-rooms.addEventListener('input', updateConfig);
-priority.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', () => {
-    priority.querySelectorAll('.chip').forEach(o => o.classList.remove('active'));
-    c.classList.add('active');
-    currentPriority = c.dataset.p;
-    updateConfig();
-  });
+/* ============ hover tooltip on config units ============ */
+const tooltip=document.getElementById('configTooltip');
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();
+const cfgCanvas=document.getElementById('configCanvas');
+const unitMeshes=cfgT.units.map(u=>u.mesh);
+cfgCanvas.addEventListener('pointermove',e=>{
+  if(cfgW.st.dragging){tooltip.style.opacity=0;return;}
+  const r=cfgCanvas.getBoundingClientRect();
+  mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;
+  ray.setFromCamera(mouse,cfgW.camera);
+  const hit=ray.intersectObjects(unitMeshes)[0];
+  if(hit){
+    const u=cfgT.units.find(x=>x.mesh===hit.object);
+    tooltip.innerHTML='<b>'+TYPES[u.type].label+'</b> · étage '+u.floor+' · '+fmt(TYPES[u.type].price)+' /mois';
+    tooltip.style.left=(e.clientX-r.left)+'px';tooltip.style.top=(e.clientY-r.top)+'px';
+    tooltip.style.opacity=1;cfgCanvas.style.cursor='pointer';
+  }else{tooltip.style.opacity=0;cfgCanvas.style.cursor='grab';}
 });
+cfgCanvas.addEventListener('pointerleave',()=>tooltip.style.opacity=0);
 
-updateConfig();
-
-/* ============ HERO 3D : rotation souris douce ============ */
-const building = document.getElementById('building');
-let targetRX = 0, targetRY = 0, curRX = 0, curRY = 0;
-document.addEventListener('mousemove', (e) => {
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
-  targetRY = (e.clientX - cx) / cx * 12;
-  targetRX = -(e.clientY - cy) / cy * 6;
-});
+/* ============ render loop ============ */
+const clock=new THREE.Clock();
 function tick(){
-  curRX += (targetRX - curRX) * 0.06;
-  curRY += (targetRY - curRY) * 0.06;
-  building.style.transform = `rotateY(${curRY}deg) rotateX(${curRX}deg)`;
   requestAnimationFrame(tick);
+  const t=clock.getElapsedTime();
+  // hero
+  if(heroW.st.active){
+    const s=heroW.st;
+    if(!s.dragging)s.target+=.0022;
+    s.rot+=(s.target-s.rot)*.08;
+    heroT.group.rotation.y=s.rot;
+    heroT.group.position.y=Math.sin(t*.8)*.05;
+    lift.position.y=.6+(Math.sin(t*.5)*.5+.5)*(heroT.topY-1.2);
+    heroW.camera.position.y=5.6+Math.sin(t*.4)*.15;
+    heroW.camera.lookAt(0,2.6,0);
+    heroW.renderer.render(heroW.scene,heroW.camera);
+  }
+  // config
+  if(cfgW.st.active){
+    const s=cfgW.st;
+    if(!s.dragging)s.target+=.0014;
+    s.rot+=(s.target-s.rot)*.08;
+    cfgT.group.rotation.y=s.rot;
+    cfgT.units.forEach(u=>{
+      const mat=u.mesh.material;
+      mat.color.lerp(u.hot?ACID:CSOFT,.12);
+      mat.emissive.lerp(u.hot?EM_ACID:EM_NONE,.12);
+      if(u.pulse>.01){u.mesh.scale.setScalar(1+.07*u.pulse);u.pulse*=.86;}
+      else u.mesh.scale.setScalar(1);
+    });
+    cfgW.renderer.render(cfgW.scene,cfgW.camera);
+  }
 }
 tick();
-
-/* ============ Smooth nav active ============ */
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => {
-    if(window.scrollY >= s.offsetTop - 200) current = s.id;
-  });
-  navLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-  });
-});
+})();
 </script>
 </body>
 </html>
