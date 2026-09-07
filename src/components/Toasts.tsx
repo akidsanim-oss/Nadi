@@ -1,21 +1,19 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { BadgeCheck, Gift, PartyPopper } from 'lucide-react';
+import { Gem } from 'lucide-react';
 import { useStore } from '../lib/store';
 
 export default function Toasts() {
   const { toasts } = useStore();
   return (
-    <div className="fixed bottom-24 inset-x-0 z-[90] flex flex-col items-center gap-2 px-4 pointer-events-none">
+    <div className="fixed bottom-6 inset-x-0 z-[100] flex flex-col items-center gap-2 pointer-events-none px-4">
       <AnimatePresence>
-        {toasts.map((t) => (
-          <motion.div
-            key={t.id}
-            initial={{ opacity: 0, y: 24, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.95 }}
-            className={`pointer-events-auto flex items-center gap-2.5 px-5 py-3 rounded-2xl text-sm font-black shadow-2xl border backdrop-blur-xl ${t.tone === 'gold' ? 'bg-[#2a0a45]/95 border-[#ffd000]/50 text-[#ffe57f]' : t.tone === 'pink' ? 'bg-[#3d0a2e]/95 border-[#ff2a85]/50 text-white' : 'bg-[#0a2e1c]/95 border-emerald-400/50 text-emerald-100'}`}
-          >
-            {t.tone === 'gold' ? <Gift size={16} className="text-[#ffd000]" /> : t.tone === 'pink' ? <PartyPopper size={16} className="text-[#ff2a85]" /> : <BadgeCheck size={16} className="text-emerald-300" />}
+        {toasts.map(t => (
+          <motion.div key={t.id} initial={{ y: 30, opacity: 0, scale: .95 }} animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 10, opacity: 0, scale: .95 }}
+            className="glass-strong rounded-full px-5 py-3 flex items-center gap-2.5 text-sm font-bold shadow-2xl border-[#e8b84a]/30">
+            <span className="w-7 h-7 grid place-items-center rounded-full bg-gradient-to-br from-[#ff4d8d] to-[#7c3aed]">
+              <Gem className="w-4 h-4 text-white" />
+            </span>
             {t.msg}
           </motion.div>
         ))}

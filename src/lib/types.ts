@@ -1,99 +1,89 @@
-export type Category = 'milkshakes' | 'smoothies' | 'juices';
+export type Locale = 'ar' | 'fr';
+export type Category = 'milkshake' | 'jus' | 'signature' | 'healthy';
+
+export interface ProductSize {
+  id: string;
+  labelAr: string;
+  labelFr: string;
+  delta: number;
+}
+
+export interface ProductExtra {
+  id: string;
+  labelAr: string;
+  labelFr: string;
+  price: number;
+}
 
 export interface Product {
   id: string;
+  slug: string;
   category: Category;
-  name: string;
-  name_fr: string;
   price: number;
   oldPrice?: number;
-  tag: string;
-  tag_fr: string;
   rating: number;
   reviewsCount: number;
+  badgeAr?: string;
+  badgeFr?: string;
   image: string;
-  description: string;
-  description_fr: string;
-  calories: string;
-  jewelColor: string;
-  customizable: boolean;
-}
-
-export interface Combo {
-  id: string;
-  name: string;
-  name_fr: string;
-  desc: string;
-  desc_fr: string;
-  price: number;
-  oldPrice: number;
-  save: string;
-  save_fr: string;
-  image: string;
-}
-
-export interface Review {
-  id: string;
-  name: string;
-  city: string;
-  rating: number;
-  text: string;
-  text_fr: string;
-  product: string;
-}
-
-export interface City {
-  ar: string;
-  fr: string;
-  quartiers: string[];
-  fee: number;
-  time: string;
+  gradient: string;
+  glow: string;
+  nameAr: string;
+  nameFr: string;
+  shortAr: string;
+  shortFr: string;
+  descAr: string;
+  descFr: string;
+  ingredientsAr: string[];
+  ingredientsFr: string[];
+  kcal: number;
+  prepMin: number;
+  tags: string[];
+  sizes: ProductSize[];
+  extras: ProductExtra[];
 }
 
 export interface CartItem {
-  key: string;
   productId: string;
-  name: string;
-  name_fr: string;
-  image: string;
-  size: string;
-  size_fr: string;
-  extras: string[];
-  unitPrice: number;
+  sizeId: string;
+  extrasIds: string[];
   qty: number;
+  note?: string;
+  key: string;
 }
 
-export interface AppUser {
-  name: string;
-  phone: string;
-  email: string;
-  city: string;
-  quartier: string;
-  address: string;
-  points: number;
-  password?: string;
+export interface OrderItem extends CartItem {
+  nameAr: string;
+  nameFr: string;
+  unitPrice: number;
+  image: string;
 }
+
+export type OrderStatus = 'pending' | 'preparing' | 'onway' | 'delivered' | 'cancelled';
 
 export interface Order {
   id: string;
+  code: string;
   date: string;
-  items: string[];
+  items: OrderItem[];
+  subtotal: number;
+  delivery: number;
+  discount: number;
   total: number;
-  status: string;
-  status_fr: string;
-  earnedPoints: number;
+  status: OrderStatus;
+  name: string;
+  phone: string;
+  city: string;
+  address: string;
+  payment: 'cod' | 'card' | 'mobile';
+  notes?: string;
+  pointsEarned: number;
 }
 
-export interface ExtraOption {
-  id: string;
-  ar: string;
-  fr: string;
-  price: number;
-}
-
-export interface SizeOption {
-  id: string;
-  ar: string;
-  fr: string;
-  delta: number;
+export interface User {
+  name: string;
+  phone: string;
+  email?: string;
+  city: string;
+  points: number;
 }

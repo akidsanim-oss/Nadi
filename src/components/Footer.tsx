@@ -1,66 +1,54 @@
 import { Link } from 'react-router-dom';
-import { Clock, Facebook, Gem, Heart, Instagram, MapPin, Music2, Phone, Youtube } from 'lucide-react';
-import { CITIES } from '../lib/data';
-import { useStore } from '../lib/store';
+import { Clock, Gem, Instagram, Facebook, MapPin, Phone, Truck } from 'lucide-react';
+import { useLang } from '../lib/i18n';
+import { Logo } from './Navbar';
 
 export default function Footer() {
-  const { tr, isAr } = useStore();
+  const { t } = useLang();
   return (
-    <footer className="relative mt-20 border-t border-[#ffd000]/20 bg-[#0d0118]/90">
-      <div className="absolute -top-px inset-x-0 h-px bg-gradient-to-l from-transparent via-[#ff2a85] to-transparent" />
-      <div className="max-w-7xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-4">
+    <footer className="mt-20 border-t border-[#e8b84a]/15 bg-[#0c0218] relative overflow-hidden">
+      <div className="absolute inset-0 pattern-zellige opacity-60 pointer-events-none" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2.5 mb-4">
-            <span className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#ff2a85] via-[#6b1182] to-[#ffd000] p-[2px]">
-              <span className="w-full h-full rounded-2xl bg-[#18022b] flex items-center justify-center"><Gem size={18} className="text-[#ffd000]" /></span>
-            </span>
-            <span><span className="block font-display font-black text-xl gem-text">جوهرة</span><span className="block text-[9px] tracking-[.3em] text-[#ffd000]/80 font-bold">JAWHARA</span></span>
-          </div>
-          <p className="text-xs leading-6 text-white/60">{tr('footer_tagline')}</p>
-          <div className="flex items-center gap-2 mt-4">
-            {[
-              { icon: Instagram, label: 'Instagram' },
-              { icon: Music2, label: 'TikTok' },
-              { icon: Facebook, label: 'Facebook' },
-              { icon: Youtube, label: 'YouTube' },
-            ].map((s) => (
-              <a key={s.label} href="#" onClick={(e) => e.preventDefault()} aria-label={s.label} className="w-9 h-9 rounded-full glass-soft flex items-center justify-center text-white/70 hover:text-[#ffd000] hover:border-[#ffd000]/50 hover:scale-110 transition">
-                <s.icon size={16} />
+          <Logo />
+          <p className="mt-4 text-sm leading-7 text-white/60">{t('ft.desc')}</p>
+          <div className="flex gap-2 mt-5">
+            {[Instagram, Facebook, Gem].map((I, i) => (
+              <a key={i} href="#" onClick={e => e.preventDefault()} className="w-10 h-10 grid place-items-center rounded-full chip hover:border-[#e8b84a]/60 hover:text-[#f5d67b] transition">
+                <I className="w-4.5 h-4.5 w-5 h-5" />
               </a>
             ))}
           </div>
         </div>
         <div>
-          <h4 className="font-display font-black text-sm text-[#ffd000] mb-4">{tr('footer_links')}</h4>
-          <ul className="space-y-2.5 text-sm text-white/65 font-bold">
-            <li><Link className="hover:text-[#ffd000] transition" to="/menu">{tr('nav_menu')}</Link></li>
-            <li><Link className="hover:text-[#ffd000] transition" to="/panier">{tr('cart')}</Link></li>
-            <li><Link className="hover:text-[#ffd000] transition" to="/mon-compte">{tr('nav_account')}</Link></li>
-            <li><Link className="hover:text-[#ffd000] transition" to="/a-propos">{tr('nav_about')}</Link></li>
-            <li><Link className="hover:text-[#ffd000] transition" to="/contact">{tr('nav_contact')}</Link></li>
+          <h4 className="font-black text-[#f5d67b] mb-4">{t('ft.links')}</h4>
+          <ul className="space-y-2.5 text-sm text-white/65">
+            <li><Link to="/menu" className="hover:text-[#f5d67b]">{t('nav.menu')}</Link></li>
+            <li><Link to="/loyalty" className="hover:text-[#f5d67b]">{t('nav.loyalty')}</Link></li>
+            <li><Link to="/stores" className="hover:text-[#f5d67b]">{t('nav.stores')}</Link></li>
+            <li><Link to="/orders" className="hover:text-[#f5d67b]">{t('nav.orders')}</Link></li>
+            <li><Link to="/favorites" className="hover:text-[#f5d67b]">{t('nav.fav')}</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="font-display font-black text-sm text-[#ffd000] mb-4">{tr('footer_cities')}</h4>
-          <ul className="space-y-2.5 text-sm text-white/65 font-bold">
-            {CITIES.map((c) => (
-              <li key={c.fr} className="flex items-center gap-2"><MapPin size={13} className="text-[#ff2a85]" />{isAr ? c.ar : c.fr}<span className="text-[10px] text-white/40">· {c.time}</span></li>
-            ))}
+          <h4 className="font-black text-[#f5d67b] mb-4">{t('ft.contact')}</h4>
+          <ul className="space-y-3 text-sm text-white/65">
+            <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#ff7ab8]" /> Maârif, Casablanca — Maroc</li>
+            <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#ff7ab8]" /> <span dir="ltr">+212 6 61 00 00 00</span></li>
+            <li className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#ff7ab8]" /> 10:00 — 23:00</li>
+            <li className="flex items-center gap-2"><Truck className="w-4 h-4 text-[#ff7ab8]" /> 30 min</li>
           </ul>
         </div>
-        <div>
-          <h4 className="font-display font-black text-sm text-[#ffd000] mb-4">{tr('footer_contact')}</h4>
-          <ul className="space-y-3 text-sm text-white/65 font-bold">
-            <li className="flex items-start gap-2"><MapPin size={15} className="text-[#ff2a85] mt-0.5 shrink-0" />{tr('ct_addr')}</li>
-            <li className="flex items-center gap-2" dir="ltr"><Phone size={15} className="text-[#ff2a85]" />+212 6 61 23 45 67</li>
-            <li className="flex items-center gap-2"><Clock size={15} className="text-[#ff2a85]" />{tr('footer_hours')}</li>
-          </ul>
+        <div className="glass rounded-3xl p-5">
+          <h4 className="font-black gold-text text-lg">{t('loyal.title')}</h4>
+          <p className="text-xs text-white/60 mt-2 leading-6">{t('loyal.desc')}</p>
+          <Link to="/loyalty" className="btn-gold mt-4 inline-flex h-10 px-5 items-center rounded-full text-sm font-black">{t('loyal.cta')}</Link>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-white/45 font-bold">
-          <span>© 2026 Jawhara — {tr('footer_rights')}</span>
-          <span className="flex items-center gap-1">{tr('made_in')} <Heart size={11} className="text-[#ff2a85] fill-[#ff2a85]" /> {isAr ? 'بالمغرب' : 'au Maroc'}</span>
+      <div className="relative border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[12px] text-white/40">
+          <span>{t('ft.rights')}</span>
+          <span className="text-center">{t('ft.stack')}</span>
         </div>
       </div>
     </footer>

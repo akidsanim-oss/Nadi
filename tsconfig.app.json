@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "allowJs": true,
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "moduleDetection": "force",
     "noEmit": true,

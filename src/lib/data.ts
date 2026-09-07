@@ -1,37 +1,184 @@
-import type { City, Combo, ExtraOption, Order, Product, Review, SizeOption, AppUser } from './types';
-import productsFile from '../mock/products.json';
-import contentFile from '../mock/content.json';
-import usersFile from '../mock/users.json';
-import ordersFile from '../mock/orders.json';
+import type { Product } from './types';
 
-interface ProductsDoc { products: Product[]; combos: Combo[] }
-interface ContentDoc { cities: City[]; extras: ExtraOption[]; reviews: Review[]; sizes: SizeOption[] }
-interface UsersDoc { users: AppUser[] }
-interface OrdersDoc { orders: Order[] }
+export const SIZES = [
+  { id: 'classic', labelAr: 'كلاسيك 350مل', labelFr: 'Classique 350ml', delta: 0 },
+  { id: 'royal', labelAr: 'ملكي 500مل', labelFr: 'Royal 500ml', delta: 8 },
+  { id: 'imperial', labelAr: 'إمبراطوري 700مل', labelFr: 'Impérial 700ml', delta: 15 },
+];
 
-export const PRODUCTS = (productsFile as unknown as ProductsDoc).products;
-export const COMBOS = (productsFile as unknown as ProductsDoc).combos;
-export const CITIES = (contentFile as unknown as ContentDoc).cities;
-export const EXTRAS = (contentFile as unknown as ContentDoc).extras;
-export const REVIEWS = (contentFile as unknown as ContentDoc).reviews;
-export const SIZES = (contentFile as unknown as ContentDoc).sizes;
-export const SEED_USERS = (usersFile as unknown as UsersDoc).users;
-export const SEED_ORDERS = (ordersFile as unknown as OrdersDoc).orders;
+export const EXTRAS = [
+  { id: 'chantilly', labelAr: 'شانتيي إضافية', labelFr: 'Chantilly extra', price: 5 },
+  { id: 'miel', labelAr: 'عسل حر', labelFr: 'Miel pur', price: 7 },
+  { id: 'amandes', labelAr: 'لوز محمّر', labelFr: 'Amandes grillées', price: 8 },
+  { id: 'choco', labelAr: 'صلصة الشوكولاتة', labelFr: 'Sauce chocolat', price: 6 },
+  { id: 'dattes', labelAr: 'تمر مجهول', labelFr: 'Dattes Medjool', price: 9 },
+  { id: 'protein', labelAr: 'بروتين طبيعي', labelFr: 'Protéine naturelle', price: 12 },
+];
 
-export const FREE_DELIVERY_THRESHOLD = 150;
+export const PRODUCTS: Product[] = [
+  {
+    id: 'p1', slug: 'fraise-royale', category: 'milkshake', price: 39, oldPrice: 48,
+    rating: 4.9, reviewsCount: 412, badgeAr: 'الأكثر مبيعاً', badgeFr: 'Best-seller',
+    image: '/images/shake-strawberry.jpg',
+    gradient: 'from-pink-500 via-rose-400 to-amber-200', glow: 'rgba(255,77,141,.45)',
+    nameAr: 'جوهرة الفراولة الملكية', nameFr: 'Jawhara Fraise Royale',
+    shortAr: 'فراولة طازجة + حليب المزرعة + كريمة مخفوقة', shortFr: 'Fraises fraîches + lait fermier + crème fouettée',
+    descAr: 'تاج تشكيلتنا: فراولة سوس الطازجة تُقطف كل صباح، تُمزج مع حليب طازج وآيس كريم الفانيليا، وتُتوَّج ب Chantilly حريرية ورذاذ ذهبي. كل رشفة كأنها قضمة من جوهرة.',
+    descFr: 'Notre couronne : des fraises du Souss cueillies chaque matin, mixées au lait frais et à la glace vanille, coiffées d’une chantilly soyeuse et d’un voile doré. Chaque gorgée croque comme un joyau.',
+    ingredientsAr: ['فراولة سوس', 'حليب طازج', 'آيس كريم فانيليا', 'شانتيي', 'عسل حر'], 
+    ingredientsFr: ['Fraises du Souss', 'Lait frais', 'Glace vanille', 'Chantilly', 'Miel pur'],
+    kcal: 380, prepMin: 7, tags: ['frais', 'fruité', 'kids'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p2', slug: 'chocolat-belge', category: 'milkshake', price: 42,
+    rating: 4.8, reviewsCount: 356, badgeAr: 'وصفة الشاف', badgeFr: 'Recette du chef',
+    image: '/images/shake-choco.jpg',
+    gradient: 'from-amber-700 via-yellow-900 to-purple-950', glow: 'rgba(232,184,74,.4)',
+    nameAr: 'الشوكولاتة البلجيكية الفاخرة', nameFr: 'Chocolat Belge Prestige',
+    shortAr: 'شوكولاتة بلجيكية 70% + حليب + لمسة ملح الأطلس', shortFr: 'Chocolat belge 70% + lait + fleur de sel de l’Atlas',
+    descAr: 'شوكولاتة بلجيكية داكنة تُذوَّب على نار هادئة مع حليب كامل الدسم ورشة ملح أطلسي تُبرز العمق. غني، مخملي، ولا يُقاوَم.',
+    descFr: 'Chocolat belge noir fondu à feu doux dans du lait entier, relevé d’une pointe de sel de l’Atlas. Riche, velouté, irrésistible.',
+    ingredientsAr: ['شوكولاتة 70%', 'حليب كامل', 'كاكاو خام', 'كريمة', 'ملح الأطلس'],
+    ingredientsFr: ['Chocolat 70%', 'Lait entier', 'Cacao brut', 'Crème', 'Sel de l’Atlas'],
+    kcal: 520, prepMin: 8, tags: ['gourmand', 'chocolat'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p3', slug: 'mangue-atlas', category: 'jus', price: 34,
+    rating: 4.9, reviewsCount: 289,
+    image: '/images/shake-mango.jpg',
+    gradient: 'from-amber-400 via-orange-400 to-yellow-200', glow: 'rgba(245,180,60,.5)',
+    nameAr: 'مانجو ذهب الأطلس', nameFr: 'Mangue Or de l’Atlas',
+    shortAr: 'مانجو ناضجة + عصير برتقال + لمسة زنجبيل', shortFr: 'Mangue mûre + jus d’orange + pointe de gingembre',
+    descAr: 'مانجو ناضجة على الشجرة تُعصر طازجة مع برتقال بوعزة ولمسة زنجبيل منعشة. لون الذهب الخالص وطعم الصيف المغربي.',
+    descFr: 'Mangue mûre pressée à froid avec orange Bouazza et une pointe de gingembre. La couleur de l’or pur, le goût de l’été marocain.',
+    ingredientsAr: ['مانجو', 'برتقال', 'زنجبيل طازج', 'نعناع', 'ثلج مجروش'],
+    ingredientsFr: ['Mangue', 'Orange', 'Gingembre frais', 'Menthe', 'Glace pilée'],
+    kcal: 210, prepMin: 5, tags: ['frais', 'vitamine', 'été'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p4', slug: 'avocat-amande', category: 'healthy', price: 45, oldPrice: 52,
+    rating: 4.7, reviewsCount: 198, badgeAr: 'صحي وبروتين', badgeFr: 'Santé & protéiné',
+    image: '/images/shake-avocado.jpg',
+    gradient: 'from-emerald-500 via-lime-400 to-amber-200', glow: 'rgba(80,220,140,.4)',
+    nameAr: 'أفوكادو اللوز الطاقي', nameFr: 'Avocat-Amande Énergie',
+    shortAr: 'أفوكادو + لوز + حليب + عسل حر', shortFr: 'Avocat + amandes + lait + miel pur',
+    descAr: 'الوصفة المفضلة للرياضيين: أفوكادو كريمي، لوز سوس المحمّر، حليب طازج وعسل حر. طاقة تدوم وشبع حقيقي بدون سكر مضاف.',
+    descFr: 'La préférée des sportifs : avocat crémeux, amandes du Souss grillées, lait frais et miel pur. Énergie durable, sans sucre ajouté.',
+    ingredientsAr: ['أفوكادو', 'لوز', 'حليب', 'عسل حر', 'قرفة'],
+    ingredientsFr: ['Avocat', 'Amandes', 'Lait', 'Miel pur', 'Cannelle'],
+    kcal: 340, prepMin: 6, tags: ['healthy', 'sport', 'sans-sucre'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p5', slug: 'oreo-cristal', category: 'milkshake', price: 44,
+    rating: 4.8, reviewsCount: 501, badgeAr: 'عشق الشباب', badgeFr: 'Favori des jeunes',
+    image: '/images/shake-oreo.jpg',
+    gradient: 'from-slate-700 via-purple-800 to-fuchsia-500', glow: 'rgba(180,140,255,.45)',
+    nameAr: 'أوريو الكريستال', nameFr: 'Oreo Cristal',
+    shortAr: 'بسكويت + فانيليا + كريمة + فتات مقرمش', shortFr: 'Biscuit + vanille + crème + éclats croustillants',
+    descAr: 'انفجار القرمشة: بسكويت مطحون طازجاً مع آيس كريم الفانيليا وحليب بارد، يُتوَّج ببرج كريمة وفتات ذهبي مقرمش.',
+    descFr: 'Explosion croustillante : biscuits broyés minute, glace vanille et lait glacé, couronnés d’une tour de crème et d’éclats dorés.',
+    ingredientsAr: ['بسكويت', 'فانيليا', 'حليب', 'كريمة', 'صلصة كراميل'],
+    ingredientsFr: ['Biscuits', 'Vanille', 'Lait', 'Crème', 'Sauce caramel'],
+    kcal: 560, prepMin: 7, tags: ['gourmand', 'kids', 'croustillant'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p6', slug: 'myrtille-violette', category: 'signature', price: 49,
+    rating: 5.0, reviewsCount: 167, badgeAr: 'توقيع جوهرة', badgeFr: 'Signature Jawhara',
+    image: '/images/shake-blueberry.jpg',
+    gradient: 'from-violet-600 via-fuchsia-500 to-pink-400', glow: 'rgba(150,90,255,.55)',
+    nameAr: 'التوت البنفسجي الملكي', nameFr: 'Myrtille Violette Royale',
+    shortAr: 'توت بري + توت أزرق + زبادي يوناني + عسل', shortFr: 'Mûres + myrtilles + yaourt grec + miel',
+    descAr: 'تحفة اللون البنفسجي: توت بري وتوت أزرق مع زبادي يوناني كريمي وعسل حر. مضادات أكسدة وفخامة في كأس واحدة — توقيع الدار.',
+    descFr: 'Chef-d’œuvre violet : mûres et myrtilles, yaourt grec crémeux et miel pur. Antioxydants et luxe dans un seul verre — la signature de la maison.',
+    ingredientsAr: ['توت أزرق', 'توت بري', 'زبادي يوناني', 'عسل', 'ليمون'],
+    ingredientsFr: ['Myrtilles', 'Mûres', 'Yaourt grec', 'Miel', 'Citron'],
+    kcal: 290, prepMin: 8, tags: ['signature', 'healthy', 'antioxydant'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p7', slug: 'pistache-royale', category: 'signature', price: 55, oldPrice: 62,
+    rating: 4.9, reviewsCount: 143, badgeAr: 'إصدار محدود', badgeFr: 'Édition limitée',
+    image: '/images/shake-pistachio.jpg',
+    gradient: 'from-lime-600 via-emerald-500 to-amber-300', glow: 'rgba(200,230,120,.45)',
+    nameAr: 'فستق حلب الفاخر', nameFr: 'Pistache d’Alep Prestige',
+    shortAr: 'فستق حلبي + حليب + ماء زهر + ذهب صالح للأكل', shortFr: 'Pistache + lait + fleur d’oranger + or comestible',
+    descAr: 'أرقى كأس في المغرب: معجون الفستق الحلبي الفاخر مع حليب طازج ونقطة ماء زهر، يُزيَّن برقائق ذهبية صالحة للأكل. تجربة تُقدَّم مرة في العمر.',
+    descFr: 'Le verre le plus noble du Maroc : pâte de pistache premium, lait frais, goutte de fleur d’oranger, paré de feuilles d’or comestible.',
+    ingredientsAr: ['فستق حلبي', 'حليب', 'ماء زهر', 'عسل', 'ذهب صالح للأكل'],
+    ingredientsFr: ['Pistache', 'Lait', 'Fleur d’oranger', 'Miel', 'Or comestible'],
+    kcal: 480, prepMin: 10, tags: ['signature', 'luxe', 'édition-limitée'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p8', slug: 'orange-souss', category: 'jus', price: 25,
+    rating: 4.8, reviewsCount: 620,
+    image: '/images/shake-orange.jpg',
+    gradient: 'from-orange-500 via-amber-400 to-yellow-300', glow: 'rgba(255,150,40,.5)',
+    nameAr: 'عصير البرتقال السوسي', nameFr: 'Jus d’Orange du Souss',
+    shortAr: 'برتقال يُعصر عند الطلب + بدون سكر', shortFr: 'Oranges pressées minute + sans sucre',
+    descAr: 'كلاسيك السوق المغربي بروح جوهرة: برتقال سوسي يُعصر أمامك مباشرة، بدون ماء وبدون سكر. فيتامين C نقي 100%.',
+    descFr: 'Le classique du souk, esprit Jawhara : oranges du Souss pressées devant vous, sans eau ni sucre. Vitamine C 100% pure.',
+    ingredientsAr: ['برتقال سوسي'], ingredientsFr: ['Oranges du Souss'],
+    kcal: 150, prepMin: 3, tags: ['frais', 'vitamine', 'classique'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p9', slug: 'panache-jawhara', category: 'signature', price: 48,
+    rating: 4.9, reviewsCount: 234, badgeAr: 'الأجمل تصويراً', badgeFr: 'Le plus photogénique',
+    image: '/images/hero-shakes.png',
+    gradient: 'from-fuchsia-500 via-purple-500 to-amber-300', glow: 'rgba(255,100,180,.5)',
+    nameAr: 'باناشي جوهرة بثلاث طبقات', nameFr: 'Panaché Jawhara Triple',
+    shortAr: 'فراولة + مانجو + أفوكادو في كأس واحدة', shortFr: 'Fraise + mangue + avocat en un seul verre',
+    descAr: 'ثلاث طبقات بألوان الجواهر: فراولة وردية، مانجو ذهبية، وأفوكادو زمردي. يُحضَّر بمهارة أمامك ويُقدَّم مع ماصتين للمشاركة.',
+    descFr: 'Trois couches couleur joyaux : fraise rose, mangue dorée, avocat émeraude. Préparé avec art devant vous, servi avec deux pailles à partager.',
+    ingredientsAr: ['فراولة', 'مانجو', 'أفوكادو', 'حليب', 'عسل'],
+    ingredientsFr: ['Fraise', 'Mangue', 'Avocat', 'Lait', 'Miel'],
+    kcal: 420, prepMin: 9, tags: ['signature', 'partage', 'photogénique'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+  {
+    id: 'p10', slug: 'dattes-cannelle', category: 'healthy', price: 38,
+    rating: 4.7, reviewsCount: 112,
+    image: '/images/shake-choco.jpg',
+    gradient: 'from-amber-600 via-orange-700 to-purple-900', glow: 'rgba(220,140,60,.45)',
+    nameAr: 'تمر مجهول والقرفة', nameFr: 'Dattes Medjool & Cannelle',
+    shortAr: 'تمر + حليب + قرفة + جوز', shortFr: 'Dattes + lait + cannelle + noix',
+    descAr: 'حلاوة طبيعية من تمر مجهول وادي درعة مع قرفة سيلان وحليب دافئ أو بارد. مشروب الأصالة المغربية بروح عصرية.',
+    descFr: 'Douceur naturelle des dattes Medjool du Drâa, cannelle de Ceylan et lait chaud ou glacé. L’authenticité marocaine, esprit moderne.',
+    ingredientsAr: ['تمر مجهول', 'حليب', 'قرفة', 'جوز', 'فانيليا'],
+    ingredientsFr: ['Dattes Medjool', 'Lait', 'Cannelle', 'Noix', 'Vanille'],
+    kcal: 310, prepMin: 6, tags: ['healthy', 'tradition', 'sans-sucre'],
+    sizes: SIZES, extras: EXTRAS,
+  },
+];
 
-export function cityInfo(cityFr: string): City {
-  return CITIES.find((c) => c.fr === cityFr) ?? CITIES[0];
-}
+export const CITIES = [
+  { ar: 'الدار البيضاء', fr: 'Casablanca', fee: 15 },
+  { ar: 'الرباط', fr: 'Rabat', fee: 15 },
+  { ar: 'مراكش', fr: 'Marrakech', fee: 12 },
+  { ar: 'أكادير', fr: 'Agadir', fee: 10 },
+  { ar: 'طنجة', fr: 'Tanger', fee: 18 },
+  { ar: 'فاس', fr: 'Fès', fee: 18 },
+  { ar: 'مكناس', fr: 'Meknès', fee: 18 },
+  { ar: 'وجدة', fr: 'Oujda', fee: 20 },
+  { ar: 'القنيطرة', fr: 'Kénitra', fee: 15 },
+  { ar: 'تطوان', fr: 'Tétouan', fee: 18 },
+];
 
-export function tierFor(points: number): 'rose' | 'gold' | 'ruby' {
-  if (points >= 300) return 'ruby';
-  if (points >= 150) return 'gold';
-  return 'rose';
-}
+export const PROMOS: Record<string, { pct: number; minAr: string; minFr: string }> = {
+  JAWHARA10: { pct: 10, minAr: 'خصم 10% على طلبك الأول', minFr: '−10% sur votre première commande' },
+  ROYAL20: { pct: 20, minAr: 'خصم 20% للطلبات فوق 150 درهم', minFr: '−20% dès 150 DH d’achat' },
+  GOLD15: { pct: 15, minAr: 'خصم 15% لأعضاء النادي الذهبي', minFr: '−15% membres du Club Gold' },
+};
 
-export function nextTierAt(points: number): number | null {
-  if (points >= 300) return null;
-  if (points >= 150) return 300;
-  return 150;
+export function productById(id: string) { return PRODUCTS.find(p => p.id === id); }
+export function priceOf(p: Product, sizeId: string, extrasIds: string[]): number {
+  const s = p.sizes.find(s => s.id === sizeId);
+  const ex = p.extras.filter(e => extrasIds.includes(e.id)).reduce((a, e) => a + e.price, 0);
+  return p.price + (s?.delta ?? 0) + ex;
 }
