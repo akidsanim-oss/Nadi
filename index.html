@@ -2,774 +2,1627 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BACK10 — Shopping Rush 3D | La Boutique Officielle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE — Boutique 3D Premium · Mode & Sneakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{width:100%;height:100%;overflow:hidden;background:#07070d;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#fff}
-  #app{position:fixed;inset:0}
-  canvas{display:block;touch-action:none}
+:root {
+  --noir: #0a0a0f;
+  --noir-soft: #12121a;
+  --noir-card: #1a1a25;
+  --blanc: #ffffff;
+  --gris-fond: #f8f8fa;
+  --gris-clair: #eceaea;
+  --gris-moyen: #888;
+  --gris-texte: #555;
+  --accent: #c49a6c;
+  --accent-hover: #d4ab7d;
+  --accent-soft: rgba(196,154,108,0.15);
+  --promo: #ff2d55;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.25);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --display: 'Playfair Display', serif;
+}
 
-  /* ---------- HUD ---------- */
-  #hud{position:absolute;inset:0;pointer-events:none;padding:10px;display:flex;flex-direction:column;justify-content:space-between}
-  .row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--blanc);
+  color: var(--noir);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; transition: var(--transition); }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; }
+.container { width: min(1280px, 92%); margin: 0 auto; }
 
-  .panel{background:rgba(12,12,20,.72);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);
-         border-radius:14px;padding:10px 13px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
-  #orderPanel{max-width:330px}
-  #orderPanel h3{font-size:11px;letter-spacing:2px;color:#ff4d5e;text-transform:uppercase;margin-bottom:6px}
-  .step{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 0;color:#8b8ba3;transition:.2s}
-  .step b{color:#fff}
-  .step.active{color:#fff}
-  .step.active .num{background:#ff2e43;box-shadow:0 0 14px #ff2e43}
-  .step.done{color:#39d98a;text-decoration:none}
-  .step.done .num{background:#1f8f5c}
-  .num{width:20px;height:20px;border-radius:50%;background:#2a2a3d;display:flex;align-items:center;justify-content:center;
-       font-size:11px;font-weight:700;flex:0 0 auto}
-  .tag{display:inline-block;background:#ff2e43;color:#fff;font-weight:800;font-size:12px;padding:1px 7px;border-radius:5px;margin-left:2px}
-  .tagw{display:inline-block;background:#fff;color:#111;font-weight:800;font-size:12px;padding:1px 7px;border-radius:5px}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--gris-fond); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
 
-  #stats{text-align:right;min-width:190px}
-  #score{font-size:26px;font-weight:900;letter-spacing:1px;line-height:1}
-  #score small{font-size:11px;color:#9a9ab5;font-weight:600;letter-spacing:2px;display:block}
-  #combo{font-size:12px;color:#ffcc4d;font-weight:800;height:15px}
-  #barWrap{margin-top:7px;width:100%;height:8px;background:#26263a;border-radius:6px;overflow:hidden}
-  #bar{height:100%;width:100%;background:linear-gradient(90deg,#39d98a,#ffcc4d,#ff2e43);transition:width .15s linear}
-  #timeTxt{font-size:11px;color:#9a9ab5;margin-top:3px;letter-spacing:1px}
+/* ============ PRELOADER ============ */
+.preloader {
+  position: fixed; inset: 0;
+  background: var(--noir);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 1.5rem;
+  z-index: 9999;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.preloader.hidden { opacity: 0; visibility: hidden; }
+.preloader-logo {
+  font-size: 2.6rem; font-weight: 900;
+  color: var(--blanc); letter-spacing: -1px;
+  font-family: var(--display);
+}
+.preloader-logo span { color: var(--accent); font-style: italic; }
+.preloader-bar {
+  width: 200px; height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px; overflow: hidden;
+}
+.preloader-bar::after {
+  content: ''; display: block;
+  width: 30%; height: 100%;
+  background: var(--accent);
+  border-radius: 20px;
+  animation: load 1.4s ease-in-out infinite;
+}
+@keyframes load {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
 
-  #hint{align-self:center;font-size:12px;color:#b9b9d0;background:rgba(12,12,20,.6);padding:6px 14px;border-radius:20px;
-        border:1px solid rgba(255,255,255,.1)}
-  #toast{position:absolute;left:50%;top:22%;transform:translate(-50%,-50%) scale(.8);opacity:0;
-         font-size:22px;font-weight:900;letter-spacing:1px;text-shadow:0 4px 20px rgba(0,0,0,.8);pointer-events:none;transition:.18s}
-  #toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+/* ============ PROMO BAR ============ */
+.promo-bar {
+  background: linear-gradient(135deg, var(--noir) 0%, #1a1a25 100%);
+  color: var(--blanc); text-align: center;
+  padding: 0.7rem 1rem;
+  font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.3px; position: relative; overflow: hidden;
+}
+.promo-bar::after {
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; }
+}
+.promo-bar strong {
+  color: var(--accent); font-weight: 700;
+  background: var(--accent-soft);
+  padding: 0.15rem 0.55rem; border-radius: 20px; margin: 0 0.3rem;
+}
 
-  /* ---------- Screens ---------- */
-  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-          background:radial-gradient(circle at 50% 40%,rgba(30,12,40,.86),rgba(5,5,10,.96));
-          text-align:center;padding:20px;z-index:20}
-  .screen.hidden{display:none}
-  .promo{background:linear-gradient(90deg,#ff2e43,#ff6a00);padding:10px 22px;border-radius:12px;font-weight:900;
-         font-size:clamp(15px,4.4vw,26px);letter-spacing:1px;box-shadow:0 10px 40px rgba(255,46,67,.45);animation:pulse 1.6s infinite}
-  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
-  h1{font-size:clamp(26px,7vw,54px);font-weight:900;letter-spacing:-1px;margin:14px 0 4px;
-     background:linear-gradient(90deg,#fff,#ffb3bb,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{color:#a9a9c6;font-size:clamp(12px,2.9vw,15px);max-width:560px;line-height:1.6;margin-bottom:16px}
-  .cats{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:620px;margin-bottom:16px}
-  .cats span{font-size:10.5px;letter-spacing:1.4px;font-weight:800;border:1px solid rgba(255,255,255,.22);
-             padding:5px 10px;border-radius:20px;color:#dcdcf0}
-  .flags{display:flex;gap:8px;justify-content:center;margin-bottom:18px;font-size:20px}
-  button{pointer-events:auto;cursor:pointer;border:none;border-radius:40px;padding:15px 42px;font-size:17px;font-weight:900;
-         letter-spacing:1.5px;color:#fff;background:linear-gradient(90deg,#ff2e43,#ff6a00);
-         box-shadow:0 12px 34px rgba(255,46,67,.5);transition:.15s}
-  button:hover{transform:translateY(-2px) scale(1.03)}
-  button:active{transform:scale(.97)}
-  .fine{margin-top:14px;color:#6f6f8c;font-size:11px;letter-spacing:1px}
-  #finalStats{display:flex;gap:26px;margin:10px 0 18px}
-  #finalStats div{font-size:11px;color:#8f8fae;letter-spacing:1.5px}
-  #finalStats b{display:block;font-size:28px;color:#fff;letter-spacing:0}
-  @media(max-width:520px){#orderPanel{max-width:57vw;font-size:11px}.step{font-size:11.5px}#score{font-size:20px}#hint{font-size:10px}}
+/* ============ HEADER ============ */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: var(--transition);
+}
+.header.scrolled { box-shadow: var(--shadow-sm); }
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 0; gap: 2rem;
+}
+.logo {
+  font-size: 1.5rem; font-weight: 900;
+  letter-spacing: -1px; white-space: nowrap;
+  font-family: var(--display);
+}
+.logo span { color: var(--accent); font-style: italic; }
+.nav { display: flex; gap: 1.8rem; font-weight: 500; font-size: 0.9rem; align-items: center; }
+.nav a { position: relative; padding: 0.25rem 0; }
+.nav a::after {
+  content: ''; position: absolute; bottom: -2px; left: 0;
+  width: 0; height: 2px; background: var(--accent);
+  transition: var(--transition);
+}
+.nav a:hover::after, .nav a.active::after { width: 100%; }
+.nav a:hover { color: var(--accent); }
+.header-actions { display: flex; gap: 0.7rem; align-items: center; }
+.icon-btn {
+  position: relative; width: 42px; height: 42px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: var(--gris-fond); transition: var(--transition);
+  font-size: 1.05rem; cursor: pointer; border: none;
+  color: var(--noir);
+}
+.icon-btn:hover { background: var(--noir); color: var(--blanc); transform: translateY(-2px); }
+.icon-btn .badge {
+  position: absolute; top: -4px; right: -4px;
+  background: var(--accent); color: var(--noir);
+  font-size: 0.65rem; font-weight: 700;
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn {
+  background: var(--noir); color: var(--blanc);
+  padding: 0.75rem 1.5rem; border-radius: 50px;
+  font-weight: 600; font-size: 0.85rem;
+  transition: var(--transition);
+  border: 2px solid var(--noir);
+  cursor: pointer; display: inline-flex;
+  align-items: center; gap: 0.5rem; white-space: nowrap;
+}
+.btn:hover { background: transparent; color: var(--noir); transform: translateY(-2px); }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: var(--noir); }
+.btn-accent:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--noir); }
+.btn-outline-light { background: transparent; border-color: rgba(255,255,255,0.35); color: var(--blanc); }
+.btn-outline-light:hover { background: var(--blanc); color: var(--noir); border-color: var(--blanc); }
+
+/* ============ HERO ============ */
+.hero {
+  position: relative;
+  background: var(--noir);
+  color: var(--blanc);
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex; align-items: center;
+}
+#hero-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  touch-action: pan-y;
+}
+.hero-vignette {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 50%, rgba(196,154,108,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 80%, rgba(255,45,85,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at center, transparent 30%, rgba(10,10,15,0.6) 90%);
+  pointer-events: none;
+  z-index: 2;
+}
+.hero-content {
+  position: relative; z-index: 3;
+  padding: 4rem 0; max-width: 620px;
+  pointer-events: none;
+}
+.hero-content > * { pointer-events: auto; }
+.hero-tag {
+  display: inline-block;
+  background: var(--accent-soft); color: var(--accent);
+  padding: 0.45rem 1.1rem; border-radius: 50px;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(196,154,108,0.3);
+  backdrop-filter: blur(10px);
+}
+.hero h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 900; letter-spacing: -2px;
+  line-height: 1; margin-bottom: 1.2rem;
+  font-family: var(--display);
+}
+.hero h1 em {
+  background: linear-gradient(135deg, var(--accent), #e8c9a0);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+}
+.hero p {
+  font-size: 1.1rem; color: rgba(255,255,255,0.65);
+  margin-bottom: 2rem; font-weight: 300; max-width: 480px;
+}
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-interact-hint {
+  position: absolute; right: 2rem; top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+  pointer-events: none;
+  writing-mode: vertical-rl;
+}
+.hero-interact-hint .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.6); }
+}
+.hero-stats {
+  position: absolute; bottom: 2.5rem; left: 0; right: 0;
+  z-index: 3; pointer-events: none;
+}
+.hero-stats-inner {
+  display: flex; gap: 3rem; justify-content: flex-end;
+}
+.hero-stat { text-align: left; }
+.hero-stat-num {
+  font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 900;
+  color: var(--blanc);
+  font-family: var(--display);
+  line-height: 1;
+}
+.hero-stat-num span { color: var(--accent); font-style: italic; }
+.hero-stat-label {
+  font-size: 0.7rem; color: rgba(255,255,255,0.5);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-top: 0.3rem;
+}
+.scroll-hint {
+  position: absolute; bottom: 1.5rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3; color: rgba(255,255,255,0.45);
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 2.5px;
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+  pointer-events: none;
+}
+.scroll-hint .line {
+  width: 1px; height: 35px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollDown 2s ease-in-out infinite;
+}
+@keyframes scrollDown {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ============ SECTIONS ============ */
+.section { padding: 6rem 0; }
+.section-dark { background: var(--noir); color: var(--blanc); }
+.section-header {
+  text-align: center; max-width: 720px;
+  margin: 0 auto 4rem;
+}
+.section-eyebrow {
+  display: inline-block; color: var(--accent);
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.section h2 {
+  font-size: clamp(2rem, 4.5vw, 3.3rem);
+  font-weight: 900; letter-spacing: -1.5px;
+  line-height: 1.1; margin-bottom: 1rem;
+  font-family: var(--display);
+}
+.section h2 em { color: var(--accent); font-style: italic; }
+.section-dark h2 { color: var(--blanc); }
+.section p.lead {
+  color: var(--gris-texte); font-size: 1.05rem;
+  font-weight: 300;
+}
+.section-dark p.lead { color: rgba(255,255,255,0.6); }
+
+/* ============ CATEGORY PILLS ============ */
+.category-pills {
+  display: flex; gap: 0.6rem; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 3rem;
+}
+.pill {
+  padding: 0.6rem 1.3rem; border-radius: 50px;
+  font-size: 0.85rem; font-weight: 500;
+  background: var(--gris-fond); color: var(--gris-texte);
+  cursor: pointer; transition: var(--transition);
+  border: 1px solid transparent;
+}
+.pill:hover { color: var(--noir); border-color: var(--accent); }
+.pill.active {
+  background: var(--noir); color: var(--blanc);
+  border-color: var(--noir);
+}
+
+/* ============ PRODUCT GRID ============ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 2rem;
+}
+.product-card {
+  background: var(--blanc); border-radius: var(--radius-lg);
+  overflow: hidden; transition: var(--transition);
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(196,154,108,0.3);
+}
+.product-img {
+  position: relative; aspect-ratio: 1;
+  background: var(--gris-fond); overflow: hidden;
+}
+.product-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.product-card:hover .product-img img { transform: scale(1.08); }
+.product-tag {
+  position: absolute; top: 1rem; left: 1rem;
+  background: var(--noir); color: var(--blanc);
+  font-size: 0.68rem; font-weight: 600;
+  padding: 0.3rem 0.75rem; border-radius: 50px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  z-index: 2;
+}
+.product-tag.promo { background: var(--promo); }
+.product-tag.new { background: var(--accent); color: var(--noir); }
+.product-fav {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition);
+  border: none; font-size: 1rem; color: var(--noir);
+  z-index: 2;
+}
+.product-fav:hover { background: var(--noir); color: var(--blanc); transform: scale(1.1); }
+.product-fav.active { background: var(--promo); color: var(--blanc); }
+.product-info { padding: 1.3rem 1.2rem 1.5rem; }
+.product-cat {
+  font-size: 0.68rem; color: var(--gris-moyen);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin-bottom: 0.4rem;
+}
+.product-name {
+  font-size: 1rem; font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+.product-price { display: flex; align-items: baseline; gap: 0.5rem; }
+.product-price .current {
+  font-size: 1.2rem; font-weight: 700; color: var(--noir);
+}
+.product-price .old {
+  font-size: 0.9rem; color: var(--gris-moyen);
+  text-decoration: line-through;
+}
+.product-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.product-actions .btn {
+  flex: 1; justify-content: center;
+  padding: 0.65rem 1rem; font-size: 0.8rem;
+}
+.quick-view {
+  flex: 0 0 42px; height: 42px;
+  background: var(--gris-fond); border: none;
+  border-radius: 50px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95rem; transition: var(--transition);
+}
+.quick-view:hover { background: var(--noir); color: var(--blanc); }
+
+/* ============ FEATURE BANNER ============ */
+.feature-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--noir); color: var(--blanc);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+.feature-banner-content { padding: 3.5rem 4rem; }
+.feature-banner h3 {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 900; line-height: 1.1;
+  margin-bottom: 1.2rem;
+}
+.feature-banner h3 em { color: var(--accent); font-style: italic; }
+.feature-banner p {
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 2rem; font-weight: 300;
+}
+.feature-list {
+  display: grid; gap: 0.9rem;
+  margin-bottom: 2rem; list-style: none;
+}
+.feature-list li {
+  display: flex; align-items: center; gap: 0.8rem;
+  font-size: 0.95rem;
+}
+.feature-list li::before {
+  content: '✓'; width: 24px; height: 24px;
+  background: var(--accent-soft); color: var(--accent);
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 0.7rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.feature-banner-img {
+  position: relative;
+  min-height: 450px;
+  background: linear-gradient(135deg, rgba(196,154,108,0.15), rgba(255,45,85,0.05));
+  overflow: hidden;
+}
+.feature-banner-img::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(196,154,108,0.25), transparent 60%);
+  pointer-events: none;
+}
+.feature-3d-canvas {
+  position: absolute; inset: 0;
+  width: 100% !important; height: 100% !important;
+  touch-action: pan-y;
+}
+.feature-tag {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: var(--accent); color: var(--noir);
+  padding: 0.4rem 1rem; border-radius: 50px;
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  z-index: 5;
+}
+
+/* ============ STATS STRIP ============ */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem; padding: 4rem 0;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  margin: 4rem 0;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900; color: var(--noir);
+  font-family: var(--display); line-height: 1;
+}
+.stat-num span { color: var(--accent); font-style: italic; }
+.stat-label {
+  font-size: 0.78rem; color: var(--gris-moyen);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-top: 0.6rem;
+}
+
+/* ============ NEWSLETTER ============ */
+.newsletter {
+  background: linear-gradient(135deg, var(--noir) 0%, var(--noir-card) 100%);
+  color: var(--blanc); text-align: center;
+  padding: 6rem 0; position: relative; overflow: hidden;
+}
+.newsletter::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(196,154,108,0.18), transparent 50%);
+  pointer-events: none;
+}
+.newsletter-inner { position: relative; z-index: 2; }
+.newsletter-form {
+  display: flex; gap: 0.6rem; max-width: 480px;
+  margin: 2rem auto 0;
+}
+.newsletter-form input {
+  flex: 1; padding: 1rem 1.5rem;
+  border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05); color: var(--blanc);
+  font-family: var(--font); font-size: 0.95rem;
+  outline: none; transition: var(--transition);
+}
+.newsletter-form input:focus {
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.08);
+}
+.newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* ============ FOOTER ============ */
+.footer {
+  background: var(--noir); color: rgba(255,255,255,0.7);
+  padding: 4rem 0 2rem;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand .logo { color: var(--blanc); display: inline-block; margin-bottom: 1rem; }
+.footer-brand p {
+  color: rgba(255,255,255,0.5);
+  font-weight: 300; margin-bottom: 1.5rem; max-width: 300px;
+}
+.socials { display: flex; gap: 0.6rem; }
+.socials a {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 600;
+}
+.socials a:hover { background: var(--accent); color: var(--noir); }
+.footer-col h4 {
+  color: var(--blanc); font-size: 0.88rem;
+  font-weight: 600; margin-bottom: 1.2rem;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-col a { font-size: 0.9rem; color: rgba(255,255,255,0.5); }
+.footer-col a:hover { color: var(--accent); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 2rem; display: flex;
+  justify-content: space-between; align-items: center;
+  font-size: 0.85rem; color: rgba(255,255,255,0.4);
+  flex-wrap: wrap; gap: 1rem;
+}
+
+/* ============ CART DRAWER ============ */
+.cart-drawer {
+  position: fixed; top: 0; right: -440px;
+  width: 100%; max-width: 400px; height: 100vh;
+  background: var(--blanc); z-index: 200;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-lg);
+}
+.cart-drawer.open { right: 0; }
+.cart-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 199; opacity: 0; visibility: hidden;
+  transition: var(--transition);
+}
+.cart-overlay.open { opacity: 1; visibility: visible; }
+.cart-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.cart-header h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; }
+.cart-close { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--noir); line-height: 1; }
+.cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+.cart-item {
+  display: flex; gap: 1rem; padding: 1rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; }
+.cart-item-info { flex: 1; }
+.cart-item-info h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+.cart-item-info .price { color: var(--accent); font-weight: 700; font-size: 0.95rem; }
+.cart-item-info .remove {
+  font-size: 0.75rem; color: var(--gris-moyen);
+  background: none; border: none; cursor: pointer;
+  margin-top: 0.3rem; padding: 0; text-decoration: underline;
+}
+.cart-qty { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.4rem; }
+.cart-qty button {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1); background: var(--gris-fond);
+  cursor: pointer; font-size: 1rem; line-height: 1;
+}
+.cart-qty button:hover { background: var(--noir); color: var(--blanc); }
+.cart-footer { padding: 1.5rem; border-top: 1px solid rgba(0,0,0,0.06); }
+.cart-total {
+  display: flex; justify-content: space-between;
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;
+}
+.cart-total span:last-child { color: var(--accent); }
+.cart-empty { text-align: center; padding: 3rem 1rem; color: var(--gris-moyen); }
+.cart-empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  background: var(--noir); color: var(--blanc);
+  padding: 1rem 1.8rem; border-radius: 50px;
+  font-size: 0.9rem; font-weight: 500;
+  z-index: 300; transition: transform 0.4s ease;
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: 0.6rem;
+  border: 1px solid var(--accent);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast .icon {
+  color: var(--accent); font-weight: 700;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent-soft); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 0.75rem;
+}
+
+/* ============ REVEAL ANIMATIONS ============ */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ============ RESPONSIVE ============ */
+.menu-toggle { display: none; }
+@media (max-width: 1024px) {
+  .feature-banner { grid-template-columns: 1fr; }
+  .feature-banner-content { padding: 2.5rem; }
+  .feature-banner-img { min-height: 350px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .stats-strip { grid-template-columns: repeat(2, 1fr); }
+  .hero-interact-hint { display: none; }
+}
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .menu-toggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--gris-fond); cursor: pointer; border: none;
+    font-size: 1.1rem;
+  }
+  .hero { min-height: 90vh; }
+  .hero-stats-inner { gap: 1.5rem; justify-content: center; }
+  .hero-stat-num { font-size: 1.4rem; }
+  .hero-content { padding: 2rem 0; max-width: 100%; }
+  .section { padding: 4rem 0; }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .products-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .product-info { padding: 1rem; }
+  .btn { padding: 0.6rem 1.2rem; font-size: 0.8rem; }
+}
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .hero-btns .btn { width: 100%; justify-content: center; }
+  .newsletter-form { flex-direction: column; }
+  .newsletter-form .btn { width: 100%; justify-content: center; }
+}
 </style>
 </head>
 <body>
-<div id="app"></div>
 
-<div id="hud">
-  <div class="row">
-    <div class="panel" id="orderPanel">
-      <h3>Commande en cours</h3>
-      <div class="step" id="s1"><div class="num">1</div><div>Rayon&nbsp;: <b id="oCat">—</b></div></div>
-      <div class="step" id="s2"><div class="num">2</div><div>Marque&nbsp;: <b id="oBrand">—</b></div></div>
-      <div class="step" id="s3"><div class="num">3</div><div>Livraison&nbsp;: <b id="oCountry">—</b></div></div>
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+  <div class="preloader-logo">LUMI<span>È</span>RE</div>
+  <div class="preloader-bar"></div>
+</div>
+
+<!-- Promo bar -->
+<div class="promo-bar">
+  Livraison offerte dès 80€ · <strong>-20%</strong> sur la nouvelle collection avec le code <strong>LUMI20</strong>
+</div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="#" class="logo">LUMI<span>È</span>RE</a>
+    <nav class="nav">
+      <a href="#nouveautes" class="active">Nouveautés</a>
+      <a href="#sneakers">Sneakers</a>
+      <a href="#vetements">Vêtements</a>
+      <a href="#accessoires">Accessoires</a>
+      <a href="#collection">Collection</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Recherche">⌕</button>
+      <button class="icon-btn" aria-label="Favoris">♡<span class="badge">3</span></button>
+      <button class="icon-btn" id="cart-btn" aria-label="Panier">⌖<span class="badge" id="cart-count">0</span></button>
     </div>
-    <div class="panel" id="stats">
-      <div id="score">0<small>PANIER (PTS)</small></div>
-      <div id="combo"></div>
-      <div id="barWrap"><div id="bar"></div></div>
-      <div id="timeTxt">60.0 s</div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-tag">Nouvelle Collection · AW25</span>
+      <h1>L'art de la <em>matière</em>.<br>Élégance en mouvement.</h1>
+      <p>Des pièces pensées pour celles et ceux qui ne transigent jamais avec le détail. Découvrez une expérience d'achat immersive, en trois dimensions.</p>
+      <div class="hero-btns">
+        <a href="#nouveautes" class="btn btn-accent">Explorer la collection →</a>
+        <a href="#collection" class="btn btn-outline-light">Histoire de la maison</a>
+      </div>
     </div>
   </div>
-  <div id="hint">Clique les éléments de la boutique 3D • Glisse pour pivoter</div>
-</div>
-<div id="toast"></div>
-
-<div class="screen" id="startScreen">
-  <div class="promo">-10% sur TOUT dès 79€ &nbsp;•&nbsp; code : BACK10</div>
-  <h1>LA BOUTIQUE OFFICIELLE</h1>
-  <div class="sub">
-    <b>Shopping Rush 3D</b> — Prépare un maximum de commandes avant la fin du chrono.<br>
-    1&nbsp;· clique le bon <b>rayon</b> &nbsp; 2&nbsp;· clique le produit de la bonne <b>marque</b> &nbsp; 3&nbsp;· clique le <b>drapeau</b> de livraison.<br>
-    Attrape les coupons <b style="color:#ff8a3d">BACK10</b> qui flottent pour du temps et des points bonus !
+  <div class="hero-interact-hint">
+    <span>Glissez pour explorer</span>
+    <span class="dot"></span>
   </div>
-  <div class="cats">
-    <span>TOP VENTES</span><span>NOUVEAUTÉS</span><span>SNEAKERS</span><span>ENSEMBLES</span>
-    <span>PANTALONS</span><span>VESTES</span><span>JEANS</span><span>EXCLUSIVITÉS</span>
+  <div class="hero-stats">
+    <div class="container hero-stats-inner">
+      <div class="hero-stat">
+        <div class="hero-stat-num">12<span>K+</span></div>
+        <div class="hero-stat-label">Clients fidèles</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">480<span>+</span></div>
+        <div class="hero-stat-label">Pièces uniques</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">4.<span>9</span></div>
+        <div class="hero-stat-label">Note moyenne</div>
+      </div>
+    </div>
   </div>
-  <div class="flags">🇫🇷 🇧🇪 🇩🇪 🇪🇸 🇮🇹 🇵🇹 🌍</div>
-  <button id="playBtn">JOUER</button>
-  <div class="fine">New Balance · adidas · Lacoste · PUMA — Mon compte · Se connecter / S'inscrire</div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <span class="line"></span>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section" id="nouveautes">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">Sélection du moment</span>
+      <h2>Pièces <em>emblématiques</em></h2>
+      <p class="lead">Une sélection rigoureuse, à la croisée du savoir-faire artisanal et de la culture urbaine contemporaine.</p>
+    </div>
+    <div class="category-pills reveal">
+      <button class="pill active" data-cat="all">Tout</button>
+      <button class="pill" data-cat="sneakers">Sneakers</button>
+      <button class="pill" data-cat="vetements">Vêtements</button>
+      <button class="pill" data-cat="accessoires">Accessoires</button>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+</section>
+
+<!-- Stats strip -->
+<div class="container">
+  <div class="stats-strip">
+    <div class="stat-item reveal">
+      <div class="stat-num">98<span>%</span></div>
+      <div class="stat-label">Satisfaction client</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">24<span>h</span></div>
+      <div class="stat-label">Livraison express</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">30<span>j</span></div>
+      <div class="stat-label">Retour gratuit</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">Paiement sécurisé</div>
+    </div>
+  </div>
 </div>
 
-<div class="screen hidden" id="overScreen">
-  <div class="promo">Commande validée avec le code BACK10 !</div>
-  <h1>PANIER FINAL</h1>
-  <div id="finalStats">
-    <div>SCORE<b id="fScore">0</b></div>
-    <div>COMMANDES<b id="fOrders">0</b></div>
-    <div>MEILLEUR COMBO<b id="fCombo">0</b></div>
+<!-- Feature banner with 3D -->
+<section class="section" id="collection">
+  <div class="container">
+    <div class="feature-banner reveal">
+      <div class="feature-banner-content">
+        <span class="section-eyebrow">Édition limitée</span>
+        <h3>L'objet du <em>moment</em>.<br>Fait main.</h3>
+        <p>Une pièce sculptée dans des matériaux nobles, assemblée à la main dans nos ateliers. Tournez-la, observez-la, vivez-la.</p>
+        <ul class="feature-list">
+          <li>Cuir tanné végétal, finition huilée</li>
+          <li>Montage manuel, 8 heures par pièce</li>
+          <li>Numérotation unique au monde</li>
+          <li>Garantie à vie, réparation offerte</li>
+        </ul>
+        <a href="#" class="btn btn-accent">Découvrir · 480€</a>
+      </div>
+      <div class="feature-banner-img">
+        <span class="feature-tag">3D · Live</span>
+        <canvas class="feature-3d-canvas" id="feature-canvas"></canvas>
+      </div>
+    </div>
   </div>
-  <div class="sub" id="rank">—</div>
-  <button id="againBtn">REJOUER</button>
-  <div class="fine">-10% sur TOUT dès 79€ · code : BACK10</div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="container newsletter-inner">
+    <span class="section-eyebrow">Cercle privé</span>
+    <h2>Rejoignez le cercle LUMIÈRE</h2>
+    <p class="lead">Avant-premières, ventes privées et invitations aux événements. Recevez <strong style="color:var(--accent)">-15%</strong> sur votre première commande.</p>
+    <form class="newsletter-form" id="newsletter-form">
+      <input type="email" placeholder="votre.adresse@email.com" required>
+      <button type="submit" class="btn btn-accent">Je rejoins</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">LUMI<span>È</span>RE</a>
+        <p>Maison française fondée en 2019. Pièces premium, savoir-faire artisanal, fabrication limitée.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Twitter">X</a>
+          <a href="#" aria-label="TikTok">TT</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Boutique</h4>
+        <ul>
+          <li><a href="#">Nouveautés</a></li>
+          <li><a href="#">Sneakers</a></li>
+          <li><a href="#">Vêtements</a></li>
+          <li><a href="#">Accessoires</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Aide</h4>
+        <ul>
+          <li><a href="#">Livraison</a></li>
+          <li><a href="#">Retours</a></li>
+          <li><a href="#">Guide des tailles</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Maison</h4>
+        <ul>
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Savoir-faire</a></li>
+          <li><a href="#">Engagements</a></li>
+          <li><a href="#">Carrières</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 LUMIÈRE. Tous droits réservés.</div>
+      <div>Conçu avec passion à Paris.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart drawer -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h3>Panier</h3>
+    <button class="cart-close" id="cart-close" aria-label="Fermer">×</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Sous-total</span>
+      <span id="cart-total">0€</span>
+    </div>
+    <button class="btn btn-accent" style="width:100%; justify-content:center;">Passer commande →</button>
+  </div>
+</aside>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="icon">✓</span>
+  <span id="toast-msg">Ajouté au panier</span>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-/* ============================================================
-   LA BOUTIQUE OFFICIELLE — SHOPPING RUSH 3D
-   ============================================================ */
-const CATEGORIES = ['TOP VENTES','NOUVEAUTÉS','SNEAKERS','ENSEMBLES','PANTALONS','VESTES','JEANS','EXCLUSIVITÉS'];
-const BRANDS = [
-  {name:'New Balance', color:'#cf1f2e', key:'nb'},
-  {name:'adidas',      color:'#1f7ae0', key:'ad'},
-  {name:'Lacoste',     color:'#1f9e57', key:'lc'},
-  {name:'PUMA',        color:'#e08a1f', key:'pm'}
+<!-- Three.js import map -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ============ PRODUCTS DATA ============ */
+const products = [
+  { id:1, name:"Sneaker AURUM 01", cat:"sneakers", price:280, old:340, tag:"new", img:"https://picsum.photos/seed/aurum1/600/600.jpg" },
+  { id:2, name:"Veste Cuir NOIR", cat:"vetements", price:420, old:null, tag:"new", img:"https://picsum.photos/seed/jacket77/600/600.jpg" },
+  { id:3, name:"Sneaker VELOURS", cat:"sneakers", price:240, old:300, tag:"promo", img:"https://picsum.photos/seed/sneak22/600/600.jpg" },
+  { id:4, name:"Sac WEEKENDER", cat:"accessoires", price:380, old:null, tag:"new", img:"https://picsum.photos/seed/bag991/600/600.jpg" },
+  { id:5, name:"Pull Cachemire", cat:"vetements", price:220, old:280, tag:"promo", img:"https://picsum.photos/seed/pullk48/600/600.jpg" },
+  { id:6, name:"Sneaker RUNNER", cat:"sneakers", price:190, old:null, tag:null, img:"https://picsum.photos/seed/runn55/600/600.jpg" },
+  { id:7, name:"Lunettes GOLD", cat:"accessoires", price:160, old:200, tag:"promo", img:"https://picsum.photos/seed/glass33/600/600.jpg" },
+  { id:8, name:"Trench CAMBRIDGE", cat:"vetements", price:560, old:null, tag:"new", img:"https://picsum.photos/seed/trench12/600/600.jpg" },
 ];
-const COUNTRIES = [
-  {code:'FR', name:'France',    emoji:'🇫🇷'},
-  {code:'BE', name:'Belgique',  emoji:'🇧🇪'},
-  {code:'DE', name:'Allemagne', emoji:'🇩🇪'},
-  {code:'ES', name:'Espagne',   emoji:'🇪🇸'},
-  {code:'IT', name:'Italie',    emoji:'🇮🇹'},
-  {code:'PT', name:'Portugal',  emoji:'🇵🇹'},
-  {code:'WW', name:'Worldwide', emoji:'🌍'}
+
+/* ============ HERO 3D SCENE ============ */
+const heroCanvas = document.getElementById('hero-canvas');
+const heroScene = new THREE.Scene();
+heroScene.fog = new THREE.FogExp2(0x0a0a0f, 0.045);
+
+const heroCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+heroCamera.position.set(0, 0.5, 6.5);
+
+const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, antialias: true, alpha: true });
+heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+heroRenderer.shadowMap.enabled = true;
+heroRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+heroRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+heroRenderer.toneMappingExposure = 1.0;
+
+// Environment for reflections
+const pmremGenerator = new THREE.PMREMGenerator(heroRenderer);
+heroScene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+// Lights
+heroScene.add(new THREE.AmbientLight(0xffffff, 0.25));
+
+const keyLight = new THREE.DirectionalLight(0xfff4e5, 2.2);
+keyLight.position.set(5, 8, 5);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+keyLight.shadow.camera.near = 0.5;
+keyLight.shadow.camera.far = 30;
+keyLight.shadow.camera.left = -8;
+keyLight.shadow.camera.right = 8;
+keyLight.shadow.camera.top = 8;
+keyLight.shadow.camera.bottom = -8;
+keyLight.shadow.bias = -0.0005;
+heroScene.add(keyLight);
+
+const accentLight = new THREE.PointLight(0xc49a6c, 3, 14);
+accentLight.position.set(-3.5, 2, 2);
+heroScene.add(accentLight);
+
+const accentLight2 = new THREE.PointLight(0xff2d55, 1.8, 10);
+accentLight2.position.set(3, -2, 1);
+heroScene.add(accentLight2);
+
+const rimLight = new THREE.DirectionalLight(0xc49a6c, 1.2);
+rimLight.position.set(-5, 2, -5);
+heroScene.add(rimLight);
+
+// Central sculpture group
+const centerGroup = new THREE.Group();
+heroScene.add(centerGroup);
+
+// Main faceted icosahedron in gold
+const mainGeo = new THREE.IcosahedronGeometry(1.05, 0);
+const goldMat = new THREE.MeshStandardMaterial({
+  color: 0xc49a6c,
+  metalness: 0.95,
+  roughness: 0.18,
+  envMapIntensity: 1.6
+});
+const mainMesh = new THREE.Mesh(mainGeo, goldMat);
+mainMesh.castShadow = true;
+mainMesh.receiveShadow = true;
+centerGroup.add(mainMesh);
+
+// Inner glowing core
+const coreGeo = new THREE.IcosahedronGeometry(0.6, 1);
+const coreMat = new THREE.MeshStandardMaterial({
+  color: 0xffe8c4,
+  emissive: 0xc49a6c,
+  emissiveIntensity: 1.6,
+  metalness: 0.3,
+  roughness: 0.4,
+  transparent: true,
+  opacity: 0.85
+});
+const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+centerGroup.add(coreMesh);
+
+// Wireframe outer shell
+const wireGeo = new THREE.IcosahedronGeometry(1.5, 1);
+const wireMat = new THREE.MeshBasicMaterial({
+  color: 0xc49a6c,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.18
+});
+const wireMesh = new THREE.Mesh(wireGeo, wireMat);
+centerGroup.add(wireMesh);
+
+// Orbiting rings
+const ringGroup = new THREE.Group();
+centerGroup.add(ringGroup);
+for (let i = 0; i < 3; i++) {
+  const ringGeo = new THREE.TorusGeometry(1.7 + i * 0.18, 0.013, 16, 100);
+  const ringMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    metalness: 0.9,
+    roughness: 0.2,
+    transparent: true,
+    opacity: 0.55 - i * 0.12
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = Math.PI / 2 + i * 0.4;
+  ring.rotation.y = i * 0.6;
+  ringGroup.add(ring);
+}
+
+// Orbiting small geometric shapes
+const orbitGroup = new THREE.Group();
+heroScene.add(orbitGroup);
+
+const orbitShapes = [];
+const shapeGeometries = [
+  new THREE.OctahedronGeometry(0.18, 0),
+  new THREE.TetrahedronGeometry(0.22, 0),
+  new THREE.BoxGeometry(0.24, 0.24, 0.24),
+  new THREE.DodecahedronGeometry(0.18, 0)
 ];
-const MODELS = {
-  'SNEAKERS':   {nb:['530 Retro','9060 Grey','2002R Protec','327 Casual'], ad:['Samba OG','Gazelle Bold','Campus 00s','Forum Low'], lc:['Court Cage','L001 Leather','Carnaby Pro','Lineshot Mid'], pm:['Suede XL','Palermo Vintage','RS-X Efekt','Speedcat OG']},
-  'ENSEMBLES':  {nb:['Ensemble Athletics','Ensemble Sport Club'], ad:['Survêtement Tiro 24','Ensemble Adicolor'], lc:['Ensemble Piqué Croco','Ensemble Sport Tennis'], pm:['Ensemble T7 Iconic','Ensemble PowerTrack']},
-  'PANTALONS':  {nb:['Jogging Essentials','Pantalon Tech Fleece'], ad:['Pantalon 3 Bandes','Cargo Adicolor'], lc:['Pantalon Croco Tech','Jogging Piqué'], pm:['Pantalon ESS Logo','Cargo T7 Track']},
-  'VESTES':     {nb:['Veste Coupe-Vent','Veste Athletics Woven'], ad:['Firebird Track Top','Veste SST Adicolor'], lc:['Veste Zippée Piqué','Veste Tennis Heritage'], pm:['Veste T7 Track','Veste Iconic MCS']},
-  'JEANS':      {nb:['Jean Straight Denim','Jean Loose Fit'], ad:['Jean Regular Denim','Jean Wide Leg'], lc:['Jean Coupe Droite','Jean Slim Croco'], pm:['Jean Denim Sport','Jean Tapered Fit']}
-};
-const SHAPE_BY_CAT = {'SNEAKERS':'shoe','ENSEMBLES':'suit','PANTALONS':'pants','VESTES':'jacket','JEANS':'jeans'};
-const BASE_CATS = ['SNEAKERS','ENSEMBLES','PANTALONS','VESTES','JEANS'];
-const CAT_COLOR = {'TOP VENTES':'#ff2e43','NOUVEAUTÉS':'#ff8a3d','SNEAKERS':'#1f7ae0','ENSEMBLES':'#8a5cf0',
-  'PANTALONS':'#1f9e57','VESTES':'#e0a01f','JEANS':'#2f5fd0','EXCLUSIVITÉS':'#d61fa0'};
 
-/* ---------------- AUDIO ---------------- */
-let AC=null;
-function audio(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return AC; }
-function tone(f,t,dur,type,vol){
-  const ac=audio(); if(!ac) return;
-  const o=ac.createOscillator(), g=ac.createGain();
-  o.type=type||'sine'; o.frequency.setValueAtTime(f,ac.currentTime+t);
-  g.gain.setValueAtTime(0,ac.currentTime+t);
-  g.gain.linearRampToValueAtTime(vol||.14,ac.currentTime+t+.012);
-  g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+t+dur);
-  o.connect(g); g.connect(ac.destination); o.start(ac.currentTime+t); o.stop(ac.currentTime+t+dur+.03);
-}
-const SFX={
-  ok(){ tone(660,0,.12,'triangle',.13); tone(990,.06,.14,'triangle',.1); },
-  add(){ tone(523,0,.1,'square',.09); tone(784,.07,.13,'square',.08); },
-  done(){ [523,659,784,1047].forEach((f,i)=>tone(f,i*.06,.28,'triangle',.12)); },
-  wrong(){ tone(150,0,.18,'sawtooth',.12); tone(95,.09,.2,'sawtooth',.1); },
-  coupon(){ [1200,1600,2100].forEach((f,i)=>tone(f,i*.045,.16,'sine',.11)); },
-  over(){ [523,415,330,220].forEach((f,i)=>tone(f,i*.16,.4,'triangle',.13)); }
-};
-
-/* ---------------- CANVAS HELPERS ---------------- */
-function C(w,h){ const c=document.createElement('canvas'); c.width=w; c.height=h; return c; }
-function rr(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
-  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-function fitFont(ctx,txt,max,size,weight,fam){
-  let s=size; do{ ctx.font=(weight||'700')+' '+s+'px '+(fam||'Segoe UI, Arial'); s-=1; }while(ctx.measureText(txt).width>max && s>8);
+for (let i = 0; i < 14; i++) {
+  const geo = shapeGeometries[i % shapeGeometries.length];
+  const isGold = i % 3 === 0;
+  const mat = new THREE.MeshStandardMaterial({
+    color: isGold ? 0xc49a6c : 0xffffff,
+    metalness: 0.88,
+    roughness: 0.25
+  });
+  const m = new THREE.Mesh(geo, mat);
+  m.castShadow = true;
+  const angle = (i / 14) * Math.PI * 2;
+  const radius = 2.7 + Math.random() * 0.6;
+  const yOffset = (Math.random() - 0.5) * 1.8;
+  m.userData = {
+    angle: angle,
+    radius: radius,
+    yOffset: yOffset,
+    speed: 0.25 + Math.random() * 0.5,
+    rotSpeed: { x: (Math.random() - 0.5) * 0.04, y: (Math.random() - 0.5) * 0.04, z: (Math.random() - 0.5) * 0.04 }
+  };
+  m.position.set(Math.cos(angle) * radius, yOffset, Math.sin(angle) * radius);
+  orbitGroup.add(m);
+  orbitShapes.push(m);
 }
 
-/* ------- product silhouettes ------- */
-function silhouette(ctx,shape,col,accent){
-  ctx.save(); ctx.translate(0,0);
-  ctx.fillStyle=col;
-  if(shape==='shoe'){
-    ctx.beginPath();
-    ctx.moveTo(-150,42); ctx.quadraticCurveTo(-158,8,-126,2);
-    ctx.lineTo(-116,-34); ctx.quadraticCurveTo(-106,-76,-62,-66);
-    ctx.lineTo(-16,-54); ctx.quadraticCurveTo(46,-42,96,-4);
-    ctx.quadraticCurveTo(140,18,150,44); ctx.quadraticCurveTo(126,58,58,60);
-    ctx.lineTo(-110,60); ctx.quadraticCurveTo(-146,60,-150,42); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,.92)'; rr(ctx,-152,36,304,30,14); ctx.fill();
-    ctx.fillStyle=accent; ctx.beginPath();
-    ctx.moveTo(-30,-40); ctx.lineTo(20,-18); ctx.lineTo(6,16); ctx.lineTo(-56,-16); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,.5)'; rr(ctx,-118,-30,44,24,10); ctx.fill();
-  } else if(shape==='pants'||shape==='jeans'){
-    const base = shape==='jeans' ? '#3c63b5' : col;
-    ctx.fillStyle=base;
-    ctx.beginPath();
-    ctx.moveTo(-74,-96); ctx.lineTo(74,-96); ctx.lineTo(66,110); ctx.lineTo(12,110);
-    ctx.lineTo(0,-6); ctx.lineTo(-12,110); ctx.lineTo(-66,110); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='rgba(0,0,0,.25)'; rr(ctx,-76,-104,152,26,8); ctx.fill();
-    ctx.strokeStyle=accent; ctx.lineWidth=7;
-    ctx.beginPath(); ctx.moveTo(-58,-80); ctx.lineTo(-50,104); ctx.stroke();
-    if(shape==='jeans'){ ctx.strokeStyle='rgba(255,220,120,.8)'; ctx.lineWidth=3;
-      ctx.beginPath(); ctx.moveTo(20,-84); ctx.lineTo(58,-84); ctx.stroke(); }
-  } else if(shape==='jacket'){
-    ctx.fillStyle=col;
-    ctx.beginPath();
-    ctx.moveTo(-62,-92); ctx.lineTo(62,-92); ctx.lineTo(120,-58); ctx.lineTo(104,30);
-    ctx.lineTo(72,22); ctx.lineTo(72,104); ctx.lineTo(-72,104); ctx.lineTo(-72,22);
-    ctx.lineTo(-104,30); ctx.lineTo(-120,-58); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,.85)'; rr(ctx,-5,-92,10,196,4); ctx.fill();
-    ctx.fillStyle=accent; rr(ctx,-118,-56,26,80,10); ctx.fill(); rr(ctx,92,-56,26,80,10); ctx.fill();
-    ctx.fillStyle='rgba(0,0,0,.3)'; rr(ctx,-46,-104,92,22,10); ctx.fill();
-  } else { /* suit */
-    ctx.fillStyle=col;
-    ctx.beginPath(); ctx.moveTo(-56,-108); ctx.lineTo(56,-108); ctx.lineTo(96,-82);
-    ctx.lineTo(86,-18); ctx.lineTo(60,-24); ctx.lineTo(60,20); ctx.lineTo(-60,20);
-    ctx.lineTo(-60,-24); ctx.lineTo(-86,-18); ctx.lineTo(-96,-82); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(-56,34); ctx.lineTo(56,34); ctx.lineTo(50,124); ctx.lineTo(10,124);
-    ctx.lineTo(0,64); ctx.lineTo(-10,124); ctx.lineTo(-50,124); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle=accent; ctx.lineWidth=6;
-    ctx.beginPath(); ctx.moveTo(-40,-100); ctx.lineTo(-40,16); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(-36,40); ctx.lineTo(-32,118); ctx.stroke();
-  }
-  ctx.restore();
-}
-
-/* ------- product card texture ------- */
-function drawCard(cv,p){
-  const ctx=cv.getContext('2d'), W=cv.width,H=cv.height;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#ffffff'; rr(ctx,6,6,W-12,H-12,34); ctx.fill();
-  // image area
-  const g=ctx.createLinearGradient(0,20,0,400);
-  g.addColorStop(0,p.catColor+'33'); g.addColorStop(1,'#f4f4f8');
-  ctx.save(); rr(ctx,16,16,W-32,384,26); ctx.clip(); ctx.fillStyle=g; ctx.fillRect(0,0,W,420);
-  ctx.strokeStyle='rgba(0,0,0,.05)'; ctx.lineWidth=2;
-  for(let i=-6;i<10;i++){ ctx.beginPath(); ctx.moveTo(i*70,0); ctx.lineTo(i*70+180,420); ctx.stroke(); }
-  ctx.save(); ctx.translate(W/2,225); silhouette(ctx,p.shape,'#20202c',p.brandColor); ctx.restore();
-  ctx.restore();
-  // badge
-  if(p.discount){
-    ctx.fillStyle='#ff2e43'; rr(ctx,28,28,132,56,14); ctx.fill();
-    ctx.fillStyle='#fff'; ctx.font='900 34px Segoe UI, Arial'; ctx.textAlign='center'; ctx.fillText('-10%',94,67);
-  }
-  if(p.isNew){ ctx.fillStyle='#111'; rr(ctx,W-172,28,144,50,14); ctx.fill();
-    ctx.fillStyle='#fff'; ctx.font='800 24px Segoe UI, Arial'; ctx.textAlign='center'; ctx.fillText('NOUVEAU',W-100,61); }
-  // brand
-  ctx.textAlign='left';
-  ctx.fillStyle=p.brandColor; ctx.font='900 36px Segoe UI, Arial';
-  ctx.fillText(p.brand.toUpperCase(),34,455);
-  // name
-  ctx.fillStyle='#40404f'; fitFont(ctx,p.name,W-70,29,'600'); ctx.fillText(p.name,34,494);
-  // category chip
-  ctx.fillStyle=p.catColor; rr(ctx,34,512,ctx.measureText(p.cat).width*0.75+34,34,17); ctx.fill();
-  ctx.fillStyle='#fff'; ctx.font='800 19px Segoe UI, Arial'; ctx.fillText(p.cat,50,536);
-  // prices
-  const fp=(p.discount? (p.price*0.9):p.price).toFixed(2).replace('.',',')+' €';
-  ctx.fillStyle= p.discount? '#ff2e43':'#111';
-  ctx.font='900 46px Segoe UI, Arial'; ctx.fillText(fp,34,604);
-  if(p.discount){
-    const ow=ctx.measureText(fp).width;
-    ctx.fillStyle='#9a9aae'; ctx.font='600 26px Segoe UI, Arial';
-    const op=p.price.toFixed(2).replace('.',',')+' €';
-    ctx.fillText(op,44+ow,600);
-    const w2=ctx.measureText(op).width;
-    ctx.strokeStyle='#9a9aae'; ctx.lineWidth=3; ctx.beginPath();
-    ctx.moveTo(44+ow,591); ctx.lineTo(44+ow+w2,591); ctx.stroke();
-  }
-  if(p.added){
-    ctx.fillStyle='rgba(20,160,90,.86)'; rr(ctx,6,6,W-12,H-12,34); ctx.fill();
-    ctx.fillStyle='#fff'; ctx.textAlign='center';
-    ctx.font='900 90px Segoe UI, Arial'; ctx.fillText('✓',W/2,H/2);
-    ctx.font='800 30px Segoe UI, Arial'; ctx.fillText('AJOUTÉ AU PANIER',W/2,H/2+70);
-  }
-}
-
-/* ------- flag texture ------- */
-function drawFlag(cv,c,active){
-  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height, fh=H*0.68;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle= active? '#ffffff':'#11111a'; rr(ctx,3,3,W-6,H-6,16); ctx.fill();
-  ctx.save(); rr(ctx,14,12,W-28,fh-18,10); ctx.clip();
-  const v=(a,b,c3)=>{ctx.fillStyle=a;ctx.fillRect(0,0,W/3,H);ctx.fillStyle=b;ctx.fillRect(W/3,0,W/3,H);ctx.fillStyle=c3;ctx.fillRect(2*W/3,0,W/3,H);};
-  const hz=(a,b,c3)=>{ctx.fillStyle=a;ctx.fillRect(0,0,W,H/3);ctx.fillStyle=b;ctx.fillRect(0,H/3,W,H/3);ctx.fillStyle=c3;ctx.fillRect(0,2*H/3,W,H/3);};
-  switch(c.code){
-    case 'FR': v('#0b3fa8','#ffffff','#e8112d'); break;
-    case 'BE': v('#111111','#f8d21c','#e8112d'); break;
-    case 'DE': hz('#111111','#dd0000','#ffce00'); break;
-    case 'ES': ctx.fillStyle='#aa151b';ctx.fillRect(0,0,W,H);ctx.fillStyle='#f1bf00';ctx.fillRect(0,H*0.25,W,H*0.42);
-               ctx.fillStyle='#aa151b';ctx.beginPath();ctx.arc(W*0.34,H*0.44,11,0,7);ctx.fill();break;
-    case 'IT': v('#009246','#ffffff','#ce2b37'); break;
-    case 'PT': ctx.fillStyle='#046a38';ctx.fillRect(0,0,W*0.42,H);ctx.fillStyle='#da291c';ctx.fillRect(W*0.42,0,W*0.58,H);
-               ctx.fillStyle='#ffe000';ctx.beginPath();ctx.arc(W*0.42,H*0.44,15,0,7);ctx.fill();
-               ctx.fillStyle='#da291c';ctx.beginPath();ctx.arc(W*0.42,H*0.44,7,0,7);ctx.fill();break;
-    default:   const gg=ctx.createLinearGradient(0,0,W,H); gg.addColorStop(0,'#1852c8'); gg.addColorStop(1,'#12b1d1');
-               ctx.fillStyle=gg; ctx.fillRect(0,0,W,H);
-               ctx.strokeStyle='rgba(255,255,255,.9)'; ctx.lineWidth=4;
-               ctx.beginPath(); ctx.arc(W/2,H*0.38,34,0,7); ctx.stroke();
-               ctx.beginPath(); ctx.ellipse(W/2,H*0.38,14,34,0,0,7); ctx.stroke();
-               ctx.beginPath(); ctx.moveTo(W/2-34,H*0.38); ctx.lineTo(W/2+34,H*0.38); ctx.stroke();
-  }
-  ctx.restore();
-  ctx.strokeStyle='rgba(255,255,255,.35)'; ctx.lineWidth=3; rr(ctx,14,12,W-28,fh-18,10); ctx.stroke();
-  ctx.textAlign='center'; ctx.fillStyle= active? '#111':'#eaeaf6';
-  fitFont(ctx,c.name,W-24,26,'800'); ctx.fillText(c.name,W/2,H-14);
-}
-
-/* ------- tab texture ------- */
-function drawTab(cv,txt,active){
-  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
-  ctx.clearRect(0,0,W,H);
-  if(active){ const g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,'#ff2e43'); g.addColorStop(1,'#ff7a1f');
-    ctx.fillStyle=g; } else ctx.fillStyle='#ffffff';
-  rr(ctx,6,6,W-12,H-12,H/2-6); ctx.fill();
-  ctx.strokeStyle= active? 'rgba(255,255,255,.6)':'rgba(0,0,0,.12)'; ctx.lineWidth=4;
-  rr(ctx,6,6,W-12,H-12,H/2-6); ctx.stroke();
-  ctx.textAlign='center'; ctx.fillStyle= active? '#fff':'#16161f';
-  fitFont(ctx,txt,W-52,34,'900'); ctx.fillText(txt,W/2,H/2+12);
-}
-
-/* ------- nav / logo textures ------- */
-function drawLogo(cv){
-  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
-  ctx.clearRect(0,0,W,H);
-  const g=ctx.createLinearGradient(0,0,W,0); g.addColorStop(0,'#16161f'); g.addColorStop(1,'#2a2036');
-  ctx.fillStyle=g; rr(ctx,4,4,W-8,H-8,18); ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,.18)'; ctx.lineWidth=3; rr(ctx,4,4,W-8,H-8,18); ctx.stroke();
-  ctx.fillStyle='#ff2e43'; ctx.beginPath();
-  const cx=54,cy=H/2; for(let i=0;i<5;i++){const a=-Math.PI/2+i*2*Math.PI/5;
-    ctx.lineTo(cx+Math.cos(a)*22,cy+Math.sin(a)*22); const b=a+Math.PI/5;
-    ctx.lineTo(cx+Math.cos(b)*9,cy+Math.sin(b)*9);} ctx.closePath(); ctx.fill();
-  ctx.textAlign='left'; ctx.fillStyle='#fff'; fitFont(ctx,'LA BOUTIQUE OFFICIELLE',W-110,34,'900');
-  ctx.fillText('LA BOUTIQUE OFFICIELLE',86,H/2+11);
-}
-function drawNav(cv,txt,icon,active){
-  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle= active? 'rgba(57,217,138,.92)':'rgba(255,255,255,.10)';
-  rr(ctx,4,4,W-8,H-8,H/2-4); ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,.28)'; ctx.lineWidth=3; rr(ctx,4,4,W-8,H-8,H/2-4); ctx.stroke();
-  ctx.textAlign='center'; ctx.fillStyle='#fff';
-  fitFont(ctx,icon+'  '+txt,W-30,30,'700'); ctx.fillText(icon+'  '+txt,W/2,H/2+10);
-}
-function drawBanner(cv){
-  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
-  const g=ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,'#12121c'); g.addColorStop(.45,'#3a0f1c'); g.addColorStop(1,'#12121c');
-  ctx.fillStyle=g; rr(ctx,0,0,W,H,26); ctx.fill();
-  ctx.strokeStyle='rgba(255,46,67,.75)'; ctx.lineWidth=6; rr(ctx,4,4,W-8,H-8,24); ctx.stroke();
-  ctx.save(); ctx.globalAlpha=.16;
-  for(let i=-2;i<24;i++){ctx.fillStyle= i%2? '#ff2e43':'#ff8a3d'; ctx.save();
-    ctx.translate(i*90,0); ctx.rotate(.25); ctx.fillRect(0,-60,26,H+140); ctx.restore();}
-  ctx.restore();
-  ctx.textAlign='center';
-  ctx.fillStyle='#fff'; ctx.font='900 118px Segoe UI, Arial';
-  ctx.shadowColor='rgba(255,46,67,.9)'; ctx.shadowBlur=34;
-  ctx.fillText('-10% SUR TOUT',W/2,H*0.46);
-  ctx.shadowBlur=0;
-  ctx.font='700 46px Segoe UI, Arial'; ctx.fillStyle='#ffd7dc';
-  const t1='dès 79€   •   code : ';
-  const t2='BACK10';
-  ctx.font='700 46px Segoe UI, Arial'; const w1=ctx.measureText(t1).width;
-  ctx.font='900 52px Segoe UI, Arial'; const w2=ctx.measureText(t2).width+44;
-  const startX=W/2-(w1+w2)/2;
-  ctx.textAlign='left'; ctx.font='700 46px Segoe UI, Arial'; ctx.fillStyle='#ffd7dc';
-  ctx.fillText(t1,startX,H*0.75);
-  ctx.fillStyle='#fff'; rr(ctx,startX+w1,H*0.75-46,w2,64,14); ctx.fill();
-  ctx.fillStyle='#ff2e43'; ctx.font='900 52px Segoe UI, Arial';
-  ctx.fillText(t2,startX+w1+22,H*0.75);
-}
-function drawCoupon(cv){
-  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
-  ctx.clearRect(0,0,W,H);
-  const g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,'#ffcc4d'); g.addColorStop(1,'#ff6a00');
-  ctx.fillStyle=g; rr(ctx,8,8,W-16,H-16,22); ctx.fill();
-  ctx.fillStyle='rgba(0,0,0,.85)'; ctx.textAlign='center';
-  ctx.font='900 62px Segoe UI, Arial'; ctx.fillText('BACK10',W/2,H*0.52);
-  ctx.font='800 28px Segoe UI, Arial'; ctx.fillText('COUPON BONUS',W/2,H*0.78);
-  ctx.setLineDash([14,10]); ctx.strokeStyle='rgba(0,0,0,.5)'; ctx.lineWidth=4;
-  rr(ctx,20,20,W-40,H-40,16); ctx.stroke(); ctx.setLineDash([]);
-}
-
-/* ---------------- THREE SETUP ---------------- */
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x06060c);
-scene.fog=new THREE.Fog(0x06060c,26,70);
-const camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.1,200);
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-document.getElementById('app').appendChild(renderer.domElement);
-
-scene.add(new THREE.AmbientLight(0xffffff,.85));
-const dl=new THREE.DirectionalLight(0xffffff,.75); dl.position.set(4,10,12); scene.add(dl);
-const p1=new THREE.PointLight(0xff2e43,1.6,40); p1.position.set(-9,6,8); scene.add(p1);
-const p2=new THREE.PointLight(0x3a7bff,1.2,40); p2.position.set(9,2,8); scene.add(p2);
-
-// floor + grid
-const floor=new THREE.Mesh(new THREE.PlaneGeometry(90,90),
-  new THREE.MeshStandardMaterial({color:0x0a0a14,roughness:.55,metalness:.35}));
-floor.rotation.x=-Math.PI/2; floor.position.y=-6.2; scene.add(floor);
-const grid=new THREE.GridHelper(90,45,0xff2e43,0x1e1e33); grid.position.y=-6.18;
-grid.material.transparent=true; grid.material.opacity=.28; scene.add(grid);
-
-// stars
-(function(){ const g=new THREE.BufferGeometry(); const n=420,a=new Float32Array(n*3);
-  for(let i=0;i<n;i++){a[i*3]=(Math.random()-.5)*90;a[i*3+1]=Math.random()*40-6;a[i*3+2]=-Math.random()*60-6;}
-  g.setAttribute('position',new THREE.BufferAttribute(a,3));
-  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:.13,transparent:true,opacity:.55})));})();
-
-const board=new THREE.Group(); scene.add(board);
-const interactives=[];
-
-function texMat(cv,extra){
-  const t=new THREE.CanvasTexture(cv); t.anisotropy=4;
-  return new THREE.MeshStandardMaterial(Object.assign({map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.18,
-    roughness:.6,metalness:.05,transparent:true},extra||{}));
-}
-function curve(mesh,x){ mesh.position.z = -(x*x)*0.022; mesh.rotation.y = -x*0.032; }
-
-/* ---------- BANNER ---------- */
-const bannerCv=C(1600,300); drawBanner(bannerCv);
-const banner=new THREE.Mesh(new THREE.BoxGeometry(11.6,2.1,.22),
-  [new THREE.MeshStandardMaterial({color:0x201020}),new THREE.MeshStandardMaterial({color:0x201020}),
-   new THREE.MeshStandardMaterial({color:0x201020}),new THREE.MeshStandardMaterial({color:0x201020}),
-   texMat(bannerCv,{emissiveIntensity:.55}),new THREE.MeshStandardMaterial({color:0x201020})]);
-banner.position.set(0,5.15,-.4); board.add(banner);
-// shine
-const shineMat=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.12,blending:THREE.AdditiveBlending,depthWrite:false});
-const shine=new THREE.Mesh(new THREE.PlaneGeometry(1.4,2.6),shineMat);
-shine.position.set(-6,5.15,-.25); shine.rotation.z=.18; board.add(shine);
-
-/* ---------- NAV ---------- */
-const logoCv=C(1024,180); drawLogo(logoCv);
-const logo=new THREE.Mesh(new THREE.PlaneGeometry(3.5,.62),texMat(logoCv,{emissiveIntensity:.3}));
-logo.position.set(-3.7,3.72,0); curve(logo,-3.7); board.add(logo);
-
-function makeNav(txt,icon,x,w){
-  const cv=C(640,140); drawNav(cv,txt,icon,false);
-  const m=new THREE.Mesh(new THREE.PlaneGeometry(w,.5),texMat(cv,{emissiveIntensity:.22}));
-  m.position.set(x,3.72,0); curve(m,x);
-  m.userData={type:'nav',cv,txt,icon,active:false,base:m.scale.clone()};
-  board.add(m); interactives.push(m); return m;
-}
-const navAccount=makeNav('Mon compte','👤',1.15,1.9);
-const navLogin  =makeNav("Se connecter / S'inscrire",'🔑',3.75,3.0);
-
-/* ---------- FLAGS ---------- */
-const flagMeshes=[];
-COUNTRIES.forEach((c,i)=>{
-  const cv=C(256,190); drawFlag(cv,c,false);
-  const m=new THREE.Mesh(new THREE.PlaneGeometry(.95,.72),texMat(cv,{emissiveIntensity:.25}));
-  const x=(i-(COUNTRIES.length-1)/2)*1.06; m.position.set(x,2.95,0); curve(m,x);
-  m.userData={type:'flag',country:c,cv,active:false};
-  board.add(m); interactives.push(m); flagMeshes.push(m);
+// Floor
+const floorGeo = new THREE.PlaneGeometry(40, 40);
+const floorMat = new THREE.MeshStandardMaterial({
+  color: 0x0a0a0f,
+  metalness: 0.5,
+  roughness: 0.45
 });
-function setFlagActive(mesh,on){ mesh.userData.active=on; drawFlag(mesh.userData.cv,mesh.userData.country,on);
-  mesh.material.map.needsUpdate=true; mesh.material.emissiveMap.needsUpdate=true; }
+const floor = new THREE.Mesh(floorGeo, floorMat);
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = -1.7;
+floor.receiveShadow = true;
+heroScene.add(floor);
 
-/* ---------- CATEGORY TABS ---------- */
-const tabMeshes=[];
-CATEGORIES.forEach((cat,i)=>{
-  const cv=C(420,120); drawTab(cv,cat,false);
-  const m=new THREE.Mesh(new THREE.PlaneGeometry(1.42,.44),texMat(cv,{emissiveIntensity:.2}));
-  const x=(i-(CATEGORIES.length-1)/2)*1.5; m.position.set(x,2.25,0); curve(m,x);
-  m.userData={type:'tab',cat,cv,active:false};
-  board.add(m); interactives.push(m); tabMeshes.push(m);
+// Floor accent ring
+const floorRingGeo = new THREE.RingGeometry(2.6, 2.65, 64);
+const floorRingMat = new THREE.MeshBasicMaterial({
+  color: 0xc49a6c,
+  transparent: true,
+  opacity: 0.4,
+  side: THREE.DoubleSide
 });
-function setTabActive(mesh,on){ mesh.userData.active=on; drawTab(mesh.userData.cv,mesh.userData.cat,on);
-  mesh.material.map.needsUpdate=true; mesh.material.emissiveMap.needsUpdate=true; }
+const floorRing = new THREE.Mesh(floorRingGeo, floorRingMat);
+floorRing.rotation.x = -Math.PI / 2;
+floorRing.position.y = -1.69;
+heroScene.add(floorRing);
 
-/* ---------- PRODUCT CARDS ---------- */
-const cards=[];
-for(let i=0;i<8;i++){
-  const cv=C(512,660);
-  const side=new THREE.MeshStandardMaterial({color:0x1c1c2b,roughness:.5});
-  const front=texMat(cv,{emissiveIntensity:.16});
-  const m=new THREE.Mesh(new THREE.BoxGeometry(2.4,2.9,.14),[side,side,side,side,front,side]);
-  const col=i%4, row=Math.floor(i/4);
-  const x=(col-1.5)*2.72, y= row===0? .35 : -2.78;
-  m.position.set(x,y,0); m.userData={type:'card',cv,x,y,i,product:null,fl:Math.random()*6};
-  curve(m,x); board.add(m); interactives.push(m); cards.push(m);
+// Inner floor ring
+const floorRingGeo2 = new THREE.RingGeometry(1.8, 1.82, 64);
+const floorRingMat2 = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  transparent: true,
+  opacity: 0.25,
+  side: THREE.DoubleSide
+});
+const floorRing2 = new THREE.Mesh(floorRingGeo2, floorRingMat2);
+floorRing2.rotation.x = -Math.PI / 2;
+floorRing2.position.y = -1.68;
+heroScene.add(floorRing2);
+
+// Particles
+const particleCount = 1500;
+const particleGeo = new THREE.BufferGeometry();
+const particlePositions = new Float32Array(particleCount * 3);
+const particleSpeeds = new Float32Array(particleCount);
+const particleSizes = new Float32Array(particleCount);
+for (let i = 0; i < particleCount; i++) {
+  particlePositions[i*3] = (Math.random() - 0.5) * 22;
+  particlePositions[i*3+1] = (Math.random() - 0.5) * 14;
+  particlePositions[i*3+2] = (Math.random() - 0.5) * 22;
+  particleSpeeds[i] = 0.001 + Math.random() * 0.006;
+  particleSizes[i] = 0.5 + Math.random() * 1.5;
 }
-function refreshCard(m){ drawCard(m.userData.cv,m.userData.product);
-  m.material[4].map.needsUpdate=true; m.material[4].emissiveMap.needsUpdate=true; }
+particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
 
-/* ---------- COUPON ---------- */
-const couponCv=C(400,220); drawCoupon(couponCv);
-const coupon=new THREE.Mesh(new THREE.PlaneGeometry(1.5,.82),
-  new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(couponCv),transparent:true}));
-coupon.visible=false; coupon.userData={type:'coupon'}; board.add(coupon); interactives.push(coupon);
-let couponTimer=7, couponLife=0;
+const particleMat = new THREE.PointsMaterial({
+  color: 0xc49a6c,
+  size: 0.03,
+  transparent: true,
+  opacity: 0.7,
+  blending: THREE.AdditiveBlending,
+  sizeAttenuation: true,
+  depthWrite: false
+});
+const particles = new THREE.Points(particleGeo, particleMat);
+heroScene.add(particles);
 
-/* ---------- effects ---------- */
-const effects=[];
-function popRing(pos,color){
-  const r=new THREE.Mesh(new THREE.RingGeometry(.35,.5,36),
-    new THREE.MeshBasicMaterial({color,transparent:true,opacity:.95,side:THREE.DoubleSide,
-      blending:THREE.AdditiveBlending,depthWrite:false}));
-  r.position.copy(pos); r.quaternion.copy(camera.quaternion); scene.add(r);
-  effects.push({m:r,t:0});
+// Controls
+const heroControls = new OrbitControls(heroCamera, heroCanvas);
+heroControls.enableDamping = true;
+heroControls.dampingFactor = 0.06;
+heroControls.enableZoom = false;
+heroControls.enablePan = false;
+heroControls.autoRotate = true;
+heroControls.autoRotateSpeed = 0.7;
+heroControls.minPolarAngle = Math.PI / 3;
+heroControls.maxPolarAngle = Math.PI / 1.7;
+heroControls.minAzimuthAngle = -Math.PI / 3;
+heroControls.maxAzimuthAngle = Math.PI / 3;
+
+// Mouse parallax
+let mouseX = 0, mouseY = 0;
+let targetMouseX = 0, targetMouseY = 0;
+window.addEventListener('mousemove', (e) => {
+  targetMouseX = (e.clientX / window.innerWidth - 0.5) * 0.3;
+  targetMouseY = (e.clientY / window.innerHeight - 0.5) * 0.3;
+});
+
+// Resize handler
+function resizeHero() {
+  const w = heroCanvas.clientWidth;
+  const h = heroCanvas.clientHeight;
+  if (w === 0 || h === 0) return;
+  heroCamera.aspect = w / h;
+  heroCamera.updateProjectionMatrix();
+  heroRenderer.setSize(w, h, false);
+}
+window.addEventListener('resize', resizeHero);
+
+// Animation loop
+const clock = new THREE.Clock();
+function animateHero() {
+  const dt = clock.getDelta();
+  const t = clock.getElapsedTime();
+  
+  mouseX += (targetMouseX - mouseX) * 0.05;
+  mouseY += (targetMouseY - mouseY) * 0.05;
+  
+  // Center group rotation
+  centerGroup.rotation.y += dt * 0.15;
+  centerGroup.rotation.x = mouseY * 0.4;
+  centerGroup.position.x = mouseX * 0.5;
+  centerGroup.position.y = Math.sin(t * 0.5) * 0.15;
+  
+  // Core pulsing
+  const pulse = 1 + Math.sin(t * 2) * 0.06;
+  coreMesh.scale.setScalar(pulse);
+  coreMat.emissiveIntensity = 1.3 + Math.sin(t * 3) * 0.4;
+  
+  // Wireframe counter rotation
+  wireMesh.rotation.y -= dt * 0.2;
+  wireMesh.rotation.x -= dt * 0.1;
+  
+  // Rings
+  ringGroup.rotation.y += dt * 0.3;
+  ringGroup.rotation.z = Math.sin(t * 0.5) * 0.2;
+  
+  // Orbiting shapes
+  orbitShapes.forEach((m) => {
+    const u = m.userData;
+    u.angle += dt * u.speed * 0.25;
+    m.position.x = Math.cos(u.angle) * u.radius;
+    m.position.z = Math.sin(u.angle) * u.radius;
+    m.position.y = u.yOffset + Math.sin(t * u.speed + u.angle * 2) * 0.3;
+    m.rotation.x += u.rotSpeed.x;
+    m.rotation.y += u.rotSpeed.y;
+    m.rotation.z += u.rotSpeed.z;
+  });
+  orbitGroup.rotation.y += dt * 0.06;
+  
+  // Particles drift
+  const pos = particleGeo.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    pos[i*3+1] += particleSpeeds[i];
+    if (pos[i*3+1] > 7) pos[i*3+1] = -7;
+  }
+  particleGeo.attributes.position.needsUpdate = true;
+  
+  // Light pulsing
+  accentLight.intensity = 2.5 + Math.sin(t * 1.5) * 0.6;
+  accentLight2.intensity = 1.5 + Math.cos(t * 2) * 0.4;
+  
+  // Floor ring pulse
+  floorRingMat.opacity = 0.3 + Math.sin(t * 2) * 0.15;
+  floorRingMat2.opacity = 0.2 + Math.sin(t * 2.5 + 1) * 0.1;
+  
+  heroControls.update();
+  heroRenderer.render(heroScene, heroCamera);
+  requestAnimationFrame(animateHero);
 }
 
-/* ---------------- GAME LOGIC ---------------- */
-const UI={score:document.getElementById('score'),combo:document.getElementById('combo'),
-  bar:document.getElementById('bar'),time:document.getElementById('timeTxt'),
-  oCat:document.getElementById('oCat'),oBrand:document.getElementById('oBrand'),oCountry:document.getElementById('oCountry'),
-  s1:document.getElementById('s1'),s2:document.getElementById('s2'),s3:document.getElementById('s3'),
-  toast:document.getElementById('toast'),hint:document.getElementById('hint')};
-const G={state:'menu',score:0,time:60,combo:0,bestCombo:0,orders:0,step:0,order:null,loggedIn:false};
+// Initialize hero scene after a small delay to ensure layout
+requestAnimationFrame(() => {
+  resizeHero();
+  animateHero();
+});
 
-function rnd(a){return a[Math.floor(Math.random()*a.length)];}
-function makeProduct(cat,brand){
-  const base = SHAPE_BY_CAT[cat] ? cat : rnd(BASE_CATS);
-  const pool = MODELS[base][brand.key];
-  const price = Math.round((39+Math.random()*130))+0.99;
-  return {brand:brand.name,brandKey:brand.key,brandColor:brand.color,cat,catColor:CAT_COLOR[cat],
-    shape:SHAPE_BY_CAT[base],name:rnd(pool),price,discount:price>=79,
-    isNew: cat==='NOUVEAUTÉS'||Math.random()<.18, added:false};
+/* ============ FEATURE 3D SCENE ============ */
+const featureCanvas = document.getElementById('feature-canvas');
+const fScene = new THREE.Scene();
+const fCamera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+fCamera.position.set(0, 0.3, 4.8);
+
+const fRenderer = new THREE.WebGLRenderer({ canvas: featureCanvas, antialias: true, alpha: true });
+fRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+fRenderer.shadowMap.enabled = true;
+fRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+fRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+fRenderer.toneMappingExposure = 1.0;
+
+const fPmrem = new THREE.PMREMGenerator(fRenderer);
+fScene.environment = fPmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+fScene.add(new THREE.AmbientLight(0xffffff, 0.3));
+const fKey = new THREE.DirectionalLight(0xfff4e5, 2.2);
+fKey.position.set(3, 5, 3);
+fKey.castShadow = true;
+fKey.shadow.mapSize.set(1024, 1024);
+fScene.add(fKey);
+const fAccent = new THREE.PointLight(0xc49a6c, 3.5, 8);
+fAccent.position.set(-2, 1, 2);
+fScene.add(fAccent);
+const fAccent2 = new THREE.PointLight(0xff2d55, 1.8, 8);
+fAccent2.position.set(2, -1, -2);
+fScene.add(fAccent2);
+
+// Feature group: TorusKnot in gold
+const fGroup = new THREE.Group();
+fScene.add(fGroup);
+
+const torusGeo = new THREE.TorusKnotGeometry(0.85, 0.27, 200, 24, 2, 3);
+const fGoldMat = new THREE.MeshStandardMaterial({
+  color: 0xc49a6c,
+  metalness: 0.95,
+  roughness: 0.15,
+  envMapIntensity: 1.5
+});
+const torusMesh = new THREE.Mesh(torusGeo, fGoldMat);
+torusMesh.castShadow = true;
+fGroup.add(torusMesh);
+
+// Inner glow sphere
+const innerGeo = new THREE.SphereGeometry(0.22, 32, 32);
+const innerMat = new THREE.MeshStandardMaterial({
+  color: 0xffe8c4,
+  emissive: 0xc49a6c,
+  emissiveIntensity: 2.2,
+  transparent: true,
+  opacity: 0.9
+});
+const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+fGroup.add(innerSphere);
+
+// Wireframe outer shell
+const fWireGeo = new THREE.IcosahedronGeometry(1.4, 1);
+const fWireMat = new THREE.MeshBasicMaterial({
+  color: 0xc49a6c,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.15
+});
+const fWire = new THREE.Mesh(fWireGeo, fWireMat);
+fGroup.add(fWire);
+
+// Pedestal
+const pedGeo = new THREE.CylinderGeometry(1.5, 1.65, 0.16, 64);
+const pedMat = new THREE.MeshStandardMaterial({
+  color: 0x12121a,
+  metalness: 0.6,
+  roughness: 0.3
+});
+const pedestal = new THREE.Mesh(pedGeo, pedMat);
+pedestal.position.y = -1.45;
+pedestal.receiveShadow = true;
+fScene.add(pedestal);
+
+// Floor light ring on pedestal
+const fRingGeo = new THREE.RingGeometry(1.5, 1.56, 64);
+const fRingMat = new THREE.MeshBasicMaterial({
+  color: 0xc49a6c,
+  transparent: true,
+  opacity: 0.55,
+  side: THREE.DoubleSide
+});
+const fRing = new THREE.Mesh(fRingGeo, fRingMat);
+fRing.rotation.x = -Math.PI / 2;
+fRing.position.y = -1.36;
+fScene.add(fRing);
+
+// Floating particles for feature
+const fParticleCount = 200;
+const fPartGeo = new THREE.BufferGeometry();
+const fPartPos = new Float32Array(fParticleCount * 3);
+const fPartSpd = new Float32Array(fParticleCount);
+for (let i = 0; i < fParticleCount; i++) {
+  fPartPos[i*3] = (Math.random() - 0.5) * 5;
+  fPartPos[i*3+1] = (Math.random() - 0.5) * 4;
+  fPartPos[i*3+2] = (Math.random() - 0.5) * 5;
+  fPartSpd[i] = 0.002 + Math.random() * 0.005;
 }
-function fillShelf(cat,requiredBrand){
-  const idx=[0,1,2,3,4,5,6,7].sort(()=>Math.random()-.5);
-  const need = requiredBrand? (1+Math.floor(Math.random()*2)) : 0;
-  cards.forEach((m,i)=>{
-    let brand;
-    if(requiredBrand && idx.indexOf(i)<need) brand=requiredBrand;
-    else { do{ brand=rnd(BRANDS); }while(requiredBrand && brand.key===requiredBrand.key && Math.random()<.75); }
-    m.userData.product=makeProduct(cat,brand);
-    refreshCard(m);
-    m.scale.set(.01,.01,.01); m.userData.pop=0;
+fPartGeo.setAttribute('position', new THREE.BufferAttribute(fPartPos, 3));
+const fPartMat = new THREE.PointsMaterial({
+  color: 0xc49a6c,
+  size: 0.025,
+  transparent: true,
+  opacity: 0.6,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+const fParticles = new THREE.Points(fPartGeo, fPartMat);
+fScene.add(fParticles);
+
+const fControls = new OrbitControls(fCamera, featureCanvas);
+fControls.enableDamping = true;
+fControls.dampingFactor = 0.06;
+fControls.enableZoom = false;
+fControls.enablePan = false;
+fControls.autoRotate = true;
+fControls.autoRotateSpeed = 1.8;
+fControls.minPolarAngle = Math.PI / 3;
+fControls.maxPolarAngle = Math.PI / 1.7;
+
+function resizeFeature() {
+  const rect = featureCanvas.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return;
+  fCamera.aspect = rect.width / rect.height;
+  fCamera.updateProjectionMatrix();
+  fRenderer.setSize(rect.width, rect.height, false);
+}
+window.addEventListener('resize', resizeFeature);
+
+const fClock = new THREE.Clock();
+let featureRunning = false;
+function animateFeature() {
+  if (!featureRunning) return;
+  const t = fClock.getElapsedTime();
+  const dt = fClock.getDelta();
+  
+  fGroup.rotation.y += dt * 0.3;
+  fGroup.position.y = Math.sin(t * 0.6) * 0.1;
+  innerSphere.scale.setScalar(1 + Math.sin(t * 2.5) * 0.1);
+  innerMat.emissiveIntensity = 1.9 + Math.sin(t * 3) * 0.5;
+  fWire.rotation.y -= dt * 0.2;
+  fRingMat.opacity = 0.45 + Math.sin(t * 2) * 0.15;
+  
+  // Particles
+  const fp = fPartGeo.attributes.position.array;
+  for (let i = 0; i < fParticleCount; i++) {
+    fp[i*3+1] += fPartSpd[i];
+    if (fp[i*3+1] > 2.5) fp[i*3+1] = -2.5;
+  }
+  fPartGeo.attributes.position.needsUpdate = true;
+  
+  fControls.update();
+  fRenderer.render(fScene, fCamera);
+  requestAnimationFrame(animateFeature);
+}
+
+// Start feature animation only when visible (performance)
+const featureObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !featureRunning) {
+      resizeFeature();
+      featureRunning = true;
+      animateFeature();
+    } else if (!entry.isIntersecting && featureRunning) {
+      featureRunning = false;
+    }
+  });
+}, { threshold: 0.1 });
+featureObserver.observe(featureCanvas);
+
+/* ============ UI INTERACTIONS ============ */
+
+// Preloader hide
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+  }, 900);
+});
+
+// Header scroll shadow
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 30) header.classList.add('scrolled');
+  else header.classList.remove('scrolled');
+});
+
+// Render products
+const grid = document.getElementById('products-grid');
+function renderProducts(filter = 'all') {
+  grid.innerHTML = '';
+  const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+  filtered.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'product-card reveal';
+    card.style.transitionDelay = (i * 0.06) + 's';
+    card.innerHTML = `
+      <div class="product-img">
+        ${p.tag ? `<span class="product-tag ${p.tag}">${p.tag === 'new' ? 'Nouveau' : 'Promo'}</span>` : ''}
+        <button class="product-fav" data-id="${p.id}" aria-label="Favori">♡</button>
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="product-info">
+        <div class="product-cat">${p.cat}</div>
+        <h3 class="product-name">${p.name}</h3>
+        <div class="product-price">
+          <span class="current">${p.price}€</span>
+          ${p.old ? `<span class="old">${p.old}€</span>` : ''}
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-accent add-cart" data-id="${p.id}">Ajouter</button>
+          <button class="quick-view" data-id="${p.id}" aria-label="Aperçu">⌕</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  
+  document.querySelectorAll('.product-card.reveal').forEach(el => revealObserver.observe(el));
+  
+  document.querySelectorAll('.add-cart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = parseInt(btn.dataset.id);
+      addToCart(id);
+    });
+  });
+  document.querySelectorAll('.product-fav').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btn.classList.toggle('active');
+      if (btn.classList.contains('active')) showToast('Ajouté aux favoris');
+    });
+  });
+  document.querySelectorAll('.quick-view').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = parseInt(btn.dataset.id);
+      const p = products.find(x => x.id === id);
+      if (p) showToast(`Aperçu · ${p.name}`);
+    });
   });
 }
-function toast(msg,color){
-  UI.toast.textContent=msg; UI.toast.style.color=color||'#fff';
-  UI.toast.classList.add('show');
-  clearTimeout(UI.toast._t); UI.toast._t=setTimeout(()=>UI.toast.classList.remove('show'),750);
-}
-function updateHUD(){
-  UI.score.innerHTML=G.score+'<small>PANIER (PTS)</small>';
-  UI.combo.textContent= G.combo>1? 'COMBO x'+(1+ (G.combo-1)*0.25).toFixed(2) : '';
-  const pct=Math.max(0,G.time/60*100); UI.bar.style.width=pct+'%';
-  UI.time.textContent=G.time.toFixed(1)+' s';
-}
-function setSteps(){
-  [UI.s1,UI.s2,UI.s3].forEach((el,i)=>{ el.className='step'+(G.step===i?' active':'')+(G.step>i?' done':''); });
-  const hints=['① Clique l’onglet du rayon demandé',
-               '② Clique un produit de la bonne marque',
-               '③ Clique le drapeau du pays de livraison'];
-  UI.hint.textContent=hints[G.step]+'  •  Glisse pour pivoter la boutique';
-}
-function newOrder(){
-  const cat=rnd(CATEGORIES), brand=rnd(BRANDS), country=rnd(COUNTRIES);
-  G.order={cat,brand,country}; G.step=0;
-  UI.oCat.innerHTML='<span class="tagw">'+cat+'</span>';
-  UI.oBrand.textContent=brand.name;
-  UI.oCountry.textContent=country.emoji+' '+country.name;
-  tabMeshes.forEach(t=>{ if(t.userData.active) setTabActive(t,false); });
-  flagMeshes.forEach(f=>{ if(f.userData.active) setFlagActive(f,false); });
-  fillShelf('TOP VENTES',null);
-  setSteps(); updateHUD();
-}
-function wrong(pos){
-  SFX.wrong(); G.combo=0; G.time=Math.max(0,G.time-2);
-  toast('✖  -2 s','#ff5566'); if(pos) popRing(pos,0xff2e43); updateHUD();
-  document.body.animate([{filter:'none'},{filter:'saturate(2) brightness(1.3)'},{filter:'none'}],160);
-}
-function addScore(n){ const mult=1+Math.max(0,G.combo-1)*0.25; G.score+=Math.round(n*mult); updateHUD(); }
 
-function handleClick(obj,worldPos){
-  const d=obj.userData;
-  if(d.type==='tab'){
-    if(G.step===0 && d.cat===G.order.cat){
-      setTabActive(obj,true); fillShelf(d.cat,G.order.brand); G.step=1;
-      addScore(60); SFX.ok(); popRing(worldPos,0x39d98a); toast('Rayon ouvert !','#39d98a'); setSteps();
-    } else if(G.step===0){ wrong(worldPos); }
-    else { // free browsing after step0 = wrong action
-      wrong(worldPos);
-    }
-  }
-  else if(d.type==='card'){
-    if(G.step===1 && d.product && !d.product.added && d.product.brand===G.order.brand.name){
-      d.product.added=true; refreshCard(obj); G.step=2;
-      addScore(120); SFX.add(); popRing(worldPos,0x39d98a);
-      toast(d.product.discount? 'Ajouté !  -10% appliqué ✓':'Ajouté au panier ✓','#39d98a'); setSteps();
-    } else wrong(worldPos);
-  }
-  else if(d.type==='flag'){
-    if(G.step===2 && d.country.code===G.order.country.code){
-      setFlagActive(obj,true); G.combo++; G.bestCombo=Math.max(G.bestCombo,G.combo); G.orders++;
-      addScore(200); G.time=Math.min(75,G.time+3.5); SFX.done(); popRing(worldPos,0xffcc4d);
-      toast('COMMANDE VALIDÉE  +3.5 s','#ffcc4d');
-      setTimeout(()=>{ if(G.state==='play') newOrder(); },420);
-      G.step=3; setSteps(); updateHUD();
-    } else wrong(worldPos);
-  }
-  else if(d.type==='nav'){
-    if(!d.active){
-      d.active=true; drawNav(d.cv,d.txt,d.icon,true);
-      obj.material.map.needsUpdate=true; obj.material.emissiveMap.needsUpdate=true;
-      G.score+= 40; updateHUD(); SFX.ok(); popRing(worldPos,0x39d98a);
-      toast(d.txt==='Mon compte'? 'Mon compte ✓ +40':'Connecté ✓ +40 fidélité','#39d98a');
-    } else toast('Déjà activé','#9a9ab5');
-  }
-  else if(d.type==='coupon'){
-    coupon.visible=false; couponLife=0; couponTimer=8+Math.random()*6;
-    G.time=Math.min(80,G.time+5); G.score+=250; updateHUD(); SFX.coupon();
-    popRing(worldPos,0xffcc4d); toast('CODE BACK10 !  +250  +5 s','#ff8a3d');
-  }
-}
-
-/* ---------------- INPUT ---------------- */
-const ray=new THREE.Raycaster(), ptr=new THREE.Vector2();
-let dragging=false,downX=0,downY=0,moved=0, targetRX=0,targetRY=0, hovered=null;
-function pointerPos(e){ return {x:e.clientX,y:e.clientY}; }
-renderer.domElement.addEventListener('pointerdown',e=>{
-  dragging=true; moved=0; downX=e.clientX; downY=e.clientY;
+// Category pills
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    renderProducts(pill.dataset.cat);
+  });
 });
-renderer.domElement.addEventListener('pointermove',e=>{
-  const nx=(e.clientX/innerWidth)*2-1, ny=-(e.clientY/innerHeight)*2+1;
-  ptr.set(nx,ny);
-  if(dragging){ moved+=Math.abs(e.clientX-downX)+Math.abs(e.clientY-downY);
-    targetRY=THREE.MathUtils.clamp((e.clientX/innerWidth-.5)*0.55,-.3,.3);
-    targetRX=THREE.MathUtils.clamp(-(e.clientY/innerHeight-.5)*0.28,-.16,.16);
+
+// Reveal observer
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Cart logic
+let cart = [];
+const cartDrawer = document.getElementById('cart-drawer');
+const cartOverlay = document.getElementById('cart-overlay');
+const cartItems = document.getElementById('cart-items');
+const cartCount = document.getElementById('cart-count');
+const cartTotal = document.getElementById('cart-total');
+
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+  const existing = cart.find(item => item.id === id);
+  if (existing) {
+    existing.qty += 1;
   } else {
-    targetRY=(nx)*0.09; targetRX=-(ny)*0.05;
+    cart.push({ ...product, qty: 1 });
+  }
+  updateCart();
+  showToast('Ajouté au panier ✓');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  updateCart();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (item) {
+    item.qty += delta;
+    if (item.qty <= 0) removeFromCart(id);
+    else updateCart();
+  }
+}
+
+function updateCart() {
+  const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+  cartCount.textContent = totalQty;
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  cartTotal.textContent = total + '€';
+  
+  if (cart.length === 0) {
+    cartItems.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">⌖</div>
+        <p>Votre panier est vide</p>
+      </div>
+    `;
+  } else {
+    cartItems.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <div class="price">${item.price * item.qty}€</div>
+          <div class="cart-qty">
+            <button data-action="dec" data-id="${item.id}">−</button>
+            <span>${item.qty}</span>
+            <button data-action="inc" data-id="${item.id}">+</button>
+          </div>
+          <button class="remove" data-action="rm" data-id="${item.id}">Retirer</button>
+        </div>
+      </div>
+    `).join('');
+    
+    cartItems.querySelectorAll('[data-action]').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = parseInt(b.dataset.id);
+        if (b.dataset.action === 'inc') changeQty(id, 1);
+        else if (b.dataset.action === 'dec') changeQty(id, -1);
+        else if (b.dataset.action === 'rm') removeFromCart(id);
+      });
+    });
+  }
+}
+
+document.getElementById('cart-btn').addEventListener('click', () => {
+  cartDrawer.classList.add('open');
+  cartOverlay.classList.add('open');
+});
+document.getElementById('cart-close').addEventListener('click', () => {
+  cartDrawer.classList.remove('open');
+  cartOverlay.classList.remove('open');
+});
+cartOverlay.addEventListener('click', () => {
+  cartDrawer.classList.remove('open');
+  cartOverlay.classList.remove('open');
+});
+
+// Toast
+const toast = document.getElementById('toast');
+const toastMsg = document.getElementById('toast-msg');
+let toastTimer;
+function showToast(msg) {
+  toastMsg.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+// Newsletter
+document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = e.target.querySelector('input').value;
+  if (email) {
+    showToast('Bienvenue dans le cercle LUMIÈRE ✓');
+    e.target.reset();
   }
 });
-renderer.domElement.addEventListener('pointerup',e=>{
-  const wasDrag = Math.abs(e.clientX-downX)>12||Math.abs(e.clientY-downY)>12;
-  dragging=false;
-  if(wasDrag||G.state!=='play') return;
-  ptr.set((e.clientX/innerWidth)*2-1, -(e.clientY/innerHeight)*2+1);
-  ray.setFromCamera(ptr,camera);
-  const hits=ray.intersectObjects(interactives.filter(o=>o.visible),false);
-  if(hits.length){ handleClick(hits[0].object,hits[0].point); }
-});
-renderer.domElement.addEventListener('pointerleave',()=>{dragging=false;});
 
-/* ---------------- RESIZE ---------------- */
-function resize(){
-  const w=innerWidth,h=innerHeight;
-  renderer.setSize(w,h); camera.aspect=w/h;
-  const need=14.2, dv=need/(2*Math.tan(camera.fov*Math.PI/360));
-  const z=Math.max(dv, dv/camera.aspect);
-  camera.position.set(0,.9,z*1.02); camera.lookAt(0,.6,0);
-  camera.updateProjectionMatrix();
-}
-addEventListener('resize',resize); resize();
+// Initialize
+renderProducts();
+updateCart();
 
-/* ---------------- LOOP ---------------- */
-const clock=new THREE.Clock();
-function animate(){
-  requestAnimationFrame(animate);
-  const dt=Math.min(.05,clock.getDelta()), t=clock.elapsedTime;
-
-  // board rotation
-  board.rotation.y += (targetRY-board.rotation.y)*.06;
-  board.rotation.x += (targetRX-board.rotation.x)*.06;
-
-  // banner shine sweep
-  shine.position.x = ((t*3.2)%16)-8;
-  shineMat.opacity = .10+.05*Math.sin(t*4);
-  banner.position.y = 5.15+Math.sin(t*1.1)*.05;
-
-  // hover detection
-  if(G.state==='play'&&!dragging){
-    ray.setFromCamera(ptr,camera);
-    const hits=ray.intersectObjects(interactives.filter(o=>o.visible),false);
-    const h=hits.length?hits[0].object:null;
-    if(h!==hovered) hovered=h;
-  }
-
-  // cards float + pop + hover
-  cards.forEach((m,i)=>{
-    const d=m.userData;
-    if(d.pop!==undefined && d.pop<1){ d.pop=Math.min(1,d.pop+dt*3.2);
-      const s=1+Math.sin(d.pop*Math.PI)*.09; m.scale.setScalar(d.pop*s); }
-    else {
-      const target=(hovered===m)?1.07:1;
-      m.scale.x+= (target-m.scale.x)*.18; m.scale.y=m.scale.x; m.scale.z=m.scale.x;
-    }
-    m.position.y = d.y + Math.sin(t*1.3+d.fl)*.055;
-    const glow = (G.step===1?.10+.09*Math.sin(t*4):0) + (hovered===m?.35:0);
-    m.material[4].emissiveIntensity = .16+glow;
-  });
-  // tabs
-  tabMeshes.forEach((m,i)=>{
-    const target=(hovered===m)?1.12:1; m.scale.x+=(target-m.scale.x)*.2; m.scale.y=m.scale.x;
-    const glow=(G.step===0?.14+.12*Math.sin(t*5+i*.4):0)+(hovered===m?.35:0)+(m.userData.active?.35:0);
-    m.material.emissiveIntensity=.2+glow;
-  });
-  // flags
-  flagMeshes.forEach((m,i)=>{
-    const target=(hovered===m)?1.16:1; m.scale.x+=(target-m.scale.x)*.2; m.scale.y=m.scale.x;
-    const glow=(G.step===2?.18+.14*Math.sin(t*5+i*.5):0)+(hovered===m?.35:0)+(m.userData.active?.4:0);
-    m.material.emissiveIntensity=.25+glow;
-    m.position.y=2.95+ (G.step===2? Math.sin(t*3+i)*.04:0);
-  });
-  // nav
-  [navAccount,navLogin].forEach(m=>{ const target=(hovered===m)?1.1:1;
-    m.scale.x+=(target-m.scale.x)*.2; m.scale.y=m.scale.x;
-    m.material.emissiveIntensity=.22+(hovered===m?.3:0)+(m.userData.active?.3:0); });
-
-  // coupon
-  if(G.state==='play'){
-    if(!coupon.visible){ couponTimer-=dt; if(couponTimer<=0){ coupon.visible=true; couponLife=6.5;
-        coupon.userData.px=(Math.random()-.5)*8; coupon.userData.py=3.4+Math.random()*1.6; } }
-    else { couponLife-=dt;
-      coupon.position.set(coupon.userData.px+Math.sin(t*1.1)*1.6, coupon.userData.py+Math.sin(t*2.2)*.35, 1.4);
-      coupon.rotation.y=Math.sin(t*1.6)*.5; coupon.rotation.z=Math.sin(t*2)*.08;
-      const s=(hovered===coupon)?1.2:1+Math.sin(t*6)*.05; coupon.scale.setScalar(s);
-      if(couponLife<=0){ coupon.visible=false; couponTimer=9+Math.random()*6; } }
-  }
-
-  // effects
-  for(let i=effects.length-1;i>=0;i--){
-    const e=effects[i]; e.t+=dt*2.4; e.m.scale.setScalar(1+e.t*3.2);
-    e.m.material.opacity=Math.max(0,.95-e.t);
-    if(e.t>=1){ scene.remove(e.m); e.m.geometry.dispose(); e.m.material.dispose(); effects.splice(i,1); }
-  }
-
-  // lights sway
-  p1.position.x=Math.sin(t*.5)*10; p2.position.x=Math.cos(t*.42)*10;
-
-  // timer
-  if(G.state==='play'){
-    G.time-=dt; if(G.time<=0){ G.time=0; endGame(); }
-    updateHUD();
-  }
-  renderer.render(scene,camera);
-}
-animate();
-
-/* ---------------- STATE ---------------- */
-function startGame(){
-  audio(); if(AC&&AC.state==='suspended') AC.resume();
-  G.state='play'; G.score=0; G.time=60; G.combo=0; G.bestCombo=0; G.orders=0;
-  [navAccount,navLogin].forEach(m=>{ m.userData.active=false; drawNav(m.userData.cv,m.userData.txt,m.userData.icon,false);
-    m.material.map.needsUpdate=true; m.material.emissiveMap.needsUpdate=true; });
-  coupon.visible=false; couponTimer=6;
-  document.getElementById('startScreen').classList.add('hidden');
-  document.getElementById('overScreen').classList.add('hidden');
-  newOrder();
-}
-function endGame(){
-  G.state='over'; SFX.over(); coupon.visible=false;
-  document.getElementById('fScore').textContent=G.score;
-  document.getElementById('fOrders').textContent=G.orders;
-  document.getElementById('fCombo').textContent=G.bestCombo;
-  let r;
-  if(G.score>=3000) r='🏆 Personal Shopper Légendaire — la boutique t’appartient !';
-  else if(G.score>=1800) r='🔥 Client VIP — livraison offerte Worldwide !';
-  else if(G.score>=900) r='👟 Bon panier — encore un effort pour le statut VIP.';
-  else r='🛒 Petit panier… réessaie avec le code BACK10 !';
-  document.getElementById('rank').textContent=r;
-  document.getElementById('overScreen').classList.remove('hidden');
-}
-document.getElementById('playBtn').addEventListener('click',startGame);
-document.getElementById('againBtn').addEventListener('click',startGame);
-
-/* preview shelf on menu */
-fillShelf('TOP VENTES',null);
-UI.hint.textContent='Appuie sur JOUER  •  Glisse pour pivoter la boutique';
 </script>
 </body>
 </html>
