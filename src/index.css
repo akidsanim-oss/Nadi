@@ -1,86 +1,95 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Barlow+Condensed:wght@500;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --color-night: #0b0d0b;
-  --color-coal: #141813;
-  --color-panel: #1b201a;
-  --color-line: #2a302a;
-  --color-crimson: #c1272d;
-  --color-blood: #8e1c21;
-  --color-palm: #006233;
-  --color-fern: #0f7a45;
-  --color-gold: #d4a24c;
-  --color-sand: #f0e8d8;
-  --color-smoke: #a9ada4;
-
-  --font-display: "Anton", "Tajawal", sans-serif;
-  --font-body: "Barlow", "Tajawal", sans-serif;
-  --font-cond: "Barlow Condensed", "Tajawal", sans-serif;
+:root {
+  --j-purple: #280645;
+  --j-deep: #12011f;
+  --j-violet: #6b1182;
+  --j-pink: #ff2a85;
+  --j-gold: #ffd000;
+  --j-cream: #fff9f2;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--color-night);
-  color: var(--color-sand);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
+  font-family: 'Tajawal', 'Cairo', system-ui, sans-serif;
+  background-color: var(--j-deep);
+  color: var(--j-cream);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+html[dir="ltr"] body { font-family: 'Outfit', 'Cairo', system-ui, sans-serif; }
+
+.font-display { font-family: 'Cairo', 'Tajawal', sans-serif !important; }
+html[dir="ltr"] .font-display { font-family: 'Outfit', 'Cairo', sans-serif !important; }
+
+::-webkit-scrollbar { width: 9px; height: 8px; }
+::-webkit-scrollbar-track { background: #18022b; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff2a85, #6b1182, #ffd000); border-radius: 999px; }
+
+::selection { background: rgba(255, 42, 133, .45); color: #fff; }
+
+.gem-text {
+  background: linear-gradient(100deg, #ffe57f 5%, #ffd000 22%, #ff2a85 55%, #c86bff 80%, #ffe57f 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gemshine 5s linear infinite;
+}
+@keyframes gemshine { to { background-position: 200% center; } }
+
+.glass-panel {
+  background: rgba(38, 7, 63, 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 208, 0, 0.16);
+}
+.glass-soft {
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.card-lift { transition: transform .35s cubic-bezier(.175,.885,.32,1.2), box-shadow .35s, border-color .35s; }
+.card-lift:hover { transform: translateY(-8px); box-shadow: 0 18px 44px rgba(255,42,133,.28), 0 0 18px rgba(255,208,0,.14); border-color: rgba(255,208,0,.45); }
+
+.bg-jewel {
+  background:
+    radial-gradient(900px 480px at 85% -5%, rgba(255, 42, 133, 0.22), transparent 60%),
+    radial-gradient(760px 520px at 8% 12%, rgba(107, 17, 130, 0.5), transparent 62%),
+    radial-gradient(700px 500px at 50% 110%, rgba(255, 208, 0, 0.10), transparent 60%),
+    linear-gradient(180deg, #1d0333 0%, #12011f 55%, #0d0118 100%);
+}
+.grain::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
-[dir='rtl'] body,
-[dir='rtl'] {
-  font-family: "Tajawal", "Barlow", sans-serif;
-}
+@keyframes floaty { 0%,100% { transform: translateY(0) rotate(0deg);} 50% { transform: translateY(-14px) rotate(3deg);} }
+.animate-floaty { animation: floaty 4.5s ease-in-out infinite; }
+@keyframes spinSlow { to { transform: rotate(360deg);} }
+.animate-spin-slow { animation: spinSlow 22s linear infinite; }
+@keyframes marqueeRtl { from { transform: translateX(0);} to { transform: translateX(50%);} }
+@keyframes marqueeLtr { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+.marquee-track { display: flex; width: max-content; animation: marqueeRtl 26s linear infinite; }
+html[dir="ltr"] .marquee-track { animation-name: marqueeLtr; }
+.marquee-track:hover { animation-play-state: paused; }
 
-.font-display {
-  font-family: var(--font-display);
-}
-
-[dir='rtl'] .font-display {
-  font-family: "Tajawal", sans-serif;
-  font-weight: 900;
-  letter-spacing: 0 !important;
-}
-
-.font-cond {
-  font-family: var(--font-cond);
-}
-
-[dir='rtl'] .font-cond {
-  font-family: "Tajawal", sans-serif;
-  font-weight: 700;
-}
-
-/* Zellige eight-point star pattern */
-.zellige {
-  background-image: url("data:image/svg+xml,%3Csvg width='56' height='56' viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23d4a24c' stroke-opacity='0.16' stroke-width='1'%3E%3Cpath d='M28 4 L34 22 L52 28 L34 34 L28 52 L22 34 L4 28 L22 22 Z'/%3E%3Ccircle cx='28' cy='28' r='5'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-.zellige-dense {
-  background-image: url("data:image/svg+xml,%3Csvg width='36' height='36' viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1'%3E%3Cpath d='M18 2 L22 14 L34 18 L22 22 L18 34 L14 22 L2 18 L14 14 Z'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 28s linear infinite;
-}
-
-[dir='rtl'] .animate-marquee {
-  animation-direction: reverse;
-}
-
-/* thin scrollbars for horizontal scrollers */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-::selection {
-  background: var(--color-crimson);
-  color: var(--color-sand);
+input, select, textarea { font-family: inherit; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.35); }
+select option { background: #22053a; color: #fff; }
+
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::before {
+  content: ''; position: absolute; top: 0; height: 100%; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.5), transparent);
+  transform: skewX(-20deg); animation: shine 3.2s ease-in-out infinite;
+  inset-inline-start: -60%;
 }
+@keyframes shine { 0% { inset-inline-start: -60%; } 55%,100% { inset-inline-start: 130%; } }
+
+.gold-ring { box-shadow: 0 0 0 2px rgba(255,208,0,.5), 0 0 26px rgba(255,208,0,.35); }
