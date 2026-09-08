@@ -1,704 +1,931 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DEAL HUNTER — SUV SHOWDOWN 2026</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-*{font-family:'Space Grotesk',system-ui,sans-serif}
-.syne{font-family:'Syne',sans-serif}
-body{background:#07070a; overscroll-behavior:none; touch-action:none}
-.glass{background:rgba(18,18,24,0.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.08)}
-.card-select{transition:all .28s cubic-bezier(.175,.885,.32,1.275)}
-.card-select:hover{transform:translateY(-3px)}
-.card-select.selected{border-color:#c8ff00!important;box-shadow:0 0 0 1px #c8ff00,0 12px 30px rgba(200,255,0,.25);transform:translateY(-2px) scale(1.02)}
-::-webkit-scrollbar{display:none}
-@keyframes popupIn{0%{transform:scale(.86) translateY(18px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
-@keyframes floatUp{0%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-42px);opacity:0}}
-@keyframes gridMove{0%{background-position:0 0}100%{background-position:40px 40px}}
-.scanline{background:linear-gradient(transparent,rgba(200,255,0,.06),transparent);height:4px;animation:scan 3s linear infinite}
-@keyframes scan{0%{top:-10%}100%{top:110%}}
-</style>
-</head>
-<body class="text-white overflow-hidden select-none">
-<div id="app" class="relative w-screen h-screen bg-[#07070a]">
-
-<!-- START SCREEN -->
-<div id="startScreen" class="absolute inset-0 z-20 overflow-y-auto">
-  <div class="min-h-full w-full relative">
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px, transparent 1px);background-size:40px 40px;animation:gridMove 8s linear infinite"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-[#c8ff00]/[0.06] via-transparent to-[#00ffd0]/[0.05] pointer-events-none"></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immersity AI | L'Intelligence Spatiale pour l'AGI</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <div class="relative max-w-[1160px] mx-auto px-5 md:px-8 py-6 md:py-10">
-      <!-- header -->
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-8">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-[#c8ff00] text-black grid place-items-center font-black syne text-[16px]">D</div>
-          <div class="leading-none">
-            <div class="syne font-extrabold tracking-tight text-[13px]">DEALHUNTER</div>
-            <div class="text-[9px] tracking-[0.22em] opacity-50 uppercase">Auto Edition • 2026</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 text-[10px]">
-          <span class="px-3 py-1.5 rounded-full glass tracking-widest">LIVE RANKING</span>
-          <span class="w-2 h-2 rounded-full bg-[#00ffd0] animate-pulse shadow-[0_0_12px_#00ffd0]"></span>
-        </div>
-      </div>
+    <!-- Three.js & Controls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-      <div class="grid lg:grid-cols-[1.15fr_.85fr] gap-8 items-start">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 text-[10px] tracking-widest uppercase mb-4">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#c8ff00]"></span> Opens in new window • Browse free offers
-          </div>
-          <h1 class="syne font-[800] leading-[0.85] tracking-[-0.03em] text-[42px] md:text-[68px]">
-            ABOUT 8<br>
-            <span class="text-[#c8ff00]">COMPACT SUVs,</span><br>
-            ONLY 1<br>
-            CHAMPION.
-          </h1>
-          <p class="mt-4 text-[13px] md:text-[14px] leading-[1.6] opacity-70 max-w-[520px]">
-            Our experts rank the top SUVs of 2026. Experience the best way to search new cars. Shop new cars, including all new EVs, SUVs, sedans, and pickup trucks. Browse free offers, from fuel to entertainment and everything in between, find deals to help you save.
-            <span class="text-white opacity-100 font-bold">Claim offers now.</span>
-          </p>
-
-          <div class="mt-5 flex flex-wrap gap-1.5">
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] tracking-wide">Electric</span>
-            <span class="px-2.5 py-1 rounded-full bg-[#c8ff00] text-black text-[10px] font-bold tracking-wide">SUV</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Sedan</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Pickup Truck</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Luxury</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Crossover</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Hybrid</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Diesel</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Coupe</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Hatchback</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Wagon</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Convertible</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Minivan</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Plug-in Hybrid</span>
-            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px]">Van</span>
-          </div>
-
-          <div class="mt-7 flex gap-3">
-            <button id="btnStart" class="group relative px-7 py-3.5 rounded-full bg-[#c8ff00] text-black font-black tracking-[0.14em] text-[12px] uppercase overflow-hidden">
-              <span class="relative z-10 flex items-center gap-2">Start Engine — See The Results <span class="group-hover:translate-x-0.5 transition">↗</span></span>
-              <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
-            </button>
-            <div class="hidden md:flex items-center gap-2 text-[11px] opacity-60">
-              <span class="w-8 h-[1px] bg-white/30"></span> WASD / Arrows + Claim pop-ups
-            </div>
-          </div>
-
-          <div class="mt-6 glass rounded-2xl p-3 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-[#ff2d55]/20 grid place-items-center">⚠️</div>
-            <div class="text-[11px] leading-tight">
-              <div class="font-bold tracking-wide">HOW TO WIN</div>
-              <div class="opacity-60">Race 3 laps, collect fuel & entertainment deals, close scam windows. Most savings + P1 = Champion.</div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="text-[11px] tracking-[0.18em] uppercase opacity-60">Choose Your Contender</div>
-            <div class="text-[10px] px-2 py-1 rounded-full bg-[#c8ff00]/15 text-[#c8ff00] border border-[#c8ff00]/20">8 VEHICLES</div>
-          </div>
-          <div id="suvGrid" class="grid grid-cols-2 gap-3"></div>
-          <div class="mt-3 text-[10px] opacity-40 leading-relaxed">What to know before purchasing an EV. See more electric cars, SUVs, sedans, and pickup trucks. Shop new EVs with free charging offers.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- GAME SCREEN -->
-<div id="gameScreen" class="absolute inset-0 z-10 hidden bg-[#0a0a0f]">
-  <canvas id="gameCanvas" class="absolute inset-0 w-full h-full"></canvas>
-  
-  <!-- HUD -->
-  <div id="hud" class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-0 left-0 right-0 p-3 md:p-5 flex justify-between items-start gap-3 pointer-events-auto">
-      <div class="flex gap-2">
-        <div class="glass rounded-full px-3 md:px-4 py-2 flex items-center gap-2">
-          <span class="text-[9px] opacity-60 tracking-[0.18em]">POS</span><span id="hudPos" class="font-black text-[13px] md:text-[14px]">1/8</span>
-        </div>
-        <div class="glass rounded-full px-3 md:px-4 py-2 flex items-center gap-2">
-          <span class="text-[9px] opacity-60 tracking-[0.18em]">LAP</span><span id="hudLap" class="font-black text-[13px] md:text-[14px]">1/3</span>
-        </div>
-      </div>
-      <div class="flex gap-2 items-center">
-        <div class="glass rounded-full px-3 md:px-4 py-2 flex items-center gap-2">
-          <span class="text-[9px] opacity-60 tracking-[0.18em]">SAVED</span><span id="hudSavings" class="font-black text-[13px] md:text-[14px] text-[#c8ff00]">$0</span>
-        </div>
-        <canvas id="minimapCanvas" width="120" height="120" class="glass rounded-[14px] w-[64px] h-[64px] md:w-[84px] md:h-[84px]"></canvas>
-      </div>
-    </div>
-    <div class="absolute bottom-[118px] md:bottom-6 left-3 md:left-5 glass rounded-full px-4 py-2 flex items-center gap-3 pointer-events-auto">
-      <span class="text-[9px] opacity-60 tracking-[0.18em]">SPEED</span><span id="hudSpeed" class="font-black text-[18px] leading-none">0</span><span class="text-[9px] opacity-60">MPH</span>
-      <div class="w-[48px] h-1 bg-white/10 rounded-full overflow-hidden ml-2"><div id="speedBar" class="h-full bg-[#c8ff00]" style="width:0%"></div></div>
-    </div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.04] syne font-black text-[18vw] leading-none tracking-[-0.05em]">DEALS</div>
-  </div>
-
-  <!-- Popups layer -->
-  <div id="popupLayer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-
-  <!-- Mobile Controls -->
-  <div id="mobileControls" class="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-end md:hidden pointer-events-auto">
-    <div class="flex gap-2.5">
-      <button id="btnLeft" class="w-[56px] h-[56px] rounded-full glass active:scale-95 flex items-center justify-center text-[18px]">‹</button>
-      <button id="btnRight" class="w-[56px] h-[56px] rounded-full glass active:scale-95 flex items-center justify-center text-[18px]">›</button>
-    </div>
-    <div class="flex gap-2.5 items-end">
-      <button id="btnBrake" class="w-[56px] h-[56px] rounded-full glass active:scale-95 flex items-center justify-center text-[12px] font-bold">BRK</button>
-      <button id="btnGas" class="w-[76px] h-[76px] rounded-full bg-[#c8ff00] text-black active:scale-95 flex flex-col items-center justify-center leading-none shadow-[0_0_30px_rgba(200,255,0,.5)]">
-        <span class="font-black text-[14px] tracking-widest">GO</span><span class="text-[8px] opacity-70">HOLD</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- RESULT SCREEN -->
-<div id="resultScreen" class="absolute inset-0 z-30 hidden overflow-y-auto bg-[#07070a]">
-  <div class="absolute inset-0 bg-gradient-to-b from-[#c8ff00]/10 via-transparent to-[#00ffd0]/10 pointer-events-none"></div>
-  <div class="relative max-w-[980px] mx-auto px-5 md:px-8 py-8 md:py-12">
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-9 h-9 rounded-full bg-[#c8ff00] text-black grid place-items-center font-black syne">D</div>
-      <div class="text-[11px] tracking-[0.2em] uppercase opacity-60">Race Report • 2026 Compact SUV Rankings</div>
-    </div>
-
-    <div class="grid lg:grid-cols-[1.1fr_.9fr] gap-6">
-      <div class="glass rounded-[24px] p-6 md:p-8 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-[220px] h-[220px] bg-[#c8ff00]/15 blur-[50px] rounded-full pointer-events-none"></div>
-        <div class="text-[11px] tracking-[0.2em] uppercase opacity-60 mb-3">Final Standing</div>
-        <div class="flex items-end gap-4 mb-6">
-          <div id="resultPos" class="syne font-black text-[72px] leading-[0.8] tracking-[-0.04em]">P1</div>
-          <div>
-            <div id="resultChampionText" class="syne font-extrabold text-[22px] md:text-[28px] leading-[0.9]">YOU ARE THE CHAMPION!</div>
-            <div class="mt-2 flex items-center gap-2">
-              <div id="resultWinnerColor" class="w-3 h-3 rounded-full bg-[#c8ff00]"></div>
-              <span id="resultWinnerName" class="font-bold text-[13px] tracking-wide">VOLT RAY E</span>
-              <span id="resultWinnerCat" class="text-[10px] px-2 py-0.5 rounded-full bg-white/10">Electric</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-3 mb-6">
-          <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
-            <div class="text-[10px] tracking-widest opacity-50 uppercase">Total Saved</div>
-            <div id="resultSavings" class="syne font-black text-[26px] text-[#c8ff00]">$0</div>
-            <div class="text-[10px] opacity-50">Fuel + Entertainment + EV</div>
-          </div>
-          <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
-            <div class="text-[10px] tracking-widest opacity-50 uppercase">Deals Claimed</div>
-            <div class="syne font-black text-[26px]">12</div>
-            <div class="text-[10px] opacity-50">Opens in new window</div>
-          </div>
-          <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
-            <div class="text-[10px] tracking-widest opacity-50 uppercase">Champion Bonus</div>
-            <div class="syne font-black text-[26px]">+500</div>
-            <div class="text-[10px] opacity-50">Expert pick 2026</div>
-          </div>
-        </div>
-
-        <div class="flex gap-3">
-          <button id="btnReplay" class="px-6 py-3 rounded-full bg-[#c8ff00] text-black font-black text-[12px] tracking-[0.14em] uppercase">Race Again</button>
-          <button id="btnGarage" class="px-6 py-3 rounded-full glass font-bold text-[12px] tracking-[0.14em] uppercase">Back to Garage</button>
-        </div>
-
-        <div class="mt-6 text-[11px] opacity-50 leading-relaxed">Popular categories include Electric, SUV, Sedan, Pickup Truck, Luxury, Crossover, Hybrid, Diesel, Coupe, Hatchback, Wagon, Convertible, Minivan, Plug-in Hybrid, and Van. Experience the best way to search new cars.</div>
-      </div>
-
-      <div class="glass rounded-[24px] p-5">
-        <div class="text-[11px] tracking-[0.18em] uppercase opacity-60 mb-4">Official 2026 Ranking — 8 Compact SUVs</div>
-        <div id="resultList" class="space-y-2"></div>
-        <div class="mt-5 p-3 rounded-xl bg-[#c8ff00]/10 border border-[#c8ff00]/20 text-[11px] leading-snug">
-          <span class="font-black">Expert Note:</span> The champion balances efficiency, handling and deal value. EV models saved 23% more on fuel offers during our test.
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
-
-<script>
-const SUVS=[
-{id:0,name:"VOLT RAY E",cat:"Electric",color:"#00ffd0",speed:9,handling:8,economy:10,icon:"⚡"},
-{id:1,name:"TERRA TREK S",cat:"SUV",color:"#ff8c00",speed:7,handling:9,economy:7,icon:"⛰️"},
-{id:2,name:"URBAN EDGE",cat:"Crossover",color:"#c8ff00",speed:8,handling:10,economy:8,icon:"🏙️"},
-{id:3,name:"LUX NOVA",cat:"Luxury",color:"#d0a0ff",speed:9,handling:7,economy:5,icon:"💎"},
-{id:4,name:"BRUTE FORCE",cat:"Pickup Truck",color:"#ff2d55",speed:6,handling:6,economy:6,icon:"🛻"},
-{id:5,name:"ECO GLIDE",cat:"Hybrid",color:"#7eff7e",speed:7,handling:8,economy:9,icon:"🌿"},
-{id:6,name:"STORM COUPE",cat:"Coupe",color:"#ff2d95",speed:10,handling:6,economy:4,icon:"🌩️"},
-{id:7,name:"FAMILY HAUL",cat:"Minivan",color:"#5eb8ff",speed:6,handling:7,economy:8,icon:"👨‍👩‍👧‍👦"},
-];
-
-let audioCtx;
-function initAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); }
-function playSound(t){
-  try{
-    initAudio();
-    const now=audioCtx.currentTime;
-    if(t==='collect'){
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-      o.connect(g);g.connect(audioCtx.destination);
-      o.frequency.setValueAtTime(380,now);o.frequency.linearRampToValueAtTime(920,now+0.14);
-      g.gain.setValueAtTime(0.28,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.32);
-      o.start(now);o.stop(now+0.32);
-    }else if(t==='bad'){
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-      o.type='sawtooth';o.connect(g);g.connect(audioCtx.destination);
-      o.frequency.setValueAtTime(180,now);o.frequency.linearRampToValueAtTime(60,now+0.35);
-      g.gain.setValueAtTime(0.3,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.4);
-      o.start(now);o.stop(now+0.4);
-    }else if(t==='popup'){
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-      o.connect(g);g.connect(audioCtx.destination);
-      o.frequency.setValueAtTime(600,now);o.frequency.setValueAtTime(900,now+0.06);
-      g.gain.setValueAtTime(0.18,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.22);
-      o.start(now);o.stop(now+0.22);
-    }else if(t==='win'){
-      [0,0.12,0.24].forEach((d,i)=>{
-        const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-        o.connect(g);g.connect(audioCtx.destination);
-        o.frequency.setValueAtTime([440,660,880][i],now+d);
-        g.gain.setValueAtTime(0.28,now+d);g.gain.exponentialRampToValueAtTime(0.001,now+d+0.5);
-        o.start(now+d);o.stop(now+d+0.5);
-      });
-    }
-  }catch(e){}
-}
-
-const canvas=document.getElementById('gameCanvas');
-const ctx=canvas.getContext('2d');
-function resize(){
-  const dpr=Math.min(2,window.devicePixelRatio||1);
-  canvas.width=window.innerWidth*dpr;
-  canvas.height=window.innerHeight*dpr;
-  canvas.style.width=window.innerWidth+'px';
-  canvas.style.height=window.innerHeight+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-}
-window.addEventListener('resize',resize); resize();
-
-let keys={};
-window.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true; if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(e.key.toLowerCase())) e.preventDefault();});
-window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
-
-let mobileLeft=false,mobileRight=false,mobileGas=false,mobileBrake=false;
-function bindHold(id,getter,setter){
-  const el=document.getElementById(id); if(!el) return;
-  const on=ev=>{ev.preventDefault();setter(true);};
-  const off=ev=>{ev.preventDefault();setter(false);};
-  el.addEventListener('touchstart',on,{passive:false}); el.addEventListener('touchend',off,{passive:false});
-  el.addEventListener('mousedown',on); window.addEventListener('mouseup',off);
-}
-bindHold('btnLeft',null,v=>mobileLeft=v);
-bindHold('btnRight',null,v=>mobileRight=v);
-bindHold('btnGas',null,v=>mobileGas=v);
-bindHold('btnBrake',null,v=>mobileBrake=v);
-
-let game={
-  state:'start',
-  selectedSUV:2,
-  trackPoints:[],
-  collectibles:[],
-  cars:[],
-  player:null,
-  savings:0,
-  lap:0,
-  position:1,
-  popupTimer:0,
-  time:0
-};
-
-function generateTrack(){
-  const pts=[]; const N=88; const base=520;
-  for(let i=0;i<N;i++){
-    const a=(i/N)*Math.PI*2;
-    const r=base + Math.sin(a*3)*130 + Math.sin(a*5+1)*70 + Math.cos(a*2)*60 + (Math.random()-0.5)*22;
-    const x=Math.cos(a)*r;
-    const y=Math.sin(a)*r*0.78 + Math.sin(a*2)*40;
-    pts.push({x,y,angle:0});
-  }
-  for(let i=0;i<N;i++){
-    const prev=pts[(i-1+N)%N], next=pts[(i+1)%N];
-    pts[i].angle=Math.atan2(next.y-prev.y,next.x-prev.x);
-  }
-  return pts;
-}
-function generateCollectibles(track){
-  const types=['fuel','ent','save','ev'];
-  const arr=[];
-  for(let i=0;i<track.length;i+=5){
-    if(Math.random()<0.7){
-      const p=track[i];
-      const perp=p.angle+Math.PI/2;
-      const off=(Math.random()-0.5)*110;
-      arr.push({x:p.x+Math.cos(perp)*off, y:p.y+Math.sin(perp)*off, type:types[Math.floor(Math.random()*types.length)], collected:false, bob:Math.random()*6});
-    }
-  }
-  return arr;
-}
-
-function initGame(){
-  game.trackPoints=generateTrack();
-  game.collectibles=generateCollectibles(game.trackPoints);
-  game.cars=[];
-  const startIdx=2;
-  for(let i=0;i<8;i++){
-    const suv=SUVS[i];
-    const pt=game.trackPoints[(startIdx+i*2)%game.trackPoints.length];
-    const perp=pt.angle+Math.PI/2;
-    const side=(i%2===0?-1:1);
-    game.cars.push({
-      x:pt.x+Math.cos(perp)*side*26 + (Math.random()-0.5)*8,
-      y:pt.y+Math.sin(perp)*side*26,
-      angle:pt.angle,
-      speed:0,
-      maxSpeed:2.6 + suv.speed*0.38,
-      handling:0.72 + suv.handling*0.12,
-      color:suv.color,
-      name:suv.name,
-      cat:suv.cat,
-      id:suv.id,
-      isPlayer:i===game.selectedSUV,
-      lap:0,
-      progress:0,
-      progressIdx:startIdx,
-      boost:0,
-      shield:0,
-      _lastIdx:startIdx
-    });
-  }
-  game.player=game.cars.find(c=>c.isPlayer);
-  game.savings=0; game.lap=0; game.popupTimer=0; game.position=1; game.time=0;
-  document.getElementById('popupLayer').innerHTML='';
-}
-
-function spawnPopup(){
-  const layer=document.getElementById('popupLayer');
-  if(layer.children.length>=3) return;
-  const good=Math.random()>0.36;
-  const goodOffers=[
-    {title:"FREE FUEL",desc:"Save $45 on next fill • Limited",save:45,type:"fuel",icon:"⛽",cta:"CLAIM +$45"},
-    {title:"ENTERTAINMENT PACK",desc:"Free streaming 3 months — $30 value",save:30,type:"ent",icon:"🎬",cta:"CLAIM +$30"},
-    {title:"EV CHARGE DEAL",desc:"Free charging weekend — Save $60",save:60,type:"ev",icon:"⚡",cta:"CLAIM +$60"},
-    {title:"MAINTENANCE",desc:"50% off service — Save $35 today",save:35,type:"save",icon:"🔧",cta:"CLAIM +$35"},
-  ];
-  const badOffers=[
-    {title:"⚠️ SCAM WARRANTY",desc:"Pay $80 now to unlock prize!!!",save:-80,type:"scam",icon:"🚨",cta:"Ignore"},
-    {title:"OVERPRICED INSURANCE",desc:"Act now — Extra $50 fee",save:-50,type:"bad",icon:"💸",cta:"Dismiss"},
-    {title:"CLICKBAIT SUV",desc:"You won't believe this deal! Opens in new window.",save:0,type:"clickbait",icon:"🖱️",cta:"Close"},
-  ];
-  const offer=good?goodOffers[Math.floor(Math.random()*goodOffers.length)]:badOffers[Math.floor(Math.random()*badOffers.length)];
-  const win=document.createElement('div');
-  win.className='deal-window absolute glass rounded-[16px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,.6)] pointer-events-auto';
-  win.style.left=(6+Math.random()*56)+'%';
-  win.style.top=(12+Math.random()*46)+'%';
-  win.style.width='300px';
-  win.style.animation='popupIn .34s cubic-bezier(.175,.885,.32,1.275)';
-  win.innerHTML=`
-    <div class="flex items-center justify-between px-3.5 py-2 ${good?'bg-[#c8ff00] text-black':'bg-[#ff2d55] text-white'} text-[10px] font-black tracking-[0.14em] uppercase">
-      <span class="flex items-center gap-1.5"><span>${offer.icon}</span> ${good?'HOT DEAL • FREE':'SPONSORED • AD'}</span>
-      <button class="close-btn w-5 h-5 rounded-full bg-black/15 hover:bg-black/25 grid place-items-center">✕</button>
-    </div>
-    <div class="p-4">
-      <div class="text-[13px] font-black tracking-wide leading-tight">${offer.title}</div>
-      <div class="text-[11px] opacity-70 leading-[1.35] mt-1">${offer.desc}</div>
-      <div class="flex gap-2 mt-3">
-        <button class="claim-btn flex-1 py-2.5 rounded-full ${good?'bg-[#c8ff00] text-black':'bg-white/10 text-white'} text-[11px] font-black tracking-[0.12em] uppercase hover:brightness-110 active:scale-[0.98] transition">${offer.cta}</button>
-        <button class="dismiss-btn px-3.5 py-2.5 rounded-full bg-white/[0.06] border border-white/10 text-[11px] font-bold">✕</button>
-      </div>
-      <div class="mt-2.5 flex items-center justify-between">
-        <div class="text-[9px] opacity-40 tracking-wide">Opens in new window • Fuel • Entertainment</div>
-        <div class="text-[9px] px-1.5 py-0.5 rounded-full ${good?'bg-[#00ffd0]/20 text-[#00ffd0]':'bg-[#ff2d55]/20 text-[#ff2d55]'}">${good?'Verified':'Unverified'}</div>
-      </div>
-    </div>
-  `;
-  layer.appendChild(win);
-  playSound('popup');
-  const close=()=>{
-    win.style.transform='scale(.9) translateY(10px)'; win.style.opacity='0'; win.style.transition='all .18s';
-    setTimeout(()=>win.remove(),180);
-  };
-  win.querySelector('.close-btn').onclick=()=>{
-    if(!good){ game.savings+=5; playSound('collect'); floatText('+ $5 SMART CLOSE', win); } else { game.savings-=10; playSound('bad'); }
-    close();
-  };
-  win.querySelector('.dismiss-btn').onclick=close;
-  win.querySelector('.claim-btn').onclick=()=>{
-    if(good){
-      game.savings+=offer.save;
-      if(offer.type==='fuel') game.player.boost=180;
-      if(offer.type==='ent') game.player.shield=360;
-      if(offer.type==='ev'){ game.player.boost=140; }
-      playSound('collect'); floatText(`+$${offer.save}`, win);
-    }else{
-      game.savings+=offer.save;
-      playSound('bad'); floatText(offer.save===0?'BLOCKED':`-$${Math.abs(offer.save)}`, win);
-    }
-    close();
-  };
-  setTimeout(()=>{ if(win.parentNode) close(); }, 5800+Math.random()*3200);
-}
-function floatText(t, parent){
-  if(!parent) return;
-  const el=document.createElement('div');
-  el.className='absolute -top-2 left-1/2 -translate-x-1/2 bg-black text-[#c8ff00] text-[10px] font-black px-2.5 py-1 rounded-full pointer-events-none z-10';
-  el.textContent=t; el.style.animation='floatUp .8s forwards';
-  parent.style.position='relative'; parent.appendChild(el);
-  setTimeout(()=>el.remove(),800);
-}
-
-let lastT=0;
-function update(dt){
-  const d=dt/16.666;
-  game.time+=dt;
-
-  game.cars.forEach(car=>{
-    if(car.isPlayer){
-      const accel = (keys['w']||keys['arrowup']||keys[' ']||mobileGas)?1: (keys['s']||keys['arrowdown']||mobileBrake)?-0.75:0;
-      const left = (keys['a']||keys['arrowleft']||mobileLeft);
-      const right= (keys['d']||keys['arrowright']||mobileRight);
-      car.speed += accel*0.19*d;
-      car.speed *= 0.985;
-      car.speed = Math.max(-car.maxSpeed*0.55, Math.min(car.speed, car.maxSpeed + (car.boost>0?2.1:0)));
-      if(Math.abs(car.speed)>0.25){
-        let steer=0; if(left) steer=-1; if(right) steer=1;
-        car.angle += steer*0.048*car.handling*(Math.min(1,Math.abs(car.speed)/car.maxSpeed))*d;
-      }
-      if(car.boost>0) car.boost-=d;
-      if(car.shield>0) car.shield-=d;
-    }else{
-      const look=9+Math.floor(car.id*0.7);
-      const tidx=(car.progressIdx+look)%game.trackPoints.length;
-      const target=game.trackPoints[tidx];
-      let diff=Math.atan2(target.y-car.y,target.x-car.x)-car.angle;
-      while(diff>Math.PI) diff-=Math.PI*2; while(diff<-Math.PI) diff+=Math.PI*2;
-      const steer=Math.max(-1,Math.min(1,diff*1.15 + (Math.random()-0.5)*0.15));
-      car.angle+=steer*0.038*car.handling*d;
-      car.speed+=0.13*d; car.speed=Math.min(car.speed, car.maxSpeed*(0.84+Math.random()*0.18)); car.speed*=0.9985;
-      game.cars.forEach(other=>{
-        if(other===car) return;
-        const dd=Math.hypot(other.x-car.x,other.y-car.y);
-        if(dd<38){
-          const pa=Math.atan2(car.y-other.y,car.x-other.x);
-          car.x+=Math.cos(pa)*0.7; car.y+=Math.sin(pa)*0.7; car.speed*=0.96;
+    <style>
+        :root {
+            --bg-dark: #05070e;
+            --accent-cyan: #00f3ff;
+            --accent-purple: #7928ca;
+            --accent-blue: #2563eb;
+            --glass-bg: rgba(10, 15, 30, 0.65);
+            --glass-border: rgba(0, 243, 255, 0.2);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
         }
-      });
-    }
-    car.x+=Math.cos(car.angle)*car.speed*d;
-    car.y+=Math.sin(car.angle)*car.speed*d;
 
-    let closest=1e9, cIdx=0;
-    for(let i=0;i<game.trackPoints.length;i+=2){
-      const p=game.trackPoints[i]; const dd=Math.hypot(p.x-car.x,p.y-car.y);
-      if(dd<closest){closest=dd;cIdx=i;}
-    }
-    car.progressIdx=cIdx; car.progress=cIdx/game.trackPoints.length;
-    const TW=184;
-    if(closest>TW/2){
-      car.speed*=0.92;
-      const ctr=game.trackPoints[cIdx];
-      const an=Math.atan2(ctr.y-car.y,ctr.x-car.x);
-      car.x+=Math.cos(an)*1.3*d; car.y+=Math.sin(an)*1.3*d;
-      if(car.isPlayer && Math.random()<0.06) playSound('bad');
-    }
-    if(car.progressIdx<5 && car._lastIdx>game.trackPoints.length-8){
-      car.lap++;
-      if(car.isPlayer){
-        game.lap=car.lap;
-        if(car.lap>=3){ endRace(); }
-      }
-    }
-    car._lastIdx=car.progressIdx;
-  });
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
 
-  game.collectibles.forEach(c=>{
-    if(c.collected) return;
-    const dd=Math.hypot(c.x-game.player.x,c.y-game.player.y);
-    if(dd<36){
-      c.collected=true;
-      if(c.type==='fuel'){game.player.boost=190; game.savings+=22;}
-      if(c.type==='ent'){game.player.shield=380; game.savings+=18;}
-      if(c.type==='save'){game.savings+=42;}
-      if(c.type==='ev'){game.savings+=54; game.player.boost=130;}
-      playSound('collect');
-      const el=document.createElement('div');
-      el.className='absolute bg-[#c8ff00] text-black text-[11px] font-black px-2.5 py-1 rounded-full pointer-events-none';
-      const sx=window.innerWidth/2 + (c.x-game.player.x);
-      const sy=window.innerHeight/2 + (c.y-game.player.y);
-      el.style.left=sx+'px'; el.style.top=sy+'px'; el.style.animation='floatUp .8s forwards';
-      el.textContent='+'+(c.type==='fuel'?'FUEL':c.type==='ent'?'FUN':c.type==='ev'?'EV':'$');
-      document.getElementById('gameScreen').appendChild(el);
-      setTimeout(()=>el.remove(),800);
-      setTimeout(()=>{c.collected=false; c.x+=(Math.random()-0.5)*240; c.y+=(Math.random()-0.5)*240;}, 2600);
-    }
-    c.bob+=0.06;
-  });
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-  const sorted=[...game.cars].sort((a,b)=> (b.lap*1000+b.progress)-(a.lap*1000+a.progress));
-  game.position=sorted.findIndex(c=>c.isPlayer)+1;
+        h1, h2, h3, .mono {
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
-  game.popupTimer+=dt;
-  if(game.popupTimer> 3800+Math.random()*2600){ game.popupTimer=0; spawnPopup(); }
+        /* 3D Canvas Container */
+        #webgl-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: auto;
+        }
 
-  document.getElementById('hudSavings').textContent='$'+game.savings;
-  document.getElementById('hudPos').textContent=game.position+'/8';
-  document.getElementById('hudLap').textContent=Math.min(game.player.lap+1,3)+'/3';
-  document.getElementById('hudSpeed').textContent=Math.floor(Math.abs(game.player.speed)*27);
-  document.getElementById('speedBar').style.width=Math.min(100, Math.abs(game.player.speed)/ (game.player.maxSpeed+2)*100)+'%';
-}
+        /* Content Overlay */
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+            width: 100%;
+        }
 
-function render(){
-  const W=window.innerWidth,H=window.innerHeight;
-  ctx.clearRect(0,0,W,H);
-  const camX=game.player.x, camY=game.player.y;
-  ctx.save();
-  ctx.translate(W/2,H/2);
-  ctx.translate(-camX,-camY);
+        .interactive {
+            pointer-events: auto;
+        }
 
-  ctx.fillStyle='#0f0f15';
-  ctx.fillRect(camX-2200,camY-2200,4400,4400);
-  ctx.strokeStyle='rgba(255,255,255,0.02)'; ctx.lineWidth=1;
-  for(let i=-2200;i<2200;i+=110){ ctx.beginPath(); ctx.moveTo(camX-2200,camY+i); ctx.lineTo(camX+2200,camY+i); ctx.stroke(); ctx.beginPath(); ctx.moveTo(camX+i,camY-2200); ctx.lineTo(camX+i,camY+2200); ctx.stroke(); }
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-  ctx.lineJoin='round'; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(game.trackPoints[0].x,game.trackPoints[0].y);
-  for(let i=1;i<game.trackPoints.length;i++) ctx.lineTo(game.trackPoints[i].x,game.trackPoints[i].y);
-  ctx.closePath();
-  ctx.strokeStyle='#000'; ctx.lineWidth=236; ctx.globalAlpha=0.6; ctx.stroke(); ctx.globalAlpha=1;
-  ctx.strokeStyle='#17171f'; ctx.lineWidth=208; ctx.stroke();
-  ctx.strokeStyle='#242433'; ctx.lineWidth=184; ctx.stroke();
-  ctx.setLineDash([20,16]); ctx.strokeStyle='rgba(200,255,0,0.28)'; ctx.lineWidth=2; ctx.stroke(); ctx.setLineDash([]);
+        .glass-panel:hover {
+            border-color: rgba(0, 243, 255, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(0, 243, 255, 0.15);
+        }
 
-  const s=game.trackPoints[0], n=game.trackPoints[1];
-  const ang=Math.atan2(n.y-s.y,n.x-s.x)+Math.PI/2;
-  ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(ang);
-  for(let i=-9;i<9;i++){ ctx.fillStyle=i%2===0?'#fff':'#111'; ctx.fillRect(i*10,-92,10,184); }
-  ctx.restore();
+        /* Header / Nav */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
 
-  game.collectibles.forEach(c=>{
-    if(c.collected) return;
-    ctx.save(); ctx.translate(c.x,c.y+Math.sin(c.bob)*5);
-    const cols={fuel:'#ff8c00',ent:'#ff2d95',save:'#c8ff00',ev:'#00ffd0'};
-    ctx.shadowColor=cols[c.type]; ctx.shadowBlur=18; ctx.fillStyle=cols[c.type];
-    ctx.beginPath(); ctx.arc(0,0,15,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
-    ctx.fillStyle='#000'; ctx.font='700 13px Space Grotesk'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    const ic={fuel:'⛽',ent:'🎬',save:'$',ev:'⚡'}; ctx.fillText(ic[c.type],0,1);
-    ctx.restore();
-  });
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+        }
 
-  game.cars.forEach(car=>{
-    ctx.save(); ctx.translate(car.x,car.y); ctx.rotate(car.angle);
-    ctx.fillStyle='rgba(0,0,0,0.45)'; ctx.beginPath(); ctx.ellipse(3,3,18,10,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=car.color; ctx.fillRect(-16,-8,32,16);
-    ctx.fillStyle='rgba(0,0,0,0.65)'; ctx.fillRect(-8,-6,16,12);
-    ctx.fillStyle='rgba(255,255,255,0.28)'; ctx.fillRect(-16,-8,32,3);
-    if(car.boost>0){
-      ctx.fillStyle='#c8ff00'; ctx.shadowColor='#c8ff00'; ctx.shadowBlur=10;
-      ctx.beginPath(); ctx.moveTo(-18,-4); ctx.lineTo(-28-Math.random()*10,0); ctx.lineTo(-18,4); ctx.closePath(); ctx.fill(); ctx.shadowBlur=0;
-    }
-    if(car.shield>0){
-      ctx.strokeStyle='#00ffd0'; ctx.lineWidth=2; ctx.globalAlpha=0.55+Math.sin(game.time*0.015)*0.35;
-      ctx.beginPath(); ctx.arc(0,0,26,0,Math.PI*2); ctx.stroke(); ctx.globalAlpha=1;
-    }
-    if(car.isPlayer){
-      ctx.fillStyle='#c8ff00'; ctx.beginPath(); ctx.moveTo(0,-18); ctx.lineTo(-5,-26); ctx.lineTo(5,-26); ctx.closePath(); ctx.fill();
-    }
-    ctx.restore();
-  });
+        .brand-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: pulse 2s infinite;
+        }
 
-  ctx.restore();
-  drawMini();
-}
-function drawMini(){
-  const mm=document.getElementById('minimapCanvas'); if(!mm) return;
-  const m=mm.getContext('2d'); const sz=120;
-  m.clearRect(0,0,sz,sz);
-  m.save(); m.translate(sz/2,sz/2); m.scale(0.075,0.075);
-  m.beginPath(); m.moveTo(game.trackPoints[0].x,game.trackPoints[0].y);
-  for(let i=1;i<game.trackPoints.length;i++) m.lineTo(game.trackPoints[i].x,game.trackPoints[i].y);
-  m.closePath(); m.strokeStyle='#3a3a4a'; m.lineWidth=22; m.stroke();
-  game.cars.forEach(c=>{ m.fillStyle=c.isPlayer?'#c8ff00':c.color; m.beginPath(); m.arc(c.x,c.y,c.isPlayer?12:6,0,Math.PI*2); m.fill(); });
-  m.restore();
-}
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
 
-let raf=0;
-function loop(t){
-  if(game.state!=='playing') return;
-  const dt=Math.min(34, t-lastT); lastT=t;
-  update(dt); render();
-  raf=requestAnimationFrame(loop);
-}
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            padding: 10px 24px;
+        }
 
-function startGame(){
-  initGame();
-  game.state='playing';
-  document.getElementById('startScreen').classList.add('hidden');
-  document.getElementById('gameScreen').classList.remove('hidden');
-  document.getElementById('resultScreen').classList.add('hidden');
-  lastT=performance.now();
-  cancelAnimationFrame(raf);
-  requestAnimationFrame(loop);
-}
-function endRace(){
-  if(game.state==='finished') return;
-  game.state='finished'; playSound('win');
-  const sorted=[...game.cars].sort((a,b)=> (b.lap*1000+b.progress)-(a.lap*1000+a.progress));
-  const winner=sorted[0];
-  document.getElementById('gameScreen').classList.add('hidden');
-  const rs=document.getElementById('resultScreen'); rs.classList.remove('hidden');
-  document.getElementById('resultPos').textContent='P'+game.position;
-  document.getElementById('resultSavings').textContent='$'+game.savings;
-  document.getElementById('resultWinnerName').textContent=winner.name;
-  document.getElementById('resultWinnerCat').textContent=winner.cat;
-  document.getElementById('resultWinnerColor').style.background=winner.color;
-  document.getElementById('resultChampionText').textContent=game.position===1?'YOU ARE THE CHAMPION!':`${winner.name} IS THE 2026 CHAMPION`;
-  const list=document.getElementById('resultList'); list.innerHTML='';
-  sorted.forEach((car,idx)=>{
-    const div=document.createElement('div');
-    div.className=`flex items-center justify-between p-3.5 rounded-[14px] border ${car.isPlayer?'bg-[#c8ff00] text-black border-[#c8ff00]':'bg-white/[0.04] border-white/10'}`;
-    div.innerHTML=`<div class="flex items-center gap-2.5"><span class="font-black w-5 text-[12px]">${idx+1}</span><span class="w-2.5 h-2.5 rounded-full" style="background:${car.color}"></span><span class="font-bold text-[12px] tracking-wide">${car.name}</span><span class="text-[10px] opacity-60 hidden md:inline">${car.cat}</span></div><div class="text-[11px] font-black">${car.isPlayer?'$'+game.savings:''}${idx===0?' • CHAMPION':''}</div>`;
-    list.appendChild(div);
-  });
-}
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
 
-function initStart(){
-  const grid=document.getElementById('suvGrid');
-  grid.innerHTML='';
-  SUVS.forEach((suv,i)=>{
-    const card=document.createElement('div');
-    card.className=`card-select glass rounded-[18px] p-4 cursor-pointer border ${i===game.selectedSUV?'selected border-[#c8ff00]':'border-white/10'}`;
-    card.innerHTML=`
-      <div class="flex justify-between items-start mb-3">
-        <div class="w-10 h-10 rounded-full grid place-items-center text-[18px]" style="background:${suv.color}18;border:1px solid ${suv.color}55">${suv.icon}</div>
-        <div class="text-[9px] tracking-[0.18em] opacity-50 uppercase px-2 py-1 rounded-full bg-white/5 border border-white/10">${suv.cat}</div>
-      </div>
-      <div class="syne font-black text-[13px] leading-[0.95] tracking-wide mb-3">${suv.name}</div>
-      <div class="space-y-1.5">
-        <div class="flex items-center gap-2 text-[9px]"><span class="w-10 opacity-50">SPEED</span><div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden"><div class="h-full" style="width:${suv.speed*10}%;background:${suv.color}"></div></div></div>
-        <div class="flex items-center gap-2 text-[9px]"><span class="w-10 opacity-50">HANDL</span><div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden"><div class="h-full" style="width:${suv.handling*10}%;background:${suv.color}"></div></div></div>
-        <div class="flex items-center gap-2 text-[9px]"><span class="w-10 opacity-50">ECO</span><div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden"><div class="h-full" style="width:${suv.economy*10}%;background:${suv.color}"></div></div></div>
-      </div>
-    `;
-    card.onclick=()=>{ game.selectedSUV=i; document.querySelectorAll('.card-select').forEach(c=>c.classList.remove('selected')); card.classList.add('selected'); playSound('popup'); };
-    grid.appendChild(card);
-  });
-}
+        nav a:hover {
+            color: var(--accent-cyan);
+        }
 
-document.getElementById('btnStart').onclick=()=>{ initAudio(); startGame(); };
-document.getElementById('btnReplay').onclick=()=>{ startGame(); };
-document.getElementById('btnGarage').onclick=()=>{
-  document.getElementById('resultScreen').classList.add('hidden');
-  document.getElementById('startScreen').classList.remove('hidden');
-};
+        .cta-btn {
+            background: linear-gradient(135deg, #00f3ff, #7928ca);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 243, 255, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
 
-initStart();
-</script>
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(121, 40, 202, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8vw;
+            box-sizing: border-box;
+        }
+
+        .hero-text {
+            max-width: 680px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.2rem);
+            line-height: 1.08;
+            margin-bottom: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent-cyan), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 26px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        /* 3D Viewport Controls HUD */
+        .hud-overlay {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            padding: 18px 24px;
+            z-index: 10;
+            width: 320px;
+        }
+
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+
+        .hud-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-mode {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-mode.active, .btn-mode:hover {
+            color: #000;
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .telemetry-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .telemetry-val {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 8vw;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 600px;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.6rem;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(0, 243, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--accent-cyan);
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Bottom CTA Banner */
+        .cta-banner {
+            margin: 60px 0;
+            padding: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(10, 15, 30, 0.8), rgba(2, 6, 23, 0.95));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+        }
+
+        footer {
+            padding: 40px 8vw;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            header {
+                padding: 16px 20px;
+            }
+            nav {
+                display: none;
+            }
+            .hud-overlay {
+                display: none;
+            }
+            .hero {
+                padding: 120px 20px 60px;
+                height: auto;
+            }
+            section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WebGL Background Scene -->
+    <div id="webgl-container"></div>
+
+    <!-- HTML Content Layer -->
+    <div class="content-layer">
+        
+        <!-- Navigation -->
+        <header>
+            <a href="#" class="brand interactive">
+                <div class="brand-indicator"></div>
+                <span>IMMERSITY</span>
+            </a>
+            <nav class="glass-panel interactive">
+                <a href="#vision">Vision</a>
+                <a href="#problem">Le Défi</a>
+                <a href="#technology">Technologie</a>
+                <a href="#ecosystem">Écosystème</a>
+            </nav>
+            <a href="#cta" class="cta-btn interactive">Rejoindre la Révolution</a>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="badge">Spatial Intelligence & World Models</div>
+                <h1>L'AGI ne peut pas raisonner <span>sans voir le monde.</span></h1>
+                <p>Nous comblons le vide mondial de données 3D. Immersity transforme chaque smartphone et caméra grand public en nœud de capture stéréo haute précision pour entraîner les futurs modèles de monde.</p>
+                <div class="hero-actions interactive">
+                    <a href="#technology" class="cta-btn">Explorer l'Architecture</a>
+                    <a href="#demo" class="secondary-btn" id="trigger-scan">Lancer le Scanner 3D</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features / Problem Section -->
+        <section id="problem">
+            <div class="section-header">
+                <div class="badge">L'Écueil de l'IA Actuelle</div>
+                <h2>Le fossé critique des données 3D (The Data Gap)</h2>
+                <p style="color: var(--text-muted);">Les modèles de langage (LLM) ont ingéré tout le texte mondial. Mais pour comprendre la physique, interagir avec notre réalité et atteindre l'AGI, l'intelligence artificielle nécessite une géométrie spatiale vivante.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="glass-panel feature-card interactive">
+                    <div class="card-icon">01</div>
+                    <h3>Zéro Matériel Propriétaire</h3>
+                    <p>Pas de capteurs LiDAR onéreux ni de lunettes encombrantes. Nous déployons des algorithmes de reconstruction stéréo neuronale directement sur votre matériel existant.</p>
+                </div>
+                <div class="glass-panel feature-card interactive">
+                    <div class="card-icon">02</div>
+                    <h3>Modèles de Monde (World Models)</h3>
+                    <p>Alimentez les modèles d'IA incarnée et de robotique avec un flux continu de scènes photoréalistes, volumétriques et annotées spatialement en temps réel.</p>
+                </div>
+                <div class="glass-panel feature-card interactive">
+                    <div class="card-icon">03</div>
+                    <h3>Gratification Immédiate</h3>
+                    <p>Les créateurs capturent des photos et vidéos stéréo immersives qu'ils peuvent revisiter en 6DoF, offrant une boucle d'engagement virale pour nourrir l'écosystème spatial.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosystem Section -->
+        <section id="technology">
+            <div class="section-header">
+                <div class="badge">Pipeline Spatial</div>
+                <h2>Du capteur brut au champ neuronal 3D</h2>
+                <p style="color: var(--text-muted);">Notre architecture déploie une inférence hybride (Edge + Cloud) capable de convertir des images 2D décorrélées en représentations spatiales unifiées.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="glass-panel feature-card interactive">
+                    <h3>Spatial Capture SDK</h3>
+                    <p>Bibliothèque mobile ultra-légère compatible iOS et Android. Synchronisation multi-vues et estimation de profondeur monoculaire accélérée sur NPU.</p>
+                </div>
+                <div class="glass-panel feature-card interactive">
+                    <h3>Neural Ray Field Engine</h3>
+                    <p>Synthèse de nouvelles vues et reconstruction par Gaussian Splatting en temps réel via des shaders WebGL/WebGPU hautement optimisés.</p>
+                </div>
+                <div class="glass-panel feature-card interactive">
+                    <h3>Plateforme B2B Data Hub</h3>
+                    <p>Accès API haute performance pour les laboratoires d'IA, constructeurs de robots autonomes et développeurs d'expériences de réalité spatiale.</p>
+                </div>
+            </div>
+
+            <div class="cta-banner glass-panel interactive" id="cta">
+                <div class="badge">Participez à la capture collective</div>
+                <h2 style="font-size: 2.2rem; margin: 16px 0 24px;">Donnez des yeux à la prochaine génération d'IA</h2>
+                <p style="max-width: 600px; margin: 0 auto 32px; color: var(--text-muted);">
+                    Intégrez notre SDK dès aujourd'hui ou préparez vos modèles aux données volumétriques haute fidélité.
+                </p>
+                <button class="cta-btn" onclick="alert('Accès Développeur Immersity ouvert prochainement.');">Obtenir un Accès Anticipé SDK</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div>© 2025 Immersity Inc. Tous droits réservés. L'Intelligence Spatiale en marche.</div>
+            <div style="display:flex; gap: 20px;">
+                <span class="mono">STATUS: SYSTEMS ACTIVE</span>
+                <span class="mono" style="color: var(--accent-cyan);">LATENCY: 14ms</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- HUD Overlay for 3D Camera/Engine Control -->
+    <aside class="hud-overlay glass-panel interactive">
+        <div class="hud-header">
+            <span>// MOTEUR SPATIAL TEMPS-RÉEL</span>
+            <span id="hud-fps" class="telemetry-val">60 FPS</span>
+        </div>
+        <div class="hud-controls">
+            <div class="control-row">
+                <span>Rendu Scène :</span>
+                <div class="btn-group">
+                    <button class="btn-mode active" data-mode="points">Points</button>
+                    <button class="btn-mode" data-mode="wireframe">Maillage</button>
+                    <button class="btn-mode" data-mode="hybrid">Hybride</button>
+                </div>
+            </div>
+            <div class="control-row">
+                <span>Scanner Laser :</span>
+                <button class="btn-mode" id="btn-toggle-scan">Activer</button>
+            </div>
+            <div class="telemetry-row">
+                <span>Voxel Density :</span>
+                <span class="telemetry-val">128,000 pts</span>
+            </div>
+            <div class="telemetry-row">
+                <span>Stereo Baseline :</span>
+                <span class="telemetry-val">64.5 mm</span>
+            </div>
+            <div class="telemetry-row">
+                <span>Convergence Profondeur :</span>
+                <span class="telemetry-val" id="telemetry-depth">0.82 m</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 3D Graphics Engine Logic -->
+    <script>
+        // Setup Three.js Application
+        const container = document.getElementById('webgl-container');
+        let scene, camera, renderer, controls;
+        let pointCloud, meshCore, scanningLaser, frustumHelpers = [];
+        let clock = new THREE.Clock();
+        
+        let mouseX = 0, mouseY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+        let scanActive = true;
+        let renderMode = 'points'; // 'points', 'wireframe', 'hybrid'
+
+        function initScene() {
+            // 1. Scene & Camera Setup
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x05070e, 0.035);
+
+            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 1.2, 5.5);
+
+            // 2. Renderer Setup
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            container.appendChild(renderer.domElement);
+
+            // 3. Orbit Controls (restricted to smooth interaction)
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = false; // Allow smooth page scrolling without trapping wheel
+            controls.maxPolarAngle = Math.PI / 1.7;
+            controls.minPolarAngle = Math.PI / 2.8;
+            controls.rotateSpeed = 0.6;
+
+            // 4. Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+
+            const pointLight1 = new THREE.PointLight(0x00f3ff, 2.5, 20);
+            pointLight1.position.set(3, 4, 3);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x7928ca, 3, 20);
+            pointLight2.position.set(-3, -2, -2);
+            scene.add(pointLight2);
+
+            // 5. Build Volumetric World Object (Spatial Model)
+            createSpatialObject();
+
+            // 6. Laser Scanner Slice Effect
+            createLaserScanner();
+
+            // 7. Simulated Stereo Cameras Frustum
+            createStereoRigVisualizer();
+
+            // 8. Dynamic Background Spatial Grid
+            createNeuralBackground();
+
+            // Event Listeners
+            window.addEventListener('resize', onWindowResize, false);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            setupUIHandlers();
+        }
+
+        // Construct a dense complex geometric entity representing spatial understanding
+        function createSpatialObject() {
+            const count = 42000;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+            const originalY = new Float32Array(count);
+
+            const colorCyan = new THREE.Color(0x00f3ff);
+            const colorPurple = new THREE.Color(0x7928ca);
+            const colorWhite = new THREE.Color(0xffffff);
+
+            // Generate complex volumetric shape: Torus Knot / Organic Brain-like Spatial Field
+            let pIdx = 0;
+            for (let i = 0; i < count; i++) {
+                const u = Math.random() * Math.PI * 2;
+                const v = Math.random() * Math.PI * 2;
+                
+                // Torus Knot math combined with noise
+                const p = 2, q = 3;
+                const r = 1.3 + Math.sin(q * u) * 0.35 + (Math.random() - 0.5) * 0.25;
+                const x = (r + Math.cos(p * u) * 0.45) * Math.cos(u) * 1.1;
+                const y = ((r + Math.cos(p * u) * 0.45) * Math.sin(u) + Math.sin(p * u) * 0.3) * 0.9;
+                const z = (Math.sin(p * u) * 0.8 + (Math.random() - 0.5) * 0.3) * 1.1;
+
+                positions[pIdx] = x;
+                positions[pIdx + 1] = y;
+                positions[pIdx + 2] = z;
+                originalY[i] = y;
+
+                // Color gradient based on spatial coordinates
+                const mixFactor = (y + 1.5) / 3.0;
+                const vertexColor = colorCyan.clone().lerp(colorPurple, mixFactor);
+                if (Math.random() > 0.96) vertexColor.lerp(colorWhite, 0.8);
+
+                colors[pIdx] = vertexColor.r;
+                colors[pIdx + 1] = vertexColor.g;
+                colors[pIdx + 2] = vertexColor.b;
+
+                pIdx += 3;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.userData = { originalY: originalY };
+
+            // Point cloud material with soft glow texture via canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 16;
+            canvas.height = 16;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+            grad.addColorStop(0, 'rgba(255,255,255,1)');
+            grad.addColorStop(0.3, 'rgba(0,243,255,0.7)');
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 16, 16);
+            const pTexture = new THREE.CanvasTexture(canvas);
+
+            const pMaterial = new THREE.PointsMaterial({
+                size: 0.045,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.85,
+                map: pTexture,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            pointCloud = new THREE.Points(geometry, pMaterial);
+            scene.add(pointCloud);
+
+            // Complementary polygon mesh with wireframe for mode switching
+            const meshGeometry = new THREE.IcosahedronGeometry(1.6, 4);
+            const meshMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00f3ff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15,
+                roughness: 0.2,
+                metalness: 0.8
+            });
+            meshCore = new THREE.Mesh(meshGeometry, meshMaterial);
+            scene.add(meshCore);
+            meshCore.visible = false;
+        }
+
+        // Horizontal scanning laser slicing the spatial cloud
+        function createLaserScanner() {
+            const scanGroup = new THREE.Group();
+
+            const lineGeo = new THREE.RingGeometry(1.8, 1.83, 64);
+            const lineMat = new THREE.MeshBasicMaterial({
+                color: 0x00f3ff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.7,
+                blending: THREE.AdditiveBlending
+            });
+            const ring = new THREE.Mesh(lineGeo, lineMat);
+            ring.rotation.x = Math.PI / 2;
+            scanGroup.add(ring);
+
+            const gridHelper = new THREE.GridHelper(3.8, 20, 0x00f3ff, 0x1d4ed8);
+            gridHelper.material.transparent = true;
+            gridHelper.material.opacity = 0.2;
+            scanGroup.add(gridHelper);
+
+            scanningLaser = scanGroup;
+            scene.add(scanningLaser);
+        }
+
+        // Visualize Stereo Optical Sensors / Eye cones
+        function createStereoRigVisualizer() {
+            const stereoRig = new THREE.Group();
+            stereoRig.position.set(0, -0.4, 3.2);
+
+            function createPyramidFrustum(colorHex, xOffset) {
+                const frustumGeo = new THREE.ConeGeometry(0.5, 1.2, 4, 1, true);
+                frustumGeo.rotateX(Math.PI / 2);
+                frustumGeo.rotateZ(Math.PI / 4);
+
+                const frustumMat = new THREE.MeshBasicMaterial({
+                    color: colorHex,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.4
+                });
+                const frustum = new THREE.Mesh(frustumGeo, frustumMat);
+                frustum.position.x = xOffset;
+                frustum.lookAt(0, 0, 0);
+                return frustum;
+            }
+
+            const leftCam = createPyramidFrustum(0x00f3ff, -0.5);
+            const rightCam = createPyramidFrustum(0x7928ca, 0.5);
+
+            stereoRig.add(leftCam);
+            stereoRig.add(rightCam);
+
+            frustumHelpers.push(leftCam, rightCam);
+            scene.add(stereoRig);
+        }
+
+        // Deep Neural Coordinate Grid in Background
+        function createNeuralBackground() {
+            const bgCount = 1500;
+            const bgGeo = new THREE.BufferGeometry();
+            const bgPos = new Float32Array(bgCount * 3);
+
+            for (let i = 0; i < bgCount * 3; i += 3) {
+                bgPos[i] = (Math.random() - 0.5) * 25;
+                bgPos[i + 1] = (Math.random() - 0.5) * 25;
+                bgPos[i + 2] = (Math.random() - 0.5) * 20 - 5;
+            }
+
+            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+            const bgMat = new THREE.PointsMaterial({
+                color: 0x3b82f6,
+                size: 0.04,
+                transparent: true,
+                opacity: 0.35
+            });
+            const bgPoints = new THREE.Points(bgGeo, bgMat);
+            scene.add(bgPoints);
+        }
+
+        function onWindowResize() {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX) * 0.0006;
+            mouseY = (event.clientY - windowHalfY) * 0.0006;
+        }
+
+        // UI Interactions and HUD Binding
+        function setupUIHandlers() {
+            // Mode buttons
+            const modeBtns = document.querySelectorAll('.btn-mode[data-mode]');
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    modeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderMode = btn.getAttribute('data-mode');
+
+                    if (renderMode === 'points') {
+                        pointCloud.visible = true;
+                        meshCore.visible = false;
+                        pointCloud.material.opacity = 0.85;
+                    } else if (renderMode === 'wireframe') {
+                        pointCloud.visible = false;
+                        meshCore.visible = true;
+                        meshCore.material.opacity = 0.45;
+                    } else if (renderMode === 'hybrid') {
+                        pointCloud.visible = true;
+                        meshCore.visible = true;
+                        pointCloud.material.opacity = 0.5;
+                        meshCore.material.opacity = 0.25;
+                    }
+                });
+            });
+
+            // Toggle scan button
+            const scanBtn = document.getElementById('btn-toggle-scan');
+            const heroScanBtn = document.getElementById('trigger-scan');
+            
+            function toggleScan() {
+                scanActive = !scanActive;
+                scanningLaser.visible = scanActive;
+                scanBtn.textContent = scanActive ? "Activer" : "Stopper";
+                scanBtn.classList.toggle('active', scanActive);
+            }
+
+            scanBtn.addEventListener('click', toggleScan);
+            heroScanBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                scanActive = true;
+                scanningLaser.visible = true;
+                scanBtn.textContent = "Activer";
+                scanBtn.classList.add('active');
+                // Smooth scroll to demo position
+                window.scrollTo({ top: window.innerHeight * 0.3, behavior: 'smooth' });
+            });
+            scanBtn.classList.add('active');
+        }
+
+        // Render Loop
+        let frameCount = 0;
+        let lastTime = performance.now();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            // 1. Smooth Camera mouse tracking (Parallax)
+            camera.position.x += (mouseX * 2.5 - camera.position.x) * 0.03;
+            camera.position.y += (-mouseY * 2.0 + 1.2 - camera.position.y) * 0.03;
+            camera.lookAt(0, 0, 0);
+
+            // 2. Rotate Spatial Core
+            if (pointCloud) {
+                pointCloud.rotation.y = elapsedTime * 0.18;
+                pointCloud.rotation.x = Math.sin(elapsedTime * 0.1) * 0.15;
+
+                // Subtle organic pulse in vertices
+                const pos = pointCloud.geometry.attributes.position;
+                const originalY = pointCloud.geometry.userData.originalY;
+                const count = pos.count;
+                for (let i = 0; i < count; i += 8) { // sampled for maximum performance
+                    const idx = i * 3 + 1;
+                    pos.array[idx] = originalY[i] + Math.sin(elapsedTime * 2.0 + originalY[i] * 3.0) * 0.03;
+                }
+                pos.needsUpdate = true;
+            }
+
+            if (meshCore && meshCore.visible) {
+                meshCore.rotation.y = elapsedTime * 0.18;
+                meshCore.rotation.x = Math.sin(elapsedTime * 0.1) * 0.15;
+            }
+
+            // 3. Laser Scanner Sweep
+            if (scanningLaser && scanActive) {
+                const laserY = Math.sin(elapsedTime * 1.8) * 1.4;
+                scanningLaser.position.y = laserY;
+
+                // Update convergence distance read-out in HUD
+                const depthVal = document.getElementById('telemetry-depth');
+                if (depthVal && frameCount % 6 === 0) {
+                    depthVal.textContent = (0.75 + Math.abs(laserY * 0.2)).toFixed(2) + ' m';
+                }
+            }
+
+            // 4. Subtle sensor cone oscillation
+            frustumHelpers.forEach((frustum, idx) => {
+                frustum.lookAt(Math.sin(elapsedTime + idx) * 0.2, 0, 0);
+            });
+
+            // 5. FPS Counter in telemetry HUD
+            frameCount++;
+            const now = performance.now();
+            if (now - lastTime >= 1000) {
+                const fps = Math.round((frameCount * 1000) / (now - lastTime));
+                const fpsEl = document.getElementById('hud-fps');
+                if (fpsEl) fpsEl.textContent = `${fps} FPS`;
+                frameCount = 0;
+                lastTime = now;
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Initialize and fire execution
+        initScene();
+        animate();
+    </script>
 </body>
 </html>
