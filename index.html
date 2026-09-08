@@ -1,931 +1,961 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Immersity AI | L'Intelligence Spatiale pour l'AGI</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Three.js & Controls -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
-    <style>
-        :root {
-            --bg-dark: #05070e;
-            --accent-cyan: #00f3ff;
-            --accent-purple: #7928ca;
-            --accent-blue: #2563eb;
-            --glass-bg: rgba(10, 15, 30, 0.65);
-            --glass-border: rgba(0, 243, 255, 0.2);
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immersity — L'Intelligence Spatiale pour l'AGI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace']
+      },
+      colors: {
+        immersity: {
+          bg: '#05070F',
+          card: '#0A0F1E',
+          cyan: '#06B6D4',
+          blue: '#2563EB',
+          violet: '#7C3AED',
+          pink: '#EC4899'
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        h1, h2, h3, .mono {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        /* 3D Canvas Container */
-        #webgl-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            pointer-events: auto;
-        }
-
-        /* Content Overlay */
-        .content-layer {
-            position: relative;
-            z-index: 2;
-            pointer-events: none;
-            width: 100%;
-        }
-
-        .interactive {
-            pointer-events: auto;
-        }
-
-        /* Glassmorphism Classes */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-panel:hover {
-            border-color: rgba(0, 243, 255, 0.4);
-            box-shadow: 0 12px 40px 0 rgba(0, 243, 255, 0.15);
-        }
-
-        /* Header / Nav */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 24px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.4rem;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-indicator {
-            width: 12px;
-            height: 12px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 12px var(--accent-cyan);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
-        }
-
-        nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            padding: 10px 24px;
-        }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--accent-cyan);
-        }
-
-        .cta-btn {
-            background: linear-gradient(135deg, #00f3ff, #7928ca);
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 243, 255, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(121, 40, 202, 0.5);
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 8vw;
-            box-sizing: border-box;
-        }
-
-        .hero-text {
-            max-width: 680px;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(0, 243, 255, 0.08);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 24px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4.2rem);
-            line-height: 1.08;
-            margin-bottom: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent-cyan), #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin-bottom: 36px;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-
-        .secondary-btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 12px 26px;
-            border-radius: 30px;
-            font-weight: 500;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-
-        .secondary-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #fff;
-        }
-
-        /* 3D Viewport Controls HUD */
-        .hud-overlay {
-            position: fixed;
-            bottom: 30px;
-            right: 40px;
-            padding: 18px 24px;
-            z-index: 10;
-            width: 320px;
-        }
-
-        .hud-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--accent-cyan);
-            border-bottom: 1px solid rgba(0, 243, 255, 0.15);
-            padding-bottom: 8px;
-            margin-bottom: 14px;
-        }
-
-        .hud-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .control-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 6px;
-        }
-
-        .btn-mode {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--text-muted);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-mode.active, .btn-mode:hover {
-            color: #000;
-            background: var(--accent-cyan);
-            border-color: var(--accent-cyan);
-            font-weight: 600;
-        }
-
-        .telemetry-row {
-            display: flex;
-            justify-content: space-between;
-            font-family: 'Space Grotesk', monospace;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
-
-        .telemetry-val {
-            color: #38bdf8;
-            font-weight: 600;
-        }
-
-        /* Sections */
-        section {
-            padding: 100px 8vw;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        .section-header {
-            max-width: 600px;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 2.6rem;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            padding: 36px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .card-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            background: rgba(0, 243, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            color: var(--accent-cyan);
-            font-size: 1.5rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Bottom CTA Banner */
-        .cta-banner {
-            margin: 60px 0;
-            padding: 60px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(10, 15, 30, 0.8), rgba(2, 6, 23, 0.95));
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-        }
-
-        footer {
-            padding: 40px 8vw;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            header {
-                padding: 16px 20px;
-            }
-            nav {
-                display: none;
-            }
-            .hud-overlay {
-                display: none;
-            }
-            .hero {
-                padding: 120px 20px 60px;
-                height: auto;
-            }
-            section {
-                padding: 60px 20px;
-            }
-        }
-    </style>
+      }
+    }
+  }
+}
+</script>
+<style>
+*{scroll-behavior:smooth}
+body{background:#05070F;color:#fff;overflow-x:hidden}
+.glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08)}
+.glass-strong{background:rgba(255,255,255,0.06);backdrop-filter:blur(32px);border:1px solid rgba(255,255,255,0.10)}
+.gradient-text{background:linear-gradient(90deg,#60A5FA 0%,#A78BFA 50%,#22D3EE 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.gradient-border{position:relative}
+.gradient-border::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(37,99,235,0.5),rgba(124,58,237,0.3),rgba(6,182,214,0.2));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.noise{position:absolute;inset:0;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}
+.reveal{opacity:0;transform:translateY(24px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.active{opacity:1;transform:translateY(0)}
+.shimmer{position:relative;overflow:hidden}
+.shimmer::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);transform:translateX(-100%);animation:shimmer 3s infinite}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse-glow{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:0.8;transform:scale(1.05)}}
+.slider-handle{cursor:ew-resize}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0A0F1E}
+::-webkit-scrollbar-thumb{background:#1E293B;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:#334155}
+</style>
 </head>
-<body>
+<body class="font-sans antialiased selection:bg-violet-500/30 selection:text-white">
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 border-b border-transparent">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 h-[72px] flex items-center justify-between">
+    <div class="flex items-center gap-10">
+      <a href="#accueil" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center font-display font-bold text-sm">◈</div>
+        <span class="font-display font-bold text-[18px] tracking-tight">IMMERSITY<span class="font-light opacity-60">.AI</span></span>
+        <span class="hidden md:inline-flex ml-2 px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-[10px] font-semibold tracking-widest">BETA</span>
+      </a>
+      <div class="hidden lg:flex items-center gap-8 text-[13px] font-medium text-white/60">
+        <a href="#probleme" class="hover:text-white transition">Vision</a>
+        <a href="#solution" class="hover:text-white transition">Technologie</a>
+        <a href="#piliers" class="hover:text-white transition">Piliers</a>
+        <a href="#impact" class="hover:text-white transition">Développeurs</a>
+        <a href="#ecosysteme" class="hover:text-white transition">Écosystème</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="#" class="hidden md:inline-flex text-[13px] font-medium text-white/70 hover:text-white px-4">Documentation</a>
+      <a href="#cta" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition">Tester l'App <span class="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center text-[10px]">↗</span></a>
+      <button id="menuBtn" class="lg:hidden w-10 h-10 rounded-full glass flex items-center justify-center"><i data-lucide="menu" class="w-5 h-5"></i></button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden absolute top-[72px] left-0 w-full bg-[#080B18]/95 backdrop-blur-xl border-b border-white/10 px-6 py-6 flex-col gap-4">
+    <a href="#probleme" class="py-2 text-sm text-white/80">Vision</a>
+    <a href="#solution" class="py-2 text-sm text-white/80">Technologie</a>
+    <a href="#piliers" class="py-2 text-sm text-white/80">Piliers</a>
+    <a href="#impact" class="py-2 text-sm text-white/80">Développeurs</a>
+    <a href="#ecosysteme" class="py-2 text-sm text-white/80">Écosystème</a>
+  </div>
+</nav>
 
-    <!-- WebGL Background Scene -->
-    <div id="webgl-container"></div>
+<!-- HERO -->
+<section id="accueil" class="relative min-h-[100vh] flex items-center overflow-hidden pt-[72px]">
+  <canvas id="hero-canvas" class="absolute inset-0 w-full h-full"></canvas>
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#05070F] pointer-events-none"></div>
+  <div class="absolute top-[18%] left-[8%] w-[480px] h-[480px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute top-[22%] right-[10%] w-[560px] h-[560px] bg-violet-600/15 rounded-full blur-[130px] pointer-events-none"></div>
+  <div class="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="noise pointer-events-none"></div>
 
-    <!-- HTML Content Layer -->
-    <div class="content-layer">
-        
-        <!-- Navigation -->
-        <header>
-            <a href="#" class="brand interactive">
-                <div class="brand-indicator"></div>
-                <span>IMMERSITY</span>
-            </a>
-            <nav class="glass-panel interactive">
-                <a href="#vision">Vision</a>
-                <a href="#problem">Le Défi</a>
-                <a href="#technology">Technologie</a>
-                <a href="#ecosystem">Écosystème</a>
-            </nav>
-            <a href="#cta" class="cta-btn interactive">Rejoindre la Révolution</a>
-        </header>
+  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8 w-full py-12 lg:py-0">
+    <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-8 items-center">
+      <!-- Left -->
+      <div class="relative">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-[11px] font-semibold tracking-widest">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          SPATIAL INTELLIGENCE • AGI READY
+          <span class="hidden sm:inline-flex ml-2 px-2 py-0.5 rounded-full bg-white text-black text-[10px]">NEW</span>
+        </div>
+        <h1 class="font-display font-bold text-[42px] sm:text-[54px] lg:text-[68px] leading-[0.9] tracking-[-0.04em] mt-6">
+          L'AGI ne peut pas<br>
+          <span class="font-light italic opacity-90">raisonner</span> sans<br>
+          <span class="gradient-text">voir le monde.</span>
+        </h1>
+        <p class="text-[18px] lg:text-[19px] leading-7 text-white/60 max-w-[560px] mt-6 font-light">
+          Nous lui donnons des yeux. <span class="text-white/90">Immersity transforme chaque smartphone en capteur stéréo</span> pour capturer la dimension manquante de l'intelligence artificielle.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          <a href="#solution" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-semibold shadow-lg shadow-violet-600/20 hover:opacity-95 transition">
+            Explorer la technologie <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="#impact" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full glass text-white text-sm font-semibold hover:bg-white/10 transition">
+            <i data-lucide="code-2" class="w-4 h-4"></i> Voir le SDK
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-8 mt-10 pt-8 border-t border-white/10">
+          <div>
+            <div class="font-display font-bold text-2xl">10M+ <span class="text-sm font-normal text-white/50">captures</span></div>
+            <div class="text-[11px] tracking-widest text-white/40">DONNÉES SPATIALES / JOUR</div>
+          </div>
+          <div>
+            <div class="font-display font-bold text-2xl">&lt;12ms <span class="text-sm font-normal text-white/50">latence</span></div>
+            <div class="text-[11px] tracking-widest text-white/40">CONVERSION STÉRÉO</div>
+          </div>
+          <div>
+            <div class="font-display font-bold text-2xl">0 <span class="text-sm font-normal text-white/50">hardware</span></div>
+            <div class="text-[11px] tracking-widest text-white/40">SUPPLÉMENTAIRE</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 mt-6 text-[12px] text-white/40">
+          <div class="flex -space-x-2">
+            <img src="https://i.pravatar.cc/100?img=11" class="w-7 h-7 rounded-full border-2 border-[#05070F] object-cover">
+            <img src="https://i.pravatar.cc/100?img=32" class="w-7 h-7 rounded-full border-2 border-[#05070F] object-cover">
+            <img src="https://i.pravatar.cc/100?img=14" class="w-7 h-7 rounded-full border-2 border-[#05070F] object-cover">
+          </div>
+          <span>Rejoint par <span class="text-white">2,400+ développeurs</span> • Noté 4.9/5</span>
+        </div>
+      </div>
 
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-text">
-                <div class="badge">Spatial Intelligence & World Models</div>
-                <h1>L'AGI ne peut pas raisonner <span>sans voir le monde.</span></h1>
-                <p>Nous comblons le vide mondial de données 3D. Immersity transforme chaque smartphone et caméra grand public en nœud de capture stéréo haute précision pour entraîner les futurs modèles de monde.</p>
-                <div class="hero-actions interactive">
-                    <a href="#technology" class="cta-btn">Explorer l'Architecture</a>
-                    <a href="#demo" class="secondary-btn" id="trigger-scan">Lancer le Scanner 3D</a>
+      <!-- Right Visual -->
+      <div class="relative lg:h-[620px] flex items-center justify-center">
+        <!-- phone mock -->
+        <div class="relative w-[320px] sm:w-[360px]">
+          <div class="absolute -inset-6 bg-gradient-to-br from-blue-600/20 via-violet-600/20 to-cyan-400/20 rounded-[48px] blur-2xl"></div>
+          <div class="relative bg-gradient-to-b from-[#0F172A] to-[#020617] rounded-[44px] p-3 border border-white/10 shadow-2xl" style="animation:float 6s ease-in-out infinite">
+            <div class="bg-black rounded-[36px] overflow-hidden relative border border-white/5">
+              <!-- top bar -->
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl z-20"></div>
+              <div class="relative h-[560px] overflow-hidden">
+                <img id="heroImage" src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80" class="absolute inset-0 w-full h-full object-cover">
+                <canvas id="depthCanvas" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500"></canvas>
+                <!-- depth overlay gradient -->
+                <div id="depthOverlay" class="absolute inset-0 opacity-0 transition-opacity duration-500" style="background:linear-gradient(180deg, transparent 30%, rgba(6,182,214,0.15), rgba(124,58,237,0.25));"></div>
+                <!-- grid -->
+                <svg class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500" id="gridOverlay" viewBox="0 0 360 560"><defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(96,165,250,0.15)" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid)"/></svg>
+                <!-- top info -->
+                <div class="absolute top-8 left-3 right-3 flex justify-between items-center z-10">
+                  <div class="glass rounded-full px-3 py-1.5 flex items-center gap-2 text-[11px] font-medium">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> REC • Stereo
+                  </div>
+                  <div class="glass rounded-full px-3 py-1 text-[10px] font-mono">12.4 ms</div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Features / Problem Section -->
-        <section id="problem">
-            <div class="section-header">
-                <div class="badge">L'Écueil de l'IA Actuelle</div>
-                <h2>Le fossé critique des données 3D (The Data Gap)</h2>
-                <p style="color: var(--text-muted);">Les modèles de langage (LLM) ont ingéré tout le texte mondial. Mais pour comprendre la physique, interagir avec notre réalité et atteindre l'AGI, l'intelligence artificielle nécessite une géométrie spatiale vivante.</p>
-            </div>
-
-            <div class="cards-grid">
-                <div class="glass-panel feature-card interactive">
-                    <div class="card-icon">01</div>
-                    <h3>Zéro Matériel Propriétaire</h3>
-                    <p>Pas de capteurs LiDAR onéreux ni de lunettes encombrantes. Nous déployons des algorithmes de reconstruction stéréo neuronale directement sur votre matériel existant.</p>
+                <!-- bottom controls -->
+                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-[10px] tracking-widest text-white/60">PROFONDEUR</span>
+                    <span class="text-[10px] font-mono text-cyan-300">0.0m — 12.5m</span>
+                  </div>
+                  <div class="h-1.5 bg-white/10 rounded-full overflow-hidden flex">
+                    <div class="h-full bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400" style="width:68%"></div>
+                  </div>
+                  <div class="flex gap-2 mt-3">
+                    <button id="toggleStereo" class="flex-1 py-2.5 rounded-full bg-white text-black text-xs font-bold flex items-center justify-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Mode Spatial ON</button>
+                    <button class="w-10 h-10 rounded-full glass flex items-center justify-center"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
+                  </div>
                 </div>
-                <div class="glass-panel feature-card interactive">
-                    <div class="card-icon">02</div>
-                    <h3>Modèles de Monde (World Models)</h3>
-                    <p>Alimentez les modèles d'IA incarnée et de robotique avec un flux continu de scènes photoréalistes, volumétriques et annotées spatialement en temps réel.</p>
-                </div>
-                <div class="glass-panel feature-card interactive">
-                    <div class="card-icon">03</div>
-                    <h3>Gratification Immédiate</h3>
-                    <p>Les créateurs capturent des photos et vidéos stéréo immersives qu'ils peuvent revisiter en 6DoF, offrant une boucle d'engagement virale pour nourrir l'écosystème spatial.</p>
-                </div>
+                <!-- depth points -->
+                <div id="depthDots" class="absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none"></div>
+              </div>
             </div>
-        </section>
+            <div class="flex justify-center gap-1.5 mt-3">
+              <span class="w-12 h-1 rounded-full bg-white/20"></span>
+              <span class="w-1 h-1 rounded-full bg-white/20"></span>
+              <span class="w-1 h-1 rounded-full bg-white/20"></span>
+            </div>
+          </div>
+          <!-- floating cards -->
+          <div class="absolute -right-6 top-10 glass-strong rounded-2xl p-3 flex items-center gap-3 shadow-xl hidden sm:flex" style="animation:float 6s ease-in-out infinite 0.8s">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center"><i data-lucide="box" class="w-5 h-5 text-white"></i></div>
+            <div>
+              <div class="text-xs font-bold">World Model</div>
+              <div class="text-[11px] text-white/50">Mesh généré • 1.2M pts</div>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          </div>
+          <div class="absolute -left-6 bottom-20 glass-strong rounded-2xl p-3 shadow-xl hidden sm:block" style="animation:float 6s ease-in-out infinite 1.2s">
+            <div class="text-[10px] tracking-widest text-white/40 mb-1">NUAGE DE POINTS</div>
+            <div class="flex items-end gap-1 h-8">
+              <span class="w-1.5 bg-blue-500 rounded-full" style="height:60%"></span>
+              <span class="w-1.5 bg-blue-500 rounded-full" style="height:90%"></span>
+              <span class="w-1.5 bg-violet-500 rounded-full" style="height:40%"></span>
+              <span class="w-1.5 bg-cyan-400 rounded-full" style="height:75%"></span>
+              <span class="w-1.5 bg-blue-500 rounded-full" style="height:55%"></span>
+              <span class="w-1.5 bg-violet-500 rounded-full" style="height:85%"></span>
+            </div>
+            <div class="text-[11px] font-mono text-white/60 mt-1">2.4 GB/s → compressé</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Ecosystem Section -->
-        <section id="technology">
-            <div class="section-header">
-                <div class="badge">Pipeline Spatial</div>
-                <h2>Du capteur brut au champ neuronal 3D</h2>
-                <p style="color: var(--text-muted);">Notre architecture déploie une inférence hybride (Edge + Cloud) capable de convertir des images 2D décorrélées en représentations spatiales unifiées.</p>
-            </div>
+<!-- LOGOS -->
+<section class="border-y border-white/[0.06] bg-white/[0.02] backdrop-blur">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-6 flex flex-wrap items-center justify-between gap-6 text-white/30 text-xs font-semibold tracking-widest">
+    <span>ILS NOUS FONT CONFIANCE</span>
+    <div class="flex flex-wrap items-center gap-8 lg:gap-12 opacity-60">
+      <span class="font-display font-bold text-sm tracking-tight text-white/70">OPENAI</span>
+      <span class="font-display font-bold text-sm tracking-tight text-white/70">DeepMind</span>
+      <span class="font-display font-bold text-sm tracking-tight text-white/70">NVIDIA</span>
+      <span class="font-display font-bold text-sm tracking-tight text-white/70">META AI</span>
+      <span class="font-display font-bold text-sm tracking-tight text-white/70">ANTHROPIC</span>
+      <span class="font-display font-bold text-sm tracking-tight text-white/70">MISTRAL</span>
+    </div>
+  </div>
+</section>
 
-            <div class="cards-grid">
-                <div class="glass-panel feature-card interactive">
-                    <h3>Spatial Capture SDK</h3>
-                    <p>Bibliothèque mobile ultra-légère compatible iOS et Android. Synchronisation multi-vues et estimation de profondeur monoculaire accélérée sur NPU.</p>
-                </div>
-                <div class="glass-panel feature-card interactive">
-                    <h3>Neural Ray Field Engine</h3>
-                    <p>Synthèse de nouvelles vues et reconstruction par Gaussian Splatting en temps réel via des shaders WebGL/WebGPU hautement optimisés.</p>
-                </div>
-                <div class="glass-panel feature-card interactive">
-                    <h3>Plateforme B2B Data Hub</h3>
-                    <p>Accès API haute performance pour les laboratoires d'IA, constructeurs de robots autonomes et développeurs d'expériences de réalité spatiale.</p>
-                </div>
-            </div>
-
-            <div class="cta-banner glass-panel interactive" id="cta">
-                <div class="badge">Participez à la capture collective</div>
-                <h2 style="font-size: 2.2rem; margin: 16px 0 24px;">Donnez des yeux à la prochaine génération d'IA</h2>
-                <p style="max-width: 600px; margin: 0 auto 32px; color: var(--text-muted);">
-                    Intégrez notre SDK dès aujourd'hui ou préparez vos modèles aux données volumétriques haute fidélité.
-                </p>
-                <button class="cta-btn" onclick="alert('Accès Développeur Immersity ouvert prochainement.');">Obtenir un Accès Anticipé SDK</button>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer>
-            <div>© 2025 Immersity Inc. Tous droits réservés. L'Intelligence Spatiale en marche.</div>
-            <div style="display:flex; gap: 20px;">
-                <span class="mono">STATUS: SYSTEMS ACTIVE</span>
-                <span class="mono" style="color: var(--accent-cyan);">LATENCY: 14ms</span>
-            </div>
-        </footer>
+<!-- PROBLEME -->
+<section id="probleme" class="relative py-20 lg:py-28 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-[#05070F] via-[#070A1A] to-[#05070F]"></div>
+  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+      <div class="reveal">
+        <div class="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-violet-300"><span class="w-8 h-[1px] bg-violet-400"></span> LE PROBLÈME</div>
+        <h2 class="font-display font-bold text-[38px] lg:text-[48px] leading-[0.9] tracking-tight mt-4">Le <span class="gradient-text">Data Gap</span> Spatial</h2>
+      </div>
+      <p class="reveal max-w-[520px] text-[15px] leading-6 text-white/60">Les modèles d'IA ont lu tout Internet. Mais ils n'ont jamais <span class="text-white">vraiment vu</span> le monde. 99% des données d'entraînement sont plates, sans profondeur ni physique.</p>
     </div>
 
-    <!-- HUD Overlay for 3D Camera/Engine Control -->
-    <aside class="hud-overlay glass-panel interactive">
-        <div class="hud-header">
-            <span>// MOTEUR SPATIAL TEMPS-RÉEL</span>
-            <span id="hud-fps" class="telemetry-val">60 FPS</span>
+    <div class="grid lg:grid-cols-12 gap-6">
+      <!-- left big card -->
+      <div class="lg:col-span-5 glass rounded-[28px] p-7 lg:p-8 reveal gradient-border overflow-hidden relative">
+        <div class="absolute -top-20 -right-20 w-60 h-60 bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div class="relative">
+          <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6"><i data-lucide="alert-triangle" class="w-5 h-5 text-amber-400"></i></div>
+          <h3 class="font-display font-semibold text-xl leading-tight">L'IA connaît les mots,<br>pas l'espace.</h3>
+          <p class="text-sm leading-6 text-white/55 mt-3">Un LLM peut décrire une chaise. Mais il ne sait pas où elle est, comment la contourner, ni si elle supporte votre poids. Sans données spatiales, pas de raisonnement physique.</p>
+          <div class="mt-6 space-y-3">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/5">
+              <span class="text-xs text-white/60 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> Données 2D (images, texte)</span>
+              <span class="text-xs font-mono font-bold">99.2%</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-600/20 to-violet-600/20 border border-blue-500/20">
+              <span class="text-xs text-white flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Données spatiales 3D</span>
+              <span class="text-xs font-mono font-bold text-cyan-300">0.8%</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-center gap-2 text-[11px] font-mono text-white/30"><i data-lucide="database" class="w-3.5 h-3.5"></i> Source: Analyse corpus 2024 • 470M datasets</div>
         </div>
-        <div class="hud-controls">
-            <div class="control-row">
-                <span>Rendu Scène :</span>
-                <div class="btn-group">
-                    <button class="btn-mode active" data-mode="points">Points</button>
-                    <button class="btn-mode" data-mode="wireframe">Maillage</button>
-                    <button class="btn-mode" data-mode="hybrid">Hybride</button>
+      </div>
+
+      <!-- right comparison -->
+      <div class="lg:col-span-7 grid md:grid-cols-2 gap-6 reveal">
+        <div class="glass rounded-[24px] overflow-hidden">
+          <div class="h-[200px] relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" class="w-full h-full object-cover opacity-70">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-red-500/90 text-[10px] font-bold tracking-widest">VISION 2D • AVEUGLE</div>
+            <div class="absolute bottom-3 left-3 right-3">
+              <div class="text-xs font-semibold">Ce que voit l'IA aujourd'hui</div>
+              <div class="text-[11px] text-white/60">Pixels plats • pas de distance</div>
+            </div>
+          </div>
+          <div class="p-4 space-y-2">
+            <div class="flex items-center gap-2 text-xs text-white/50"><i data-lucide="x" class="w-3.5 h-3.5 text-red-400"></i> Pas d'échelle réelle</div>
+            <div class="flex items-center gap-2 text-xs text-white/50"><i data-lucide="x" class="w-3.5 h-3.5 text-red-400"></i> Pas d'occlusion</div>
+            <div class="flex items-center gap-2 text-xs text-white/50"><i data-lucide="x" class="w-3.5 h-3.5 text-red-400"></i> Hallucinations spatiales</div>
+          </div>
+        </div>
+        <div class="glass rounded-[24px] overflow-hidden border border-cyan-400/20 relative">
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-400/15 rounded-full blur-2xl"></div>
+          <div class="h-[200px] relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80" class="w-full h-full object-cover">
+            <div class="absolute inset-0 opacity-60" style="background:linear-gradient(180deg,transparent,rgba(6,182,214,0.35));"></div>
+            <!-- depth lines -->
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 200"><g stroke="rgba(34,211,238,0.35)" stroke-width="0.7" fill="none"><path d="M0 100 Q100 80 200 100 T400 100"/><path d="M0 120 Q100 100 200 120 T400 120"/><path d="M0 80 Q100 60 200 80 T400 80"/></g><g fill="rgba(34,211,238,0.9)"><circle cx="120" cy="90" r="3"/><circle cx="200" cy="100" r="3"/><circle cx="280" cy="110" r="3"/></g></svg>
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-cyan-400 text-black text-[10px] font-bold tracking-widest">VISION SPATIALE • IMMERSITY</div>
+            <div class="absolute bottom-3 left-3 right-3">
+              <div class="text-xs font-semibold">Ce que nous capturons</div>
+              <div class="text-[11px] text-white/80">Profondeur • échelle • physique</div>
+            </div>
+          </div>
+          <div class="p-4 space-y-2">
+            <div class="flex items-center gap-2 text-xs text-white"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Distance au cm près</div>
+            <div class="flex items-center gap-2 text-xs text-white"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Géométrie réelle</div>
+            <div class="flex items-center gap-2 text-xs text-white"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> World Models entraînables</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4 mt-6 reveal">
+      <div class="glass rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center flex-shrink-0"><i data-lucide="brain" class="w-6 h-6 text-amber-400"></i></div>
+        <div><div class="font-bold text-sm">Hallucinations</div><div class="text-xs text-white/50">L'IA invente ce qu'elle ne peut pas mesurer</div></div>
+      </div>
+      <div class="glass rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-red-500/15 flex items-center justify-center flex-shrink-0"><i data-lucide="move-3d" class="w-6 h-6 text-red-400"></i></div>
+        <div><div class="font-bold text-sm">Pas d'embodiment</div><div class="text-xs text-white/50">Impossible pour un robot d'agir</div></div>
+      </div>
+      <div class="glass rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-violet-500/15 flex items-center justify-center flex-shrink-0"><i data-lucide="trending-down" class="w-6 h-6 text-violet-400"></i></div>
+        <div><div class="font-bold text-sm">Plateau des performances</div><div class="text-xs text-white/50">Les LLM stagnent sans spatial</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution" class="relative py-20 lg:py-28">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto reveal">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-300 text-[11px] font-bold tracking-widest">LA SOLUTION IMMERSITY</div>
+      <h2 class="font-display font-bold text-[36px] lg:text-[52px] leading-[0.95] tracking-tight mt-4">Transformez vos utilisateurs<br><span class="gradient-text">en capteurs stéréo</span></h2>
+      <p class="text-white/60 mt-4 text-[15px] leading-6">Pas de LiDAR. Pas de casque. Juste l'appareil qu'ils ont déjà. Notre IA reconstruit la profondeur en temps réel à partir d'une simple caméra.</p>
+    </div>
+
+    <div class="mt-12 glass rounded-[32px] overflow-hidden reveal gradient-border">
+      <div class="grid lg:grid-cols-2">
+        <!-- interactive slider -->
+        <div class="relative bg-[#080C1C] p-6 lg:p-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-sm">Démo interactive • Glissez pour comparer</h3>
+            <span class="text-[11px] font-mono text-white/40">STÉRÉO ENGINE v2.4</span>
+          </div>
+          <div id="compareWrap" class="relative h-[380px] rounded-2xl overflow-hidden bg-black select-none">
+            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80" class="absolute inset-0 w-full h-full object-cover" alt="nature">
+            <!-- depth version -->
+            <div id="compareAfter" class="absolute inset-0 w-1/2 overflow-hidden border-r-2 border-white/80">
+              <div class="absolute inset-0 w-[360px] lg:w-[520px]" style="background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80') center/cover; filter: hue-rotate(180deg) saturate(1.6) contrast(1.2) brightness(0.9);"></div>
+              <div class="absolute inset-0 opacity-50" style="background:repeating-linear-gradient(90deg, transparent 0 20px, rgba(34,211,238,0.08) 20px 21px)"></div>
+              <div class="absolute top-3 left-3 px-2 py-1 rounded-full bg-cyan-400 text-black text-[10px] font-bold">MODE IMMERSITY</div>
+              <!-- depth labels -->
+              <div class="absolute top-1/3 left-8 glass px-2 py-1 rounded-full text-[10px] font-mono">4.2m</div>
+              <div class="absolute bottom-1/3 left-16 glass px-2 py-1 rounded-full text-[10px] font-mono">12.5m</div>
+            </div>
+            <div class="absolute top-3 right-3 px-2 py-1 rounded-full bg-white/90 text-black text-[10px] font-bold">MODE STANDARD</div>
+            <!-- handle -->
+            <div id="compareHandle" class="absolute top-0 bottom-0 w-0.5 bg-white left-1/2 -translate-x-1/2">
+              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-xl flex items-center justify-center slider-handle">
+                <i data-lucide="arrow-left-right" class="w-4 h-4 text-black"></i>
+              </div>
+            </div>
+            <input id="compareRange" type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize">
+          </div>
+          <div class="flex items-center justify-between mt-4 text-[11px] text-white/40 font-mono">
+            <span>← 2D plate</span><span>Profondeur reconstruite →</span>
+          </div>
+        </div>
+        <!-- features -->
+        <div class="p-6 lg:p-8 flex flex-col justify-center">
+          <div class="space-y-6">
+            <div class="flex gap-4">
+              <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center flex-shrink-0"><i data-lucide="smartphone" class="w-5 h-5 text-white"></i></div>
+              <div>
+                <h4 class="font-semibold text-sm">Smartphone → Capteur stéréo</h4>
+                <p class="text-xs leading-5 text-white/55 mt-1">Notre modèle de profondeur infère la géométrie 3D à partir d'une seule image RGB. Aucun matériel supplémentaire.</p>
+                <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Compatible 98% des smartphones</div>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center flex-shrink-0"><i data-lucide="zap" class="w-5 h-5 text-white"></i></div>
+              <div>
+                <h4 class="font-semibold text-sm">Temps réel • Edge & Cloud</h4>
+                <p class="text-xs leading-5 text-white/55 mt-1">Inférence <span class="text-white font-semibold">12ms sur mobile</span> ou traitement cloud pour qualité cinéma. Vous choisissez.</p>
+                <div class="mt-2 flex gap-2">
+                  <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono">Edge: 12ms</span>
+                  <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono">Cloud: 4K 60fps</span>
                 </div>
+              </div>
             </div>
-            <div class="control-row">
-                <span>Scanner Laser :</span>
-                <button class="btn-mode" id="btn-toggle-scan">Activer</button>
+            <div class="flex gap-4">
+              <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0"><i data-lucide="shield-check" class="w-5 h-5 text-white"></i></div>
+              <div>
+                <h4 class="font-semibold text-sm">Privacy-first • On-device</h4>
+                <p class="text-xs leading-5 text-white/55 mt-1">La profondeur est calculée localement. Seul le nuage de points anonymisé peut être partagé — jamais l'image brute.</p>
+              </div>
             </div>
-            <div class="telemetry-row">
-                <span>Voxel Density :</span>
-                <span class="telemetry-val">128,000 pts</span>
-            </div>
-            <div class="telemetry-row">
-                <span>Stereo Baseline :</span>
-                <span class="telemetry-val">64.5 mm</span>
-            </div>
-            <div class="telemetry-row">
-                <span>Convergence Profondeur :</span>
-                <span class="telemetry-val" id="telemetry-depth">0.82 m</span>
-            </div>
+          </div>
+          <a href="#" class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 hover:text-cyan-200">Voir la démo technique <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
         </div>
-    </aside>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 3D Graphics Engine Logic -->
-    <script>
-        // Setup Three.js Application
-        const container = document.getElementById('webgl-container');
-        let scene, camera, renderer, controls;
-        let pointCloud, meshCore, scanningLaser, frustumHelpers = [];
-        let clock = new THREE.Clock();
-        
-        let mouseX = 0, mouseY = 0;
-        let windowHalfX = window.innerWidth / 2;
-        let windowHalfY = window.innerHeight / 2;
-        let scanActive = true;
-        let renderMode = 'points'; // 'points', 'wireframe', 'hybrid'
+<!-- PILIERS -->
+<section id="piliers" class="relative py-20 lg:py-24">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row justify-between gap-6 mb-10 reveal">
+      <h2 class="font-display font-bold text-[32px] lg:text-[42px] leading-none tracking-tight">Trois piliers.<br><span class="text-white/40">Zéro friction.</span></h2>
+      <p class="max-w-md text-sm leading-6 text-white/60 lg:text-right">Une adoption massive ne vient pas de la technologie seule. Elle vient de l'expérience. Nous avons conçu Immersity pour être irrésistible.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- card 1 -->
+      <div class="group glass rounded-[28px] p-7 relative overflow-hidden hover:bg-white/[0.06] transition reveal">
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-blue-500 via-cyan-400 to-transparent opacity-60"></div>
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-blue-600/15 rounded-full blur-2xl group-hover:bg-blue-600/25 transition"></div>
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-400 flex items-center justify-center mb-6"><i data-lucide="repeat" class="w-6 h-6 text-white"></i></div>
+        <div class="text-[11px] font-bold tracking-widest text-blue-300">01 — EVERYDAY</div>
+        <h3 class="font-display font-bold text-xl mt-2 leading-tight">Intégré au quotidien</h3>
+        <p class="text-sm leading-6 text-white/55 mt-3">Pas une app de plus. Immersity s'intègre dans les apps que les gens utilisent déjà — caméra, messagerie, shopping. La capture spatiale devient un réflexe.</p>
+        <div class="mt-6 rounded-2xl bg-[#0B1020] border border-white/5 p-3 flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80" class="w-14 h-14 rounded-xl object-cover">
+          <div class="flex-1">
+            <div class="text-xs font-semibold">Capture auto</div>
+            <div class="text-[11px] text-white/50">Chaque photo = données 3D</div>
+            <div class="mt-1.5 h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="h-full w-[82%] bg-blue-500 rounded-full"></div></div>
+          </div>
+          <span class="text-emerald-400"><i data-lucide="check-circle-2" class="w-5 h-5"></i></span>
+        </div>
+        <div class="mt-6 flex items-center gap-2 text-xs font-semibold text-white/60"><span class="w-6 h-[1px] bg-white/20"></span> Ex: Instagram, Snapchat, Amazon</div>
+      </div>
+      <!-- card 2 -->
+      <div class="group glass rounded-[28px] p-7 relative overflow-hidden hover:bg-white/[0.06] transition reveal" style="transition-delay:100ms">
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-violet-500 via-fuchsia-400 to-transparent opacity-60"></div>
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-violet-600/15 rounded-full blur-2xl group-hover:bg-violet-600/25 transition"></div>
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center mb-6"><i data-lucide="sparkles" class="w-6 h-6 text-white"></i></div>
+        <div class="text-[11px] font-bold tracking-widest text-violet-300">02 — INSTANT GRATIFICATION</div>
+        <h3 class="font-display font-bold text-xl mt-2 leading-tight">Le wow immédiat</h3>
+        <p class="text-sm leading-6 text-white/55 mt-3">L'utilisateur voit instantanément la magie : photo qui prend vie, effet 3D, partage immersif. La valeur est perçue en 2 secondes.</p>
+        <div class="mt-6 rounded-2xl bg-gradient-to-br from-violet-600/20 to-fuchsia-600/20 border border-violet-500/20 p-4 relative overflow-hidden">
+          <div class="flex items-center gap-2 text-xs font-bold"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Rendu 3D • 0.8s</div>
+          <div class="mt-3 flex gap-2">
+            <div class="flex-1 h-20 rounded-xl overflow-hidden relative"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-violet-600/20"></div><div class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px]">AVANT</div></div>
+            <div class="flex-1 h-20 rounded-xl overflow-hidden relative border-2 border-violet-400"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&q=80" class="w-full h-full object-cover" style="filter:contrast(1.2)"><div class="absolute inset-0 bg-gradient-to-t from-violet-600/40 to-transparent"></div><div class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-violet-600 text-[9px] font-bold text-white">APRÈS ✨</div></div>
+          </div>
+        </div>
+        <div class="mt-6 flex items-center gap-2 text-xs font-semibold text-white/60"><span class="w-6 h-[1px] bg-white/20"></span> +340% d'engagement mesuré</div>
+      </div>
+      <!-- card 3 -->
+      <div class="group glass rounded-[28px] p-7 relative overflow-hidden hover:bg-white/[0.06] transition reveal" style="transition-delay:200ms">
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-cyan-400 via-emerald-400 to-transparent opacity-60"></div>
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-cyan-600/15 rounded-full blur-2xl group-hover:bg-cyan-600/25 transition"></div>
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-400 flex items-center justify-center mb-6"><i data-lucide="unlock" class="w-6 h-6 text-white"></i></div>
+        <div class="text-[11px] font-bold tracking-widest text-cyan-300">03 — NO BARRIERS</div>
+        <h3 class="font-display font-bold text-xl mt-2 leading-tight">Aucune barrière</h3>
+        <p class="text-sm leading-6 text-white/55 mt-3">Pas de nouveau hardware. Pas de courbe d'apprentissage. Une ligne de code SDK et votre app devient spatiale. Déploiement en un après-midi.</p>
+        <div class="mt-6 rounded-2xl bg-[#0B1020] border border-white/5 p-4 font-mono text-[11px]">
+          <div class="flex items-center justify-between mb-2"><span class="text-white/40">SDK install</span><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">1 min</span></div>
+          <div class="text-cyan-300">npm install <span class="text-white">@immersity/sdk</span></div>
+          <div class="mt-2 text-white/50">// Une ligne pour activer la 3D</div>
+          <div class="text-violet-300">Immersity<span class="text-white">.enable()</span></div>
+        </div>
+        <div class="mt-6 flex items-center gap-2 text-xs font-semibold text-white/60"><span class="w-6 h-[1px] bg-white/20"></span> Docs • Exemples • Support Discord</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function initScene() {
-            // 1. Scene & Camera Setup
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x05070e, 0.035);
+<!-- IMPACT IA -->
+<section id="impact" class="relative py-20 lg:py-28 bg-[#080B18] border-y border-white/5 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-blue-600/[0.06] via-transparent to-violet-600/[0.06]"></div>
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 relative">
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
+      <div class="reveal">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold tracking-widest text-white/70"><i data-lucide="cpu" class="w-3.5 h-3.5"></i> IMPACT IA • POUR LES BUILDERS</div>
+        <h2 class="font-display font-bold text-[36px] lg:text-[44px] leading-[0.95] tracking-tight mt-4">Nourrissez vos<br><span class="gradient-text">World Models</span></h2>
+        <p class="text-white/60 text-[15px] leading-6 mt-4 max-w-xl">Les données spatiales d'Immersity sont le carburant manquant pour l'AGI incarnée. Entraînez des modèles qui comprennent enfin la physique.</p>
+        <div class="grid grid-cols-3 gap-4 mt-8">
+          <div class="glass rounded-2xl p-4 text-center">
+            <div class="font-display font-bold text-xl">1000×</div>
+            <div class="text-[11px] leading-tight text-white/50 mt-1">plus de données<br>spatiales</div>
+          </div>
+          <div class="glass rounded-2xl p-4 text-center border border-violet-500/20 bg-violet-500/5">
+            <div class="font-display font-bold text-xl text-violet-300">-73%</div>
+            <div class="text-[11px] leading-tight text-white/50 mt-1">coût d'acquisition<br>vs LiDAR</div>
+          </div>
+          <div class="glass rounded-2xl p-4 text-center">
+            <div class="font-display font-bold text-xl">4.2×</div>
+            <div class="text-[11px] leading-tight text-white/50 mt-1">accélération<br>convergence</div>
+          </div>
+        </div>
+        <div class="mt-8 space-y-4">
+          <div class="flex gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="layers-3" class="w-4 h-4 text-blue-400"></i></div>
+            <div><div class="font-semibold text-sm">Données prêtes pour l'entraînement</div><div class="text-xs text-white/55">Nuages de points, depth maps, meshes + métadonnées sémantiques. Format OpenUSD / PLY / NeRF.</div></div>
+          </div>
+          <div class="flex gap-3">
+            <div class="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="workflow" class="w-4 h-4 text-violet-400"></i></div>
+            <div><div class="font-semibold text-sm">Pipeline World Models</div><div class="text-xs text-white/55">De la capture à la simulation physique : notre API génère des environnements entraînables.</div></div>
+          </div>
+        </div>
+      </div>
 
-            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 1.2, 5.5);
+      <!-- code block -->
+      <div class="reveal lg:sticky lg:top-24">
+        <div class="glass-strong rounded-[24px] overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-white/[0.02]">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500/80"></span><span class="w-3 h-3 rounded-full bg-yellow-500/80"></span><span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+              <span class="ml-3 text-xs font-mono text-white/50">spatial_pipeline.py</span>
+            </div>
+            <button id="copyBtn" class="px-3 py-1.5 rounded-full bg-white text-black text-xs font-semibold flex items-center gap-1.5 hover:bg-white/90 transition"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Copier</button>
+          </div>
+          <div class="p-5 font-mono text-[12.5px] leading-6 overflow-x-auto">
+<pre class="text-white/80"><span class="text-white/30"># 1. Capture depuis n'importe quel smartphone</span>
+<span class="text-violet-300">from</span> immersity <span class="text-violet-300">import</span> SpatialCapture
 
-            // 2. Renderer Setup
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
-            container.appendChild(renderer.domElement);
+capture <span class="text-cyan-300">=</span> SpatialCapture.<span class="text-cyan-300">from_image</span>(<span class="text-emerald-300">"photo.jpg"</span>)
+depth <span class="text-cyan-300">=</span> capture.<span class="text-cyan-300">estimate_depth</span>(model<span class="text-cyan-300">=</span><span class="text-emerald-300">"v2-large"</span>) <span class="text-white/30"># &lt;12ms</span>
+cloud <span class="text-cyan-300">=</span> depth.<span class="text-cyan-300">to_pointcloud</span>()
 
-            // 3. Orbit Controls (restricted to smooth interaction)
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.enableZoom = false; // Allow smooth page scrolling without trapping wheel
-            controls.maxPolarAngle = Math.PI / 1.7;
-            controls.minPolarAngle = Math.PI / 2.8;
-            controls.rotateSpeed = 0.6;
+<span class="text-white/30"># 2. Génère un World Model entraînable</span>
+world <span class="text-cyan-300">=</span> cloud.<span class="text-cyan-300">to_world_model</span>(
+  physics<span class="text-cyan-300">=</span><span class="text-violet-300">True</span>,
+  semantics<span class="text-cyan-300">=</span><span class="text-violet-300">True</span>
+)
 
-            // 4. Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-            scene.add(ambientLight);
+<span class="text-white/30"># 3. Entraîne ton agent</span>
+agent.<span class="text-cyan-300">train</span>(world, epochs<span class="text-cyan-300">=</span><span class="text-amber-300">100</span>)</pre>
+          </div>
+          <div class="px-5 py-3 bg-emerald-500/10 border-t border-emerald-500/15 flex items-center gap-2 text-xs text-emerald-300">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Pipeline testé sur 12 architectures • Compatible PyTorch, JAX, Genesis
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <a href="#" class="glass rounded-2xl p-4 flex items-center gap-3 hover:bg-white/10 transition">
+            <div class="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+            <div><div class="text-sm font-semibold">Documentation</div><div class="text-xs text-white/50">Guides & API ref</div></div>
+          </a>
+          <a href="#" class="glass rounded-2xl p-4 flex items-center gap-3 hover:bg-white/10 transition">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center"><i data-lucide="github" class="w-5 h-5 text-white"></i></div>
+            <div><div class="text-sm font-semibold">SDK Open</div><div class="text-xs text-white/50">GitHub • 4.2k ⭐</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            const pointLight1 = new THREE.PointLight(0x00f3ff, 2.5, 20);
-            pointLight1.position.set(3, 4, 3);
-            scene.add(pointLight1);
+<!-- ECOSYSTEME -->
+<section id="ecosysteme" class="relative py-20 lg:py-28">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="text-center reveal">
+      <div class="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-white/40"><span class="w-8 h-[1px] bg-white/20"></span> ÉCOSYSTÈME <span class="w-8 h-[1px] bg-white/20"></span></div>
+      <h2 class="font-display font-bold text-[34px] lg:text-[44px] tracking-tight mt-3">Hardware. Software. <span class="gradient-text">SDK.</span></h2>
+      <p class="text-white/55 text-sm max-w-2xl mx-auto mt-3">Une plateforme complète, du capteur à la simulation.</p>
+    </div>
 
-            const pointLight2 = new THREE.PointLight(0x7928ca, 3, 20);
-            pointLight2.position.set(-3, -2, -2);
-            scene.add(pointLight2);
+    <!-- tabs -->
+    <div class="flex justify-center mt-8 reveal">
+      <div class="inline-flex p-1 rounded-full glass">
+        <button data-tab="hardware" class="tab-btn px-6 py-2.5 rounded-full text-sm font-semibold bg-white text-black">Hardware</button>
+        <button data-tab="software" class="tab-btn px-6 py-2.5 rounded-full text-sm font-semibold text-white/60 hover:text-white">Software</button>
+        <button data-tab="sdk" class="tab-btn px-6 py-2.5 rounded-full text-sm font-semibold text-white/60 hover:text-white">SDK & API</button>
+      </div>
+    </div>
 
-            // 5. Build Volumetric World Object (Spatial Model)
-            createSpatialObject();
+    <div class="mt-8">
+      <!-- hardware -->
+      <div id="tab-hardware" class="tab-panel grid lg:grid-cols-3 gap-6 reveal">
+        <div class="lg:col-span-2 glass rounded-[28px] overflow-hidden">
+          <div class="h-[280px] relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&q=80" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-white text-black text-xs font-bold">Aucun hardware propriétaire</div>
+            <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+              <div><div class="font-display font-bold text-lg">Fonctionne sur 4B+ appareils</div><div class="text-xs text-white/70">iOS 14+ • Android 10+ • Web</div></div>
+              <span class="px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold">✓ Certifié</span>
+            </div>
+          </div>
+          <div class="p-6 grid grid-cols-3 gap-4 text-center">
+            <div><div class="font-bold">iPhone</div><div class="text-xs text-white/50">TrueDepth optimisé</div></div>
+            <div><div class="font-bold">Android</div><div class="text-xs text-white/50">Mono → Stéréo IA</div></div>
+            <div><div class="font-bold">Web</div><div class="text-xs text-white/50">WebAssembly 12ms</div></div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="glass rounded-[24px] p-6">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/15 flex items-center justify-center mb-3"><i data-lucide="smartphone" class="w-5 h-5 text-blue-400"></i></div>
+            <h4 class="font-semibold">Smartphones</h4><p class="text-xs text-white/55 mt-1">Caméra standard suffit. Notre réseau neuronal fait le reste.</p>
+          </div>
+          <div class="glass rounded-[24px] p-6">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center mb-3"><i data-lucide="glasses" class="w-5 h-5 text-violet-400"></i></div>
+            <h4 class="font-semibold">AR / VR Ready</h4><p class="text-xs text-white/55 mt-1">Export natif pour Vision Pro, Quest 3, et casques spatiaux.</p>
+          </div>
+          <div class="glass rounded-[24px] p-6 bg-gradient-to-br from-cyan-500/10 to-blue-600/10 border-cyan-400/20">
+            <div class="text-xs font-bold tracking-widest text-cyan-300">PERFORMANCE</div>
+            <div class="font-display font-bold text-2xl mt-1">12ms <span class="text-sm font-normal text-white/60">inférence</span></div>
+            <div class="text-xs text-white/50">sur iPhone 13 • 60fps vidéo</div>
+          </div>
+        </div>
+      </div>
 
-            // 6. Laser Scanner Slice Effect
-            createLaserScanner();
+      <div id="tab-software" class="tab-panel hidden grid lg:grid-cols-3 gap-6">
+        <div class="glass rounded-[28px] p-6">
+          <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center mb-4"><i data-lucide="wand-2" class="w-5 h-5 text-violet-400"></i></div>
+          <h4 class="font-semibold">Immersity Studio</h4><p class="text-xs text-white/55 mt-1">Éditeur spatial pour convertir, éditer et partager en 3D.</p>
+          <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=600&q=80" class="w-full h-32 object-cover rounded-xl mt-4">
+        </div>
+        <div class="glass rounded-[28px] p-6">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center mb-4"><i data-lucide="cloud" class="w-5 h-5 text-cyan-400"></i></div>
+          <h4 class="font-semibold">Cloud Processing</h4><p class="text-xs text-white/55 mt-1">Traitement 4K/8K, super-résolution profondeur, batch API.</p>
+          <div class="mt-4 space-y-2 font-mono text-xs">
+            <div class="flex justify-between p-2 rounded-lg bg-white/5"><span>Upload</span><span class="text-emerald-400">2.1s</span></div>
+            <div class="flex justify-between p-2 rounded-lg bg-white/5"><span>Depth 4K</span><span class="text-emerald-400">0.9s</span></div>
+          </div>
+        </div>
+        <div class="glass rounded-[28px] p-6">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/15 flex items-center justify-center mb-4"><i data-lucide="share-2" class="w-5 h-5 text-blue-400"></i></div>
+          <h4 class="font-semibold">Distribution</h4><p class="text-xs text-white/55 mt-1">Un lien = expérience 3D interactive sur tous les appareils.</p>
+          <div class="mt-4 glass rounded-xl p-3 flex items-center gap-2 text-xs"><i data-lucide="link" class="w-4 h-4 text-white/40"></i> immersity.link/abc-3d <span class="ml-auto px-2 py-0.5 rounded-full bg-white text-black text-[10px] font-bold">Copier</span></div>
+        </div>
+      </div>
 
-            // 7. Simulated Stereo Cameras Frustum
-            createStereoRigVisualizer();
+      <div id="tab-sdk" class="tab-panel hidden grid lg:grid-cols-2 gap-6">
+        <div class="glass rounded-[28px] p-7">
+          <h4 class="font-display font-bold text-lg">SDK ultra-léger</h4>
+          <p class="text-sm text-white/55 mt-2">Intégration en minutes. React, Swift, Kotlin, Unity, Web.</p>
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            <div class="p-3 rounded-xl bg-white text-black font-semibold text-sm flex items-center gap-2"><i data-lucide="code" class="w-4 h-4"></i> Web SDK</div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10 font-semibold text-sm flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> iOS / Android</div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10 font-semibold text-sm flex items-center gap-2"><i data-lucide="gamepad-2" class="w-4 h-4"></i> Unity</div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10 font-semibold text-sm flex items-center gap-2"><i data-lucide="box" class="w-4 h-4"></i> React Three</div>
+          </div>
+          <div class="mt-6 p-4 rounded-xl bg-[#0B1020] border border-white/5 font-mono text-xs">
+            <div class="text-white/30">// React Example</div>
+            <div><span class="text-violet-300">import</span> { ImmersityView } <span class="text-violet-300">from</span> <span class="text-emerald-300">'@immersity/react'</span></div>
+            <div class="text-cyan-300">&lt;ImmersityView src="photo.jpg" depth autoRotate /&gt;</div>
+          </div>
+        </div>
+        <div class="glass rounded-[28px] p-7 bg-gradient-to-br from-violet-600/10 to-blue-600/10">
+          <h4 class="font-display font-bold text-lg">API Spatial Data</h4>
+          <p class="text-sm text-white/55 mt-2">Accédez à l'échelle mondiale de données spatiales pour entraîner vos modèles.</p>
+          <div class="mt-5 space-y-3">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10"><span class="text-sm font-medium">REST API</span><span class="text-xs font-mono text-emerald-300">api.immersity.ai/v2</span></div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10"><span class="text-sm font-medium">Webhooks</span><span class="text-xs text-white/50">Temps réel</span></div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10"><span class="text-sm font-medium">Streaming</span><span class="text-xs text-white/50">WebSocket 60fps</span></div>
+          </div>
+          <a href="#" class="mt-6 inline-flex w-full justify-center py-3 rounded-full bg-white text-black font-semibold text-sm">Explorer l'API →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            // 8. Dynamic Background Spatial Grid
-            createNeuralBackground();
+<!-- CTA -->
+<section id="cta" class="relative py-16 lg:py-20">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="relative rounded-[32px] overflow-hidden bg-gradient-to-br from-blue-600 via-violet-600 to-cyan-500 p-[1px]">
+      <div class="rounded-[31px] bg-[#0A0F1E] relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/15 via-violet-600/10 to-cyan-400/10"></div>
+        <div class="absolute -top-24 -right-24 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[80px]"></div>
+        <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[80px]"></div>
+        <div class="relative grid lg:grid-cols-2 gap-10 p-8 lg:p-12 items-center">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-bold tracking-widest">REJOINDRE LA RÉVOLUTION</div>
+            <h2 class="font-display font-bold text-[32px] lg:text-[40px] leading-[0.95] tracking-tight mt-4">Prêt à donner<br>des yeux à l'IA ?</h2>
+            <p class="text-white/60 text-sm leading-6 mt-3 max-w-md">Rejoignez 2,400+ développeurs et entreprises qui construisent déjà le futur spatial. Accès bêta gratuit.</p>
+            <div class="flex flex-wrap gap-6 mt-6 text-xs">
+              <span class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Sans carte bancaire</span>
+              <span class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> 10k captures gratuites</span>
+              <span class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Support Discord</span>
+            </div>
+          </div>
+          <div class="glass-strong rounded-[24px] p-6 lg:p-7">
+            <h4 class="font-semibold">Commencer gratuitement</h4>
+            <p class="text-xs text-white/50 mt-1">Accès instantané • Pas de spam</p>
+            <form id="ctaForm" class="mt-5 space-y-3">
+              <input type="email" required placeholder="votre@email.com" class="w-full px-4 py-3.5 rounded-xl bg-white text-black placeholder:text-black/40 text-sm font-medium outline-none focus:ring-2 focus:ring-violet-500">
+              <div class="grid grid-cols-2 gap-3">
+                <select class="px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-sm text-white outline-none">
+                  <option class="text-black">Développeur</option>
+                  <option class="text-black">Chercheur IA</option>
+                  <option class="text-black">Produit</option>
+                  <option class="text-black">Entreprise</option>
+                </select>
+                <input type="text" placeholder="Entreprise" class="px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-sm text-white placeholder:text-white/40 outline-none">
+              </div>
+              <button type="submit" class="w-full py-3.5 rounded-xl bg-white text-black font-bold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition">Créer mon compte spatial <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+              <div class="text-[11px] text-center text-white/30">En continuant, vous acceptez nos Conditions & Politique de confidentialité</div>
+            </form>
+            <div class="mt-4 flex items-center justify-center gap-2 text-[11px] text-white/40"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Données chiffrées • RGPD • SOC 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            // Event Listeners
-            window.addEventListener('resize', onWindowResize, false);
-            document.addEventListener('mousemove', onDocumentMouseMove, false);
-            setupUIHandlers();
-        }
+<!-- FOOTER -->
+<footer class="border-t border-white/5 pt-12 pb-8">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center font-display font-bold text-sm">◈</div>
+          <span class="font-display font-bold">IMMERSITY.AI</span>
+        </div>
+        <p class="text-xs leading-5 text-white/45 mt-3 max-w-sm">L'infrastructure de l'Intelligence Spatiale. Nous transformons le monde réel en données entraînables pour l'AGI.</p>
+        <div class="flex gap-2 mt-4">
+          <a href="#" class="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 transition"><i data-lucide="github" class="w-4 h-4"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 transition"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-bold tracking-widest text-white/60">PRODUIT</div>
+        <div class="mt-4 space-y-2.5 text-sm text-white/45">
+          <a href="#" class="block hover:text-white">Technologie</a>
+          <a href="#" class="block hover:text-white">SDK & API</a>
+          <a href="#" class="block hover:text-white">Studio</a>
+          <a href="#" class="block hover:text-white">Pricing</a>
+          <a href="#" class="block hover:text-white">Changelog</a>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-bold tracking-widest text-white/60">DÉVELOPPEURS</div>
+        <div class="mt-4 space-y-2.5 text-sm text-white/45">
+          <a href="#" class="block hover:text-white">Documentation</a>
+          <a href="#" class="block hover:text-white">Exemples</a>
+          <a href="#" class="block hover:text-white">Communauté Discord</a>
+          <a href="#" class="block hover:text-white">Status</a>
+          <a href="#" class="block hover:text-white">Support</a>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-bold tracking-widest text-white/60">ENTREPRISE</div>
+        <div class="mt-4 space-y-2.5 text-sm text-white/45">
+          <a href="#" class="block hover:text-white">À propos</a>
+          <a href="#" class="block hover:text-white">Carrières</a>
+          <a href="#" class="block hover:text-white">Blog</a>
+          <a href="#" class="block hover:text-white">Contact</a>
+          <a href="#" class="block hover:text-white">Press Kit</a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10 pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 text-xs text-white/30">
+      <span>© 2025 Immersity AI, Inc. Tous droits réservés. Fait avec ◈ à Paris & San Francisco.</span>
+      <div class="flex gap-6"><a href="#" class="hover:text-white">Confidentialité</a><a href="#" class="hover:text-white">Conditions</a><a href="#" class="hover:text-white">Cookies</a></div>
+    </div>
+  </div>
+</footer>
 
-        // Construct a dense complex geometric entity representing spatial understanding
-        function createSpatialObject() {
-            const count = 42000;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
-            const originalY = new Float32Array(count);
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full bg-white text-black text-sm font-semibold shadow-xl translate-y-20 opacity-0 transition-all duration-500 z-50">Bienvenue dans la révolution spatiale ✨</div>
 
-            const colorCyan = new THREE.Color(0x00f3ff);
-            const colorPurple = new THREE.Color(0x7928ca);
-            const colorWhite = new THREE.Color(0xffffff);
+<script>
+lucide.createIcons();
 
-            // Generate complex volumetric shape: Torus Knot / Organic Brain-like Spatial Field
-            let pIdx = 0;
-            for (let i = 0; i < count; i++) {
-                const u = Math.random() * Math.PI * 2;
-                const v = Math.random() * Math.PI * 2;
-                
-                // Torus Knot math combined with noise
-                const p = 2, q = 3;
-                const r = 1.3 + Math.sin(q * u) * 0.35 + (Math.random() - 0.5) * 0.25;
-                const x = (r + Math.cos(p * u) * 0.45) * Math.cos(u) * 1.1;
-                const y = ((r + Math.cos(p * u) * 0.45) * Math.sin(u) + Math.sin(p * u) * 0.3) * 0.9;
-                const z = (Math.sin(p * u) * 0.8 + (Math.random() - 0.5) * 0.3) * 1.1;
+// navbar scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY>20){navbar.classList.add('bg-[#05070F]/70','backdrop-blur-xl','border-white/10');}else{navbar.classList.remove('bg-[#05070F]/70','backdrop-blur-xl','border-white/10');}
+});
 
-                positions[pIdx] = x;
-                positions[pIdx + 1] = y;
-                positions[pIdx + 2] = z;
-                originalY[i] = y;
+// mobile menu
+document.getElementById('menuBtn').addEventListener('click', ()=>{
+  const m=document.getElementById('mobileMenu');
+  m.classList.toggle('hidden'); m.classList.toggle('flex');
+});
 
-                // Color gradient based on spatial coordinates
-                const mixFactor = (y + 1.5) / 3.0;
-                const vertexColor = colorCyan.clone().lerp(colorPurple, mixFactor);
-                if (Math.random() > 0.96) vertexColor.lerp(colorWhite, 0.8);
+// reveal
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')})},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-                colors[pIdx] = vertexColor.r;
-                colors[pIdx + 1] = vertexColor.g;
-                colors[pIdx + 2] = vertexColor.b;
+// tabs
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>{b.className='tab-btn px-6 py-2.5 rounded-full text-sm font-semibold text-white/60 hover:text-white'});
+    btn.className='tab-btn px-6 py-2.5 rounded-full text-sm font-semibold bg-white text-black';
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.add('hidden'));
+    document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
+    lucide.createIcons();
+  });
+});
 
-                pIdx += 3;
-            }
+// compare slider
+const range=document.getElementById('compareRange');
+const after=document.getElementById('compareAfter');
+const handle=document.getElementById('compareHandle');
+function updateCompare(v){
+  after.style.width=v+'%';
+  handle.style.left=v+'%';
+}
+if(range){
+  range.addEventListener('input', e=> updateCompare(e.target.value));
+  // drag touch
+  let dragging=false;
+  const wrap=document.getElementById('compareWrap');
+  wrap.addEventListener('pointerdown',()=>dragging=true);
+  window.addEventListener('pointerup',()=>dragging=false);
+  wrap.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    const rect=wrap.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    const pct=Math.max(0,Math.min(100, (x/rect.width)*100));
+    range.value=pct;
+    updateCompare(pct);
+  });
+}
 
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            geometry.userData = { originalY: originalY };
+// toggle stereo mode on phone
+let stereoOn=true;
+const toggleBtn=document.getElementById('toggleStereo');
+const depthOverlay=document.getElementById('depthOverlay');
+const gridOverlay=document.getElementById('gridOverlay');
+const depthDots=document.getElementById('depthDots');
+const depthCanvas=document.getElementById('depthCanvas');
+function setStereo(on){
+  stereoOn=on;
+  if(on){
+    depthOverlay.style.opacity='1';
+    gridOverlay.style.opacity='1';
+    depthDots.style.opacity='1';
+    depthCanvas.style.opacity='0.45';
+    toggleBtn.innerHTML='<i data-lucide="layers" class="w-3.5 h-3.5"></i> Mode Spatial ON';
+    toggleBtn.className='flex-1 py-2.5 rounded-full bg-white text-black text-xs font-bold flex items-center justify-center gap-1.5';
+  }else{
+    depthOverlay.style.opacity='0';
+    gridOverlay.style.opacity='0';
+    depthDots.style.opacity='0';
+    depthCanvas.style.opacity='0';
+    toggleBtn.innerHTML='<i data-lucide="layers" class="w-3.5 h-3.5"></i> Mode Spatial OFF';
+    toggleBtn.className='flex-1 py-2.5 rounded-full bg-white/10 text-white border border-white/15 text-xs font-bold flex items-center justify-center gap-1.5';
+  }
+  lucide.createIcons();
+}
+if(toggleBtn) toggleBtn.addEventListener('click',()=> setStereo(!stereoOn));
+// generate dots
+if(depthDots){
+  for(let i=0;i<28;i++){
+    const d=document.createElement('div');
+    d.className='absolute w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.9)]';
+    d.style.left=(10+Math.random()*80)+'%';
+    d.style.top=(15+Math.random()*65)+'%';
+    d.style.opacity=0.6+Math.random()*0.4;
+    d.style.animation=`pulse-glow ${2+Math.random()*2}s infinite`;
+    depthDots.appendChild(d);
+  }
+}
+// depth canvas shimmer
+if(depthCanvas){
+  const c=depthCanvas; const ctx=c.getContext('2d');
+  function resize(){c.width=c.offsetWidth*2; c.height=c.offsetHeight*2; draw();}
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const grad=ctx.createLinearGradient(0,0,0,c.height);
+    grad.addColorStop(0,'rgba(96,165,250,0)');
+    grad.addColorStop(0.5,'rgba(34,211,238,0.18)');
+    grad.addColorStop(1,'rgba(124,58,237,0.25)');
+    ctx.fillStyle=grad; ctx.fillRect(0,c.height*0.3,c.width,c.height*0.7);
+    ctx.strokeStyle='rgba(34,211,238,0.12)'; ctx.lineWidth=1;
+    for(let y=c.height*0.35; y<c.height; y+=28){
+      ctx.beginPath(); ctx.moveTo(0,y); 
+      for(let x=0;x<c.width;x+=18){ ctx.lineTo(x, y + Math.sin(x*0.012+Date.now()*0.001)*10 );}
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); window.addEventListener('resize',resize); draw();
+  setStereo(true);
+}
 
-            // Point cloud material with soft glow texture via canvas
-            const canvas = document.createElement('canvas');
-            canvas.width = 16;
-            canvas.height = 16;
-            const ctx = canvas.getContext('2d');
-            const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
-            grad.addColorStop(0, 'rgba(255,255,255,1)');
-            grad.addColorStop(0.3, 'rgba(0,243,255,0.7)');
-            grad.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 16, 16);
-            const pTexture = new THREE.CanvasTexture(canvas);
+// copy btn
+document.getElementById('copyBtn')?.addEventListener('click',()=>{
+  navigator.clipboard.writeText(`from immersity import SpatialCapture\ncapture = SpatialCapture.from_image("photo.jpg")\ndepth = capture.estimate_depth(model="v2-large")`);
+  const b=document.getElementById('copyBtn'); const old=b.innerHTML; b.innerHTML='Copié ✓'; setTimeout(()=>b.innerHTML=old,1500);
+});
 
-            const pMaterial = new THREE.PointsMaterial({
-                size: 0.045,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.85,
-                map: pTexture,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
-            });
+// form toast
+document.getElementById('ctaForm')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  const t=document.getElementById('toast');
+  t.classList.remove('translate-y-20','opacity-0');
+  setTimeout(()=> t.classList.add('translate-y-20','opacity-0'), 3000);
+});
 
-            pointCloud = new THREE.Points(geometry, pMaterial);
-            scene.add(pointCloud);
+// THREE hero
+(function(){
+  const canvas=document.getElementById('hero-canvas');
+  if(!canvas || !window.THREE) return;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(65, canvas.clientWidth/canvas.clientHeight, 0.1, 1000);
+  camera.position.z=14;
+  const renderer=new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  function onResize(){
+    const w=canvas.clientWidth, h=canvas.clientHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h; camera.updateProjectionMatrix();
+  }
+  onResize(); window.addEventListener('resize',onResize);
 
-            // Complementary polygon mesh with wireframe for mode switching
-            const meshGeometry = new THREE.IcosahedronGeometry(1.6, 4);
-            const meshMaterial = new THREE.MeshStandardMaterial({
-                color: 0x00f3ff,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.15,
-                roughness: 0.2,
-                metalness: 0.8
-            });
-            meshCore = new THREE.Mesh(meshGeometry, meshMaterial);
-            scene.add(meshCore);
-            meshCore.visible = false;
-        }
+  const count=1800;
+  const geo=new THREE.BufferGeometry();
+  const pos=new Float32Array(count*3);
+  const col=new Float32Array(count*3);
+  const palette=[new THREE.Color('#60A5FA'), new THREE.Color('#A78BFA'), new THREE.Color('#22D3EE')];
+  for(let i=0;i<count;i++){
+    const i3=i*3;
+    pos[i3]=(Math.random()-0.5)*28;
+    pos[i3+1]=(Math.random()-0.5)*16;
+    pos[i3+2]=(Math.random()-0.5)*12 -2;
+    const c=palette[Math.floor(Math.random()*palette.length)];
+    col[i3]=c.r; col[i3+1]=c.g; col[i3+2]=c.b;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:0.04, vertexColors:true, transparent:true, opacity:0.65, sizeAttenuation:true});
+  const points=new THREE.Points(geo,mat);
+  scene.add(points);
 
-        // Horizontal scanning laser slicing the spatial cloud
-        function createLaserScanner() {
-            const scanGroup = new THREE.Group();
+  // wire plane subtle
+  const planeGeo=new THREE.PlaneGeometry(30,30,28,28);
+  const planeMat=new THREE.MeshBasicMaterial({color:0x1e3a8a, wireframe:true, transparent:true, opacity:0.06});
+  const plane=new THREE.Mesh(planeGeo, planeMat);
+  plane.rotation.x=-Math.PI/2.5; plane.position.y=-6; plane.position.z=-4;
+  scene.add(plane);
 
-            const lineGeo = new THREE.RingGeometry(1.8, 1.83, 64);
-            const lineMat = new THREE.MeshBasicMaterial({
-                color: 0x00f3ff,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.7,
-                blending: THREE.AdditiveBlending
-            });
-            const ring = new THREE.Mesh(lineGeo, lineMat);
-            ring.rotation.x = Math.PI / 2;
-            scanGroup.add(ring);
-
-            const gridHelper = new THREE.GridHelper(3.8, 20, 0x00f3ff, 0x1d4ed8);
-            gridHelper.material.transparent = true;
-            gridHelper.material.opacity = 0.2;
-            scanGroup.add(gridHelper);
-
-            scanningLaser = scanGroup;
-            scene.add(scanningLaser);
-        }
-
-        // Visualize Stereo Optical Sensors / Eye cones
-        function createStereoRigVisualizer() {
-            const stereoRig = new THREE.Group();
-            stereoRig.position.set(0, -0.4, 3.2);
-
-            function createPyramidFrustum(colorHex, xOffset) {
-                const frustumGeo = new THREE.ConeGeometry(0.5, 1.2, 4, 1, true);
-                frustumGeo.rotateX(Math.PI / 2);
-                frustumGeo.rotateZ(Math.PI / 4);
-
-                const frustumMat = new THREE.MeshBasicMaterial({
-                    color: colorHex,
-                    wireframe: true,
-                    transparent: true,
-                    opacity: 0.4
-                });
-                const frustum = new THREE.Mesh(frustumGeo, frustumMat);
-                frustum.position.x = xOffset;
-                frustum.lookAt(0, 0, 0);
-                return frustum;
-            }
-
-            const leftCam = createPyramidFrustum(0x00f3ff, -0.5);
-            const rightCam = createPyramidFrustum(0x7928ca, 0.5);
-
-            stereoRig.add(leftCam);
-            stereoRig.add(rightCam);
-
-            frustumHelpers.push(leftCam, rightCam);
-            scene.add(stereoRig);
-        }
-
-        // Deep Neural Coordinate Grid in Background
-        function createNeuralBackground() {
-            const bgCount = 1500;
-            const bgGeo = new THREE.BufferGeometry();
-            const bgPos = new Float32Array(bgCount * 3);
-
-            for (let i = 0; i < bgCount * 3; i += 3) {
-                bgPos[i] = (Math.random() - 0.5) * 25;
-                bgPos[i + 1] = (Math.random() - 0.5) * 25;
-                bgPos[i + 2] = (Math.random() - 0.5) * 20 - 5;
-            }
-
-            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
-            const bgMat = new THREE.PointsMaterial({
-                color: 0x3b82f6,
-                size: 0.04,
-                transparent: true,
-                opacity: 0.35
-            });
-            const bgPoints = new THREE.Points(bgGeo, bgMat);
-            scene.add(bgPoints);
-        }
-
-        function onWindowResize() {
-            windowHalfX = window.innerWidth / 2;
-            windowHalfY = window.innerHeight / 2;
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function onDocumentMouseMove(event) {
-            mouseX = (event.clientX - windowHalfX) * 0.0006;
-            mouseY = (event.clientY - windowHalfY) * 0.0006;
-        }
-
-        // UI Interactions and HUD Binding
-        function setupUIHandlers() {
-            // Mode buttons
-            const modeBtns = document.querySelectorAll('.btn-mode[data-mode]');
-            modeBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    modeBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    renderMode = btn.getAttribute('data-mode');
-
-                    if (renderMode === 'points') {
-                        pointCloud.visible = true;
-                        meshCore.visible = false;
-                        pointCloud.material.opacity = 0.85;
-                    } else if (renderMode === 'wireframe') {
-                        pointCloud.visible = false;
-                        meshCore.visible = true;
-                        meshCore.material.opacity = 0.45;
-                    } else if (renderMode === 'hybrid') {
-                        pointCloud.visible = true;
-                        meshCore.visible = true;
-                        pointCloud.material.opacity = 0.5;
-                        meshCore.material.opacity = 0.25;
-                    }
-                });
-            });
-
-            // Toggle scan button
-            const scanBtn = document.getElementById('btn-toggle-scan');
-            const heroScanBtn = document.getElementById('trigger-scan');
-            
-            function toggleScan() {
-                scanActive = !scanActive;
-                scanningLaser.visible = scanActive;
-                scanBtn.textContent = scanActive ? "Activer" : "Stopper";
-                scanBtn.classList.toggle('active', scanActive);
-            }
-
-            scanBtn.addEventListener('click', toggleScan);
-            heroScanBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                scanActive = true;
-                scanningLaser.visible = true;
-                scanBtn.textContent = "Activer";
-                scanBtn.classList.add('active');
-                // Smooth scroll to demo position
-                window.scrollTo({ top: window.innerHeight * 0.3, behavior: 'smooth' });
-            });
-            scanBtn.classList.add('active');
-        }
-
-        // Render Loop
-        let frameCount = 0;
-        let lastTime = performance.now();
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const elapsedTime = clock.getElapsedTime();
-
-            // 1. Smooth Camera mouse tracking (Parallax)
-            camera.position.x += (mouseX * 2.5 - camera.position.x) * 0.03;
-            camera.position.y += (-mouseY * 2.0 + 1.2 - camera.position.y) * 0.03;
-            camera.lookAt(0, 0, 0);
-
-            // 2. Rotate Spatial Core
-            if (pointCloud) {
-                pointCloud.rotation.y = elapsedTime * 0.18;
-                pointCloud.rotation.x = Math.sin(elapsedTime * 0.1) * 0.15;
-
-                // Subtle organic pulse in vertices
-                const pos = pointCloud.geometry.attributes.position;
-                const originalY = pointCloud.geometry.userData.originalY;
-                const count = pos.count;
-                for (let i = 0; i < count; i += 8) { // sampled for maximum performance
-                    const idx = i * 3 + 1;
-                    pos.array[idx] = originalY[i] + Math.sin(elapsedTime * 2.0 + originalY[i] * 3.0) * 0.03;
-                }
-                pos.needsUpdate = true;
-            }
-
-            if (meshCore && meshCore.visible) {
-                meshCore.rotation.y = elapsedTime * 0.18;
-                meshCore.rotation.x = Math.sin(elapsedTime * 0.1) * 0.15;
-            }
-
-            // 3. Laser Scanner Sweep
-            if (scanningLaser && scanActive) {
-                const laserY = Math.sin(elapsedTime * 1.8) * 1.4;
-                scanningLaser.position.y = laserY;
-
-                // Update convergence distance read-out in HUD
-                const depthVal = document.getElementById('telemetry-depth');
-                if (depthVal && frameCount % 6 === 0) {
-                    depthVal.textContent = (0.75 + Math.abs(laserY * 0.2)).toFixed(2) + ' m';
-                }
-            }
-
-            // 4. Subtle sensor cone oscillation
-            frustumHelpers.forEach((frustum, idx) => {
-                frustum.lookAt(Math.sin(elapsedTime + idx) * 0.2, 0, 0);
-            });
-
-            // 5. FPS Counter in telemetry HUD
-            frameCount++;
-            const now = performance.now();
-            if (now - lastTime >= 1000) {
-                const fps = Math.round((frameCount * 1000) / (now - lastTime));
-                const fpsEl = document.getElementById('hud-fps');
-                if (fpsEl) fpsEl.textContent = `${fps} FPS`;
-                frameCount = 0;
-                lastTime = now;
-            }
-
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        // Initialize and fire execution
-        initScene();
-        animate();
-    </script>
+  let mx=0, my=0;
+  window.addEventListener('mousemove', e=>{
+    mx=(e.clientX/window.innerWidth -0.5)*2;
+    my=(e.clientY/window.innerHeight -0.5)*1.5;
+  });
+  let t=0;
+  function animate(){
+    requestAnimationFrame(animate);
+    t+=0.003;
+    points.rotation.y+=0.0006;
+    points.position.x += (mx*0.6 - points.position.x)*0.02;
+    points.position.y += (-my*0.4 - points.position.y)*0.02;
+    plane.position.x = Math.sin(t*0.5)*0.8;
+    // pulse opacity
+    const p=points.geometry.attributes.position;
+    for(let i=0;i<count;i++){
+      const z=p.array[i*3+2];
+      // subtle z wave
+      p.array[i*3+2] += Math.sin(t*2 + i*0.01)*0.002;
+    }
+    p.needsUpdate=true;
+    renderer.render(scene,camera);
+  }
+  animate();
+})();
+</script>
 </body>
 </html>
